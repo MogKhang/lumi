@@ -1283,9 +1283,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   children: [
                     // Show logo or name/title
                     if (heroItem.clearLogoPath != null)
-                      SizedBox(
-                        height: 120,
-                        width: 400,
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 400, maxHeight: 120),
                         child: Builder(
                           builder: (context) {
                             final dpr = MediaImageHelper.effectiveDevicePixelRatio(context);

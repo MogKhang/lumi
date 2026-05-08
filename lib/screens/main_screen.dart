@@ -1278,66 +1278,74 @@ class _MainScreenState extends State<MainScreen>
           key: mainScaffoldMessengerKey,
           child: Scaffold(
             body: _buildTickerAwareStack(),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Reconnect bar when offline
-                if (_isOffline)
-                  Material(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    child: InkWell(
-                      onTap: _isReconnecting ? null : _triggerReconnect,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (_isReconnecting)
-                              SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Theme.of(context).colorScheme.primary,
+            bottomNavigationBar: ClipRect(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Reconnect bar when offline
+                  if (_isOffline)
+                    Material(
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      child: InkWell(
+                        onTap: _isReconnecting ? null : _triggerReconnect,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (_isReconnecting)
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                )
+                              else
+                                Icon(Symbols.wifi_rounded, size: 18, color: Theme.of(context).colorScheme.primary),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  t.common.reconnect,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              )
-                            else
-                              Icon(Symbols.wifi_rounded, size: 18, color: Theme.of(context).colorScheme.primary),
-                            const SizedBox(width: 8),
-                            Text(
-                              t.common.reconnect,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context).colorScheme.primary,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                  SettingValueBuilder<bool>(
+                    pref: SettingsService.showNavBarLabels,
+                    builder: (context, showNavBarLabels, _) {
+                      final destinations = _buildNavDestinations(_isOffline);
+                      if (destinations.length < 2) return const SizedBox.shrink();
+                      
+                      final hideLabels = !showNavBarLabels;
+                      return NavigationBarTheme(
+                        data: NavigationBarTheme.of(context).copyWith(height: hideLabels ? 56 : null),
+                        child: NavigationBar(
+                          selectedIndex: _currentIndex,
+                          onDestinationSelected: (i) {
+                            final tabs = _getVisibleTabs(_isOffline);
+                            if (i >= 0 && i < tabs.length) _selectTab(tabs[i].id);
+                          },
+                          labelBehavior: hideLabels
+                              ? NavigationDestinationLabelBehavior.alwaysHide
+                              : NavigationDestinationLabelBehavior.alwaysShow,
+                          destinations: destinations,
+                        ),
+                      );
+                    },
                   ),
-                SettingValueBuilder<bool>(
-                  pref: SettingsService.showNavBarLabels,
-                  builder: (context, showNavBarLabels, _) {
-                    final hideLabels = !showNavBarLabels;
-                    return NavigationBarTheme(
-                      data: NavigationBarTheme.of(context).copyWith(height: hideLabels ? 56 : null),
-                      child: NavigationBar(
-                        selectedIndex: _currentIndex,
-                        onDestinationSelected: (i) {
-                          final tabs = _getVisibleTabs(_isOffline);
-                          if (i >= 0 && i < tabs.length) _selectTab(tabs[i].id);
-                        },
-                        labelBehavior: hideLabels
-                            ? NavigationDestinationLabelBehavior.alwaysHide
-                            : NavigationDestinationLabelBehavior.alwaysShow,
-                        destinations: _buildNavDestinations(_isOffline),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
