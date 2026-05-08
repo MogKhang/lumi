@@ -137,7 +137,6 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                   destinationBuilder: (context) => const AboutScreen(),
                 ),
 
-                const SizedBox(height: 16),
                 _buildLogoutTile(),
                 const SizedBox(height: 24),
               ]),
