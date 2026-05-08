@@ -19,6 +19,8 @@ import '../widgets/focusable_media_card.dart';
 import '../utils/focus_utils.dart';
 import 'libraries/state_messages.dart';
 import 'main_screen.dart';
+import '../services/settings_service.dart';
+import '../widgets/settings_builder.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -167,8 +169,10 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Widget _buildResultsList(BuildContext context) {
+    final svc = SettingsService.instanceOrNull!;
+    final showServerNameSetting = svc.read(SettingsService.showServerNameOnHubs);
     final multiServer = context.watch<MultiServerProvider>();
-    final showServerName = multiServer.totalServerCount > 1;
+    final showServerName = showServerNameSetting && multiServer.totalServerCount > 1;
     return SliverPadding(
       padding: const EdgeInsets.all(16),
       sliver: SliverList(
@@ -192,7 +196,9 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SettingsBuilder(
+      prefs: const [SettingsService.showServerNameOnHubs],
+      builder: (context) => Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           primary: false,
@@ -257,6 +263,7 @@ class _SearchScreenState extends State<SearchScreen>
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

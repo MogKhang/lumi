@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../i18n/strings.g.dart';
-import '../../models/transcode_quality_preset.dart';
 import '../../mpv/player/platform/player_android.dart';
-import '../../utils/quality_preset_labels.dart';
 import '../../services/discord_rpc_service.dart';
 import '../../services/keyboard_shortcuts_service.dart';
 import '../../services/settings_service.dart';
@@ -49,7 +47,6 @@ class _PlaybackSettingsScreenState extends State<PlaybackSettingsScreen> {
       title: Text(t.settings.videoPlayback),
       children: [
         SettingsSectionHeader(t.settings.player),
-        if (Platform.isAndroid) _playerBackendSelector(),
         _externalPlayerTile(),
         _hardwareDecodingTile(),
         if ((Platform.isAndroid && !PlatformDetector.isTV()) || Platform.isIOS || Platform.isMacOS) _autoPipTile(),
@@ -59,7 +56,6 @@ class _PlaybackSettingsScreenState extends State<PlaybackSettingsScreen> {
         _displaySwitchDelayTile(),
         _tunneledPlaybackTile(),
         _bufferSizeTile(),
-        _defaultQualityTile(),
 
         SettingsSectionHeader(t.settings.subtitlesAndConfig),
         SettingNavigationTile(
@@ -208,17 +204,7 @@ class _PlaybackSettingsScreenState extends State<PlaybackSettingsScreen> {
     );
   }
 
-  Widget _playerBackendSelector() => SettingSegmentedTile<bool, bool>(
-    pref: SettingsService.useExoPlayer,
-    icon: Symbols.play_circle_rounded,
-    title: t.settings.playerBackend,
-    segments: [
-      ButtonSegment(value: true, label: Text(t.settings.exoPlayer)),
-      ButtonSegment(value: false, label: Text(t.settings.mpv)),
-    ],
-    decode: (s) => s,
-    encode: (s) => s,
-  );
+
 
   Widget _externalPlayerTile() => SettingsBuilder(
     prefs: [SettingsService.useExternalPlayer, SettingsService.selectedExternalPlayer],
@@ -332,17 +318,7 @@ class _PlaybackSettingsScreenState extends State<PlaybackSettingsScreen> {
     );
   }
 
-  Widget _defaultQualityTile() => SettingSelectionTile<TranscodeQualityPreset, TranscodeQualityPreset>(
-    pref: SettingsService.defaultQualityPreset,
-    icon: Symbols.high_quality_rounded,
-    title: t.settings.defaultQualityTitle,
-    subtitleBuilder: qualityPresetLabel,
-    options: TranscodeQualityPreset.displayOrder
-        .map((p) => DialogOption(value: p, title: qualityPresetLabel(p)))
-        .toList(),
-    decode: (p) => p,
-    encode: (p) => p,
-  );
+
 
   Widget _mpvConfigTile() => SettingValueBuilder<bool>(
     pref: SettingsService.useExoPlayer,

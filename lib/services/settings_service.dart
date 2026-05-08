@@ -255,7 +255,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const String defaultCreditsPattern = r'(?:^|\b)(?:outro|closing|credits?|ending)(?:\b|$)|^ed(?:\s?\d+)?$';
 
   static const enableDebugLogging = BoolPref('enable_debug_logging', onWrite: setLoggerLevel);
-  static const crashReporting = BoolPref('crash_reporting', defaultValue: true);
+  static const crashReporting = BoolPref('crash_reporting', defaultValue: false);
   static const enableHardwareDecoding = BoolPref('enable_hardware_decoding', defaultValue: true);
   static const enableHDR = BoolPref('enable_hdr', defaultValue: true);
   static const preferredVideoCodec = StringPref('preferred_video_codec', defaultValue: 'auto');
@@ -263,17 +263,17 @@ class SettingsService extends BaseSharedPreferencesService {
   static const viewMode = EnumPref<ViewMode>('view_mode', values: ViewMode.values, defaultValue: ViewMode.grid);
   static const seekTimeSmall = IntPref('seek_time_small', defaultValue: 10);
   static const seekTimeLarge = IntPref('seek_time_large', defaultValue: 30);
-  static const rewindOnResume = IntPref('rewind_on_resume');
-  static const showHeroSection = BoolPref('show_hero_section', defaultValue: true);
+  static const rewindOnResume = IntPref('rewind_on_resume', defaultValue: 5);
+  static const showHeroSection = BoolPref('show_hero_section', defaultValue: false);
   static const useGlobalHubs = BoolPref('use_global_hubs', defaultValue: true);
-  static const showServerNameOnHubs = BoolPref('show_server_name_on_hubs');
+  static const showServerNameOnHubs = BoolPref('show_server_name_on_hubs', defaultValue: false);
   static const groupLibrariesByServer = BoolPref('group_libraries_by_server', defaultValue: true);
   static const sleepTimerDuration = IntPref('sleep_timer_duration', defaultValue: 30);
   static const audioSyncOffset = IntPref('audio_sync_offset');
   static const subtitleSyncOffset = IntPref('subtitle_sync_offset');
   static const volume = DoublePref('volume', defaultValue: 100.0);
   static const rotationLocked = BoolPref('rotation_locked', defaultValue: true);
-  static const subtitleFontSize = IntPref('subtitle_font_size', defaultValue: 38);
+  static const subtitleFontSize = IntPref('subtitle_font_size', defaultValue: 42);
   static const subtitleTextColor = StringPref('subtitle_text_color', defaultValue: '#FFFFFF');
   static const subtitleBorderSize = IntPref('subtitle_border_size', defaultValue: 3);
   static const subtitleBorderColor = StringPref('subtitle_border_color', defaultValue: '#000000');
@@ -317,9 +317,9 @@ class SettingsService extends BaseSharedPreferencesService {
   static const autoPlayNextEpisode = BoolPref('auto_play_next_episode', defaultValue: true);
   static const useExoPlayer = BoolPref('use_exoplayer', defaultValue: true);
   static const alwaysKeepSidebarOpen = BoolPref('always_keep_sidebar_open');
-  static const showUnwatchedCount = BoolPref('show_unwatched_count', defaultValue: true);
+  static const showUnwatchedCount = BoolPref('show_unwatched_count', defaultValue: false);
   static const showEpisodeNumberOnCards = BoolPref('show_episode_number_on_cards', defaultValue: true);
-  static const showSeasonPostersOnTabs = BoolPref('show_season_posters_on_tabs');
+  static const showSeasonPostersOnTabs = BoolPref('show_season_posters_on_tabs', defaultValue: true);
   static const hideSpoilers = BoolPref('hide_spoilers');
   static const showNavBarLabels = BoolPref('show_nav_bar_labels', defaultValue: true);
   static const globalShaderPreset = StringPref('global_shader_preset', defaultValue: 'none');
@@ -339,7 +339,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const recentRooms = NullableStringPref('watch_together_recent_rooms');
 
   static final maxVolume = IntPref('max_volume', defaultValue: 100, transform: (v) => v.clamp(100, 300));
-  static final subtitlePosition = IntPref('subtitle_position', defaultValue: 100, transform: (v) => v.clamp(0, 100));
+  static final subtitlePosition = IntPref('subtitle_position', defaultValue: 120, transform: (v) => v.clamp(0, 150));
   static final defaultPlaybackSpeed = DoublePref(
     'default_playback_speed',
     defaultValue: 1.0,

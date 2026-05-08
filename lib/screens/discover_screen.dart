@@ -1209,7 +1209,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                       key: i < _hubKeys.length ? _hubKeys[i] : null,
                       hub: _hubs[i],
                       icon: _getHubIcon(_hubs[i].title),
-                      showServerName: showServerNameOnHubs || duplicateHubTitles.contains(_hubs[i].title),
+                      showServerName: showServerNameOnHubs && duplicateHubTitles.contains(_hubs[i].title),
                       onRefresh: updateItem,
                       // Hub index is i + 1 if continue watching exists, otherwise i
                       onVerticalNavigation: (isUp) => _handleVerticalNavigation(_onDeck.isNotEmpty ? i + 1 : i, isUp),

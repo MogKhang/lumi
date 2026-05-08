@@ -144,6 +144,10 @@ class PlatformDetector {
     return TvDetectionService.isTVSync();
   }
 
+  static bool isAndroid(BuildContext context) {
+    return Theme.of(context).platform == TargetPlatform.android;
+  }
+
   static bool isAppleTV() {
     return TvDetectionService.isAppleTVSync();
   }

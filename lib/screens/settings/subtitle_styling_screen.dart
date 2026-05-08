@@ -23,7 +23,7 @@ class SubtitleStylingScreen extends StatelessWidget {
 
   String _formatPosition(int value) {
     if (value == 0) return 'Top';
-    if (value == 100) return 'Bottom';
+    if (value == 120) return 'Bottom';
     return '$value%';
   }
 
@@ -65,7 +65,7 @@ class SubtitleStylingScreen extends StatelessWidget {
           labelText: t.subtitlingStyling.position,
           suffixText: '%',
           min: 0,
-          max: 100,
+          max: 120,
         ),
         SettingSwitchTile(
           pref: SettingsService.subtitleBold,
