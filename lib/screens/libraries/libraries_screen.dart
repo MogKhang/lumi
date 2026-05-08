@@ -15,6 +15,7 @@ import '../../mixins/tab_navigation_mixin.dart';
 import '../../../services/plex_client.dart';
 import '../../media/media_backend.dart';
 import '../../media/media_item.dart';
+import '../../media/media_kind.dart';
 import '../../media/media_library.dart';
 import '../../media/media_server_client.dart';
 import '../../providers/hidden_libraries_provider.dart';
@@ -71,8 +72,9 @@ class ContextMenuItem {
 
 class LibrariesScreen extends StatefulWidget {
   final VoidCallback? onLibraryOrderChanged;
+  final MediaKind? filterKind;
 
-  const LibrariesScreen({super.key, this.onLibraryOrderChanged});
+  const LibrariesScreen({super.key, this.onLibraryOrderChanged, this.filterKind});
 
   @override
   State<LibrariesScreen> createState() => _LibrariesScreenState();
@@ -177,7 +179,12 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
     // Compute visible libraries for initial load
     final hiddenKeys = hiddenLibrariesProvider.hiddenLibraryKeys;
-    final visibleLibraries = allLibraries.where((lib) => !hiddenKeys.contains(lib.globalKey)).toList();
+    var visibleLibraries = allLibraries.where((lib) => !hiddenKeys.contains(lib.globalKey)).toList();
+
+    // Filter by MediaKind if requested
+    if (widget.filterKind != null) {
+      visibleLibraries = visibleLibraries.where((lib) => lib.kind == widget.filterKind).toList();
+    }
 
     // Load saved preferences
     final storage = await StorageService.getInstance();

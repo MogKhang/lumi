@@ -2140,11 +2140,11 @@ class TranslationsNavigationEn {
 
 	// Translations
 
-	/// en: 'Libraries'
-	String get libraries => 'Libraries';
+	/// en: 'Movies'
+	String get movies => 'Movies';
 
-	/// en: 'Downloads'
-	String get downloads => 'Downloads';
+	/// en: 'TV Shows'
+	String get shows => 'TV Shows';
 
 	/// en: 'Live TV'
 	String get liveTv => 'Live TV';
@@ -4661,8 +4661,8 @@ extension on Translations {
 			'licenses.license' => 'License',
 			'licenses.licenseNumber' => ({required Object number}) => 'License ${number}',
 			'licenses.licensesCount' => ({required Object count}) => '${count} licenses',
-			'navigation.libraries' => 'Libraries',
-			'navigation.downloads' => 'Downloads',
+			'navigation.movies' => 'Movies',
+			'navigation.shows' => 'TV Shows',
 			'navigation.liveTv' => 'Live TV',
 			'liveTv.title' => 'Live TV',
 			'liveTv.guide' => 'Guide',

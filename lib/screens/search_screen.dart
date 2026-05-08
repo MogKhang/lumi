@@ -18,12 +18,13 @@ import '../widgets/pill_input_decoration.dart';
 import '../widgets/focusable_media_card.dart';
 import '../utils/focus_utils.dart';
 import 'libraries/state_messages.dart';
-import 'main_screen.dart';
 import '../services/settings_service.dart';
 import '../widgets/settings_builder.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final String? initialQuery;
+
+  const SearchScreen({super.key, this.initialQuery});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -45,6 +46,11 @@ class _SearchScreenState extends State<SearchScreen>
     super.initState();
     _searchDebounce = debounce(_performSearch, const Duration(milliseconds: 500));
     _searchController.addListener(_onSearchChanged);
+
+    if (widget.initialQuery != null) {
+      _searchController.text = widget.initialQuery!;
+    }
+
     FocusUtils.requestFocusAfterBuild(this, _searchFocusNode);
   }
 
@@ -163,10 +169,7 @@ class _SearchScreenState extends State<SearchScreen>
     }
   }
 
-  /// Navigate focus to the sidebar
-  void _navigateToSidebar() {
-    MainScreenFocusScope.of(context)?.focusSidebar();
-  }
+
 
   Widget _buildResultsList(BuildContext context) {
     final svc = SettingsService.instanceOrNull!;
@@ -185,7 +188,6 @@ class _SearchScreenState extends State<SearchScreen>
             disableScale: true,
             focusNode: index == 0 ? _firstResultFocusNode : null,
             onListRefresh: () => updateItem(item.id),
-            onNavigateLeft: _navigateToSidebar,
             onNavigateUp: index == 0 ? focusSearchInput : null,
             showServerName: showServerName,
           );
@@ -210,8 +212,8 @@ class _SearchScreenState extends State<SearchScreen>
                 child: FocusableTextField(
                   controller: _searchController,
                   focusNode: _searchFocusNode,
+                  autofocus: true,
                   textInputAction: TextInputAction.search,
-                  onNavigateLeft: _navigateToSidebar,
                   onNavigateDown: _searchResults.isNotEmpty && !_isSearching
                       ? _firstResultFocusNode.requestFocus
                       : null,
@@ -219,7 +221,7 @@ class _SearchScreenState extends State<SearchScreen>
                     if (_searchController.text.isNotEmpty) {
                       _searchController.clear();
                     } else {
-                      _navigateToSidebar();
+                      Navigator.of(context).pop();
                     }
                   },
                   decoration: pillInputDecoration(

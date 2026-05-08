@@ -10,12 +10,12 @@ import 'package:provider/provider.dart';
 import '../focus/dpad_navigator.dart';
 import '../focus/focus_memory_tracker.dart';
 import '../media/media_library.dart';
+import '../media/media_kind.dart';
 import '../mixins/mounted_set_state_mixin.dart';
 import '../navigation/navigation_tabs.dart';
 import '../providers/hidden_libraries_provider.dart';
 import '../providers/libraries_provider.dart';
 import '../services/settings_service.dart';
-import '../utils/platform_detector.dart';
 import '../utils/library_grouping.dart';
 import '../providers/multi_server_provider.dart';
 import '../services/fullscreen_state_manager.dart';
@@ -188,7 +188,8 @@ class SideNavigationRail extends StatefulWidget {
 }
 
 class SideNavigationRailState extends State<SideNavigationRail> with MountedSetStateMixin {
-  bool _librariesExpanded = true;
+  bool _moviesExpanded = true;
+  bool _showsExpanded = true;
 
   bool _isHovered = false;
   bool _isTouchExpanded = false;
@@ -198,9 +199,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   static const Duration _collapseDelay = Duration(milliseconds: 150);
 
   static const _kHome = 'home';
-  static const _kLibraries = 'libraries';
-  static const _kSearch = 'search';
-  static const _kDownloads = 'downloads';
+  static const _kMovies = 'movies';
+  static const _kShows = 'shows';
   static const _kSettings = 'settings';
   static const _kReconnect = 'reconnect';
   static const _kFullscreen = 'fullscreen';
@@ -299,23 +299,29 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
 
   /// Build the set of valid focus keys (main nav + currently rendered library rows).
   Set<String> _buildValidFocusKeys({
-    required List<_LibraryNavRow> visibleRows,
-    required List<_LibraryNavRow> hiddenRows,
-    required bool hasHiddenLibraries,
+    required List<_LibraryNavRow> visibleMovieRows,
+    required List<_LibraryNavRow> visibleShowRows,
+    required List<_LibraryNavRow> hiddenMovieRows,
+    required List<_LibraryNavRow> hiddenShowRows,
+    required bool hasHiddenMovies,
+    required bool hasHiddenShows,
     required bool hasLiveTv,
   }) {
     return {
       _kHome,
-      _kLibraries,
-      _kSearch,
-      _kDownloads,
+      _kMovies,
+      _kShows,
       _kSettings,
       _kReconnect,
-      if (hasHiddenLibraries) _kHiddenLibraries,
+      if (hasHiddenMovies || hasHiddenShows) _kHiddenLibraries,
       if (_showFullscreenToggle) _kFullscreen,
       if (hasLiveTv) 'liveTv',
-      ..._focusKeysForLibraryRows(visibleRows),
-      if (_hiddenLibrariesExpanded) ..._focusKeysForLibraryRows(hiddenRows),
+      ..._focusKeysForLibraryRows(visibleMovieRows),
+      ..._focusKeysForLibraryRows(visibleShowRows),
+      if (_hiddenLibrariesExpanded) ...[
+        ..._focusKeysForLibraryRows(hiddenMovieRows),
+        ..._focusKeysForLibraryRows(hiddenShowRows),
+      ],
     };
   }
 
@@ -374,28 +380,36 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   }
 
   /// Ordered list of focusable keys matching visual top-to-bottom order.
-  List<String> _buildFocusOrder(
-    List<_LibraryNavRow> visibleRows,
-    List<_LibraryNavRow> hiddenRows, {
-    required bool hasHiddenLibraries,
+  List<String> _buildFocusOrder({
+    required List<_LibraryNavRow> visibleMovieRows,
+    required List<_LibraryNavRow> visibleShowRows,
+    required List<_LibraryNavRow> hiddenMovieRows,
+    required List<_LibraryNavRow> hiddenShowRows,
+    required bool hasHiddenMovies,
+    required bool hasHiddenShows,
     required bool hasLiveTv,
   }) {
     return [
       if (widget.isOfflineMode && widget.onReconnect != null) _kReconnect,
       if (!widget.isOfflineMode) ...[
         _kHome,
-        _kLibraries,
-        if (_librariesExpanded) ...[
-          ..._focusKeysForLibraryRows(visibleRows),
-          if (hasHiddenLibraries) ...[
-            _kHiddenLibraries,
-            if (_hiddenLibrariesExpanded) ..._focusKeysForLibraryRows(hiddenRows),
+        _kMovies,
+        if (_moviesExpanded) ...[
+          ..._focusKeysForLibraryRows(visibleMovieRows),
+        ],
+        _kShows,
+        if (_showsExpanded) ...[
+          ..._focusKeysForLibraryRows(visibleShowRows),
+        ],
+        if (hasHiddenMovies || hasHiddenShows) ...[
+          _kHiddenLibraries,
+          if (_hiddenLibrariesExpanded) ...[
+            ..._focusKeysForLibraryRows(hiddenMovieRows),
+            ..._focusKeysForLibraryRows(hiddenShowRows),
           ],
         ],
         if (hasLiveTv) 'liveTv',
-        _kSearch,
       ],
-      _kDownloads,
       _kSettings,
       if (_showFullscreenToggle) _kFullscreen,
     ];
@@ -498,15 +512,28 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     final hiddenKeys = hiddenLibrariesProvider.hiddenLibraryKeys;
 
     final allLibraries = librariesProvider.libraries;
-    final visibleLibraries = <MediaLibrary>[];
-    final hiddenLibraries = <MediaLibrary>[];
+    final visibleMovieLibraries = <MediaLibrary>[];
+    final visibleShowLibraries = <MediaLibrary>[];
+    final hiddenMovieLibraries = <MediaLibrary>[];
+    final hiddenShowLibraries = <MediaLibrary>[];
     final serverIds = <String>{};
+
     for (final lib in allLibraries) {
       if (lib.serverId != null) serverIds.add(lib.serverId!);
-      if (hiddenKeys.contains(lib.globalKey)) {
-        hiddenLibraries.add(lib);
-      } else {
-        visibleLibraries.add(lib);
+      final isHidden = hiddenKeys.contains(lib.globalKey);
+
+      if (lib.kind == MediaKind.movie) {
+        if (isHidden) {
+          hiddenMovieLibraries.add(lib);
+        } else {
+          visibleMovieLibraries.add(lib);
+        }
+      } else if (lib.kind == MediaKind.show) {
+        if (isHidden) {
+          hiddenShowLibraries.add(lib);
+        } else {
+          visibleShowLibraries.add(lib);
+        }
       }
     }
 
@@ -524,31 +551,41 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         // Server grouping: only when multi-server AND the user-facing toggle is on.
         final groupByServerSetting = SettingsService.instanceOrNull!.read(SettingsService.groupLibrariesByServer);
         final showServerHeaders = serverIds.length > 1 && groupByServerSetting;
+
+        final allVisibleLibs = [...visibleMovieLibraries, ...visibleShowLibraries];
+        final allHiddenLibs = [...hiddenMovieLibraries, ...hiddenShowLibraries];
+
         _collapsedServerGroupKeys.retainAll(
-          _buildServerGroupStateKeys(visibleLibraries, hiddenLibraries, showServerHeaders: showServerHeaders),
+          _buildServerGroupStateKeys(allVisibleLibs, allHiddenLibs, showServerHeaders: showServerHeaders),
         );
-        final visibleRows = _buildLibraryRows(
-          visibleLibraries,
-          section: _LibraryNavSection.visible,
-          showServerHeaders: showServerHeaders,
-        );
-        final hiddenRows = _buildLibraryRows(
-          hiddenLibraries,
-          section: _LibraryNavSection.hidden,
-          showServerHeaders: showServerHeaders,
-        );
+
+        final visibleMovieRows =
+            _buildLibraryRows(visibleMovieLibraries, section: _LibraryNavSection.visible, showServerHeaders: showServerHeaders);
+        final visibleShowRows =
+            _buildLibraryRows(visibleShowLibraries, section: _LibraryNavSection.visible, showServerHeaders: showServerHeaders);
+        final hiddenMovieRows =
+            _buildLibraryRows(hiddenMovieLibraries, section: _LibraryNavSection.hidden, showServerHeaders: showServerHeaders);
+        final hiddenShowRows =
+            _buildLibraryRows(hiddenShowLibraries, section: _LibraryNavSection.hidden, showServerHeaders: showServerHeaders);
+
         _focusTracker.pruneExcept(
           _buildValidFocusKeys(
-            visibleRows: visibleRows,
-            hiddenRows: hiddenRows,
-            hasHiddenLibraries: hiddenLibraries.isNotEmpty,
+            visibleMovieRows: visibleMovieRows,
+            visibleShowRows: visibleShowRows,
+            hiddenMovieRows: hiddenMovieRows,
+            hiddenShowRows: hiddenShowRows,
+            hasHiddenMovies: hiddenMovieLibraries.isNotEmpty,
+            hasHiddenShows: hiddenShowLibraries.isNotEmpty,
             hasLiveTv: hasLiveTv,
           ),
         );
         final focusOrder = _buildFocusOrder(
-          visibleRows,
-          hiddenRows,
-          hasHiddenLibraries: hiddenLibraries.isNotEmpty,
+          visibleMovieRows: visibleMovieRows,
+          visibleShowRows: visibleShowRows,
+          hiddenMovieRows: hiddenMovieRows,
+          hiddenShowRows: hiddenShowRows,
+          hasHiddenMovies: hiddenMovieLibraries.isNotEmpty,
+          hasHiddenShows: hiddenShowLibraries.isNotEmpty,
           hasLiveTv: hasLiveTv,
         );
         _debugAssertUniqueFocusOrder(focusOrder);
@@ -604,11 +641,29 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
 
                                 const SizedBox(height: 8),
 
+                                 _buildLibrariesSection(
+                                  visibleRows: visibleMovieRows,
+                                  hiddenRows: hiddenMovieRows,
+                                  hiddenLibraryCount: hiddenMovieLibraries.length,
+                                  tabId: NavigationTabId.movies,
+                                  focusKey: _kMovies,
+                                  isExpanded: _moviesExpanded,
+                                  onToggleExpansion: () => setState(() => _moviesExpanded = !_moviesExpanded),
+                                  t: t,
+                                  isCollapsed: isCollapsed,
+                                ),
+
+                                const SizedBox(height: 8),
+
                                 _buildLibrariesSection(
-                                  visibleRows,
-                                  hiddenRows,
-                                  hiddenLibraries.length,
-                                  t,
+                                  visibleRows: visibleShowRows,
+                                  hiddenRows: hiddenShowRows,
+                                  hiddenLibraryCount: hiddenShowLibraries.length,
+                                  tabId: NavigationTabId.shows,
+                                  focusKey: _kShows,
+                                  isExpanded: _showsExpanded,
+                                  onToggleExpansion: () => setState(() => _showsExpanded = !_showsExpanded),
+                                  t: t,
                                   isCollapsed: isCollapsed,
                                 ),
 
@@ -628,35 +683,6 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
 
                                   const SizedBox(height: 8),
                                 ],
-
-                                _buildNavItem(
-                                  icon: Symbols.search_rounded,
-                                  selectedIcon: Symbols.search_rounded,
-                                  label: Translations.of(context).common.search,
-                                  isSelected: widget.selectedTab == NavigationTabId.search,
-                                  isFocused: _focusTracker.isFocused(_kSearch),
-                                  onTap: () => widget.onDestinationSelected(NavigationTabId.search),
-                                  focusNode: _focusTracker.get(_kSearch),
-                                  isCollapsed: isCollapsed,
-                                ),
-
-                                const SizedBox(height: 8),
-                              ],
-
-                              // Downloads (hidden on Apple TV — no user
-                              // file storage)
-                              if (!PlatformDetector.isAppleTV()) ...[
-                                _buildNavItem(
-                                  icon: Symbols.download_rounded,
-                                  selectedIcon: Symbols.download_rounded,
-                                  label: Translations.of(context).navigation.downloads,
-                                  isSelected: widget.selectedTab == NavigationTabId.downloads,
-                                  isFocused: _focusTracker.isFocused(_kDownloads),
-                                  onTap: () => widget.onDestinationSelected(NavigationTabId.downloads),
-                                  focusNode: _focusTracker.get(_kDownloads),
-                                  isCollapsed: isCollapsed,
-                                ),
-                                const SizedBox(height: 8),
                               ],
 
                               _buildNavItem(
@@ -771,31 +797,38 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       onNavigateRight: widget.onNavigateToContent,
     );
   }
-
-  Widget _buildLibrariesSection(
-    List<_LibraryNavRow> visibleRows,
-    List<_LibraryNavRow> hiddenRows,
-    int hiddenLibraryCount,
-    dynamic t, {
+  Widget _buildLibrariesSection({
+    required List<_LibraryNavRow> visibleRows,
+    required List<_LibraryNavRow> hiddenRows,
+    required int hiddenLibraryCount,
+    required NavigationTabId tabId,
+    required String focusKey,
+    required bool isExpanded,
+    required VoidCallback onToggleExpansion,
+    required dynamic t,
     bool isCollapsed = false,
   }) {
     final librariesProvider = context.watch<LibrariesProvider>();
     final isLoading = librariesProvider.isLoading;
-    final isLibrariesSelected = widget.selectedTab == NavigationTabId.libraries && widget.selectedLibraryKey == null;
-    final isLibrariesFocused = _focusTracker.isFocused(_kLibraries);
+    final isTabSelected = widget.selectedTab == tabId && widget.selectedLibraryKey == null;
+    final isFocused = _focusTracker.isFocused(focusKey);
     final allEmpty = visibleRows.isEmpty && hiddenLibraryCount == 0;
+
+    final label = tabId == NavigationTabId.movies
+        ? Translations.of(context).navigation.movies
+        : Translations.of(context).navigation.shows;
+
+    final icon = tabId == NavigationTabId.movies ? Symbols.movie_rounded : Symbols.tv_rounded;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Focus(
-          focusNode: _focusTracker.get(_kLibraries),
+          focusNode: _focusTracker.get(focusKey),
           onKeyEvent: (node, event) {
             if (event is! KeyDownEvent) return KeyEventResult.ignored;
             if (event.logicalKey.isSelectKey) {
-              setState(() {
-                _librariesExpanded = !_librariesExpanded;
-              });
+              onToggleExpansion();
               return KeyEventResult.handled;
             }
             // RIGHT arrow navigates to content area
@@ -810,16 +843,18 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
             child: InkWell(
               canRequestFocus: false,
               onTap: () {
-                setState(() {
-                  _librariesExpanded = !_librariesExpanded;
-                });
+                if (isCollapsed) {
+                  widget.onDestinationSelected(tabId);
+                } else {
+                  onToggleExpansion();
+                }
               },
               borderRadius: BorderRadius.circular(tokens(context).radiusMd),
               child: Container(
                 decoration: BoxDecoration(
                   color: () {
-                    if (isLibrariesSelected) return t.text.withValues(alpha: 0.1);
-                    if (isLibrariesFocused) return t.text.withValues(alpha: 0.08);
+                    if (isTabSelected) return t.text.withValues(alpha: 0.1);
+                    if (isFocused) return t.text.withValues(alpha: 0.08);
                     return null;
                   }(),
                   borderRadius: BorderRadius.circular(tokens(context).radiusMd),
@@ -836,10 +871,10 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                       child: Row(
                         children: [
                           AppIcon(
-                            Symbols.video_library_rounded,
+                            icon,
                             fill: 1,
                             size: 22,
-                            color: widget.selectedTab == NavigationTabId.libraries ? t.text : t.textMuted,
+                            color: widget.selectedTab == tabId ? t.text : t.textMuted,
                           ),
                           const SizedBox(width: 11),
                           Expanded(
@@ -847,13 +882,11 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                               opacity: isCollapsed ? 0.0 : 1.0,
                               duration: tokens(context).fast,
                               child: Text(
-                                Translations.of(context).navigation.libraries,
+                                label,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: widget.selectedTab == NavigationTabId.libraries
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                  color: widget.selectedTab == NavigationTabId.libraries ? t.text : t.textMuted,
+                                  fontWeight: widget.selectedTab == tabId ? FontWeight.w600 : FontWeight.w400,
+                                  color: widget.selectedTab == tabId ? t.text : t.textMuted,
                                 ),
                               ),
                             ),
@@ -862,7 +895,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                             opacity: isCollapsed ? 0.0 : 1.0,
                             duration: tokens(context).fast,
                             child: AppIcon(
-                              _librariesExpanded ? Symbols.expand_less_rounded : Symbols.expand_more_rounded,
+                              isExpanded ? Symbols.expand_less_rounded : Symbols.expand_more_rounded,
                               fill: 1,
                               size: 20,
                               color: t.textMuted,
@@ -879,7 +912,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         ),
 
         TweenAnimationBuilder<double>(
-          tween: Tween(end: (_librariesExpanded && !isCollapsed) ? 1.0 : 0.0),
+          tween: Tween(end: (isExpanded && !isCollapsed) ? 1.0 : 0.0),
           duration: tokens(context).normal,
           curve: Curves.easeOutCubic,
           builder: (context, value, child) {
@@ -888,7 +921,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
             );
           },
           child: ExcludeFocus(
-            excluding: !_librariesExpanded || isCollapsed,
+            excluding: !isExpanded || isCollapsed,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1076,7 +1109,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
 
   Widget _buildLibraryItem(_LibraryNavSection section, MediaLibrary library, dynamic t, {bool showServerName = false}) {
     final isSelected =
-        widget.selectedTab == NavigationTabId.libraries && widget.selectedLibraryKey == library.globalKey;
+        (widget.selectedTab == NavigationTabId.movies || widget.selectedTab == NavigationTabId.shows) &&
+        widget.selectedLibraryKey == library.globalKey;
     final focusKey = _libraryItemFocusKey(section, library);
     final isFocused = _focusTracker.isFocused(focusKey);
     final focusNode = _focusTracker.get(focusKey);

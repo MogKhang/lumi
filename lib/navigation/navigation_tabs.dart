@@ -3,10 +3,10 @@ import 'package:plezy/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../i18n/strings.g.dart';
-import '../utils/platform_detector.dart';
+
 
 /// Navigation tab identifiers
-enum NavigationTabId { discover, libraries, liveTv, search, downloads, settings }
+enum NavigationTabId { discover, movies, shows, liveTv, settings }
 
 /// Represents a navigation tab with its configuration
 class NavigationTab {
@@ -32,7 +32,6 @@ class NavigationTab {
     return allNavigationTabs.where((tab) {
       if (isOffline && tab.onlineOnly) return false;
       if (tab.id == NavigationTabId.liveTv && !hasLiveTv) return false;
-      if (tab.id == NavigationTabId.downloads && PlatformDetector.isAppleTV()) return false;
       return true;
     }).toList();
   }
@@ -40,29 +39,27 @@ class NavigationTab {
 
 // Label getters (must be top-level for const constructor)
 String _getHomeLabel() => t.common.home;
-String _getLibrariesLabel() => t.navigation.libraries;
+String _getMoviesLabel() => t.navigation.movies;
+String _getShowsLabel() => t.navigation.shows;
 String _getLiveTvLabel() => t.navigation.liveTv;
-String _getSearchLabel() => t.common.search;
-String _getDownloadsLabel() => t.navigation.downloads;
 String _getSettingsLabel() => t.common.settings;
 
 /// All navigation tabs in display order
 const allNavigationTabs = [
   NavigationTab(id: NavigationTabId.discover, onlineOnly: true, icon: Symbols.home_rounded, getLabel: _getHomeLabel),
   NavigationTab(
-    id: NavigationTabId.libraries,
+    id: NavigationTabId.movies,
     onlineOnly: true,
-    icon: Symbols.video_library_rounded,
-    getLabel: _getLibrariesLabel,
+    icon: Symbols.movie_rounded,
+    getLabel: _getMoviesLabel,
+  ),
+  NavigationTab(
+    id: NavigationTabId.shows,
+    onlineOnly: true,
+    icon: Symbols.tv_rounded,
+    getLabel: _getShowsLabel,
   ),
   NavigationTab(id: NavigationTabId.liveTv, onlineOnly: true, icon: Symbols.live_tv_rounded, getLabel: _getLiveTvLabel),
-  NavigationTab(id: NavigationTabId.search, onlineOnly: true, icon: Symbols.search_rounded, getLabel: _getSearchLabel),
-  NavigationTab(
-    id: NavigationTabId.downloads,
-    onlineOnly: false,
-    icon: Symbols.download_rounded,
-    getLabel: _getDownloadsLabel,
-  ),
   NavigationTab(
     id: NavigationTabId.settings,
     onlineOnly: false,

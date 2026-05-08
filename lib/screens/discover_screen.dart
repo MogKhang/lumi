@@ -61,6 +61,7 @@ import '../watch_together/watch_together.dart';
 import '../providers/companion_remote_provider.dart';
 import '../widgets/companion_remote/remote_session_dialog.dart';
 import 'companion_remote/mobile_remote_screen.dart';
+import 'search_screen.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -1025,6 +1026,13 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     onNavigateLeft: _navigateToSidebar,
                     onNavigateDown: _focusContentFromAppBar,
                     actions: [
+                      FocusableAction(
+                        icon: Symbols.search_rounded,
+                        iconColor: Colors.white,
+                        onPressed: () =>
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
+                        tooltip: t.common.search,
+                      ),
                       FocusableAction(icon: Symbols.refresh_rounded, iconColor: Colors.white, onPressed: _loadContent),
                       // Watch Together
                       FocusableAction(

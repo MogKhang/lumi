@@ -34,11 +34,13 @@ import '../providers/multi_server_provider.dart';
 import '../providers/hidden_libraries_provider.dart';
 import '../providers/libraries_provider.dart';
 import '../providers/playback_state_provider.dart';
-import '../widgets/settings_builder.dart';
-import '../services/api_cache.dart';
+
+import '../media/media_kind.dart';
 import '../services/multi_server_manager.dart';
 import '../services/offline_watch_sync_service.dart';
 import '../services/settings_service.dart';
+import '../services/api_cache.dart';
+import '../widgets/settings_builder.dart';
 import '../providers/offline_mode_provider.dart';
 import '../services/companion_remote/companion_remote_receiver.dart';
 import '../services/fullscreen_state_manager.dart';
@@ -51,7 +53,7 @@ import 'discover_screen.dart';
 import 'libraries/libraries_screen.dart';
 import 'livetv/live_tv_screen.dart';
 import 'search_screen.dart';
-import 'downloads/downloads_screen.dart';
+
 import 'settings/settings_screen.dart';
 import 'profile/profile_switch_screen.dart';
 import '../services/watch_next_service.dart';
@@ -116,9 +118,6 @@ class _MainScreenState extends State<MainScreen>
   /// Last selected online tab (restored when coming back online after an offline fallback)
   NavigationTabId? _lastOnlineTabId;
 
-  /// Whether we auto-switched to Downloads because the previous tab was unavailable offline
-  bool _autoSwitchedToDownloads = false;
-
   OfflineModeProvider? _offlineModeProvider;
   MultiServerProvider? _multiServerProvider;
   bool _lastHasLiveTv = false;
@@ -131,10 +130,9 @@ class _MainScreenState extends State<MainScreen>
 
   late List<Widget> _screens;
   final GlobalKey<State<DiscoverScreen>> _discoverKey = GlobalKey();
-  final GlobalKey<State<LibrariesScreen>> _librariesKey = GlobalKey();
+  final GlobalKey<State<LibrariesScreen>> _moviesKey = GlobalKey();
+  final GlobalKey<State<LibrariesScreen>> _showsKey = GlobalKey();
   final GlobalKey<State<LiveTvScreen>> _liveTvKey = GlobalKey();
-  final GlobalKey<State<SearchScreen>> _searchKey = GlobalKey();
-  final GlobalKey<State<DownloadsScreen>> _downloadsKey = GlobalKey();
   final GlobalKey<State<SettingsScreen>> _settingsKey = GlobalKey();
   final GlobalKey<SideNavigationRailState> _sideNavKey = GlobalKey();
 
@@ -196,9 +194,8 @@ class _MainScreenState extends State<MainScreen>
       windowManager.setPreventClose(true);
     }
 
-    _currentTab = _isOffline ? NavigationTabId.downloads : NavigationTabId.discover;
+    _currentTab = _isOffline ? NavigationTabId.settings : NavigationTabId.discover;
     _lastOnlineTabId = _isOffline ? null : NavigationTabId.discover;
-    _autoSwitchedToDownloads = _isOffline;
 
     // Synchronize _lastHasLiveTv with provider before building screens
     // so _buildScreens and _hasLiveTv getter agree from the start.
@@ -328,10 +325,10 @@ class _MainScreenState extends State<MainScreen>
         if (_discoverKey.currentState case final FullRefreshable refreshable) {
           refreshable.fullRefresh();
         }
-        if (_librariesKey.currentState case final FullRefreshable refreshable) {
+        if (_moviesKey.currentState case final FullRefreshable refreshable) {
           refreshable.fullRefresh();
         }
-        if (_searchKey.currentState case final FullRefreshable refreshable) {
+        if (_showsKey.currentState case final FullRefreshable refreshable) {
           refreshable.fullRefresh();
         }
       }());
@@ -626,20 +623,18 @@ class _MainScreenState extends State<MainScreen>
       if (idx >= 0) _selectTab(tabs[(idx - 1 + tabs.length) % tabs.length].id);
     };
     receiver.onTabDiscover = () => _selectTab(NavigationTabId.discover);
-    receiver.onTabLibraries = () => _selectTab(NavigationTabId.libraries);
-    receiver.onTabSearch = () => _selectTab(NavigationTabId.search);
-    receiver.onTabDownloads = () => _selectTab(NavigationTabId.downloads);
+    receiver.onTabLibraries = () => _selectTab(NavigationTabId.movies);
+    receiver.onTabSearch = () {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const SearchScreen()),
+      );
+    };
     receiver.onTabSettings = () => _selectTab(NavigationTabId.settings);
     receiver.onHome = () => _selectTab(NavigationTabId.discover);
     receiver.onSearchAction = (query) {
-      _selectTab(NavigationTabId.search);
-      if (query != null && query.isNotEmpty) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_searchKey.currentState case final SearchInputFocusable searchable) {
-            searchable.setSearchQuery(query);
-          }
-        });
-      }
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => SearchScreen(initialQuery: query)),
+      );
     };
   }
 
@@ -705,7 +700,6 @@ class _MainScreenState extends State<MainScreen>
       receiver.onTabDiscover = null;
       receiver.onTabLibraries = null;
       receiver.onTabSearch = null;
-      receiver.onTabDownloads = null;
       receiver.onTabSettings = null;
       receiver.onHome = null;
       receiver.onSearchAction = null;
@@ -769,13 +763,17 @@ class _MainScreenState extends State<MainScreen>
       for (final tab in _getVisibleTabs(offline))
         switch (tab.id) {
           NavigationTabId.discover => DiscoverScreen(key: _discoverKey),
-          NavigationTabId.libraries => LibrariesScreen(
-            key: _librariesKey,
+          NavigationTabId.movies => LibrariesScreen(
+            key: _moviesKey,
+            filterKind: MediaKind.movie,
+            onLibraryOrderChanged: _onLibraryOrderChanged,
+          ),
+          NavigationTabId.shows => LibrariesScreen(
+            key: _showsKey,
+            filterKind: MediaKind.show,
             onLibraryOrderChanged: _onLibraryOrderChanged,
           ),
           NavigationTabId.liveTv => LiveTvScreen(key: _liveTvKey),
-          NavigationTabId.search => SearchScreen(key: _searchKey),
-          NavigationTabId.downloads => DownloadsScreen(key: _downloadsKey),
           NavigationTabId.settings => SettingsScreen(key: _settingsKey),
         },
     ];
@@ -836,21 +834,18 @@ class _MainScreenState extends State<MainScreen>
           _lastOnlineTabId = previousTab;
         }
 
-        final normalizedTab = _normalizeTabForMode(_currentTab, _isOffline);
-        _currentTab = normalizedTab;
-
-        // Track if we auto-switched to Downloads because the previous tab was unavailable.
-        _autoSwitchedToDownloads =
-            previousTab != NavigationTabId.downloads && normalizedTab == NavigationTabId.downloads;
-      } else {
-        // Coming back online: restore the last online tab if we forced a switch to Downloads.
-        if (_autoSwitchedToDownloads) {
-          final restoredTab = _lastOnlineTabId ?? NavigationTabId.discover;
-          _currentTab = _normalizeTabForMode(restoredTab, _isOffline);
+        if (previousTab != _currentTab) {
+          _selectTab(NavigationTabId.settings);
         } else {
           _currentTab = _normalizeTabForMode(_currentTab, _isOffline);
         }
-        _autoSwitchedToDownloads = false;
+      } else {
+        // Coming back online: restore the last online tab
+        if (_lastOnlineTabId != null) {
+          _currentTab = _normalizeTabForMode(_lastOnlineTabId!, _isOffline);
+        } else {
+          _currentTab = _normalizeTabForMode(_currentTab, _isOffline);
+        }
       }
     });
 
@@ -980,28 +975,23 @@ class _MainScreenState extends State<MainScreen>
     return KeyEventResult.handled;
   }
 
-  /// Handle Cmd+F (macOS) / Ctrl+F (Windows/Linux) to navigate to search.
+  /// Handle Search key or Cmd+F (macOS) / Ctrl+F (Windows/Linux) to navigate to search.
   KeyEventResult _handleSearchShortcut(KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
-    if (event.logicalKey != LogicalKeyboardKey.keyF) return KeyEventResult.ignored;
+    if (_isOffline) return KeyEventResult.ignored;
+
+    final isSearchKey = event.logicalKey == LogicalKeyboardKey.browserSearch;
 
     final isMetaPressed = HardwareKeyboard.instance.isMetaPressed;
     final isControlPressed = HardwareKeyboard.instance.isControlPressed;
+    final isMacShortcut = Platform.isMacOS && isMetaPressed && !isControlPressed && event.logicalKey == LogicalKeyboardKey.keyF;
+    final isOtherShortcut = !Platform.isMacOS && isControlPressed && !isMetaPressed && event.logicalKey == LogicalKeyboardKey.keyF;
 
-    final isMacShortcut = Platform.isMacOS && isMetaPressed && !isControlPressed;
-    final isOtherShortcut = !Platform.isMacOS && isControlPressed && !isMetaPressed;
+    if (!isSearchKey && !isMacShortcut && !isOtherShortcut) return KeyEventResult.ignored;
 
-    if (!isMacShortcut && !isOtherShortcut) return KeyEventResult.ignored;
-    if (_isOffline) return KeyEventResult.handled;
-
-    _selectTab(NavigationTabId.search);
-    if (_isSidebarFocused) _focusContent();
-    // Schedule focus after the frame so the search screen is visible in the IndexedStack
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_searchKey.currentState case final SearchInputFocusable searchable) {
-        searchable.focusSearchInput();
-      }
-    });
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const SearchScreen()),
+    );
     return KeyEventResult.handled;
   }
 
@@ -1094,10 +1084,10 @@ class _MainScreenState extends State<MainScreen>
     if (_discoverKey.currentState case final FullRefreshable refreshable) {
       refreshable.fullRefresh();
     }
-    if (_librariesKey.currentState case final FullRefreshable refreshable) {
+    if (_moviesKey.currentState case final FullRefreshable refreshable) {
       refreshable.fullRefresh();
     }
-    if (_searchKey.currentState case final FullRefreshable refreshable) {
+    if (_showsKey.currentState case final FullRefreshable refreshable) {
       refreshable.fullRefresh();
     }
 
@@ -1116,9 +1106,6 @@ class _MainScreenState extends State<MainScreen>
       _currentTab = tab;
       if (!_isOffline) {
         _lastOnlineTabId = tab;
-      } else if (previousTab != tab) {
-        // User made an explicit offline selection, so don't auto-restore later.
-        _autoSwitchedToDownloads = false;
       }
     });
 
@@ -1141,26 +1128,25 @@ class _MainScreenState extends State<MainScreen>
     if (!_isOffline && tab == NavigationTabId.discover) {
       _onDiscoverBecameVisible();
     }
-
-    // Focus search input after rebuild so IndexedStack has made it visible
-    if (tab == NavigationTabId.search) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_searchKey.currentState case final SearchInputFocusable searchable) {
-          searchable.focusSearchInput();
-        }
-      });
-    }
   }
 
   /// Handle library selection from side navigation rail
   void _selectLibrary(String libraryGlobalKey) {
     _selectedLibraryGlobalKey = libraryGlobalKey;
-    _selectTab(NavigationTabId.libraries);
-    // Tell LibrariesScreen to load this library after tab switch
-    if (_librariesKey.currentState case final LibraryLoadable loadable) {
+
+    // Determine which tab to switch to based on library kind
+    final librariesProvider = context.read<LibrariesProvider>();
+    final library = librariesProvider.libraries.firstWhere((lib) => lib.globalKey == libraryGlobalKey);
+
+    final tabId = library.kind == MediaKind.show ? NavigationTabId.shows : NavigationTabId.movies;
+    _selectTab(tabId);
+
+    // Tell the appropriate screen to load this library after tab switch
+    final key = _screenKeyFor(tabId);
+    if (key?.currentState case final LibraryLoadable loadable) {
       loadable.loadLibraryByKey(libraryGlobalKey);
     }
-    if (_librariesKey.currentState case final FocusableTab focusable) {
+    if (key?.currentState case final FocusableTab focusable) {
       focusable.focusActiveTabIfReady();
     }
   }
@@ -1179,10 +1165,9 @@ class _MainScreenState extends State<MainScreen>
   GlobalKey? _screenKeyFor(NavigationTabId tab) {
     return switch (tab) {
       NavigationTabId.discover => _discoverKey,
-      NavigationTabId.libraries => _librariesKey,
+      NavigationTabId.movies => _moviesKey,
+      NavigationTabId.shows => _showsKey,
       NavigationTabId.liveTv => _liveTvKey,
-      NavigationTabId.search => _searchKey,
-      NavigationTabId.downloads => _downloadsKey,
       NavigationTabId.settings => _settingsKey,
     };
   }

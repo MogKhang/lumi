@@ -715,8 +715,8 @@
     "licensesCount": "${count} licenses"
   },
   "navigation": {
-    "libraries": "Libraries",
-    "downloads": "Downloads",
+    "movies": "Movies",
+    "shows": "TV Shows",
     "liveTv": "Live TV"
   },
   "liveTv": {
