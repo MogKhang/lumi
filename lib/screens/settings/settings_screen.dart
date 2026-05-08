@@ -349,16 +349,19 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   Widget _buildSwitchServerTile() {
     return Consumer<MultiServerProvider>(
       builder: (context, provider, _) {
-        final allServers = provider.serverManager.serverIds;
-        final isAllSelected = provider.serverIds.length == allServers.length;
-        final currentFilter = provider.serverIds;
+        final allowedServers = provider.allowedServerIds ?? provider.serverManager.serverIds;
+        final selectedId = provider.selectedServerId;
+        
+        // Use the first server as the effective selection if none explicitly selected
+        final effectiveSelection = (selectedId != null && allowedServers.contains(selectedId))
+            ? selectedId 
+            : (allowedServers.isNotEmpty ? allowedServers.first : null);
+
         final String subtitle;
-        if (isAllSelected) {
-          subtitle = 'All Servers';
-        } else if (currentFilter.length == 1) {
-          subtitle = provider.serverManager.getClient(currentFilter.first)?.serverName ?? 'Unknown Server';
+        if (effectiveSelection != null) {
+          subtitle = provider.serverManager.getClient(effectiveSelection)?.serverName ?? 'Unknown Server';
         } else {
-          subtitle = '${currentFilter.length} Servers';
+          subtitle = 'No Servers Available';
         }
 
         return ListTile(
@@ -367,29 +370,22 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
           subtitle: Text(subtitle),
           trailing: const AppIcon(Symbols.chevron_right_rounded, fill: 1),
           onTap: () async {
-            final options = [
-              DialogOption(value: 'ALL', title: 'All Servers'),
-              ...allServers.map((id) => DialogOption(
-                    value: id,
-                    title: provider.serverManager.getClient(id)?.serverName ?? id,
-                  )),
-            ];
+            if (allowedServers.isEmpty) return;
 
-            final String initialValue = isAllSelected || currentFilter.isEmpty ? 'ALL' : currentFilter.first;
+            final options = allowedServers.map((id) => DialogOption(
+                  value: id,
+                  title: provider.serverManager.getClient(id)?.serverName ?? id,
+                )).toList();
 
             final value = await showSelectionDialog<String>(
               context: context,
               title: 'Switch Server',
               options: options,
-              currentValue: initialValue,
+              currentValue: effectiveSelection!,
             );
 
             if (value != null && context.mounted) {
-              if (value == 'ALL') {
-                provider.setVisibleServerIds(null);
-              } else {
-                provider.setVisibleServerIds({value});
-              }
+              provider.setSelectedServerId(value);
               unawaited(context.read<LibrariesProvider>().loadLibraries());
             }
           },

@@ -1030,6 +1030,18 @@ class _LibrariesScreenState extends State<LibrariesScreen>
         ? allLibraries.where((lib) => lib.globalKey == _selectedLibraryGlobalKey).firstOrNull
         : null;
 
+    // Auto-select first library if current selection is invalid (e.g. after server switch)
+    if (_selectedLibraryGlobalKey != null &&
+        selectedLibrary == null &&
+        visibleLibraries.isNotEmpty &&
+        !isLoadingLibraries) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _initializeWithLibraries();
+        }
+      });
+    }
+
     final showMobileTabsRow = selectedLibrary != null && !PlatformDetector.shouldUseSideNavigation(context);
 
     Widget appBar({required bool floating}) => DesktopSliverAppBar(

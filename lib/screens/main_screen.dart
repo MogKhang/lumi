@@ -121,6 +121,7 @@ class _MainScreenState extends State<MainScreen>
   OfflineModeProvider? _offlineModeProvider;
   MultiServerProvider? _multiServerProvider;
   bool _lastHasLiveTv = false;
+  String? _lastSelectedServerId;
 
   /// Whether a reconnection attempt is in progress
   bool _isReconnecting = false;
@@ -200,9 +201,12 @@ class _MainScreenState extends State<MainScreen>
     // Synchronize _lastHasLiveTv with provider before building screens
     // so _buildScreens and _hasLiveTv getter agree from the start.
     try {
-      _lastHasLiveTv = context.read<MultiServerProvider>().hasLiveTv;
+      final mp = context.read<MultiServerProvider>();
+      _lastHasLiveTv = mp.hasLiveTv;
+      _lastSelectedServerId = mp.selectedServerId;
     } catch (_) {
       _lastHasLiveTv = false;
+      _lastSelectedServerId = null;
     }
     _screens = _buildScreens(_isOffline);
 
@@ -585,12 +589,12 @@ class _MainScreenState extends State<MainScreen>
       _offlineModeProvider!.addListener(_handleOfflineStatusChanged);
     }
 
-    // Listen for Live TV / DVR availability changes
+    // Listen for MultiServer changes (Live TV, server selection)
     final multiServer = context.read<MultiServerProvider>();
     if (multiServer != _multiServerProvider) {
-      _multiServerProvider?.removeListener(_handleLiveTvChanged);
+      _multiServerProvider?.removeListener(_handleMultiServerChanged);
       _multiServerProvider = multiServer;
-      _multiServerProvider!.addListener(_handleLiveTvChanged);
+      _multiServerProvider!.addListener(_handleMultiServerChanged);
     }
 
     // Wire up Companion Remote command routing (host devices only, once)
@@ -681,7 +685,7 @@ class _MainScreenState extends State<MainScreen>
       windowManager.setPreventClose(false);
     }
     _offlineModeProvider?.removeListener(_handleOfflineStatusChanged);
-    _multiServerProvider?.removeListener(_handleLiveTvChanged);
+    _multiServerProvider?.removeListener(_handleMultiServerChanged);
     if (_bindingSettleListener != null) {
       _activeProfileForListener?.removeListener(_bindingSettleListener!);
     }
@@ -804,15 +808,32 @@ class _MainScreenState extends State<MainScreen>
     }());
   }
 
-  void _handleLiveTvChanged() {
-    final hasLiveTv = _multiServerProvider?.hasLiveTv ?? false;
-    if (hasLiveTv == _lastHasLiveTv) return;
-    _lastHasLiveTv = hasLiveTv;
+  void _handleMultiServerChanged() {
+    final multiServer = _multiServerProvider;
+    if (multiServer == null) return;
 
-    setState(() {
-      _screens = _buildScreens(_isOffline);
-      _currentTab = _normalizeTabForMode(_currentTab, _isOffline);
-    });
+    final hasLiveTv = multiServer.hasLiveTv;
+    final selectedServerId = multiServer.selectedServerId;
+
+    bool needsRebuild = false;
+    if (hasLiveTv != _lastHasLiveTv) {
+      _lastHasLiveTv = hasLiveTv;
+      needsRebuild = true;
+    }
+
+    if (selectedServerId != _lastSelectedServerId) {
+      _lastSelectedServerId = selectedServerId;
+      unawaited(_invalidateAllScreens());
+      // Rebuild anyway to update the side nav server highlighting/headers
+      needsRebuild = true;
+    }
+
+    if (needsRebuild) {
+      setState(() {
+        _screens = _buildScreens(_isOffline);
+        _currentTab = _normalizeTabForMode(_currentTab, _isOffline);
+      });
+    }
   }
 
   void _handleOfflineStatusChanged() {

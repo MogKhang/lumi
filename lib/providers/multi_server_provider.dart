@@ -40,27 +40,75 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   /// Previously-seen set of online server IDs, used to detect new servers
   Set<String> _previousOnlineServerIds = {};
 
-  /// Visibility filter applied by the active app profile. `null` means
-  /// "all servers visible" (no profile restriction); otherwise only server
-  /// ids in the set surface through [serverIds] / [onlineServerIds].
-  Set<String>? _visibleServerIds;
+  /// The set of server IDs allowed by the active profile. `null` means no profile
+  /// restriction (all servers managed by the app are allowed).
+  Set<String>? _allowedServerIds;
 
-  /// Replace the active visibility filter and notify listeners. Pass `null`
-  /// to clear the filter (all servers visible). Idempotent — does nothing
-  /// when [ids] equals the current filter.
+  /// The server ID explicitly selected by the user in Settings.
+  String? _selectedServerId;
+
+  /// Get the currently active allowed server IDs.
+  Set<String>? get allowedServerIds => _allowedServerIds;
+
+  /// Get the currently selected server ID.
+  String? get selectedServerId => _selectedServerId;
+
+  /// Replace the active allowed server IDs and notify listeners. Pass `null`
+  /// to clear the restriction. Idempotent — does nothing when [ids] equals 
+  /// the current allowed set.
   void setVisibleServerIds(Set<String>? ids) {
-    if (_visibleServerIds == null && ids == null) return;
-    if (_visibleServerIds != null &&
+    if (_allowedServerIds == null && ids == null) return;
+    if (_allowedServerIds != null &&
         ids != null &&
-        _visibleServerIds!.length == ids.length &&
-        _visibleServerIds!.containsAll(ids)) {
+        _allowedServerIds!.length == ids.length &&
+        _allowedServerIds!.containsAll(ids)) {
       return;
     }
-    _visibleServerIds = ids;
-    _aggregationService.visibleServerIds = _visibleServerIds;
+    _allowedServerIds = ids;
+    _syncAggregationFilter();
     _pruneLiveTvServersForVisibility();
     safeNotifyListeners();
     _refreshLiveTvAvailabilitySoon();
+  }
+
+  /// Select a specific server for the UI. Pass `null` to revert to the 
+  /// default (first allowed server).
+  void setSelectedServerId(String? serverId) {
+    if (_selectedServerId == serverId) return;
+    _selectedServerId = serverId;
+    _syncAggregationFilter();
+    _pruneLiveTvServersForVisibility();
+    safeNotifyListeners();
+    _refreshLiveTvAvailabilitySoon();
+  }
+
+  void _syncAggregationFilter() {
+    _aggregationService.visibleServerIds = _effectiveVisibleIds;
+  }
+
+  /// The IDs actually used for filtering content. Returns a set containing
+  /// only the selected server (if allowed) or the first allowed server.
+  Set<String>? get _effectiveVisibleIds {
+    // If no profile restriction, default to first available server
+    if (_allowedServerIds == null) {
+      final all = _serverManager.serverIds;
+      if (all.isEmpty) return null;
+      if (_selectedServerId != null && all.contains(_selectedServerId)) {
+        return {_selectedServerId!};
+      }
+      return {all.first};
+    }
+
+    // If profile restricts to an empty set, show nothing
+    if (_allowedServerIds!.isEmpty) return const {};
+
+    // Use selected server if it's in the allowed set
+    if (_selectedServerId != null && _allowedServerIds!.contains(_selectedServerId)) {
+      return {_selectedServerId!};
+    }
+
+    // Default to the first allowed server
+    return {_allowedServerIds!.first};
   }
 
   /// Add [serverId] to the active visibility filter. Used after adding a
@@ -68,23 +116,23 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   /// becomes visible without the binder having to re-run. Initializes the
   /// filter to a one-element set when no filter is currently set.
   void addToVisibleServerIds(String serverId) {
-    final current = _visibleServerIds;
+    final current = _allowedServerIds;
     if (current == null) {
-      _visibleServerIds = {serverId};
-      _aggregationService.visibleServerIds = _visibleServerIds;
+      _allowedServerIds = {serverId};
+      _syncAggregationFilter();
       safeNotifyListeners();
       _refreshLiveTvAvailabilitySoon();
       return;
     }
     if (current.contains(serverId)) return;
-    _visibleServerIds = {...current, serverId};
-    _aggregationService.visibleServerIds = _visibleServerIds;
+    _allowedServerIds = {...current, serverId};
+    _syncAggregationFilter();
     safeNotifyListeners();
     _refreshLiveTvAvailabilitySoon();
   }
 
   void _pruneLiveTvServersForVisibility() {
-    final filter = _visibleServerIds;
+    final filter = _effectiveVisibleIds;
     if (filter == null) return;
     _liveTvServers.removeWhere((s) => !filter.contains(s.serverId));
     _hasLiveTv = _liveTvServers.isNotEmpty;
@@ -141,7 +189,7 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   /// Get all online server IDs (visibility-filtered).
   List<String> get onlineServerIds {
     final all = _serverManager.onlineServerIds;
-    final filter = _visibleServerIds;
+    final filter = _effectiveVisibleIds;
     if (filter == null) return all;
     return all.where(filter.contains).toList();
   }
@@ -149,14 +197,14 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   /// Get all server IDs (visibility-filtered).
   List<String> get serverIds {
     final all = _serverManager.serverIds;
-    final filter = _visibleServerIds;
+    final filter = _effectiveVisibleIds;
     if (filter == null) return all;
     return all.where(filter.contains).toList();
   }
 
   /// Check if a server is online (and visible under the active profile).
   bool isServerOnline(String serverId) {
-    final filter = _visibleServerIds;
+    final filter = _effectiveVisibleIds;
     if (filter != null && !filter.contains(serverId)) return false;
     return _serverManager.isServerOnline(serverId);
   }
@@ -180,7 +228,7 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   /// "Sign in again" banner distinct from generic "Server offline".
   List<String> get authErrorServerIds {
     final all = _serverManager.authErrorServerIds;
-    final filter = _visibleServerIds;
+    final filter = _effectiveVisibleIds;
     if (filter == null) return all.toList();
     return all.where(filter.contains).toList();
   }
@@ -241,7 +289,7 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
       }
     }
 
-    final filter = _visibleServerIds;
+    final filter = _effectiveVisibleIds;
     final visibleLiveTvServers = filter == null
         ? newLiveTvServers
         : newLiveTvServers.where((s) => filter.contains(s.serverId)).toList();
