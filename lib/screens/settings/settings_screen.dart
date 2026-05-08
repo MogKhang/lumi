@@ -31,6 +31,17 @@ import '../profile/profile_switch_screen.dart';
 import '../../widgets/settings_builder.dart';
 import '../../models/transcode_quality_preset.dart';
 import '../../utils/quality_preset_labels.dart';
+import '../../providers/companion_remote_provider.dart';
+import '../../providers/user_profile_provider.dart';
+import '../../providers/multi_server_provider.dart';
+import '../../providers/hidden_libraries_provider.dart';
+import '../../providers/playback_state_provider.dart';
+import '../../providers/libraries_provider.dart';
+import '../../profiles/profile_connection_registry.dart';
+import '../../connection/connection_registry.dart';
+import '../../profiles/plex_home_service.dart';
+import '../../services/storage_service.dart';
+import '../auth_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -112,9 +123,11 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                 if (PlatformDetector.isAndroid(context)) _buildPlayerBackendTile(),
                 _buildDefaultQualityTile(),
 
-                _buildProfilesSection(),
+                _buildProfileSwitcherTile(),
 
                 if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
+
+                _buildSwitchServerTile(),
 
                 SettingNavigationTile(
                   focusNode: _focusTracker.get(_kAbout),
@@ -123,6 +136,9 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                   subtitle: t.settings.aboutDescription,
                   destinationBuilder: (context) => const AboutScreen(),
                 ),
+
+                const SizedBox(height: 16),
+                _buildLogoutTile(),
                 const SizedBox(height: 24),
               ]),
             ),
@@ -310,7 +326,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     );
   }
 
-  Widget _buildProfilesSection() {
+  Widget _buildProfileSwitcherTile() {
     return StreamBuilder<List<Profile>>(
       stream: context.read<ProfileRegistry>().watchProfiles(),
       builder: (context, snapshot) {
@@ -329,5 +345,99 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         );
       },
     );
+  }
+
+  Widget _buildSwitchServerTile() {
+    return Consumer<MultiServerProvider>(
+      builder: (context, provider, _) {
+        final allServers = provider.serverManager.serverIds;
+        final isAllSelected = provider.serverIds.length == allServers.length;
+        final currentFilter = provider.serverIds;
+        final String subtitle;
+        if (isAllSelected) {
+          subtitle = 'All Servers';
+        } else if (currentFilter.length == 1) {
+          subtitle = provider.serverManager.getClient(currentFilter.first)?.serverName ?? 'Unknown Server';
+        } else {
+          subtitle = '${currentFilter.length} Servers';
+        }
+
+        return ListTile(
+          leading: const AppIcon(Symbols.dns_rounded, fill: 1),
+          title: const Text('Switch Server'),
+          subtitle: Text(subtitle),
+          trailing: const AppIcon(Symbols.chevron_right_rounded, fill: 1),
+          onTap: () async {
+            final options = [
+              DialogOption(value: 'ALL', title: 'All Servers'),
+              ...allServers.map((id) => DialogOption(
+                    value: id,
+                    title: provider.serverManager.getClient(id)?.serverName ?? id,
+                  )),
+            ];
+
+            final String initialValue = isAllSelected || currentFilter.isEmpty ? 'ALL' : currentFilter.first;
+
+            final value = await showSelectionDialog<String>(
+              context: context,
+              title: 'Switch Server',
+              options: options,
+              currentValue: initialValue,
+            );
+
+            if (value != null && context.mounted) {
+              if (value == 'ALL') {
+                provider.setVisibleServerIds(null);
+              } else {
+                provider.setVisibleServerIds({value});
+              }
+              unawaited(context.read<LibrariesProvider>().loadLibraries());
+            }
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildLogoutTile() {
+    return ListTile(
+      leading: const AppIcon(Symbols.logout_rounded, fill: 1, color: Colors.red),
+      title: Text(t.common.logout, style: const TextStyle(color: Colors.red)),
+      onTap: () => _handleLogout(context),
+    );
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final companionRemote = context.read<CompanionRemoteProvider>();
+    final userProfileProvider = context.read<UserProfileProvider>();
+    final multiServerProvider = context.read<MultiServerProvider>();
+    final profileConnReg = context.read<ProfileConnectionRegistry>();
+    final profileRegistry = context.read<ProfileRegistry>();
+    final connectionRegistry = context.read<ConnectionRegistry>();
+    final plexHome = context.read<PlexHomeService>();
+    final hiddenLibrariesProvider = context.read<HiddenLibrariesProvider>();
+    final playbackStateProvider = context.read<PlaybackStateProvider>();
+
+    await companionRemote.resetForLogout();
+    await userProfileProvider.logout();
+    multiServerProvider.clearAllConnections();
+    await profileConnReg.clear();
+    await profileRegistry.clear();
+    await connectionRegistry.clear();
+    await plexHome.clearAll();
+    final storage = await StorageService.getInstance();
+    await storage.clearActiveProfileId();
+    await storage.clearAllProfileLastUsed();
+    await hiddenLibrariesProvider.refresh();
+    playbackStateProvider.clearShuffle();
+
+    if (context.mounted) {
+      unawaited(
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const AuthScreen()),
+          (route) => false,
+        ),
+      );
+    }
   }
 }

@@ -1661,8 +1661,8 @@ class TranslationsProfilesEn {
 	/// en: 'Sign out failed.'
 	String get signOutFailed => 'Sign out failed.';
 
-	/// en: 'Profiles'
-	String get sectionTitle => 'Profiles';
+	/// en: 'Switch User'
+	String get sectionTitle => 'Switch User';
 
 	/// en: 'Add profiles to mix managed users and local identities'
 	String get summarySingle => 'Add profiles to mix managed users and local identities';
@@ -4507,7 +4507,7 @@ extension on Translations {
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
-			'profiles.sectionTitle' => 'Profiles',
+			'profiles.sectionTitle' => 'Switch User',
 			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',

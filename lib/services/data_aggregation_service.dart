@@ -21,10 +21,19 @@ class DataAggregationService {
 
   DataAggregationService(this._serverManager);
 
+  Set<String>? visibleServerIds;
+
+  Map<String, MediaServerClient> get _filteredClients {
+    final clients = _serverManager.onlineClients;
+    final filter = visibleServerIds;
+    if (filter == null) return clients;
+    return Map.fromEntries(clients.entries.where((e) => filter.contains(e.key)));
+  }
+
   /// Fetch libraries from all online clients regardless of backend, returning
   /// neutral [MediaLibrary]s.
   Future<List<MediaLibrary>> getMediaLibrariesFromAllServers() async {
-    final clients = _serverManager.onlineClients;
+    final clients = _filteredClients;
     if (clients.isEmpty) {
       appLogger.w('No online servers available for fetching libraries (neutral)');
       return [];
@@ -45,7 +54,7 @@ class DataAggregationService {
   /// Items are tagged with server info by the underlying client. Returns
   /// neutral [MediaItem]s.
   Future<List<MediaItem>> getOnDeckFromAllServers({int? limit, Set<String>? hiddenLibraryKeys}) async {
-    final clients = _serverManager.onlineClients;
+    final clients = _filteredClients;
     if (clients.isEmpty) {
       appLogger.w('No online servers available for fetching on deck');
       return [];
@@ -96,7 +105,7 @@ class DataAggregationService {
     Set<String>? hiddenLibraryKeys,
     bool useGlobalHubs = true,
   }) async {
-    final clients = _serverManager.onlineClients;
+    final clients = _filteredClients;
     if (clients.isEmpty) {
       appLogger.w('No online servers available for fetching hubs');
       return [];
@@ -193,7 +202,7 @@ class DataAggregationService {
       return [];
     }
 
-    final clients = _serverManager.onlineClients;
+    final clients = _filteredClients;
     if (clients.isEmpty) return [];
 
     final futures = clients.entries.map((entry) async {

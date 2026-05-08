@@ -57,6 +57,7 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
       return;
     }
     _visibleServerIds = ids;
+    _aggregationService.visibleServerIds = _visibleServerIds;
     _pruneLiveTvServersForVisibility();
     safeNotifyListeners();
     _refreshLiveTvAvailabilitySoon();
@@ -70,12 +71,14 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
     final current = _visibleServerIds;
     if (current == null) {
       _visibleServerIds = {serverId};
+      _aggregationService.visibleServerIds = _visibleServerIds;
       safeNotifyListeners();
       _refreshLiveTvAvailabilitySoon();
       return;
     }
     if (current.contains(serverId)) return;
     _visibleServerIds = {...current, serverId};
+    _aggregationService.visibleServerIds = _visibleServerIds;
     safeNotifyListeners();
     _refreshLiveTvAvailabilitySoon();
   }

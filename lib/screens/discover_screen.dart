@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:plezy/widgets/app_icon.dart';
-import '../widgets/server_activities_button.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import '../focus/focusable_action_bar.dart';
@@ -23,20 +22,9 @@ import '../widgets/optimized_media_image.dart' show blurArtwork;
 import '../providers/multi_server_provider.dart';
 import '../providers/hidden_libraries_provider.dart';
 import '../providers/libraries_provider.dart';
-import '../providers/playback_state_provider.dart';
 import '../widgets/hub_section.dart';
 import '../widgets/loading_indicator_box.dart';
-import 'profile/profile_switch_screen.dart';
-import '../connection/connection_registry.dart';
 import '../profiles/active_profile_provider.dart';
-import '../profiles/plex_home_service.dart';
-import '../profiles/profile.dart';
-import '../profiles/profile_activation.dart';
-import '../profiles/profile_avatar.dart';
-import '../profiles/profile_connection_registry.dart';
-import '../profiles/profile_registry.dart';
-import '../providers/user_profile_provider.dart';
-import '../services/storage_service.dart';
 import '../services/settings_service.dart';
 import '../widgets/settings_builder.dart';
 import '../mixins/refreshable.dart';
@@ -46,7 +34,6 @@ import '../mixins/item_updatable.dart';
 import '../mixins/watch_state_aware.dart';
 import '../utils/watch_state_notifier.dart';
 import '../utils/app_logger.dart';
-import '../utils/dialogs.dart';
 import '../utils/formatters.dart';
 import '../utils/provider_extensions.dart';
 import '../utils/video_player_navigation.dart';
@@ -54,13 +41,8 @@ import '../utils/layout_constants.dart';
 import '../utils/platform_detector.dart';
 import '../theme/mono_tokens.dart';
 import '../services/watch_next_service.dart';
-import 'auth_screen.dart';
 import 'libraries/content_state_builder.dart';
 import 'main_screen.dart';
-import '../watch_together/watch_together.dart';
-import '../providers/companion_remote_provider.dart';
-import '../widgets/companion_remote/remote_session_dialog.dart';
-import 'companion_remote/mobile_remote_screen.dart';
 import 'search_screen.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -128,6 +110,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   bool _isTabVisible = true;
   HiddenLibrariesProvider? _hiddenLibrariesProvider;
   Set<String> _lastSeenHiddenKeys = {};
+  MultiServerProvider? _multiServerProvider;
+  Set<String>? _lastSeenVisibleServerIds;
 
   // WatchStateAware: watch on-deck items and their parent shows/seasons
   @override
@@ -295,6 +279,24 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       _hiddenLibrariesProvider = provider;
       _hiddenLibrariesProvider!.addListener(_onHiddenLibrariesChanged);
     }
+    final msProvider = context.read<MultiServerProvider>();
+    if (msProvider != _multiServerProvider) {
+      _multiServerProvider?.removeListener(_onMultiServerChanged);
+      _multiServerProvider = msProvider;
+      _multiServerProvider!.addListener(_onMultiServerChanged);
+    }
+  }
+
+  void _onMultiServerChanged() {
+    final currentIds = _multiServerProvider?.serverIds;
+    final currentVisible = currentIds != null ? Set<String>.from(currentIds) : <String>{};
+    if (_lastSeenVisibleServerIds != null && 
+        currentVisible.length == _lastSeenVisibleServerIds!.length && 
+        currentVisible.containsAll(_lastSeenVisibleServerIds!)) {
+      return;
+    }
+    _lastSeenVisibleServerIds = currentVisible;
+    _loadContent();
   }
 
   void _onHiddenLibrariesChanged() {
@@ -335,6 +337,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   @override
   void dispose() {
     _hiddenLibrariesProvider?.removeListener(_onHiddenLibrariesChanged);
+    _multiServerProvider?.removeListener(_onMultiServerChanged);
     WidgetsBinding.instance.removeObserver(this);
     _autoScrollTimer?.cancel();
     _indicatorTimer?.cancel();
@@ -826,166 +829,6 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     }
   }
 
-  Future<void> _handleLogout() async {
-    final confirm = await showConfirmDialog(
-      context,
-      title: t.common.logout,
-      message: t.messages.logoutConfirm,
-      confirmText: t.common.logout,
-      isDestructive: true,
-    );
-
-    if (confirm && mounted) {
-      final navigator = Navigator.of(context, rootNavigator: true);
-      // Use comprehensive logout through UserProfileProvider
-      final userProfileProvider = Provider.of<UserProfileProvider>(context, listen: false);
-      final multiServerProvider = context.read<MultiServerProvider>();
-      final hiddenLibrariesProvider = context.read<HiddenLibrariesProvider>();
-      final playbackStateProvider = context.read<PlaybackStateProvider>();
-      final connectionRegistry = context.read<ConnectionRegistry>();
-      final profileRegistry = context.read<ProfileRegistry>();
-      final profileConnReg = context.read<ProfileConnectionRegistry>();
-      final plexHome = context.read<PlexHomeService>();
-      final companionRemote = context.read<CompanionRemoteProvider>();
-
-      // Clear all user data and provider states
-      await companionRemote.resetForLogout();
-      await userProfileProvider.logout();
-      multiServerProvider.clearAllConnections();
-      // Drop the profile/connection rows so the next sign-in starts clean
-      // and doesn't bind to stale tokens or orphaned profile rows.
-      await profileConnReg.clear();
-      await profileRegistry.clear();
-      await connectionRegistry.clear();
-      await plexHome.clearAll();
-      final storage = await StorageService.getInstance();
-      await storage.clearActiveProfileId();
-      await storage.clearAllProfileLastUsed();
-      await hiddenLibrariesProvider.refresh();
-      playbackStateProvider.clearShuffle();
-
-      if (navigator.mounted) {
-        unawaited(
-          navigator.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const AuthScreen()), (route) => false),
-        );
-      }
-    }
-  }
-
-  void _handleSwitchProfile(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileSwitchScreen()));
-  }
-
-  /// Build the [FocusableAction] wrapping the user-menu PopupMenuButton.
-  /// Pulls live state from [ActiveProfileProvider]; the menu reuses
-  /// [_userMenuItems] for the menu contents so d-pad and tap paths
-  /// stay in sync.
-  FocusableAction _buildUserMenuAction(BuildContext context) {
-    final activeProvider = context.watch<ActiveProfileProvider>();
-    final active = activeProvider.active;
-    final profiles = activeProvider.profiles;
-
-    return FocusableAction(
-      onPressed: () => _showUserMenu(context),
-      child: PopupMenuButton<String>(
-        icon: active != null
-            ? ProfileAvatar(profile: active, size: 32)
-            : const AppIcon(Symbols.account_circle_rounded, fill: 1, size: 32, color: Colors.white),
-        itemBuilder: (context) => _userMenuItems(context, activeProfile: active, profiles: profiles),
-      ),
-    );
-  }
-
-  List<PopupMenuEntry<String>> _userMenuItems(
-    BuildContext context, {
-    required Profile? activeProfile,
-    required List<Profile> profiles,
-  }) {
-    final theme = Theme.of(context);
-    final switchable = profiles.where((p) => p.id != activeProfile?.id).toList();
-    void deferAction(String value) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) _handleUserMenuAction(context, value);
-      });
-    }
-
-    return [
-      for (final p in switchable)
-        PopupMenuItem<String>(
-          value: 'profile:${p.id}',
-          onTap: () => deferAction('profile:${p.id}'),
-          child: Row(
-            children: [
-              ProfileAvatar(profile: p, size: 24),
-              const SizedBox(width: 12),
-              Expanded(child: Text(p.displayName, overflow: TextOverflow.ellipsis)),
-              if (p.isPinProtected) ...[
-                const SizedBox(width: 8),
-                AppIcon(Symbols.lock_rounded, fill: 1, size: 14, color: theme.colorScheme.onSurfaceVariant),
-              ],
-            ],
-          ),
-        ),
-      if (switchable.isNotEmpty) const PopupMenuDivider(),
-      PopupMenuItem<String>(
-        value: 'manage_profiles',
-        onTap: () => deferAction('manage_profiles'),
-        child: const Row(children: [AppIcon(Symbols.group_rounded, fill: 1), SizedBox(width: 8), Text('Profiles')]),
-      ),
-      PopupMenuItem<String>(
-        value: 'logout',
-        onTap: () => deferAction('logout'),
-        child: Row(
-          children: [const AppIcon(Symbols.logout_rounded, fill: 1), const SizedBox(width: 8), Text(t.common.logout)],
-        ),
-      ),
-    ];
-  }
-
-  Future<void> _handleUserMenuAction(BuildContext context, String value) async {
-    if (value == 'logout') {
-      unawaited(_handleLogout());
-      return;
-    }
-    if (value == 'manage_profiles') {
-      _handleSwitchProfile(context);
-      return;
-    }
-    if (value.startsWith('profile:')) {
-      final id = value.substring('profile:'.length);
-      final active = context.read<ActiveProfileProvider>();
-      final target = active.profiles.where((p) => p.id == id).firstOrNull;
-      if (target == null) return;
-      await activateProfileWithPin(context, target);
-    }
-  }
-
-  /// Show user menu programmatically (for D-pad select)
-  void _showUserMenu(BuildContext context) {
-    final actionBar = _actionBarKey.currentState;
-    if (actionBar == null) return;
-    final lastNode = actionBar.getFocusNode(actionBar.widget.actions.length - 1);
-    final RenderBox? button = lastNode?.context?.findRenderObject() as RenderBox?;
-    if (button == null) return;
-
-    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
-    final position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(Offset.zero, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-
-    final activeProvider = context.read<ActiveProfileProvider>();
-    unawaited(
-      showMenu<String>(
-        context: context,
-        position: position,
-        items: _userMenuItems(context, activeProfile: activeProvider.active, profiles: activeProvider.profiles),
-      ),
-    );
-  }
 
   Widget _buildOverlaidAppBar() {
     final statusBarHeight = MediaQuery.paddingOf(context).top;
@@ -1010,132 +853,25 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           child: Row(
             children: [
               Text(
-                t.discover.title,
+                t.common.home,
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              Consumer2<WatchTogetherProvider, CompanionRemoteProvider>(
-                builder: (context, watchTogether, companionRemote, _) {
-                  final isDesktop = PlatformDetector.shouldActAsRemoteHost(context);
-                  final colorScheme = Theme.of(context).colorScheme;
-
-                  return FocusableActionBar(
-                    key: _actionBarKey,
-                    onNavigateLeft: _navigateToSidebar,
-                    onNavigateDown: _focusContentFromAppBar,
-                    actions: [
-                      FocusableAction(
-                        icon: Symbols.search_rounded,
-                        iconColor: Colors.white,
-                        onPressed: () =>
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
-                        tooltip: t.common.search,
-                      ),
-                      FocusableAction(icon: Symbols.refresh_rounded, iconColor: Colors.white, onPressed: _loadContent),
-                      // Watch Together
-                      FocusableAction(
-                        onPressed: () =>
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const WatchTogetherScreen())),
-                        child: Stack(
-                          children: [
-                            IconButton(
-                              icon: AppIcon(
-                                Symbols.group_rounded,
-                                fill: watchTogether.isInSession ? 1 : 0,
-                                color: watchTogether.isInSession ? colorScheme.primary : Colors.white,
-                              ),
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const WatchTogetherScreen()),
-                              ),
-                              tooltip: 'Watch Together',
-                            ),
-                            if (watchTogether.isInSession && watchTogether.participantCount > 1)
-                              Positioned(
-                                top: 6,
-                                right: 6,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.primary,
-                                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                  ),
-                                  child: Text(
-                                    '${watchTogether.participantCount}',
-                                    style: TextStyle(
-                                      color: colorScheme.onPrimary,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      // Companion Remote
-                      FocusableAction(
-                        onPressed: () {
-                          if (isDesktop) {
-                            RemoteSessionDialog.show(context);
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const MobileRemoteScreen()),
-                            );
-                          }
-                        },
-                        child: Stack(
-                          children: [
-                            IconButton(
-                              icon: AppIcon(
-                                Symbols.phone_android_rounded,
-                                fill: companionRemote.isConnected ? 1 : 0,
-                                color: companionRemote.isConnected ? colorScheme.primary : Colors.white,
-                              ),
-                              onPressed: () {
-                                if (isDesktop) {
-                                  RemoteSessionDialog.show(context);
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const MobileRemoteScreen()),
-                                  );
-                                }
-                              },
-                              tooltip: t.companionRemote.title,
-                            ),
-                            if (companionRemote.isConnected)
-                              Positioned(
-                                top: 6,
-                                right: 6,
-                                child: Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1)),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      // Server Tasks — Plex-only (`/activities` API has no
-                      // Jellyfin equivalent), hide the button entirely on
-                      // Jellyfin-only profiles so the chrome doesn't show
-                      // a permanently empty popover.
-                      if (PlatformDetector.isDesktop(context) &&
-                          context.select<MultiServerProvider, bool>((p) => p.hasOnlinePlexServers))
-                        const FocusableAction(child: ServerActivitiesButton()),
-                      // User menu — profiles + sign out
-                      _buildUserMenuAction(context),
-                    ],
-                  );
-                },
+              FocusableActionBar(
+                key: _actionBarKey,
+                onNavigateLeft: _navigateToSidebar,
+                onNavigateDown: _focusContentFromAppBar,
+                actions: [
+                  FocusableAction(
+                    icon: Symbols.search_rounded,
+                    iconColor: Colors.white,
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
+                    tooltip: t.common.search,
+                  ),
+                ],
               ),
             ],
           ),

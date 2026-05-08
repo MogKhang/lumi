@@ -535,7 +535,7 @@
     "signOutPlexMessage": "${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.",
     "signedOutPlex": "Signed out of Plex.",
     "signOutFailed": "Sign out failed.",
-    "sectionTitle": "Profiles",
+    "sectionTitle": "Switch User",
     "summarySingle": "Add profiles to mix managed users and local identities",
     "summaryMultipleWithActive": "${count} profiles · active: ${activeName}",
     "summaryMultiple": "${count} profiles",
