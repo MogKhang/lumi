@@ -35,16 +35,16 @@ import '../../mixins/item_updatable.dart';
 import '../../i18n/strings.g.dart';
 import 'state_messages.dart';
 import 'tabs/library_browse_tab.dart';
-import 'tabs/library_recommended_tab.dart';
+
 import 'tabs/library_collections_tab.dart';
 import 'tabs/library_playlists_tab.dart';
-import '../search_screen.dart';
 
-enum LibraryTabType { browse, recommended, collections, playlists }
+
+enum LibraryTabType { browse, collections, playlists }
 
 List<LibraryTabType> _getVisibleTabs(MediaLibrary library) {
   if (library.isShared) return [LibraryTabType.browse, LibraryTabType.playlists];
-  return LibraryTabType.values;
+  return [LibraryTabType.browse, LibraryTabType.collections, LibraryTabType.playlists];
 }
 
 /// A menu action item for context menus
@@ -88,8 +88,8 @@ class _LibrariesScreenState extends State<LibrariesScreen>
         TickerProviderStateMixin,
         TabNavigationMixin {
   // GlobalKeys for tabs to enable refresh
-  final _recommendedTabKey = GlobalKey();
-  final _browseTabKey = GlobalKey();
+
+  final _browseTabKey = GlobalKey<LibraryBrowseTabState>();
   final _collectionsTabKey = GlobalKey();
   final _playlistsTabKey = GlobalKey();
 
@@ -292,12 +292,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
       final tabState = _getTabState(tabController.index);
       if (tabState != null) {
-        // Browse tab has a chips bar - focus that first so DOWN navigates to grid
-        if (_visibleTabs[tabController.index] == LibraryTabType.browse) {
-          (tabState as dynamic).focusChipsBar();
-        } else {
-          (tabState as dynamic).focusFirstItem();
-        }
+        (tabState as dynamic).focusFirstItem();
       }
     });
   }
@@ -306,7 +301,6 @@ class _LibrariesScreenState extends State<LibrariesScreen>
   State? _getTabState(int index) {
     if (index < 0 || index >= _visibleTabs.length) return null;
     return switch (_visibleTabs[index]) {
-      LibraryTabType.recommended => _recommendedTabKey.currentState,
       LibraryTabType.browse => _browseTabKey.currentState,
       LibraryTabType.collections => _collectionsTabKey.currentState,
       LibraryTabType.playlists => _playlistsTabKey.currentState,
@@ -383,7 +377,6 @@ class _LibrariesScreenState extends State<LibrariesScreen>
   }
 
   String _getTabLabel(LibraryTabType type) => switch (type) {
-    LibraryTabType.recommended => t.libraries.tabs.recommended,
     LibraryTabType.browse => t.libraries.tabs.browse,
     LibraryTabType.collections => t.libraries.tabs.collections,
     LibraryTabType.playlists => t.libraries.tabs.playlists,
@@ -396,14 +389,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     required int tabIndex,
   }) {
     return switch (type) {
-      LibraryTabType.recommended => LibraryRecommendedTab(
-        key: _recommendedTabKey,
-        library: library,
-        isActive: isActive,
-        suppressAutoFocus: suppressAutoFocus,
-        onDataLoaded: () => _handleTabDataLoaded(tabIndex),
-        onBack: focusTabBar,
-      ),
+
       LibraryTabType.browse => LibraryBrowseTab(
         key: _browseTabKey,
         library: library,
@@ -412,6 +398,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
         onDataLoaded: () => _handleTabDataLoaded(tabIndex),
         onBack: focusTabBar,
         onResetScroll: _resetOuterScroll,
+        onFiltersChanged: () => setState(() {}),
       ),
       LibraryTabType.collections => LibraryCollectionsTab(
         key: _collectionsTabKey,
@@ -523,17 +510,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     _initializeWithLibraries();
   }
 
-  // Refresh the currently active tab
-  void _refreshCurrentTab() {
-    if (tabController.index < 0 || tabController.index >= _visibleTabs.length) return;
-    final key = switch (_visibleTabs[tabController.index]) {
-      LibraryTabType.recommended => _recommendedTabKey,
-      LibraryTabType.browse => _browseTabKey,
-      LibraryTabType.collections => _collectionsTabKey,
-      LibraryTabType.playlists => _playlistsTabKey,
-    };
-    (key.currentState as dynamic)?.refresh();
-  }
+
 
   // Public method to fully reload all content (for profile switches)
   @override
@@ -887,18 +864,32 @@ class _LibrariesScreenState extends State<LibrariesScreen>
           onNavigateLeft: () => getTabChipFocusNode(_visibleTabs.length - 1).requestFocus(),
           onNavigateDown: _focusCurrentTab,
           actions: [
-            FocusableAction(
-              icon: Symbols.search_rounded,
-              tooltip: t.common.search,
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
-            ),
-            if (allLibraries.isNotEmpty)
+            if (_visibleTabs[tabController.index] == LibraryTabType.browse) ...[
               FocusableAction(
-                icon: Symbols.edit_rounded,
-                tooltip: t.libraries.manageLibraries,
-                onPressed: _showLibraryManagementSheet,
+                tooltip: t.libraries.filters,
+                onPressed: () => _browseTabKey.currentState?.showFiltersBottomSheet(),
+                child: IconButton(
+                  onPressed: () => _browseTabKey.currentState?.showFiltersBottomSheet(),
+                  icon: Badge(
+                    label: Text(_browseTabKey.currentState?.selectedFiltersCount.toString() ?? '0'),
+                    isLabelVisible: (_browseTabKey.currentState?.selectedFiltersCount ?? 0) > 0,
+                    child: const AppIcon(Symbols.filter_alt_rounded),
+                  ),
+                ),
               ),
-            FocusableAction(icon: Symbols.sync_rounded, tooltip: t.common.refresh, onPressed: _refreshCurrentTab),
+              FocusableAction(
+                tooltip: _browseTabKey.currentState?.selectedSortLabel ?? t.libraries.sort,
+                onPressed: () => _browseTabKey.currentState?.showSortBottomSheet(),
+                child: IconButton(
+                  onPressed: () => _browseTabKey.currentState?.showSortBottomSheet(),
+                  icon: Badge(
+                    isLabelVisible: _browseTabKey.currentState?.isSortDescending ?? false,
+                    label: const AppIcon(Symbols.arrow_downward_rounded, size: 10, color: Colors.white),
+                    child: const AppIcon(Symbols.sort_rounded),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ],

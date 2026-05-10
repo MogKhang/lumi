@@ -29,7 +29,7 @@ import '../alpha_scroll_handle.dart';
 import '../library_alpha_bar_strategy.dart';
 import '../library_filter_sort_loader.dart';
 import '../../../widgets/focusable_media_card.dart';
-import '../../../widgets/focusable_filter_chip.dart';
+
 import '../../../widgets/loading_indicator_box.dart';
 import '../../../widgets/media_grid_delegate.dart';
 import '../../../widgets/overlay_sheet.dart';
@@ -37,8 +37,7 @@ import '../../../mixins/library_tab_focus_mixin.dart';
 import '../folder_tree_view.dart';
 import '../filters_bottom_sheet.dart';
 import '../sort_bottom_sheet.dart';
-import '../../../widgets/app_icon.dart';
-import '../../../widgets/focusable_list_tile.dart';
+
 import '../content_state_builder.dart';
 import '../../../services/storage_service.dart';
 import '../../../services/settings_service.dart';
@@ -61,6 +60,7 @@ class LibraryBrowseTab extends BaseLibraryTab<MediaItem> {
   /// (filter/sort change, library reload, etc.). Lets the parent resync the
   /// outer floating header — see `_resetOuterScroll` in libraries_screen.
   final VoidCallback? onResetScroll;
+  final VoidCallback? onFiltersChanged;
 
   const LibraryBrowseTab({
     super.key,
@@ -72,13 +72,14 @@ class LibraryBrowseTab extends BaseLibraryTab<MediaItem> {
     super.suppressAutoFocus,
     super.onBack,
     this.onResetScroll,
+    this.onFiltersChanged,
   });
 
   @override
-  State<LibraryBrowseTab> createState() => _LibraryBrowseTabState();
+  State<LibraryBrowseTab> createState() => LibraryBrowseTabState();
 }
 
-class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrowseTab>
+class LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrowseTab>
     with ItemUpdatable, LibraryTabFocusMixin, GridFocusNodeMixin, DeletionAware, PaginatedItemLoader<LibraryBrowseTab> {
   @override
   String? get itemServerId => widget.library.serverId;
@@ -168,6 +169,9 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
   Map<String, String> _selectedFilters = {};
   MediaSort? _selectedSort;
   bool _isSortDescending = false;
+  int get selectedFiltersCount => _selectedFilters.length;
+  String? get selectedSortLabel => _selectedSort?.title;
+  bool get isSortDescending => _isSortDescending;
   String _selectedGrouping = 'all'; // all, seasons, episodes, folders
 
   // Alpha jump bar state
@@ -226,10 +230,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
   bool _rangeLoadScheduled = false;
   bool _topScrollResetScheduled = false;
 
-  // Focus nodes for filter chips
-  final FocusNode _groupingChipFocusNode = FocusNode(debugLabel: 'grouping_chip');
-  final FocusNode _filtersChipFocusNode = FocusNode(debugLabel: 'filters_chip');
-  final FocusNode _sortChipFocusNode = FocusNode(debugLabel: 'sort_chip');
+
 
   // The inner CustomScrollView attaches its position to NestedScrollView's
   // shared inner controller (via PrimaryScrollController), which has one
@@ -252,18 +253,14 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
 
   @override
   void dispose() {
-    disposePagination();
+
+    _isScrollActive.dispose();
+    _currentFirstVisibleIndex.dispose();
     _scrollActivityTimer?.cancel();
     _scrollIdleTimer?.cancel();
     _alphaUpdateTimer?.cancel();
     _innerPosition?.removeListener(_onScrollChanged);
-    // _innerPosition is owned by the inner CustomScrollView's Scrollable.
-    _groupingChipFocusNode.dispose();
-    _filtersChipFocusNode.dispose();
-    _sortChipFocusNode.dispose();
-    _alphaJumpBarFocusNode.dispose();
-    _currentFirstVisibleIndex.dispose();
-    _isScrollActive.dispose();
+    disposePagination();
     disposeGridFocusNodes();
     super.dispose();
   }
@@ -341,15 +338,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     }
   }
 
-  /// Height of the chips bar (padding + chip + padding)
-  static const double _chipsBarHeight = 48.0;
 
-  /// Focus the chips bar (for navigating from tab bar to content).
-  /// Called by libraries screen when pressing DOWN on tab bar.
-  void focusChipsBar() {
-    lastFocusedGridIndex = null;
-    _groupingChipFocusNode.requestFocus();
-  }
 
   /// Reset transient browse state before loading a different library.
   void _resetForFullReload() {
@@ -360,6 +349,11 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     _isJumpScrolling = false;
     _jumpScrollGeneration++;
     _currentFirstVisibleIndex.value = 0;
+    _filters = [];
+    _sortOptions = [];
+    _selectedFilters = {};
+    _selectedSort = null;
+    _isSortDescending = false;
 
     // The browse tab state is kept alive across libraries, so ensure this
     // tab's scroll resets to 0 (other tabs keep their own positions). Defer
@@ -432,6 +426,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
             }
           }
         }
+        if (widget.onFiltersChanged != null) widget.onFiltersChanged!();
       });
 
       // Load items and first characters in parallel
@@ -552,8 +547,8 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
   }
 
   @override
-  void onPageLoaded(int start, List<MediaItem> pageItems) {
-    _prefetchImages(start, pageItems);
+  void onPageLoaded(int start, List<MediaItem> items) {
+    _prefetchImages(start, items);
   }
 
   String _getDefaultGrouping() {
@@ -578,40 +573,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     }
   }
 
-  List<String> _getGroupingOptions() {
-    final type = widget.library.kind.id.toLowerCase();
-    // Folder browsing relies on a section folder API
-    // (Plex `/library/sections/{id}/folders`); gated by capability so any
-    // future backend that exposes the same can opt in without touching
-    // this method.
-    final canFolder = context.tryGetMediaClientForServer(widget.library.serverId)?.capabilities.folderGrouping ?? false;
-    if (type == 'show') {
-      return ['shows', 'seasons', 'episodes', if (canFolder) 'folders'];
-    } else if (type == 'movie') {
-      return ['movies', if (canFolder) 'folders'];
-    } else if (type == 'mixed') {
-      // Shared libraries: all video content types, no folders
-      return ['all', 'movies', 'shows', 'seasons', 'episodes'];
-    }
-    return ['all', if (canFolder) 'folders'];
-  }
 
-  String _getGroupingLabel(String grouping) {
-    switch (grouping) {
-      case 'movies':
-        return t.libraries.groupings.movies;
-      case 'shows':
-        return t.libraries.groupings.shows;
-      case 'seasons':
-        return t.libraries.groupings.seasons;
-      case 'episodes':
-        return t.libraries.groupings.episodes;
-      case 'folders':
-        return t.libraries.groupings.folders;
-      default:
-        return t.libraries.groupings.all;
-    }
-  }
 
   String _getErrorMessage(dynamic error) {
     if (error is MediaServerHttpException) {
@@ -620,62 +582,9 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     return mapUnexpectedErrorToMessage(error, context: t.libraries.content);
   }
 
-  void _showGroupingBottomSheet() {
-    SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
-    final options = _getGroupingOptions();
-    final controller = OverlaySheetController.of(context);
-    controller
-        .show<String>(
-          showDragHandle: true,
-          builder: (sheetContext) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                child: Text(
-                  t.libraries.groupings.title,
-                  style: Theme.of(sheetContext).textTheme.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: options.map((grouping) {
-                      final isSelected = _selectedGrouping == grouping;
-                      return FocusableListTile(
-                        key: ValueKey(grouping),
-                        dense: true,
-                        leading: AppIcon(
-                          isSelected ? Symbols.radio_button_checked_rounded : Symbols.radio_button_unchecked_rounded,
-                          fill: 1,
-                        ),
-                        title: Text(_getGroupingLabel(grouping)),
-                        onTap: () => controller.close(grouping),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )
-        .then((value) {
-          if (!mounted || value == null || value == _selectedGrouping) return;
-          setState(() {
-            _selectedGrouping = value;
-          });
-          StorageService.getInstance().then((storage) {
-            storage.saveLibraryGrouping(widget.library.globalKey, value);
-          });
-          _loadItems();
-          _loadFirstCharacters();
-        });
-  }
 
-  void _showFiltersBottomSheet() {
+
+  void showFiltersBottomSheet() {
     SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
     OverlaySheetController.of(context).show(
       builder: (context) => FiltersBottomSheet(
@@ -699,12 +608,13 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
 
           unawaited(_loadItems());
           unawaited(_loadFirstCharacters());
+          if (widget.onFiltersChanged != null) widget.onFiltersChanged!();
         },
       ),
     );
   }
 
-  void _showSortBottomSheet() {
+  void showSortBottomSheet() {
     SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
     // Track pending state in local variables so the callbacks don't trigger
     // setState/_loadItems while the sheet is open (which would steal focus).
@@ -738,6 +648,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
             });
             _loadItems();
             _loadFirstCharacters();
+            if (widget.onFiltersChanged != null) widget.onFiltersChanged!();
           } else if (pendingSort != null &&
               (pendingSort!.key != _selectedSort?.key || pendingDescending != _isSortDescending)) {
             setState(() {
@@ -749,50 +660,12 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
             });
             _loadItems();
             _loadFirstCharacters();
+            if (widget.onFiltersChanged != null) widget.onFiltersChanged!();
           }
         });
   }
 
-  /// Navigate focus from chips down to the grid item.
-  /// Restores focus to the previously focused item if content hasn't changed.
-  void _navigateToGrid() {
-    // In folder mode, firstItemFocusNode is attached to the first folder tree item
-    if (_selectedGrouping == 'folders') {
-      firstItemFocusNode.requestFocus();
-      return;
-    }
 
-    if (totalSize == 0) return;
-
-    final targetIndex =
-        shouldRestoreGridFocus && lastFocusedGridIndex! < totalSize && loadedItems.containsKey(lastFocusedGridIndex!)
-        ? lastFocusedGridIndex!
-        : 0;
-
-    // Drop the chip's focus first so the targeted grid item's request isn't
-    // racing against the chip's still-held primary focus state. Without this,
-    // dpad DOWN from a chip occasionally fails to move focus to the grid.
-    if (FocusManager.instance.primaryFocus == _groupingChipFocusNode ||
-        FocusManager.instance.primaryFocus == _filtersChipFocusNode ||
-        FocusManager.instance.primaryFocus == _sortChipFocusNode) {
-      FocusManager.instance.primaryFocus?.unfocus();
-    }
-
-    // Use firstItemFocusNode for index 0 (matches _buildMediaCardItem)
-    final target = targetIndex == 0
-        ? firstItemFocusNode
-        : getGridItemFocusNode(targetIndex, prefix: 'browse_grid_item');
-
-    // Defer to a post-frame so the focus node has a chance to attach if the
-    // grid item is being built/rebuilt in the same frame.
-    if (target.context != null) {
-      target.requestFocus();
-    } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) target.requestFocus();
-      });
-    }
-  }
 
   /// Navigate from the alpha jump bar to the nearest visible grid item.
   /// After a jump-scroll the previously focused item is off-screen (and its
@@ -834,10 +707,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     }
   }
 
-  /// Navigate focus from grid up to the chips bar
-  void _navigateToChips() {
-    _groupingChipFocusNode.requestFocus();
-  }
+
 
   /// Navigate focus to the sidebar
   void _navigateToSidebar() {
@@ -974,8 +844,8 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     final rowHeight = itemHeight + GridLayoutConstants.mainAxisSpacing;
     if (rowHeight <= 0) return 0;
 
-    // Items start at `_chipsBarHeight + _effectiveTopPadding` in scroll coords.
-    final contentOffset = (offset - _chipsBarHeight - _effectiveTopPadding).clamp(0.0, double.infinity);
+    // Items start at `_effectiveTopPadding` in scroll coords.
+    final contentOffset = (offset - _effectiveTopPadding).clamp(0.0, double.infinity);
     final row = (contentOffset / rowHeight).floor();
     final maxIndex = totalSize > 0 ? totalSize - 1 : 0;
     return (row * _currentColumnCount).clamp(0, maxIndex);
@@ -1037,9 +907,9 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     final itemHeight = itemWidth / GridLayoutConstants.posterAspectRatio;
     final rowHeight = itemHeight + GridLayoutConstants.mainAxisSpacing;
     final targetRow = index ~/ _currentColumnCount;
-    // Position the target row at the top of the viewport. Chips and the grid's
-    // top padding both precede the items in scroll coordinates.
-    final offset = _chipsBarHeight + _effectiveTopPadding + targetRow * rowHeight;
+    // Position the target row at the top of the viewport. The grid's
+    // top padding precedes the items in scroll coordinates.
+    final offset = _effectiveTopPadding + targetRow * rowHeight;
 
     final gen = _jumpScrollGeneration;
     final maxExtent = pos.maxScrollExtent;
@@ -1157,14 +1027,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
                 },
               ),
             ),
-            // Floating chips: scroll off with content but snap back into view
-            // on upward direction reversal, matching the outer floating
-            // SliverAppBar's behavior.
-            SliverPersistentHeader(
-              floating: true,
-              pinned: false,
-              delegate: _ChipsBarDelegate(builder: (_) => _buildChipsBar(), height: _chipsBarHeight),
-            ),
+
             ..._buildContentSlivers(),
           ],
         ),
@@ -1298,75 +1161,9 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     }
   }
 
-  /// Whether the filters chip is visible
-  bool get _isFiltersChipVisible => _filters.isNotEmpty && _selectedGrouping != 'folders';
 
-  /// Whether the sort chip is visible
-  bool get _isSortChipVisible => _sortOptions.isNotEmpty && _selectedGrouping != 'folders';
 
-  /// Builds the chips bar widget
-  Widget _buildChipsBar() {
-    VoidCallback? groupingNavigateRight;
-    if (_isFiltersChipVisible) {
-      groupingNavigateRight = () => _filtersChipFocusNode.requestFocus();
-    } else if (_isSortChipVisible) {
-      groupingNavigateRight = () => _sortChipFocusNode.requestFocus();
-    }
 
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Grouping chip
-          FocusableFilterChip(
-            focusNode: _groupingChipFocusNode,
-            icon: Symbols.category_rounded,
-            label: _getGroupingLabel(_selectedGrouping),
-            onPressed: _showGroupingBottomSheet,
-            onNavigateDown: _navigateToGrid,
-            onNavigateUp: widget.onBack,
-            onNavigateLeft: _navigateToSidebar,
-            onNavigateRight: groupingNavigateRight,
-            onBack: widget.onBack,
-          ),
-          const SizedBox(width: 8),
-          // Filters chip
-          if (_isFiltersChipVisible)
-            FocusableFilterChip(
-              focusNode: _filtersChipFocusNode,
-              icon: Symbols.filter_alt_rounded,
-              label: _selectedFilters.isEmpty
-                  ? t.libraries.filters
-                  : t.libraries.filtersWithCount(count: _selectedFilters.length),
-              onPressed: _showFiltersBottomSheet,
-              onNavigateDown: _navigateToGrid,
-              onNavigateUp: widget.onBack,
-              onNavigateLeft: () => _groupingChipFocusNode.requestFocus(),
-              onNavigateRight: _isSortChipVisible ? () => _sortChipFocusNode.requestFocus() : null,
-              onBack: widget.onBack,
-            ),
-          if (_isFiltersChipVisible) const SizedBox(width: 8),
-          // Sort chip
-          if (_isSortChipVisible)
-            FocusableFilterChip(
-              focusNode: _sortChipFocusNode,
-              icon: Symbols.sort_rounded,
-              label: _selectedSort?.title ?? t.libraries.sort,
-              onPressed: _showSortBottomSheet,
-              onNavigateDown: _navigateToGrid,
-              onNavigateUp: widget.onBack,
-              onNavigateLeft: _isFiltersChipVisible
-                  ? () => _filtersChipFocusNode.requestFocus()
-                  : () => _groupingChipFocusNode.requestFocus(),
-              onBack: widget.onBack,
-            ),
-        ],
-      ),
-    );
-  }
 
   /// Builds content as slivers for the CustomScrollView
   List<Widget> _buildContentSlivers() {
@@ -1380,7 +1177,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
           serverId: widget.library.serverId,
           onRefresh: updateItem,
           firstItemFocusNode: firstItemFocusNode,
-          onNavigateUp: _navigateToChips,
+          onNavigateUp: widget.onBack,
         ),
       ];
     }
@@ -1510,7 +1307,7 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
     // can spuriously jump to overlay widgets like the floating chips header.
     VoidCallback? navigateUp;
     if (isFirstRow) {
-      navigateUp = _navigateToChips;
+      navigateUp = widget.onBack;
     } else if (columnCount > 0 && index >= columnCount) {
       navigateUp = () => _focusGridItem(index - columnCount);
     }
@@ -1565,26 +1362,4 @@ class _LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrows
   }
 }
 
-/// SliverPersistentHeader delegate for the chips bar. Fixed-height floating
-/// header that snaps in on scroll direction reversal.
-class _ChipsBarDelegate extends SliverPersistentHeaderDelegate {
-  final WidgetBuilder builder;
-  final double height;
 
-  const _ChipsBarDelegate({required this.builder, required this.height});
-
-  @override
-  double get minExtent => height;
-
-  @override
-  double get maxExtent => height;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox(height: height, child: builder(context));
-  }
-
-  @override
-  bool shouldRebuild(covariant _ChipsBarDelegate oldDelegate) =>
-      builder != oldDelegate.builder || height != oldDelegate.height;
-}
