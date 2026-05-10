@@ -33,7 +33,8 @@ import '../i18n/strings.g.dart';
 /// - Focus never "escapes" to random elements
 class HubSection extends StatefulWidget {
   final MediaHub hub;
-  final IconData icon;
+  final IconData? icon;
+  final String? emoji;
   final void Function(String)? onRefresh;
   final VoidCallback? onRemoveFromContinueWatching;
   final bool isInContinueWatching;
@@ -61,7 +62,8 @@ class HubSection extends StatefulWidget {
   const HubSection({
     super.key,
     required this.hub,
-    required this.icon,
+    this.icon,
+    this.emoji,
     this.onRefresh,
     this.onRemoveFromContinueWatching,
     this.isInContinueWatching = false,
@@ -340,7 +342,10 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AppIcon(widget.icon, fill: 1),
+                    if (widget.emoji != null)
+                      Text(widget.emoji!, style: const TextStyle(fontSize: 20))
+                    else
+                      AppIcon(widget.icon, fill: 1),
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
@@ -402,7 +407,7 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
                   final isEpisodeOnlyHub = hasEpisodes && !hasNonEpisodes;
 
                   // Use 16:9 for episode-only hubs OR mixed hubs (with episode thumbnail mode)
-                  final useWideLayout =
+                  final useWideLayout = !widget.isInContinueWatching &&
                       episodePosterMode == EpisodePosterMode.episodeThumbnail && (isEpisodeOnlyHub || isMixedHub);
 
                   // Card dimensions based on hub type

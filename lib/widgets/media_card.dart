@@ -203,6 +203,7 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
             isOffline: widget.isOffline,
             localPosterPath: localPosterPath,
             showServerName: widget.showServerName,
+            isInContinueWatching: widget.isInContinueWatching,
           );
 
     // MediaContextMenu as a non-widget helper — only wrap with its key for
@@ -259,6 +260,7 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
                           isOffline: widget.isOffline,
                           localPosterPath: localPosterPath,
                           mixedHubContext: widget.mixedHubContext,
+                          isInContinueWatching: widget.isInContinueWatching,
                           knownWidth: posterWidth,
                           knownHeight: posterHeight,
                         ),
@@ -279,6 +281,7 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
                           isOffline: widget.isOffline,
                           localPosterPath: localPosterPath,
                           mixedHubContext: widget.mixedHubContext,
+                          isInContinueWatching: widget.isInContinueWatching,
                         ),
                       ),
                       if (item is MediaItem) _MediaCardHelpers.buildWatchProgress(context, item),
@@ -326,6 +329,7 @@ class _MediaCardList extends StatelessWidget {
   final bool isOffline;
   final String? localPosterPath;
   final bool showServerName;
+  final bool isInContinueWatching;
 
   const _MediaCardList({
     required this.item,
@@ -339,6 +343,7 @@ class _MediaCardList extends StatelessWidget {
     this.isOffline = false,
     this.localPosterPath,
     this.showServerName = false,
+    this.isInContinueWatching = false,
   });
 
   double _basePosterWidth() {
@@ -524,7 +529,7 @@ class _MediaCardList extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(tokens(context).radiusSm),
-                    child: _buildPosterImage(context, item, isOffline: isOffline, localPosterPath: localPosterPath),
+                    child: _buildPosterImage(context, item, isOffline: isOffline, localPosterPath: localPosterPath, isInContinueWatching: isInContinueWatching),
                   ),
                   if (item is MediaItem) _MediaCardHelpers.buildWatchProgress(context, item as MediaItem),
                 ],
@@ -637,6 +642,7 @@ Widget _buildPosterImage(
   bool isOffline = false,
   String? localPosterPath,
   bool mixedHubContext = false,
+  bool isInContinueWatching = false,
   double? knownWidth,
   double? knownHeight,
 }) {
@@ -656,7 +662,9 @@ Widget _buildPosterImage(
       localFilePath: localPosterPath,
     );
   } else if (item is MediaItem) {
-    final episodePosterMode = SettingsService.instanceOrNull!.read(SettingsService.episodePosterMode);
+    final episodePosterMode = isInContinueWatching
+        ? EpisodePosterMode.seriesPoster
+        : SettingsService.instanceOrNull!.read(SettingsService.episodePosterMode);
     final hideSpoilers = SettingsService.instanceOrNull!.read(SettingsService.hideSpoilers);
     final shouldBlur =
         hideSpoilers && item.shouldHideSpoiler && episodePosterMode == EpisodePosterMode.episodeThumbnail;

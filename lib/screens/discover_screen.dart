@@ -936,7 +936,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                         more: false,
                         items: _onDeck,
                       ),
-                      icon: Symbols.play_circle_rounded,
+                      emoji: '⏳',
                       onRefresh: updateItem,
                       onRemoveFromContinueWatching: _refreshContinueWatching,
                       isInContinueWatching: true,
@@ -1448,7 +1448,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const AppIcon(Symbols.play_arrow_rounded, fill: 1, size: 20, color: Colors.black),
+            const Text('⏳', style: TextStyle(fontSize: 18)),
             const SizedBox(width: 8),
             if (hasProgress) ...[
               // Progress bar
