@@ -293,7 +293,7 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
               if (item is MediaItem && _hasClickableTitle(item))
                 _ClickableText(
                   text: item.displayTitle,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, height: 1.1),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, height: 1.3),
                   onTap: () => _navigateToDetail(context, item, isOffline: widget.isOffline),
                 )
               else
@@ -301,8 +301,9 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
                   item is MediaPlaylist ? item.title : (item as MediaItem).displayTitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, height: 1.1),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, height: 1.3),
                 ),
+              const SizedBox(height: 2),
               // Subtitle
               if (item is MediaPlaylist)
                 _MediaCardHelpers.buildPlaylistMeta(context, item)
@@ -544,7 +545,7 @@ class _MediaCardList extends StatelessWidget {
                   if (item is MediaItem && _hasClickableTitle(item as MediaItem))
                     _ClickableText(
                       text: (item as MediaItem).displayTitle,
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: _titleFontSize, height: 1.2),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: _titleFontSize, height: 1.3),
                       onTap: () => _navigateToDetail(context, item as MediaItem, isOffline: isOffline),
                     )
                   else
@@ -552,7 +553,7 @@ class _MediaCardList extends StatelessWidget {
                       _displayTitle(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: _titleFontSize, height: 1.2),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: _titleFontSize, height: 1.3),
                     ),
                   const SizedBox(height: 4),
                   if (metadataLine.isNotEmpty) ...[

@@ -705,7 +705,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   }
 
   /// Get icon for hub based on its title
-  IconData _getHubIcon(String title) {
+  IconData? _getHubIcon(String title) {
     final lowerTitle = title.toLowerCase();
 
     // Trending/Popular content
@@ -796,7 +796,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     }
 
     // Default icon for other hubs
-    return Symbols.auto_awesome_rounded;
+    return null;
   }
 
   /// Get the set of hub titles that appear more than once (duplicates)
