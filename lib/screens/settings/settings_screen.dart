@@ -112,7 +112,15 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         child: CustomScrollView(
           primary: false,
           slivers: [
-            ExcludeFocus(child: CustomAppBar(title: Text(t.settings.title), pinned: true)),
+            ExcludeFocus(
+              child: CustomAppBar(
+                title: Text(
+                  t.settings.title,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                pinned: true,
+              ),
+            ),
             SliverList(
               delegate: SliverChildListDelegate([
                 if (DonationService.isEnabled) _buildDonateTile(),

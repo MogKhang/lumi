@@ -37,7 +37,7 @@ class DesktopAppBarHelper {
   static List<Widget>? buildAdjustedActions(List<Widget>? actions) {
     double? rightPadding;
 
-    if (Platform.isMacOS) {
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
       rightPadding = DesktopWindowPadding.macOSRight;
     } else if (Platform.isIOS || Platform.isAndroid) {
       rightPadding = DesktopWindowPadding.mobileRight;

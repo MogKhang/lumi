@@ -38,6 +38,7 @@ import 'tabs/library_browse_tab.dart';
 import 'tabs/library_recommended_tab.dart';
 import 'tabs/library_collections_tab.dart';
 import 'tabs/library_playlists_tab.dart';
+import '../search_screen.dart';
 
 enum LibraryTabType { browse, recommended, collections, playlists }
 
@@ -886,13 +887,18 @@ class _LibrariesScreenState extends State<LibrariesScreen>
           onNavigateLeft: () => getTabChipFocusNode(_visibleTabs.length - 1).requestFocus(),
           onNavigateDown: _focusCurrentTab,
           actions: [
+            FocusableAction(
+              icon: Symbols.search_rounded,
+              tooltip: t.common.search,
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
+            ),
             if (allLibraries.isNotEmpty)
               FocusableAction(
                 icon: Symbols.edit_rounded,
                 tooltip: t.libraries.manageLibraries,
                 onPressed: _showLibraryManagementSheet,
               ),
-            FocusableAction(icon: Symbols.refresh_rounded, tooltip: t.common.refresh, onPressed: _refreshCurrentTab),
+            FocusableAction(icon: Symbols.sync_rounded, tooltip: t.common.refresh, onPressed: _refreshCurrentTab),
           ],
         ),
       ],
