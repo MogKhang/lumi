@@ -44,6 +44,7 @@ import '../services/watch_next_service.dart';
 import 'libraries/content_state_builder.dart';
 import 'main_screen.dart';
 import 'search_screen.dart';
+import '../utils/desktop_window_padding.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -831,7 +832,6 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
 
   Widget _buildOverlaidAppBar() {
-    final statusBarHeight = MediaQuery.paddingOf(context).top;
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -846,36 +846,32 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           stops: const [0.0, 0.3, 0.6, 1.0],
         ),
       ),
-      child: Padding(
-        padding: EdgeInsets.only(top: statusBarHeight, left: 16, right: 16, bottom: 8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Text(
-                t.common.home,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              const Spacer(),
-              FocusableActionBar(
-                key: _actionBarKey,
-                onNavigateLeft: _navigateToSidebar,
-                onNavigateDown: _focusContentFromAppBar,
-                actions: [
-                  FocusableAction(
-                    icon: Symbols.search_rounded,
-                    iconColor: Colors.white,
-                    onPressed: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
-                    tooltip: t.common.search,
-                  ),
-                ],
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
+        title: DesktopTitleBarPadding(
+          child: Text(
+            t.common.home,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ),
+        actions: DesktopAppBarHelper.buildAdjustedActions([
+          FocusableActionBar(
+            key: _actionBarKey,
+            onNavigateLeft: _navigateToSidebar,
+            onNavigateDown: _focusContentFromAppBar,
+            actions: [
+              FocusableAction(
+                icon: Symbols.search_rounded,
+                onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
+                tooltip: t.common.search,
               ),
             ],
           ),
-        ),
+        ]),
       ),
     );
   }

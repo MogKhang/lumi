@@ -351,10 +351,9 @@ class _HubDetailScreenState extends State<HubDetailScreen>
                       padding: const EdgeInsets.all(8),
                       sliver: SliverLayoutBuilder(
                         builder: (context, constraints) {
-                          final maxExtent = GridSizeCalculator.getMaxCrossAxisExtentWithPadding(
+                          final maxExtent = GridSizeCalculator.getMaxCrossAxisExtent(
                             context,
                             libraryDensity,
-                            16,
                           );
                           final columnCount = GridSizeCalculator.getColumnCount(
                             constraints.crossAxisExtent,
@@ -365,8 +364,7 @@ class _HubDetailScreenState extends State<HubDetailScreen>
                             gridDelegate: MediaGridDelegate.createDelegate(
                               context: context,
                               density: libraryDensity,
-                              usePaddingAware: true,
-                              horizontalPadding: 16,
+                              usePaddingAware: false,
                               useWideAspectRatio: useWideLayout,
                             ),
                             delegate: SliverChildBuilderDelegate((context, index) {
