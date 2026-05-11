@@ -682,7 +682,7 @@ Widget _buildPosterImage(
         imagePath: posterUrl,
         width: knownWidth ?? double.infinity,
         height: knownHeight ?? double.infinity,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
         localFilePath: localPosterPath,
       );
     } else {
@@ -691,7 +691,7 @@ Widget _buildPosterImage(
         imagePath: posterUrl,
         width: knownWidth ?? double.infinity,
         height: knownHeight ?? double.infinity,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
         errorWidget: posterFallbackUrl == null
             ? null
             : (_, _, _) => OptimizedMediaImage.poster(
@@ -699,7 +699,7 @@ Widget _buildPosterImage(
                 imagePath: posterFallbackUrl,
                 width: knownWidth ?? double.infinity,
                 height: knownHeight ?? double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
         localFilePath: localPosterPath,
       );
