@@ -720,6 +720,7 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
               children: [
                 TrackChapterControls(
                   player: widget.player,
+                  metadata: widget.metadata,
                   chapters: widget.chapters,
                   chaptersLoaded: widget.chaptersLoaded,
                   trackControlsState: _trackControlsState,

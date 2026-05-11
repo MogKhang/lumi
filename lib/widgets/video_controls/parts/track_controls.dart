@@ -181,6 +181,7 @@ extension _PlexVideoControlsTrackMethods on _PlexVideoControlsState {
 
     return TrackChapterControls(
       player: widget.player,
+      metadata: widget.metadata,
       chapters: _chapters,
       chaptersLoaded: _chaptersLoaded,
       trackControlsState: trackControlsState,

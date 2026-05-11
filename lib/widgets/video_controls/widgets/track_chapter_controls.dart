@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:plezy/widgets/video_controls/sheets/episode_sheet.dart';
 import 'package:flutter/services.dart';
 import '../../../utils/formatters.dart';
 import '../../../services/settings_service.dart';
@@ -8,6 +9,7 @@ import '../sheets/base_video_control_sheet.dart';
 
 import '../../../focus/dpad_navigator.dart';
 import '../../../media/media_item.dart';
+import '../../../media/media_kind.dart';
 import '../../../media/media_version.dart';
 import '../../../mpv/mpv.dart';
 import '../../../media/media_source_info.dart';
@@ -29,6 +31,7 @@ import '../video_control_button.dart';
 /// Row of track and chapter control buttons for the video player
 class TrackChapterControls extends StatelessWidget {
   final Player player;
+  final MediaItem metadata;
   final List<MediaChapter> chapters;
   final bool chaptersLoaded;
   final TrackControlsState trackControlsState;
@@ -58,6 +61,7 @@ class TrackChapterControls extends StatelessWidget {
   const TrackChapterControls({
     super.key,
     required this.player,
+    required this.metadata,
     required this.chapters,
     required this.chaptersLoaded,
     required this.trackControlsState,
@@ -436,6 +440,31 @@ class TrackChapterControls extends StatelessWidget {
           buttonIndex++;
         }
 
+        // Episodes button
+        if (metadata.kind == MediaKind.episode) {
+          final currentIndex = buttonIndex;
+          buttons.add(
+            _buildTrackButton(
+              buttonIndex: currentIndex,
+              icon: Symbols.format_list_bulleted_rounded,
+              tooltip: 'Episodes',
+              semanticLabel: 'Episodes',
+              tracks: tracks,
+              isMobile: isMobile,
+              isDesktop: isDesktop,
+              onPressed: () {
+                onCancelAutoHide?.call();
+                OverlaySheetController.of(context)
+                    .show(
+                      builder: (_) => EpisodeSheet(metadata: metadata),
+                    )
+                    .whenComplete(() => onStartAutoHide?.call());
+              },
+            ),
+          );
+          buttonIndex++;
+        }
+
 
 
 
@@ -494,6 +523,7 @@ class TrackChapterControls extends StatelessWidget {
         (onSwitchVersion != null || onSwitchQualityPreset != null)) {
       count++;
     }
+    if (metadata.kind == MediaKind.episode) count++;
 
     if (isDesktop && onToggleAlwaysOnTop != null) count++; // Always on top
     if (isDesktop) count++; // Fullscreen
