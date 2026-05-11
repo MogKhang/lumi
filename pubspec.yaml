@@ -133,3 +133,8 @@ flutter:
     - assets/shaders/anime4k/
     - assets/player_icons/
     - assets/rating_icons/
+
+  fonts:
+    - family: Lexend
+      fonts:
+        - asset: assets/fonts/Lexend-VariableFont_wght.ttf

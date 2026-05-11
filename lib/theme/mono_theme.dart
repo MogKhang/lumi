@@ -44,6 +44,7 @@ ThemeData monoTheme({required bool dark, bool oled = false}) {
   final base = ThemeData(
     useMaterial3: true,
     brightness: isDark ? Brightness.dark : Brightness.light,
+    fontFamily: 'Lexend',
     colorScheme: ColorScheme(
       brightness: isDark ? Brightness.dark : Brightness.light,
       primary: c.text,
@@ -88,9 +89,10 @@ ThemeData monoTheme({required bool dark, bool oled = false}) {
         .apply(bodyColor: c.text, displayColor: c.text)
         .copyWith(
           displayLarge: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.5),
-          titleMedium: const TextStyle(fontWeight: FontWeight.w600),
-          bodyMedium: TextStyle(color: c.text),
-          bodySmall: TextStyle(color: c.textMuted),
+          titleLarge: const TextStyle(fontWeight: FontWeight.w500, fontSize: 19),
+          titleMedium: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+          bodyMedium: TextStyle(color: c.text, fontWeight: FontWeight.w500),
+          bodySmall: TextStyle(color: c.textMuted, fontWeight: FontWeight.w500),
         ),
     cardTheme: CardThemeData(
       color: c.surface,
