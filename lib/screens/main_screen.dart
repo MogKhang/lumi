@@ -1288,17 +1288,24 @@ class _MainScreenState extends State<MainScreen>
       );
     }
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        _handleMainBack();
-      },
-      child: OverlaySheetHost(
-        child: ScaffoldMessenger(
-          key: mainScaffoldMessengerKey,
-          child: Scaffold(
-            body: _buildTickerAwareStack(),
+    return OverlaySheetHost(
+      child: Builder(
+        builder: (context) {
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop) return;
+              final sheetController = OverlaySheetController.maybeOf(context);
+              if (sheetController != null && sheetController.isOpen) {
+                sheetController.close();
+                return;
+              }
+              _handleMainBack();
+            },
+            child: ScaffoldMessenger(
+              key: mainScaffoldMessengerKey,
+              child: Scaffold(
+                body: _buildTickerAwareStack(),
             bottomNavigationBar: ClipRect(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -1369,8 +1376,9 @@ class _MainScreenState extends State<MainScreen>
               ),
             ),
           ),
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

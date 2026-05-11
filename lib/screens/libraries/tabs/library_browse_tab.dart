@@ -585,7 +585,6 @@ class LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrowse
 
 
   void showFiltersBottomSheet() {
-    SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
     OverlaySheetController.of(context).show(
       builder: (context) => FiltersBottomSheet(
         filters: _filters,
@@ -615,7 +614,6 @@ class LibraryBrowseTabState extends BaseLibraryTabState<MediaItem, LibraryBrowse
   }
 
   void showSortBottomSheet() {
-    SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
     // Track pending state in local variables so the callbacks don't trigger
     // setState/_loadItems while the sheet is open (which would steal focus).
     MediaSort? pendingSort = _selectedSort;
