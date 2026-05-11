@@ -109,6 +109,7 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       'writer': 80,
       'producer': 90,
       'country': 100,
+      'network': 105,
       'contentRating': 110,
     };
 
