@@ -442,6 +442,12 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
     bindEffect<bool>(SettingsService.videoPlayerNavigationEnabled, (enabled) {
       if (enabled && _showControls) _focusPlayPauseIfKeyboardMode();
     }, fireImmediately: false);
+    bindEffect<int>(SettingsService.audioSyncOffset, (offset) {
+      widget.player.setProperty('audio-delay', (offset / 1000.0).toString());
+    }, fireImmediately: true);
+    bindEffect<int>(SettingsService.subtitleSyncOffset, (offset) {
+      widget.player.setProperty('sub-delay', (offset / 1000.0).toString());
+    }, fireImmediately: true);
     // Rebuild on any setting that affects build output (seek labels, skip
     // logic, perf overlay visibility, click-toggles, etc.).
     bindRebuild([

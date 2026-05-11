@@ -333,21 +333,6 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
 
     return ListView(
       children: [
-        // Playback Speed - hidden for live TV and when user cannot control playback
-        if (widget.canControl && !widget.isLive)
-          StreamBuilder<double>(
-            stream: widget.player.streams.rate,
-            initialData: widget.player.state.rate,
-            builder: (context, snapshot) {
-              final currentRate = snapshot.data ?? 1.0;
-              return _SettingsMenuItem(
-                icon: Symbols.speed_rounded,
-                title: t.videoSettings.playbackSpeed,
-                valueText: formatPlaybackRate(currentRate, normalAtOne: true),
-                onTap: () => _navigateTo(_SettingsView.speed),
-              );
-            },
-          ),
 
         // Sleep Timer
         ListenableBuilder(
@@ -364,23 +349,7 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
           },
         ),
 
-        // Audio Sync
-        _SettingsMenuItem(
-          icon: Symbols.sync_rounded,
-          title: t.videoSettings.audioSync,
-          valueText: formatSyncOffset(_audioSyncOffset.toDouble()),
-          isHighlighted: _audioSyncOffset != 0,
-          onTap: () => _navigateTo(_SettingsView.audioSync),
-        ),
 
-        // Subtitle Sync
-        _SettingsMenuItem(
-          icon: Symbols.subtitles_rounded,
-          title: t.videoSettings.subtitleSync,
-          valueText: formatSyncOffset(_subtitleSyncOffset.toDouble()),
-          isHighlighted: _subtitleSyncOffset != 0,
-          onTap: () => _navigateTo(_SettingsView.subtitleSync),
-        ),
 
         // HDR Toggle (iOS, macOS, and Windows)
         if (Platform.isIOS || Platform.isMacOS || Platform.isWindows)

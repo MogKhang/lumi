@@ -125,8 +125,8 @@ extension _PlexVideoControlsTrackMethods on _PlexVideoControlsState {
       onStartAutoHide: _startHideTimer,
       // Sync offsets are now driven by listenable rebuilds — the sheet writes
       // to SettingsService and the parent re-reads via `_audioSyncOffset` /
-      // `_subtitleSyncOffset` getters. Callback kept for sheet API compat.
-      onSyncOffsetChanged: null,
+      // `_subtitleSyncOffset` getters.
+      onSyncOffsetChanged: _onSyncOffsetChanged,
       serverId: widget.metadata.serverId ?? '',
       shaderService: widget.shaderService,
       onShaderChanged: widget.onShaderChanged,
@@ -146,6 +146,15 @@ extension _PlexVideoControlsTrackMethods on _PlexVideoControlsState {
       // this metadata's serverId.
       subtitleSearchSupported: _isPlexBackedMetadata(),
     );
+  }
+
+
+  void _onSyncOffsetChanged(String property, int offset) {
+    if (property == 'audio-delay') {
+      SettingsService.instanceOrNull?.write(SettingsService.audioSyncOffset, offset);
+    } else if (property == 'sub-delay') {
+      SettingsService.instanceOrNull?.write(SettingsService.subtitleSyncOffset, offset);
+    }
   }
 
   /// True when the active server supports external subtitle search (Plex

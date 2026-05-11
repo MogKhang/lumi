@@ -6,14 +6,13 @@ import '../../../mpv/mpv.dart';
 import '../../../i18n/strings.g.dart';
 import '../../../utils/scroll_utils.dart';
 import '../../../utils/track_label_builder.dart';
-import '../../../widgets/app_icon.dart';
-import '../../../widgets/focusable_list_tile.dart';
 import '../../../widgets/overlay_sheet.dart';
 import 'base_video_control_sheet.dart';
 import 'sheet_column_header.dart';
-import 'subtitle_search_sheet.dart';
 import '../helpers/track_filter_helper.dart';
 import '../helpers/track_selection_helper.dart';
+import '../widgets/sync_offset_control.dart';
+import 'package:provider/provider.dart';
 
 /// Combined bottom sheet for selecting audio and subtitle tracks side-by-side.
 class TrackSheet extends StatelessWidget {
@@ -25,6 +24,11 @@ class TrackSheet extends StatelessWidget {
   final Function(AudioTrack)? onAudioTrackChanged;
   final Function(SubtitleTrack)? onSubtitleTrackChanged;
   final Function(SubtitleTrack)? onSecondarySubtitleTrackChanged;
+  final int audioSyncOffset;
+  final int subtitleSyncOffset;
+  final void Function(String propertyName, int offset)? onSyncOffsetChanged;
+  final VoidCallback? onCancelAutoHide;
+  final VoidCallback? onStartAutoHide;
 
   /// When true, the audio column renders the Plex [sourceAudioTracks] list
   /// and taps are routed to [onSwitchAudioStreamId] instead of using the
@@ -55,6 +59,11 @@ class TrackSheet extends StatelessWidget {
     this.selectedAudioStreamId,
     this.onSwitchAudioStreamId,
     this.subtitleSearchSupported = true,
+    this.audioSyncOffset = 0,
+    this.subtitleSyncOffset = 0,
+    this.onSyncOffsetChanged,
+    this.onCancelAutoHide,
+    this.onStartAutoHide,
   });
 
   @override
@@ -105,6 +114,8 @@ class TrackSheet extends StatelessWidget {
                     selectedStreamId: selectedAudioStreamId,
                     onSelected: onSwitchAudioStreamId!,
                     showHeader: showHeader,
+                    syncOffset: audioSyncOffset,
+                    onSyncOffsetChanged: onSyncOffsetChanged,
                   );
                 }
                 return _AudioColumn(
@@ -113,6 +124,8 @@ class TrackSheet extends StatelessWidget {
                   player: player,
                   onTrackChanged: onAudioTrackChanged,
                   showHeader: showHeader,
+                  syncOffset: audioSyncOffset,
+                  onSyncOffsetChanged: onSyncOffsetChanged,
                 );
               }
 
@@ -137,6 +150,8 @@ class TrackSheet extends StatelessWidget {
                           supportsSecondary: supportsSecondary,
                           showHeader: true,
                           subtitleSearchSupported: subtitleSearchSupported,
+                          syncOffset: subtitleSyncOffset,
+                          onSyncOffsetChanged: onSyncOffsetChanged,
                         ),
                       ),
                     ),
@@ -161,6 +176,8 @@ class TrackSheet extends StatelessWidget {
                 supportsSecondary: supportsSecondary,
                 showHeader: false,
                 subtitleSearchSupported: subtitleSearchSupported,
+                syncOffset: subtitleSyncOffset,
+                onSyncOffsetChanged: onSyncOffsetChanged,
               );
             },
           ),
@@ -175,12 +192,16 @@ class _SourceAudioColumn extends StatefulWidget {
   final int? selectedStreamId;
   final ValueChanged<int> onSelected;
   final bool showHeader;
+  final int syncOffset;
+  final void Function(String propertyName, int offset)? onSyncOffsetChanged;
 
   const _SourceAudioColumn({
     required this.tracks,
     required this.selectedStreamId,
     required this.onSelected,
     required this.showHeader,
+    this.syncOffset = 0,
+    this.onSyncOffsetChanged,
   });
 
   @override
@@ -205,6 +226,17 @@ class _SourceAudioColumnState extends State<_SourceAudioColumn> {
     return Column(
       children: [
         if (widget.showHeader) SheetColumnHeader(label: t.videoControls.audioLabel),
+        SyncOffsetControl(
+          player: context.read<Player>(), // We can get player from context if available, or pass it
+          propertyName: 'audio-delay',
+          initialOffset: widget.syncOffset,
+          labelText: t.videoSettings.audioSync,
+          onOffsetChanged: (offset) async {
+            widget.onSyncOffsetChanged?.call('audio-delay', offset);
+          },
+          compact: true,
+        ),
+        const Divider(height: 1),
         Expanded(
           child: ListView.builder(
             controller: _initialScroll.controller,
@@ -236,6 +268,8 @@ class _AudioColumn extends StatefulWidget {
   final Player player;
   final Function(AudioTrack)? onTrackChanged;
   final bool showHeader;
+  final int syncOffset;
+  final void Function(String propertyName, int offset)? onSyncOffsetChanged;
 
   const _AudioColumn({
     required this.tracks,
@@ -243,6 +277,8 @@ class _AudioColumn extends StatefulWidget {
     required this.player,
     this.onTrackChanged,
     required this.showHeader,
+    this.syncOffset = 0,
+    this.onSyncOffsetChanged,
   });
 
   @override
@@ -267,6 +303,17 @@ class _AudioColumnState extends State<_AudioColumn> {
     return Column(
       children: [
         if (widget.showHeader) SheetColumnHeader(label: t.videoControls.audioLabel),
+        SyncOffsetControl(
+          player: widget.player,
+          propertyName: 'audio-delay',
+          initialOffset: widget.syncOffset,
+          labelText: t.videoSettings.audioSync,
+          onOffsetChanged: (offset) async {
+            widget.onSyncOffsetChanged?.call('audio-delay', offset);
+          },
+          compact: true,
+        ),
+        const Divider(height: 1),
         Expanded(
           child: ListView.builder(
             controller: _initialScroll.controller,
@@ -312,6 +359,8 @@ class _SubtitleColumn extends StatefulWidget {
   final bool supportsSecondary;
   final bool showHeader;
   final bool subtitleSearchSupported;
+  final int syncOffset;
+  final void Function(String propertyName, int offset)? onSyncOffsetChanged;
 
   const _SubtitleColumn({
     required this.tracks,
@@ -326,6 +375,8 @@ class _SubtitleColumn extends StatefulWidget {
     this.supportsSecondary = false,
     required this.showHeader,
     this.subtitleSearchSupported = true,
+    this.syncOffset = 0,
+    this.onSyncOffsetChanged,
   });
 
   @override
@@ -357,6 +408,17 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
     return Column(
       children: [
         if (widget.showHeader) SheetColumnHeader(label: t.videoControls.subtitlesLabel),
+        SyncOffsetControl(
+          player: widget.player,
+          propertyName: 'sub-delay',
+          initialOffset: widget.syncOffset,
+          labelText: t.videoSettings.subtitleSync,
+          onOffsetChanged: (offset) async {
+            widget.onSyncOffsetChanged?.call('sub-delay', offset);
+          },
+          compact: true,
+        ),
+        const Divider(height: 1),
         Expanded(
           child: ListView.builder(
             controller: _initialScroll.controller,
@@ -454,23 +516,6 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
             },
           ),
         ),
-        if (widget.ratingKey.isNotEmpty && widget.subtitleSearchSupported) ...[
-          Divider(height: 1, color: Theme.of(context).dividerColor),
-          FocusableListTile(
-            leading: const AppIcon(Symbols.search_rounded),
-            title: Text(t.videoControls.searchSubtitles),
-            onTap: () {
-              OverlaySheetController.of(context).push(
-                builder: (_) => SubtitleSearchSheet(
-                  ratingKey: widget.ratingKey,
-                  serverId: widget.serverId,
-                  mediaTitle: widget.mediaTitle,
-                  onSubtitleDownloaded: widget.onSubtitleDownloaded,
-                ),
-              );
-            },
-          ),
-        ],
       ],
     );
   }
