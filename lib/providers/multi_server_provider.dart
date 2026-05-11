@@ -8,6 +8,7 @@ import '../mixins/disposable_change_notifier_mixin.dart';
 import '../services/plex_client.dart';
 import '../services/data_aggregation_service.dart';
 import '../services/multi_server_manager.dart';
+import '../services/settings_service.dart';
 import '../utils/app_logger.dart';
 
 /// Cached info about a DVR-enabled server
@@ -76,6 +77,13 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   void setSelectedServerId(String? serverId) {
     if (_selectedServerId == serverId) return;
     _selectedServerId = serverId;
+    
+    // Persist the selection
+    final settings = SettingsService.instanceOrNull;
+    if (settings != null) {
+      unawaited(settings.write(SettingsService.selectedServerId, serverId));
+    }
+    
     _syncAggregationFilter();
     _pruneLiveTvServersForVisibility();
     safeNotifyListeners();
@@ -153,6 +161,13 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   }
 
   MultiServerProvider(this._serverManager, this._aggregationService) {
+    // Load persisted selection
+    final settings = SettingsService.instanceOrNull;
+    if (settings != null) {
+      _selectedServerId = settings.read(SettingsService.selectedServerId);
+      _syncAggregationFilter();
+    }
+
     // Listen to server status changes
     _statusSubscription = _serverManager.statusStream.listen((_) {
       final currentOnline = Set<String>.from(onlineServerIds);
@@ -247,7 +262,8 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   /// Clear all server connections
   void clearAllConnections() {
     _serverManager.disconnectAll();
-    appLogger.d('MultiServerProvider: All connections cleared');
+    setSelectedServerId(null);
+    appLogger.d('MultiServerProvider: All connections cleared and server selection reset');
     safeNotifyListeners();
   }
 

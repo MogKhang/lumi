@@ -288,6 +288,9 @@ class TranslationsCommonEn {
 
 	/// en: 'Press back again to exit'
 	String get pressBackAgainToExit => 'Press back again to exit';
+
+	/// en: 'Done'
+	String get done => 'Done';
 }
 
 // Path: screens
@@ -2067,6 +2070,21 @@ class TranslationsServerSelectionEn {
 
 	/// en: 'Failed to load servers: ${error}'
 	String failedToLoadServers({required Object error}) => 'Failed to load servers: ${error}';
+
+	/// en: 'Select Server'
+	String get selectServer => 'Select Server';
+
+	/// en: 'Choose which server you'd like to use'
+	String get selectServerDescription => 'Choose which server you\'d like to use';
+
+	/// en: 'No servers available'
+	String get noServersAvailable => 'No servers available';
+
+	/// en: 'Online'
+	String get online => 'Online';
+
+	/// en: 'Offline'
+	String get offline => 'Offline';
 }
 
 // Path: hubDetail
@@ -4071,6 +4089,7 @@ extension on Translations {
 			'common.fullscreen' => 'Fullscreen',
 			'common.exitFullscreen' => 'Exit fullscreen',
 			'common.pressBackAgainToExit' => 'Press back again to exit',
+			'common.done' => 'Done',
 			'screens.licenses' => 'Licenses',
 			'screens.switchProfile' => 'Switch Profile',
 			'screens.subtitleStyling' => 'Subtitle Styling',
@@ -4523,9 +4542,9 @@ extension on Translations {
 			'profiles.connectionsLabel' => 'Connections',
 			'profiles.add' => 'Add',
 			'profiles.deleteProfileButton' => 'Delete profile',
-			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
 			'profiles.plexHomeAccount' => 'Plex Home account',
 			'profiles.connectionDefault' => 'Default',
 			'profiles.makeDefault' => 'Make default',
@@ -4649,6 +4668,11 @@ extension on Translations {
 			'serverSelection.allServerConnectionsFailed' => 'Failed to connect to any servers. Please check your network and try again.',
 			'serverSelection.noServersFoundForAccount' => ({required Object username, required Object email}) => 'No servers found for ${username} (${email})',
 			'serverSelection.failedToLoadServers' => ({required Object error}) => 'Failed to load servers: ${error}',
+			'serverSelection.selectServer' => 'Select Server',
+			'serverSelection.selectServerDescription' => 'Choose which server you\'d like to use',
+			'serverSelection.noServersAvailable' => 'No servers available',
+			'serverSelection.online' => 'Online',
+			'serverSelection.offline' => 'Offline',
 			'hubDetail.title' => 'Title',
 			'hubDetail.releaseYear' => 'Release Year',
 			'hubDetail.dateAdded' => 'Date Added',
@@ -5032,14 +5056,14 @@ extension on Translations {
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',
 			'metadataEdit.episodeOrdering' => 'Episode Ordering',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.tmdbAiring' => 'The Movie Database (Aired)',
 			'metadataEdit.tvdbAiring' => 'TheTVDB (Aired)',
 			'metadataEdit.tvdbAbsolute' => 'TheTVDB (Absolute)',
 			'metadataEdit.metadataLanguage' => 'Metadata Language',
 			'metadataEdit.useOriginalTitle' => 'Use Original Title',
 			'metadataEdit.preferredAudioLanguage' => 'Preferred Audio Language',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.preferredSubtitleLanguage' => 'Preferred Subtitle Language',
 			'metadataEdit.subtitleMode' => 'Auto-Select Subtitle Mode',
 			'metadataEdit.manuallySelected' => 'Manually selected',

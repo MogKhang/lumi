@@ -23,6 +23,7 @@ import 'mixins/mounted_set_state_mixin.dart';
 import 'profiles/plex_home_service.dart';
 import 'screens/main_screen.dart';
 import 'screens/auth_screen.dart';
+import 'screens/select_server_screen.dart';
 import 'screens/profile/pin_entry_dialog.dart';
 import 'screens/profile/profile_switch_screen.dart';
 import 'services/storage_service.dart';
@@ -1176,6 +1177,24 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     await downloadProvider.refreshMetadataFromCache();
     if (!mounted) return;
 
+    // Show server selection screen on first login when multiple servers exist
+    final multiServer = context.read<MultiServerProvider>();
+    final serverIds = multiServer.allowedServerIds ?? multiServer.serverManager.serverIds;
+    final currentSelection = multiServer.selectedServerId;
+
+    if (serverIds.length > 1) {
+      if (currentSelection == null || !serverIds.contains(currentSelection)) {
+        await Navigator.of(context).push<bool>(
+          MaterialPageRoute(builder: (_) => const SelectServerScreen()),
+        );
+        if (!mounted) return;
+      }
+    } else if (serverIds.length == 1 && currentSelection == null) {
+      // Auto-select the only server
+      multiServer.setSelectedServerId(serverIds.first);
+    }
+
+    if (!mounted) return;
     unawaited(Navigator.pushReplacement(context, fadeRoute(MainScreen(initialPromptHandled: shouldPrompt))));
   }
 

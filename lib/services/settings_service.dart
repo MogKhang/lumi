@@ -337,6 +337,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const customDownloadPath = NullableStringPref('custom_download_path');
   static final customRelayUrl = NullableStringPref('custom_relay_url', transform: _trimEmptyAsNull);
   static const recentRooms = NullableStringPref('watch_together_recent_rooms');
+  static const selectedServerId = NullableStringPref('selected_server_id');
 
   static final maxVolume = IntPref('max_volume', defaultValue: 100, transform: (v) => v.clamp(100, 300));
   static final subtitlePosition = IntPref('subtitle_position', defaultValue: 120, transform: (v) => v.clamp(0, 150));

@@ -12,6 +12,7 @@ import '../services/plex_auth_service.dart';
 import '../services/settings_service.dart';
 import '../services/storage_service.dart';
 import '../providers/user_profile_provider.dart';
+import '../providers/multi_server_provider.dart';
 import '../i18n/strings.g.dart';
 import '../utils/app_logger.dart';
 import '../utils/platform_detector.dart';
@@ -25,6 +26,7 @@ import '../widgets/dialog_action_button.dart';
 import 'auth/plex_pin_auth_flow.dart';
 import 'main_screen.dart';
 import 'profile/profile_switch_screen.dart';
+import 'select_server_screen.dart';
 import 'settings/add_jellyfin_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -161,6 +163,31 @@ class _AuthScreenState extends State<AuthScreen> {
       }
 
       await context.read<UserProfileProvider>().initialize();
+
+      if (!mounted) return;
+
+      final multiServer = context.read<MultiServerProvider>();
+      
+      // Wait for the active profile binder to settle so we have an accurate server list
+      await context.read<ActiveProfileProvider>().awaitBindingSettle();
+      if (!mounted) return;
+
+      final serverIds = multiServer.allowedServerIds ?? multiServer.serverManager.serverIds;
+      final currentSelection = multiServer.selectedServerId;
+
+      // If a server is already selected and it's still available, skip the screen.
+      // Otherwise, if there are multiple servers, we need to prompt.
+      if (serverIds.length > 1) {
+        if (currentSelection == null || !serverIds.contains(currentSelection)) {
+          await Navigator.of(context).push<bool>(
+            MaterialPageRoute(builder: (_) => const SelectServerScreen()),
+          );
+          if (!mounted) return;
+        }
+      } else if (serverIds.length == 1 && currentSelection == null) {
+        // Auto-select the only server
+        multiServer.setSelectedServerId(serverIds.first);
+      }
 
       if (!mounted) return;
       unawaited(Navigator.pushReplacement(context, fadeRoute(MainScreen(initialPromptHandled: promptHandled))));

@@ -62,7 +62,8 @@
     "loading": "Loading...",
     "fullscreen": "Fullscreen",
     "exitFullscreen": "Exit fullscreen",
-    "pressBackAgainToExit": "Press back again to exit"
+    "pressBackAgainToExit": "Press back again to exit",
+    "done": "Done"
   },
   "screens": {
     "licenses": "Licenses",
@@ -694,7 +695,12 @@
   "serverSelection": {
     "allServerConnectionsFailed": "Failed to connect to any servers. Please check your network and try again.",
     "noServersFoundForAccount": "No servers found for ${username} (${email})",
-    "failedToLoadServers": "Failed to load servers: ${error}"
+    "failedToLoadServers": "Failed to load servers: ${error}",
+    "selectServer": "Select Server",
+    "selectServerDescription": "Choose which server you'd like to use",
+    "noServersAvailable": "No servers available",
+    "online": "Online",
+    "offline": "Offline"
   },
   "hubDetail": {
     "title": "Title",
