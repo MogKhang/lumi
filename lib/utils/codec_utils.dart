@@ -69,18 +69,34 @@ class CodecUtils {
     final lower = codec.toLowerCase();
     return switch (lower) {
       'aac' => 'AAC',
+      'he-aac' || 'he_aac' || 'heaac' => 'HE-AAC',
       'ac3' => 'AC3',
-      'eac3' || 'ec3' => 'E-AC3',
-      'truehd' => 'TrueHD',
+      'eac3' || 'ec3' => 'EAC3',
+      'truehd' || 'mlp' => 'TrueHD',
       'dts' => 'DTS',
       'dca' => 'DTS',
-      'dtshd' || 'dts-hd' => 'DTS-HD',
+      'dtshd' || 'dts-hd' || 'dts_hd' => 'DTS-HD',
+      'dtshd_ma' || 'dts-hd_ma' || 'dts-ma' => 'DTS-HD MA',
+      'dtshd_hra' || 'dts-hd_hra' => 'DTS-HD HRA',
       'flac' => 'FLAC',
+      'alac' => 'ALAC',
       'mp3' || 'mp3float' => 'MP3',
       'opus' => 'Opus',
       'vorbis' => 'Vorbis',
-      'pcm_s16le' || 'pcm_s24le' || 'pcm' => 'PCM',
+      'pcm_s16le' || 'pcm_s24le' || 'pcm' || 'pcm_s32le' => 'PCM',
       _ => codec.toUpperCase(),
+    };
+  }
+
+  /// Formats audio channels into a user-friendly display format.
+  static String formatChannels(int? channels) {
+    if (channels == null) return '';
+    return switch (channels) {
+      1 => 'Mono',
+      2 => 'Stereo',
+      6 => '5.1',
+      8 => '7.1',
+      _ => '${channels}ch',
     };
   }
 }

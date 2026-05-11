@@ -91,11 +91,22 @@ class TrackLabelBuilder {
     required int index,
   }) {
     final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : 'Unknown';
-    final codecStr = codec != null ? CodecUtils.formatAudioCodec(codec) : 'Unknown';
-    final channelsStr = channelsCount != null ? ' ${channelsCount}ch' : '';
+    final codecStr = codec != null ? CodecUtils.formatAudioCodec(codec) : '';
+    final channelsStr = CodecUtils.formatChannels(channelsCount);
     
-    final label = '$lang ($codecStr$channelsStr)';
-    if (title != null && title.isNotEmpty) {
+    final String codecAndChannels;
+    if (codecStr.isNotEmpty && channelsStr.isNotEmpty) {
+      codecAndChannels = '$codecStr $channelsStr';
+    } else if (codecStr.isNotEmpty) {
+      codecAndChannels = codecStr;
+    } else if (channelsStr.isNotEmpty) {
+      codecAndChannels = channelsStr;
+    } else {
+      codecAndChannels = 'Unknown';
+    }
+    
+    final label = '$lang ($codecAndChannels)';
+    if (title != null && title.isNotEmpty && title != label) {
       return '$label | $title';
     }
     return label;
@@ -115,7 +126,7 @@ class TrackLabelBuilder {
     final forcedStr = forced ? ' (Forced)' : '';
 
     final label = '$lang ($ext$externalStr)$forcedStr';
-    if (title != null && title.isNotEmpty) {
+    if (title != null && title.isNotEmpty && title != label) {
       return '$label | $title';
     }
     return label;

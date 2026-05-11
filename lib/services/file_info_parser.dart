@@ -168,15 +168,44 @@ class PlexFileInfoStreamReader implements FileInfoStreamReader {
 
   @override
   MediaAudioTrack toAudioTrack(Map<String, dynamic> stream, int _) {
+    var codec = stream['codec'] as String? ?? stream['audioCodec'] as String?;
+    final profile = stream['profile'] as String?;
+    final displayTitle = stream['displayTitle'] as String?;
+
+    // Enhance DTS detection if profile is present
+    if (codec?.toLowerCase() == 'dca' && profile != null) {
+      final p = profile.toLowerCase();
+      if (p == 'ma') {
+        codec = 'dtshd_ma';
+      } else if (p == 'hra') {
+        codec = 'dtshd_hra';
+      }
+    }
+
+    // Fallback: Extract codec from displayTitle if missing from 'codec' field
+    // Plex displayTitle example: "English (AC3 5.1)" or "AC3 5.1"
+    if ((codec == null || codec.isEmpty) && displayTitle != null) {
+      final match = RegExp(r'\((.*?)\)').firstMatch(displayTitle);
+      final content = match?.group(1) ?? displayTitle;
+      final parts = content.split(' ');
+      if (parts.isNotEmpty) {
+        // Only use it if it's not the language name (roughly)
+        final first = parts[0];
+        if (first.length <= 6 && !first.contains(' ')) {
+          codec = first;
+        }
+      }
+    }
+
     return MediaAudioTrack(
       id: stream['id'] as int,
       index: stream['index'] as int?,
-      codec: stream['codec'] as String?,
+      codec: codec,
       language: stream['language'] as String?,
       languageCode: stream['languageCode'] as String?,
       title: stream['title'] as String?,
-      displayTitle: stream['displayTitle'] as String?,
-      channels: stream['channels'] as int?,
+      displayTitle: displayTitle,
+      channels: stream['channels'] as int? ?? stream['audioChannels'] as int?,
       selected: flexibleBool(stream['selected']),
     );
   }
