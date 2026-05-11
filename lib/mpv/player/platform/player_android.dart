@@ -148,6 +148,20 @@ class PlayerAndroid extends PlayerBase {
 
   @override
   Future<void> selectSubtitleTrack(SubtitleTrack track) async {
+    final current = state.track.subtitle;
+    final isCurrentSsa = current?.codec?.toLowerCase().contains('ass') == true ||
+        current?.codec?.toLowerCase().contains('ssa') == true;
+
+    // SSA/ASS subtitles rendered via libass overlay can sometimes "stick" on screen
+    // when switching to a non-SSA track (like SRT). To ensure they are cleared,
+    // we briefly turn subtitles off before selecting the new track.
+    if (isCurrentSsa && track.id != 'no' && current?.id != track.id) {
+      await invoke('selectSubtitleTrack', {'trackId': 'no'});
+      // Tiny delay to ensure the "off" command is processed by the libass renderer
+      // before the new track (which might not use the libass path) is selected.
+      await Future.delayed(const Duration(milliseconds: 20));
+    }
+
     await invoke('selectSubtitleTrack', {'trackId': track.id});
   }
 

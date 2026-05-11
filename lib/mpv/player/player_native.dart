@@ -166,11 +166,31 @@ class PlayerNative extends PlayerBase {
 
   @override
   Future<void> selectSubtitleTrack(SubtitleTrack track) async {
+    final current = state.track.subtitle;
+    final isCurrentSsa = current?.codec?.toLowerCase().contains('ass') == true ||
+        current?.codec?.toLowerCase().contains('ssa') == true;
+
+    // SSA/ASS subtitles can sometimes "stick" on screen when switching tracks
+    // immediately. Briefly turning subtitles off ensures the renderer is cleared.
+    if (isCurrentSsa && track.id != 'no' && current?.id != track.id) {
+      await setProperty('sid', 'no');
+      await Future.delayed(const Duration(milliseconds: 20));
+    }
+
     await setProperty('sid', track.id);
   }
 
   @override
   Future<void> selectSecondarySubtitleTrack(SubtitleTrack track) async {
+    final current = state.track.secondarySubtitle;
+    final isCurrentSsa = current?.codec?.toLowerCase().contains('ass') == true ||
+        current?.codec?.toLowerCase().contains('ssa') == true;
+
+    if (isCurrentSsa && track.id != 'no' && current?.id != track.id) {
+      await setProperty('secondary-sid', 'no');
+      await Future.delayed(const Duration(milliseconds: 20));
+    }
+
     await setProperty('secondary-sid', track.id);
   }
 
