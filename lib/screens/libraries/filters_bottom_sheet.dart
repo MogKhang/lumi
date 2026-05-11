@@ -69,11 +69,67 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
   }
 
   void _sortFilters() {
-    // Separate boolean filters (toggles) from regular filters
-    final booleanFilters = widget.filters.where((f) => f.filterType == 'boolean').toList();
-    final regularFilters = widget.filters.where((f) => f.filterType != 'boolean').toList();
+    // 1. Define the filters we want to EXCLUDE
+    const excludedFilters = {
+      'hdr',
+      'dovi',
+      'unmatched',
+      'collection',
+      'studio',
+      'resolution',
+      'edition',
+    };
 
-    // Combine with boolean filters first
+    // 2. Filter the incoming list
+    final filtered = widget.filters.where((f) {
+      final filterKey = f.filter.toLowerCase();
+      final machineKey = f.key.toLowerCase();
+      final titleKey = f.title.toLowerCase();
+      
+      return !excludedFilters.contains(filterKey) 
+          && !excludedFilters.contains(machineKey)
+          && !excludedFilters.contains(titleKey);
+    }).toList();
+
+    // 3. Separate boolean filters (toggles) from regular filters
+    final booleanFilters = filtered.where((f) => f.filterType == 'boolean').toList();
+    final regularFilters = filtered.where((f) => f.filterType != 'boolean').toList();
+
+    // 4. Define custom sort order for regular filters
+    final sortOrder = {
+      'unwatched': 1,
+      'inProgress': 2,
+      'audioLanguage': 10,
+      'subtitleLanguage': 20,
+      'genre': 30,
+      'year': 40,
+      'decade': 50,
+      'actor': 60,
+      'director': 70,
+      'writer': 80,
+      'producer': 90,
+      'country': 100,
+      'contentRating': 110,
+    };
+
+    regularFilters.sort((a, b) {
+      final aOrder = sortOrder[a.filter] ?? 999;
+      final bOrder = sortOrder[b.filter] ?? 999;
+
+      if (aOrder != bOrder) {
+        return aOrder.compareTo(bOrder);
+      }
+      return a.title.compareTo(b.title);
+    });
+
+    // Also sort booleans by the same map if applicable
+    booleanFilters.sort((a, b) {
+      final aOrder = sortOrder[a.filter] ?? 999;
+      final bOrder = sortOrder[b.filter] ?? 999;
+      return aOrder.compareTo(bOrder);
+    });
+
+    // 5. Combine: booleans (Unwatched, In Progress) first, then regular filters
     _sortedFilters = [...booleanFilters, ...regularFilters];
   }
 
