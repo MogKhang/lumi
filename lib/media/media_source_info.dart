@@ -1,4 +1,3 @@
-import '../utils/codec_utils.dart';
 import '../utils/track_label_builder.dart' show TrackLabelBuilder, buildTrackLabel;
 
 class MediaSourceInfo {
@@ -107,10 +106,13 @@ class MediaAudioTrack with _TrackLabelMixin {
   });
 
   String get label {
-    final additionalParts = <String>[];
-    if (codec != null) additionalParts.add(CodecUtils.formatAudioCodec(codec!));
-    if (channels != null) additionalParts.add('${channels!}ch');
-    return buildLabel(additionalParts);
+    return TrackLabelBuilder.buildAudioLabel(
+      title: displayTitle ?? title,
+      language: languageCode ?? language,
+      codec: codec,
+      channelsCount: channels,
+      index: (index ?? id) - 1,
+    );
   }
 }
 
@@ -151,6 +153,7 @@ class MediaSubtitleTrack with _TrackLabelMixin {
       language: languageCode ?? language,
       codec: codec,
       forced: forced,
+      isExternal: isExternal,
       index: (index ?? id) - 1,
     );
   }

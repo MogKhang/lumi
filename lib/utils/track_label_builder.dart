@@ -1,4 +1,5 @@
 import 'codec_utils.dart';
+import 'language_codes.dart';
 
 /// Builds a track label from parts with the standard `' · '` joiner pattern.
 ///
@@ -89,20 +90,15 @@ class TrackLabelBuilder {
     int? channelsCount,
     required int index,
   }) {
-    final extraParts = <String>[];
-    if (codec != null && codec.isNotEmpty) {
-      extraParts.add(CodecUtils.formatAudioCodec(codec));
+    final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : 'Unknown';
+    final codecStr = codec != null ? CodecUtils.formatAudioCodec(codec) : 'Unknown';
+    final channelsStr = channelsCount != null ? ' ${channelsCount}ch' : '';
+    
+    final label = '$lang ($codecStr$channelsStr)';
+    if (title != null && title.isNotEmpty) {
+      return '$label | $title';
     }
-    if (channelsCount != null) {
-      extraParts.add('${channelsCount}ch');
-    }
-    return buildTrackLabel(
-      title: title,
-      language: language?.toUpperCase(),
-      extraParts: extraParts,
-      index: index,
-      fallbackPrefix: 'Audio Track',
-    );
+    return label;
   }
 
   static String buildSubtitleLabel({
@@ -110,15 +106,18 @@ class TrackLabelBuilder {
     String? language,
     String? codec,
     bool forced = false,
+    bool isExternal = false,
     required int index,
   }) {
-    final cleanedTitle = cleanSubtitleTitle(title, codec: codec);
-    final cleanedLanguage = cleanTrackMetadataValue(language)?.toUpperCase();
-    final extraParts = <String>[];
-    if (forced && !_metadataToken(cleanedTitle ?? '').split('_').contains('FORCED')) extraParts.add('Forced');
-    if (codec != null && codec.isNotEmpty) {
-      extraParts.add(CodecUtils.formatSubtitleCodec(codec));
+    final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : 'Unknown';
+    final ext = codec != null ? CodecUtils.getSubtitleExtension(codec).toUpperCase() : 'SRT';
+    final externalStr = isExternal ? ' External' : '';
+    final forcedStr = forced ? ' (Forced)' : '';
+
+    final label = '$lang ($ext$externalStr)$forcedStr';
+    if (title != null && title.isNotEmpty) {
+      return '$label | $title';
     }
-    return buildTrackLabel(title: cleanedTitle, language: cleanedLanguage, extraParts: extraParts, index: index);
+    return label;
   }
 }

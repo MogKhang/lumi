@@ -461,6 +461,7 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
                 title: track.title,
                 language: track.language,
                 codec: track.codec,
+                isExternal: track.isExternal,
                 index: index - 1,
               );
 
