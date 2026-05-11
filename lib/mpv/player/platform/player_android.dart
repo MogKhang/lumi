@@ -347,6 +347,8 @@ class PlayerAndroid extends PlayerBase {
     int subtitlePosition = 100,
     bool bold = false,
     bool italic = false,
+    String? fontFamily,
+    double? bottomPadding,
   }) async {
     if (disposed || !initialized) return;
     await invoke('setSubtitleStyle', {
@@ -359,6 +361,8 @@ class PlayerAndroid extends PlayerBase {
       'subtitlePosition': subtitlePosition,
       'bold': bold,
       'italic': italic,
+      'fontFamily': fontFamily,
+      'bottomPadding': bottomPadding,
     });
   }
 

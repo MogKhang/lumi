@@ -665,6 +665,8 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       await player!.setProperty('sub-ass-override', settingsService.read(SettingsService.subAssOverride).name);
       await player!.setProperty('sub-ass-video-aspect-override', '1');
       await player!.setProperty('sub-pos', settingsService.read(SettingsService.subtitlePosition).toString());
+      await player!.setProperty('sub-margin-y', '30');
+      await player!.setProperty('sub-bold', 'yes');
 
       if (Platform.isIOS) {
         await player!.setProperty('audio-exclusive', 'yes');

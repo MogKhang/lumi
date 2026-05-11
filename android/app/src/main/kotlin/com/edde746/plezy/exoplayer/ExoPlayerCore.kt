@@ -1697,7 +1697,9 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     bgOpacity: Int,
     subtitlePosition: Int = 100,
     bold: Boolean = false,
-    italic: Boolean = false
+    italic: Boolean = false,
+    fontFamily: String? = null,
+    bottomPadding: Float? = null
   ) {
     activity.runOnUiThread {
       // 1. Non-ASS subtitles: CaptionStyleCompat on SubtitleView
@@ -1719,7 +1721,25 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         italic -> Typeface.ITALIC
         else -> Typeface.NORMAL
       }
-      val typeface = if (typefaceStyle != Typeface.NORMAL) {
+
+      val typeface = if (fontFamily == "Lexend") {
+        try {
+          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val builder = Typeface.Builder(activity.assets, "flutter_assets/assets/fonts/Lexend-VariableFont_wght.ttf")
+            // Medium weight is 500. If 'bold' is requested, we use 500 to match "Lexend Medium"
+            // as per user request for Lexend Medium specifically.
+            builder.setWeight(if (bold) 500 else 400)
+            builder.setItalic(italic)
+            builder.build()
+          } else {
+            val base = Typeface.createFromAsset(activity.assets, "flutter_assets/assets/fonts/Lexend-VariableFont_wght.ttf")
+            Typeface.create(base, typefaceStyle)
+          }
+        } catch (e: Exception) {
+          Log.e(TAG, "Failed to load Lexend typeface: ${e.message}")
+          if (typefaceStyle != Typeface.NORMAL) Typeface.create(Typeface.DEFAULT, typefaceStyle) else null
+        }
+      } else if (typefaceStyle != Typeface.NORMAL) {
         Typeface.create(Typeface.DEFAULT, typefaceStyle)
       } else {
         null
@@ -1748,11 +1768,21 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
       }
       (subtitleView?.layoutParams as? FrameLayout.LayoutParams)?.let { params ->
         params.gravity = gravity or Gravity.CENTER_HORIZONTAL
+        if (bottomPadding != null && gravity == Gravity.BOTTOM) {
+          val density = activity.resources.displayMetrics.density
+          params.bottomMargin = (bottomPadding * density).toInt()
+        } else {
+          params.bottomMargin = 0
+        }
         subtitleView?.layoutParams = params
       }
       // Fine-grained positioning within bottom region via bottom padding fraction
       if (clampedPosition > 66) {
-        val bottomFraction = (100 - clampedPosition) / 100f
+        var bottomFraction = (100 - clampedPosition) / 100f
+        if (bottomPadding != null) {
+          // Add extra fraction based on bottomPadding (using 720 as reference height)
+          bottomFraction += bottomPadding / 720f
+        }
         subtitleView?.setBottomPaddingFraction(bottomFraction)
       } else {
         subtitleView?.setBottomPaddingFraction(0f)

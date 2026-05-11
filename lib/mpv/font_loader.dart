@@ -8,8 +8,8 @@ import '../utils/app_logger.dart';
 /// Extracts font files from Flutter assets to the cache directory for
 /// comprehensive Unicode coverage (including CJK characters) for libass subtitles.
 class SubtitleFontLoader {
-  static const String _fontAssetPath = 'assets/go-noto-current-regular.ttf';
-  static const String _fontName = 'Go Noto Current-Regular';
+  static const String _fontAssetPath = 'assets/fonts/Lexend-VariableFont_wght.ttf';
+  static const String _fontName = 'Lexend';
 
   /// In-memory cache of the resolved font directory. The filesystem work
   /// (temp dir lookup, existence checks, asset extraction) is idempotent per
@@ -30,7 +30,7 @@ class SubtitleFontLoader {
         await fontDir.create(recursive: true);
       }
 
-      final fontFile = File(path.join(fontDir.path, 'go-noto-current-regular.ttf'));
+      final fontFile = File(path.join(fontDir.path, 'Lexend-VariableFont_wght.ttf'));
 
       if (!await fontFile.exists()) {
         final fontData = await rootBundle.load(_fontAssetPath);

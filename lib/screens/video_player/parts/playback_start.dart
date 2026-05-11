@@ -246,8 +246,10 @@ extension _VideoPlayerPlaybackStartMethods on VideoPlayerScreenState {
             bgColor: settingsService.read(SettingsService.subtitleBackgroundColor),
             bgOpacity: settingsService.read(SettingsService.subtitleBackgroundOpacity),
             subtitlePosition: settingsService.read(SettingsService.subtitlePosition),
-            bold: settingsService.read(SettingsService.subtitleBold),
+            bold: true,
             italic: settingsService.read(SettingsService.subtitleItalic),
+            fontFamily: 'Lexend',
+            bottomPadding: 30.0,
           );
         }
 
