@@ -101,6 +101,36 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     OverlaySheetController.of(context).close();
   }
 
+  Widget _buildSortDirectionButton({
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onPressed,
+    required bool isLeft,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 48,
+        height: 40,
+        decoration: BoxDecoration(
+          color: isSelected ? colorScheme.secondaryContainer : Colors.transparent,
+          borderRadius: isLeft
+              ? const BorderRadius.horizontal(left: Radius.circular(19))
+              : const BorderRadius.horizontal(right: Radius.circular(19)),
+        ),
+        child: Center(
+          child: AppIcon(
+            icon,
+            fill: 1,
+            size: 18,
+            color: isSelected ? colorScheme.onSecondaryContainer : colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -155,22 +185,36 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                     title: Text(sort.title),
                     value: sort,
                     secondary: isSelected
-                        ? SegmentedButton<bool>(
-                            showSelectedIcon: false,
-                            segments: const [
-                              ButtonSegment(
-                                value: false,
-                                icon: AppIcon(Symbols.arrow_upward_rounded, fill: 1, size: 16),
+                        ? Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+                                width: 1,
                               ),
-                              ButtonSegment(
-                                value: true,
-                                icon: AppIcon(Symbols.arrow_downward_rounded, fill: 1, size: 16),
-                              ),
-                            ],
-                            selected: {_currentDescending},
-                            onSelectionChanged: (Set<bool> newSelection) {
-                              _handleDirectionChange(sort, newSelection.first);
-                            },
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildSortDirectionButton(
+                                  icon: Symbols.arrow_upward_rounded,
+                                  isSelected: !_currentDescending,
+                                  onPressed: () => _handleDirectionChange(sort, false),
+                                  isLeft: true,
+                                ),
+                                Container(
+                                  width: 1,
+                                  height: 24,
+                                  color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+                                ),
+                                _buildSortDirectionButton(
+                                  icon: Symbols.arrow_downward_rounded,
+                                  isSelected: _currentDescending,
+                                  onPressed: () => _handleDirectionChange(sort, true),
+                                  isLeft: false,
+                                ),
+                              ],
+                            ),
                           )
                         : null,
                   ),
