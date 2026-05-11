@@ -308,7 +308,6 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
         child: VideoControlsHeader(
           metadata: widget.metadata,
           style: VideoHeaderStyle.multiLine,
-          trailing: widget.trackChapterControls,
           onBack: widget.onBack,
         ),
       ),
@@ -419,17 +418,25 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
       top: false, // Only respect bottom safe area when in portrait
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: VideoTimelineBar(
-          player: widget.player,
-          chapters: widget.chapters,
-          chaptersLoaded: widget.chaptersLoaded,
-          showChapterMarkersOnTimeline: widget.showChapterMarkersOnTimeline,
-          onSeek: widget.onSeek,
-          onSeekEnd: widget.onSeekEnd,
-          horizontalLayout: false,
-          enabled: widget.canControl,
-          showFinishTime: false,
-          thumbnailDataBuilder: widget.thumbnailDataBuilder,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            VideoTimelineBar(
+              player: widget.player,
+              chapters: widget.chapters,
+              chaptersLoaded: widget.chaptersLoaded,
+              showChapterMarkersOnTimeline: widget.showChapterMarkersOnTimeline,
+              onSeek: widget.onSeek,
+              onSeekEnd: widget.onSeekEnd,
+              horizontalLayout: false,
+              enabled: widget.canControl,
+              showFinishTime: false,
+              thumbnailDataBuilder: widget.thumbnailDataBuilder,
+            ),
+            const SizedBox(height: 8),
+            widget.trackChapterControls,
+          ],
         ),
       ),
     );

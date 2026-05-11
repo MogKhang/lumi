@@ -655,24 +655,6 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
               metadata: widget.metadata,
               style: Platform.isMacOS ? VideoHeaderStyle.singleLine : VideoHeaderStyle.multiLine,
               onBack: widget.onBack,
-              trailing: TrackChapterControls(
-                player: widget.player,
-                chapters: widget.chapters,
-                chaptersLoaded: widget.chaptersLoaded,
-                trackControlsState: _trackControlsState,
-                onSeekCompleted: widget.onSeekCompleted,
-                focusNodes: _trackControlFocusNodes,
-                onFocusChange: _onFocusChange,
-                onNavigateLeft: () {}, // Now at start of top row
-                onNavigateUp: () {
-                  // No upper row
-                },
-                onNavigateDown: () {
-                  _timelineFocusNode.requestFocus();
-                  widget.onFocusActivity?.call();
-                },
-                hideChaptersAndQueue: widget.useDpadNavigation && _hasStripContent,
-              ),
             ),
           ),
           if (_isLive && (widget.captureBuffer == null || widget.isAtLiveEdge)) ...[
@@ -736,6 +718,25 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
             skipTraversal: true,
             child: Row(
               children: [
+                TrackChapterControls(
+                  player: widget.player,
+                  chapters: widget.chapters,
+                  chaptersLoaded: widget.chaptersLoaded,
+                  trackControlsState: _trackControlsState,
+                  onSeekCompleted: widget.onSeekCompleted,
+                  focusNodes: _trackControlFocusNodes,
+                  onFocusChange: _onFocusChange,
+                  onNavigateLeft: () {},
+                  onNavigateUp: () {
+                    _timelineFocusNode.requestFocus();
+                    widget.onFocusActivity?.call();
+                  },
+                  onNavigateDown: () {
+                    // No lower row
+                  },
+                  hideChaptersAndQueue: widget.useDpadNavigation && _hasStripContent,
+                ),
+                const SizedBox(width: 8),
                 if (!_isLive) ...[
                   // Previous item
                   Opacity(
