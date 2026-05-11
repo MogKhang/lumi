@@ -805,8 +805,39 @@ class _LibrariesScreenState extends State<LibrariesScreen>
       );
     }
 
-    // On mobile, show static title (tabs are in a separate row below)
+    // On mobile, the title is shown here; tabs are moved to the AppBar bottom
     return titleWidget;
+  }
+
+  PreferredSizeWidget? _buildMobileTabBar() {
+    if (PlatformDetector.shouldUseSideNavigation(context) || _selectedLibraryGlobalKey == null) {
+      return null;
+    }
+
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(48),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (int i = 0; i < _visibleTabs.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                buildTabChip(
+                  _getTabLabel(_visibleTabs[i]),
+                  i,
+                  onSelectWhenActive: _focusCurrentTab,
+                  onNavigateDown: _focusCurrentTabFromTabBar,
+                  onNavigateRightFromLast: () => _actionBarKey.currentState?.requestFocusOnFirst(),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -844,18 +875,14 @@ class _LibrariesScreenState extends State<LibrariesScreen>
       });
     }
 
-    final showMobileTabsRow = selectedLibrary != null && !PlatformDetector.shouldUseSideNavigation(context);
-
-    Widget appBar({required bool floating}) => DesktopSliverAppBar(
+    Widget appBar({required bool pinned, bool? isFloating}) => DesktopSliverAppBar(
       title: _buildAppBarTitle(selectedLibrary),
-      // When showing the tab content, let the app bar float away with the
-      // content. Otherwise (loading / empty / error states) keep it pinned so
-      // it stays visible over the centered state widget.
-      pinned: !floating,
-      floating: floating,
-      snap: floating,
+      pinned: pinned,
+      floating: isFloating ?? false,
+      snap: isFloating ?? false,
+      bottom: _buildMobileTabBar(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       shadowColor: Colors.transparent,
       scrolledUnderElevation: 0,
       actions: [
@@ -899,7 +926,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
       return CustomScrollView(
         controller: _outerScrollController,
         slivers: [
-          appBar(floating: false),
+          appBar(pinned: false),
           SliverFillRemaining(child: body),
         ],
       );
@@ -938,32 +965,8 @@ class _LibrariesScreenState extends State<LibrariesScreen>
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverOverlapAbsorber(
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            sliver: appBar(floating: true),
+            sliver: appBar(pinned: true),
           ),
-          if (showMobileTabsRow)
-            SliverToBoxAdapter(
-              child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (int i = 0; i < _visibleTabs.length; i++) ...[
-                        if (i > 0) const SizedBox(width: 8),
-                        buildTabChip(
-                          _getTabLabel(_visibleTabs[i]),
-                          i,
-                          onSelectWhenActive: _focusCurrentTab,
-                          onNavigateDown: _focusCurrentTabFromTabBar,
-                          onNavigateRightFromLast: () => _actionBarKey.currentState?.requestFocusOnFirst(),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            ),
         ],
         body: TabBarView(
           key: ValueKey(_selectedLibraryGlobalKey),
