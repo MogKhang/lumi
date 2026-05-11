@@ -45,6 +45,7 @@ import 'libraries/content_state_builder.dart';
 import 'main_screen.dart';
 import 'search_screen.dart';
 import '../utils/desktop_window_padding.dart';
+import '../widgets/desktop_app_bar.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -831,48 +832,36 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   }
 
 
-  Widget _buildOverlaidAppBar() {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black.withValues(alpha: 0.7),
-            Colors.black.withValues(alpha: 0.5),
-            Colors.black.withValues(alpha: 0.3),
-            Colors.transparent,
+  Widget _buildAppBar({required bool pinned, bool floating = false}) {
+    return DesktopSliverAppBar(
+      title: DesktopTitleBarPadding(
+        child: Text(
+          t.common.home,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        ),
+      ),
+      pinned: pinned,
+      floating: floating,
+      snap: floating,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+      shadowColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      actions: DesktopAppBarHelper.buildAdjustedActions([
+        FocusableActionBar(
+          key: _actionBarKey,
+          onNavigateLeft: _navigateToSidebar,
+          onNavigateDown: _focusContentFromAppBar,
+          actions: [
+            FocusableAction(
+              icon: Symbols.search_rounded,
+              onPressed: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
+              tooltip: t.common.search,
+            ),
           ],
-          stops: const [0.0, 0.3, 0.6, 1.0],
         ),
-      ),
-      child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false,
-        title: DesktopTitleBarPadding(
-          child: Text(
-            t.common.home,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ),
-        actions: DesktopAppBarHelper.buildAdjustedActions([
-          FocusableActionBar(
-            key: _actionBarKey,
-            onNavigateLeft: _navigateToSidebar,
-            onNavigateDown: _focusContentFromAppBar,
-            actions: [
-              FocusableAction(
-                icon: Symbols.search_rounded,
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
-                tooltip: t.common.search,
-              ),
-            ],
-          ),
-        ]),
-      ),
+      ]),
     );
   }
 
@@ -898,131 +887,138 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     final theme = Theme.of(context);
     return Material(
       color: theme.scaffoldBackgroundColor,
-      child: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              // Hero Section (Continue Watching) - at top of screen
-              Builder(
-                builder: (context) {
-                  if (_onDeck.isNotEmpty && showHeroSection) {
-                    return _buildHeroSection();
-                  }
-                  // Add top padding when hero is not shown
-                  return SliverToBoxAdapter(
-                    child: SizedBox(height: kToolbarHeight + MediaQuery.paddingOf(context).top + 16),
-                  );
-                },
-              ),
-              if (_isLoading) LoadingIndicatorBox.sliver,
-              if (_errorMessage != null) SliverErrorState(message: _errorMessage!, onRetry: _loadContent),
-              if (!_isLoading && _errorMessage == null) ...[
-                // On Deck / Continue Watching
-                if (_onDeck.isNotEmpty)
-                  SliverToBoxAdapter(
-                    child: HubSection(
-                      key: _continueWatchingHubKey,
-                      hub: MediaHub(
-                        id: 'continue_watching',
-                        title: t.discover.continueWatching,
-                        type: 'mixed',
-                        identifier: '_continue_watching_',
-                        size: _onDeck.length,
-                        more: false,
-                        items: _onDeck,
-                      ),
-                      emoji: '⏳',
-                      onRefresh: updateItem,
-                      onRemoveFromContinueWatching: _refreshContinueWatching,
-                      isInContinueWatching: true,
-                      onVerticalNavigation: (isUp) => _handleVerticalNavigation(0, isUp),
-                      onNavigateUp: _focusTopBoundary,
-                      onNavigateToSidebar: _navigateToSidebar,
-                    ),
-                  ),
-
-                // Recommendation Hubs (Trending, Top in Genre, etc.)
-                for (int i = 0; i < _hubs.length; i++)
-                  SliverToBoxAdapter(
-                    child: HubSection(
-                      key: i < _hubKeys.length ? _hubKeys[i] : null,
-                      hub: _hubs[i],
-                      icon: _getHubIcon(_hubs[i].title),
-                      showServerName: showServerNameOnHubs && duplicateHubTitles.contains(_hubs[i].title),
-                      onRefresh: updateItem,
-                      // Hub index is i + 1 if continue watching exists, otherwise i
-                      onVerticalNavigation: (isUp) => _handleVerticalNavigation(_onDeck.isNotEmpty ? i + 1 : i, isUp),
-                      onNavigateUp: (i == 0 && _onDeck.isEmpty) ? _focusTopBoundary : null,
-                      onNavigateToSidebar: _navigateToSidebar,
-                    ),
-                  ),
-
-                // Show loading skeleton for hubs while they're loading
-                if (_areHubsLoading && _hubs.isEmpty)
-                  for (int i = 0; i < 3; i++)
+      child: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: _buildAppBar(pinned: true),
+          ),
+        ],
+        body: Builder(
+          builder: (context) {
+            return CustomScrollView(
+              slivers: [
+                SliverOverlapInjector(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                // Hero Section (Continue Watching) - at top of screen
+                Builder(
+                  builder: (context) {
+                    if (_onDeck.isNotEmpty && showHeroSection) {
+                      return _buildHeroSection();
+                    }
+                    // Add standard padding when hero is not shown
+                    return const SliverToBoxAdapter(
+                      child: SizedBox(height: 16),
+                    );
+                  },
+                ),
+                if (_isLoading) LoadingIndicatorBox.sliver,
+                if (_errorMessage != null) SliverErrorState(message: _errorMessage!, onRetry: _loadContent),
+                if (!_isLoading && _errorMessage == null) ...[
+                  // On Deck / Continue Watching
+                  if (_onDeck.isNotEmpty)
                     SliverToBoxAdapter(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
+                      child: HubSection(
+                        key: _continueWatchingHubKey,
+                        hub: MediaHub(
+                          id: 'continue_watching',
+                          title: t.discover.continueWatching,
+                          type: 'mixed',
+                          identifier: '_continue_watching_',
+                          size: _onDeck.length,
+                          more: false,
+                          items: _onDeck,
+                        ),
+                        emoji: '⏳',
+                        onRefresh: updateItem,
+                        onRemoveFromContinueWatching: _refreshContinueWatching,
+                        isInContinueWatching: true,
+                        onVerticalNavigation: (isUp) => _handleVerticalNavigation(0, isUp),
+                        onNavigateUp: _focusTopBoundary,
+                        onNavigateToSidebar: _navigateToSidebar,
+                      ),
+                    ),
+
+                  // Recommendation Hubs (Trending, Top in Genre, etc.)
+                  for (int i = 0; i < _hubs.length; i++)
+                    SliverToBoxAdapter(
+                      child: HubSection(
+                        key: i < _hubKeys.length ? _hubKeys[i] : null,
+                        hub: _hubs[i],
+                        icon: _getHubIcon(_hubs[i].title),
+                        showServerName: showServerNameOnHubs && duplicateHubTitles.contains(_hubs[i].title),
+                        onRefresh: updateItem,
+                        // Hub index is i + 1 if continue watching exists, otherwise i
+                        onVerticalNavigation: (isUp) => _handleVerticalNavigation(_onDeck.isNotEmpty ? i + 1 : i, isUp),
+                        onNavigateUp: (i == 0 && _onDeck.isEmpty) ? _focusTopBoundary : null,
+                        onNavigateToSidebar: _navigateToSidebar,
+                      ),
+                    ),
+
+                  // Show loading skeleton for hubs while they're loading
+                  if (_areHubsLoading && _hubs.isEmpty)
+                    for (int i = 0; i < 3; i++)
+                      SliverToBoxAdapter(
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 200,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.surfaceContainerHighest,
+                                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                height: 200,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 5,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: const EdgeInsets.only(right: 12),
+                                      width: 140,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                                        borderRadius: BorderRadius.circular(tokens(context).radiusSm),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                  if (_onDeck.isEmpty && _hubs.isEmpty && !_areHubsLoading)
+                    SliverFillRemaining(
+                      child: Center(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 200,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.surfaceContainerHighest,
-                                borderRadius: const BorderRadius.all(Radius.circular(4)),
-                              ),
-                            ),
+                            const AppIcon(Symbols.movie_rounded, fill: 1, size: 64, color: Colors.grey),
                             const SizedBox(height: 16),
-                            SizedBox(
-                              height: 200,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.only(right: 12),
-                                    width: 140,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                                      borderRadius: BorderRadius.circular(tokens(context).radiusSm),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                            Text(t.discover.noContentAvailable),
+                            const SizedBox(height: 8),
+                            Text(t.discover.addMediaToLibraries, style: const TextStyle(color: Colors.grey)),
                           ],
                         ),
                       ),
                     ),
 
-                if (_onDeck.isEmpty && _hubs.isEmpty && !_areHubsLoading)
-                  SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const AppIcon(Symbols.movie_rounded, fill: 1, size: 64, color: Colors.grey),
-                          const SizedBox(height: 16),
-                          Text(t.discover.noContentAvailable),
-                          const SizedBox(height: 8),
-                          Text(t.discover.addMediaToLibraries, style: const TextStyle(color: Colors.grey)),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                SliverToBoxAdapter(child: SizedBox(height: 24 + bottomPadding)),
+                  SliverToBoxAdapter(child: SizedBox(height: 24 + bottomPadding)),
+                ],
               ],
-            ],
-          ),
-          // Overlaid app bar — excluded from default focus traversal so that
-          // initial/tab-switch focus lands on content (hero/hubs), not the toolbar.
-          // Toolbar buttons are still reachable via explicit UP from hero section.
-          Positioned(top: 0, left: 0, right: 0, child: ExcludeFocusTraversal(child: _buildOverlaidAppBar())),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
