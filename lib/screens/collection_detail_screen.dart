@@ -104,36 +104,7 @@ class _CollectionDetailScreenState extends BaseMediaListDetailScreen<CollectionD
 
   @override
   List<FocusableAction> getAppBarActions() {
-    final ruleKey = _collectionSyncRuleKey();
-    // Select the specific bool we care about so unrelated DownloadProvider
-    // ticks (e.g. active download progress) don't rebuild the app bar.
-    final hasRule = context.select<DownloadProvider, bool>((p) => p.hasSyncRule(ruleKey));
-
-    return [
-      if (hasItems) ...[
-        FocusableAction(icon: Symbols.play_arrow_rounded, tooltip: t.common.play, onPressed: playItems),
-        FocusableAction(icon: Symbols.shuffle_rounded, tooltip: t.common.shuffle, onPressed: shufflePlayItems),
-      ],
-      if (!PlatformDetector.isAppleTV())
-        FocusableAction(
-          icon: hasRule ? Symbols.sync_rounded : Symbols.download_rounded,
-          tooltip: hasRule ? t.downloads.manageSyncRule : t.downloads.downloadNow,
-          onPressed: hasRule ? _manageCollectionSyncRule : _downloadCollection,
-          iconColor: hasRule ? Colors.teal : null,
-        ),
-      if (!PlatformDetector.isAppleTV() && hasRule)
-        FocusableAction(
-          icon: Symbols.sync_disabled_rounded,
-          tooltip: t.downloads.removeSyncRule,
-          onPressed: _removeCollectionSyncRule,
-        ),
-      FocusableAction(
-        icon: Symbols.delete_rounded,
-        tooltip: t.common.delete,
-        onPressed: _deleteCollection,
-        iconColor: Colors.red,
-      ),
-    ];
+    return [];
   }
 
   Future<void> _downloadCollection() async {
