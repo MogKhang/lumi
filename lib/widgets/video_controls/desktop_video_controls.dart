@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 
 import '../../focus/dpad_navigator.dart';
 import '../../media/media_item.dart';
+import '../../media/media_kind.dart';
 import '../../mpv/mpv.dart';
 import '../../media/media_source_info.dart';
 import '../../services/fullscreen_state_manager.dart';
@@ -739,18 +740,20 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                 ),
                 const SizedBox(width: 8),
                 if (!_isLive) ...[
-                  // Previous item
-                  Opacity(
-                    opacity: _canControl ? 1.0 : 0.5,
-                    child: _buildFocusableButton(
-                      focusNode: _prevItemFocusNode,
-                      index: 0,
-                      icon: Symbols.skip_previous_rounded,
-                      color: widget.onPrevious != null && _canControl ? Colors.white : Colors.white54,
-                      onPressed: _canControl ? widget.onPrevious : null,
-                      semanticLabel: t.videoControls.previousButton,
+                  if (widget.metadata.kind == MediaKind.episode) ...[
+                    // Previous item
+                    Opacity(
+                      opacity: _canControl ? 1.0 : 0.5,
+                      child: _buildFocusableButton(
+                        focusNode: _prevItemFocusNode,
+                        index: 0,
+                        icon: Symbols.skip_previous_rounded,
+                        color: widget.onPrevious != null && _canControl ? Colors.white : Colors.white54,
+                        onPressed: _canControl ? widget.onPrevious : null,
+                        semanticLabel: t.videoControls.previousButton,
+                      ),
                     ),
-                  ),
+                  ],
                   // Previous chapter
                   StreamBuilder<Duration>(
                     stream: widget.player.streams.position,
@@ -845,17 +848,19 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                     },
                   ),
                   // Next item
-                  Opacity(
-                    opacity: _canControl ? 1.0 : 0.5,
-                    child: _buildFocusableButton(
-                      focusNode: _nextItemFocusNode,
-                      index: 6,
-                      icon: Symbols.skip_next_rounded,
-                      color: widget.onNext != null && _canControl ? Colors.white : Colors.white54,
-                      onPressed: _canControl ? widget.onNext : null,
-                      semanticLabel: t.videoControls.nextButton,
+                  if (widget.metadata.kind == MediaKind.episode) ...[
+                    Opacity(
+                      opacity: _canControl ? 1.0 : 0.5,
+                      child: _buildFocusableButton(
+                        focusNode: _nextItemFocusNode,
+                        index: 6,
+                        icon: Symbols.skip_next_rounded,
+                        color: widget.onNext != null && _canControl ? Colors.white : Colors.white54,
+                        onPressed: _canControl ? widget.onNext : null,
+                        semanticLabel: t.videoControls.nextButton,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
                 // Go to Live button (only when time-shifted behind live edge)
                 if (_isLive && widget.captureBuffer != null && !widget.isAtLiveEdge && widget.onJumpToLive != null) ...[

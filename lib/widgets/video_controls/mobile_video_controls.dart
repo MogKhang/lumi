@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../media/media_item.dart';
+import '../../media/media_kind.dart';
 import '../../mpv/mpv.dart';
 import '../../models/livetv_capture_buffer.dart';
 import '../../media/media_source_info.dart';
@@ -335,7 +336,7 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (!widget.isLive) ...[
+            if (!widget.isLive && widget.metadata.kind == MediaKind.episode) ...[
               // Previous episode button (greyed out when unavailable)
               CircularControlButton(
                 semanticLabel: t.videoControls.previousButton,
@@ -359,7 +360,7 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
                 }
               },
             ),
-            if (!widget.isLive) ...[
+            if (!widget.isLive && widget.metadata.kind == MediaKind.episode) ...[
               const SizedBox(width: 24),
               // Next episode button (greyed out when unavailable)
               CircularControlButton(
