@@ -36,6 +36,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
   late bool _currentDescending;
   late final FocusNode _initialFocusNode;
   final _firstItemKey = GlobalKey();
+  late List<MediaSort> _filteredSortOptions;
   final _scrollController = ScrollController();
 
   @override
@@ -45,9 +46,33 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     _currentDescending = widget.isSortDescending;
     _initialFocusNode = FocusNode(debugLabel: 'SortBottomSheetInitialFocus');
 
+    // Filter out unwanted sort options
+    const excludedKeys = {
+      'criticRating',
+      'audienceRating',
+      'duration',
+      'viewedAt',
+      'resolution',
+    };
+
+    _filteredSortOptions = widget.sortOptions.where((s) {
+      final key = s.key.toLowerCase();
+      final title = s.title.toLowerCase();
+      
+      // Check common Plex/Jellyfin keys for these categories
+      final isExcluded = excludedKeys.contains(key) ||
+          title.contains('critic rating') ||
+          title.contains('audience rating') ||
+          title.contains('duration') ||
+          title.contains('date viewed') ||
+          title.contains('resolution');
+          
+      return !isExcluded;
+    }).toList();
+
     // Scroll to selected item, then handle focus
     final selectedIndex = widget.selectedSort != null
-        ? widget.sortOptions.indexWhere((s) => s.key == widget.selectedSort!.key)
+        ? _filteredSortOptions.indexWhere((s) => s.key == widget.selectedSort!.key)
         : -1;
     if (selectedIndex > 0) {
       scrollToCurrentItem(_scrollController, _firstItemKey, selectedIndex);
@@ -156,9 +181,9 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
               primary: false,
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(vertical: 8),
-              itemCount: widget.sortOptions.length,
+              itemCount: _filteredSortOptions.length,
               itemBuilder: (context, index) {
-                final sort = widget.sortOptions[index];
+                final sort = _filteredSortOptions[index];
                 final isSelected = _currentSort?.key == sort.key;
 
                 return Focus(
