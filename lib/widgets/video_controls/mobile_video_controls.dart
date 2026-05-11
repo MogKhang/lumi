@@ -428,7 +428,7 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
           onSeekEnd: widget.onSeekEnd,
           horizontalLayout: false,
           enabled: widget.canControl,
-          showFinishTime: true,
+          showFinishTime: false,
           thumbnailDataBuilder: widget.thumbnailDataBuilder,
         ),
       ),

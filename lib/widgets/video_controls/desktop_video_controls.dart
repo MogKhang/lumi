@@ -14,7 +14,6 @@ import '../../services/fullscreen_state_manager.dart';
 import '../../services/scrub_preview_source.dart';
 import '../../utils/desktop_window_padding.dart';
 import '../../utils/platform_detector.dart';
-import '../../utils/formatters.dart';
 import '../../i18n/strings.g.dart';
 import '../../focus/focusable_wrapper.dart';
 import '../../models/livetv_capture_buffer.dart';
@@ -656,6 +655,24 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
               metadata: widget.metadata,
               style: Platform.isMacOS ? VideoHeaderStyle.singleLine : VideoHeaderStyle.multiLine,
               onBack: widget.onBack,
+              trailing: TrackChapterControls(
+                player: widget.player,
+                chapters: widget.chapters,
+                chaptersLoaded: widget.chaptersLoaded,
+                trackControlsState: _trackControlsState,
+                onSeekCompleted: widget.onSeekCompleted,
+                focusNodes: _trackControlFocusNodes,
+                onFocusChange: _onFocusChange,
+                onNavigateLeft: () {}, // Now at start of top row
+                onNavigateUp: () {
+                  // No upper row
+                },
+                onNavigateDown: () {
+                  _timelineFocusNode.requestFocus();
+                  widget.onFocusActivity?.call();
+                },
+                hideChaptersAndQueue: widget.useDpadNavigation && _hasStripContent,
+              ),
             ),
           ),
           if (_isLive && (widget.captureBuffer == null || widget.isAtLiveEdge)) ...[
@@ -804,17 +821,6 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                     ),
                   ),
                 ],
-                // Go to Live button (only when time-shifted behind live edge)
-                if (_isLive && widget.captureBuffer != null && !widget.isAtLiveEdge && widget.onJumpToLive != null) ...[
-                  _buildFocusableButton(
-                    focusNode: _goToLiveFocusNode,
-                    index: 7,
-                    icon: Symbols.stream_rounded,
-                    onPressed: _canControl ? widget.onJumpToLive : null,
-                    semanticLabel: t.liveTv.goToLive,
-                    tooltip: t.liveTv.goToLive,
-                  ),
-                ],
                 if (!_isLive) ...[
                   // Next chapter
                   StreamBuilder<Duration>(
@@ -849,60 +855,18 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                     ),
                   ),
                 ],
-                // Finish time (hidden for live TV and when too narrow to fit)
-                if (_isLive)
-                  const Spacer()
-                else
-                  Expanded(
-                    child: StreamBuilder<Duration>(
-                      stream: widget.player.streams.position,
-                      initialData: widget.player.state.position,
-                      builder: (context, posSnap) {
-                        return StreamBuilder<Duration>(
-                          stream: widget.player.streams.duration,
-                          initialData: widget.player.state.duration,
-                          builder: (context, durSnap) {
-                            return StreamBuilder<double>(
-                              stream: widget.player.streams.rate,
-                              initialData: widget.player.state.rate,
-                              builder: (context, rateSnap) {
-                                final position = posSnap.data ?? Duration.zero;
-                                final duration = durSnap.data ?? Duration.zero;
-                                final remaining = duration - position;
-                                final rate = rateSnap.data ?? 1.0;
-                                if (remaining.inSeconds <= 0) return const SizedBox.shrink();
-
-                                final text = t.videoControls.endsAt(
-                                  time: formatFinishTime(
-                                    remaining,
-                                    rate: rate,
-                                    is24Hour: MediaQuery.alwaysUse24HourFormatOf(context),
-                                  ),
-                                );
-                                const style = TextStyle(color: Colors.white70, fontSize: 13);
-
-                                return LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    final tp = TextPainter(
-                                      text: TextSpan(text: text, style: style),
-                                      textDirection: TextDirection.ltr,
-                                    )..layout();
-                                    final textWidth = tp.width + 8;
-                                    tp.dispose();
-                                    if (textWidth > constraints.maxWidth) return const SizedBox.shrink();
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: Text(text, style: style),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
-                    ),
+                // Go to Live button (only when time-shifted behind live edge)
+                if (_isLive && widget.captureBuffer != null && !widget.isAtLiveEdge && widget.onJumpToLive != null) ...[
+                  _buildFocusableButton(
+                    focusNode: _goToLiveFocusNode,
+                    index: 7,
+                    icon: Symbols.stream_rounded,
+                    onPressed: _canControl ? widget.onJumpToLive : null,
+                    semanticLabel: t.liveTv.goToLive,
+                    tooltip: t.liveTv.goToLive,
                   ),
+                ],
+                const Spacer(),
                 // Volume control (hidden on TV — hardware handles volume)
                 if (!PlatformDetector.isTV()) ...[
                   VolumeControl(
@@ -912,29 +876,7 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                     onFocusChange: _onFocusChange,
                     onFocusActivity: widget.onFocusActivity,
                   ),
-                  const SizedBox(width: 16),
                 ],
-                // Audio track, subtitle, and chapter controls
-                TrackChapterControls(
-                  player: widget.player,
-                  chapters: widget.chapters,
-                  chaptersLoaded: widget.chaptersLoaded,
-                  trackControlsState: _trackControlsState,
-                  onSeekCompleted: widget.onSeekCompleted,
-                  focusNodes: _trackControlFocusNodes,
-                  onFocusChange: _onFocusChange,
-                  onNavigateLeft: navigateFromTrackToVolume,
-                  onNavigateUp: () {
-                    _timelineFocusNode.requestFocus();
-                    widget.onFocusActivity?.call();
-                  },
-                  onNavigateDown: () {
-                    if (widget.useDpadNavigation && _hasStripContent) {
-                      _showContentStrip();
-                    }
-                  },
-                  hideChaptersAndQueue: widget.useDpadNavigation && _hasStripContent,
-                ),
               ],
             ),
           ),

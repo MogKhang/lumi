@@ -141,19 +141,7 @@ class VideoTimelineBar extends StatelessWidget {
   }
 
   Widget _buildRemainingTimestamp(Duration remaining) {
-    if (!showFinishTime || remaining.inSeconds >= 0) {
-      return _buildTimestamp(remaining);
-    }
-    return StreamBuilder<double>(
-      stream: player.streams.rate,
-      initialData: player.state.rate,
-      builder: (context, rateSnap) {
-        final rate = rateSnap.data ?? 1.0;
-        final text =
-            '${formatDurationTimestamp(remaining)} · ${formatFinishTime(remaining.abs(), rate: rate, is24Hour: MediaQuery.alwaysUse24HourFormatOf(context))}';
-        return Text(text, style: _timestampStyle);
-      },
-    );
+    return _buildTimestamp(remaining);
   }
 
   Widget _buildSlider(Duration position, Duration duration, List<BufferRange> bufferRanges) {

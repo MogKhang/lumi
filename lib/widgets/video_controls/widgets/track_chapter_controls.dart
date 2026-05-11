@@ -42,6 +42,9 @@ class TrackChapterControls extends StatelessWidget {
   /// Called to navigate up from any button (e.g., to focus timeline on TV)
   final VoidCallback? onNavigateUp;
 
+  /// Called to navigate right from the last button
+  final VoidCallback? onNavigateRight;
+
   /// Called to navigate down from any button (e.g., to show content strip on TV)
   final VoidCallback? onNavigateDown;
 
@@ -58,6 +61,7 @@ class TrackChapterControls extends StatelessWidget {
     this.focusNodes,
     this.onFocusChange,
     this.onNavigateLeft,
+    this.onNavigateRight,
     this.onNavigateUp,
     this.onNavigateDown,
     this.hideChaptersAndQueue = false,
@@ -127,6 +131,9 @@ class TrackChapterControls extends StatelessWidget {
     if (key == LogicalKeyboardKey.arrowRight) {
       if (index < totalButtons - 1 && focusNodes != null && focusNodes!.length > index + 1) {
         focusNodes![index + 1].requestFocus();
+        return KeyEventResult.handled;
+      } else if (index == totalButtons - 1) {
+        onNavigateRight?.call();
         return KeyEventResult.handled;
       }
       // At end, consume to prevent bubbling

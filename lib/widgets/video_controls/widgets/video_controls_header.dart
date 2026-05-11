@@ -69,12 +69,15 @@ class VideoControlsHeader extends StatelessWidget {
     final List<String> parts = [seriesName];
 
     if (hasEpisodeInfo) {
-      parts.add('S${metadata.parentIndex}E${metadata.index}');
+      parts.add('Season ${metadata.parentIndex.toString().padLeft(2, '0')}');
+      parts.add('Episode ${metadata.index.toString().padLeft(2, '0')}');
       parts.add(metadata.title!);
+    } else if (metadata.year != null) {
+      parts.add(metadata.year.toString());
     }
 
     return Text(
-      toBulletedString(parts),
+      hasEpisodeInfo ? parts.join(' * ') : toBulletedString(parts),
       style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -85,13 +88,11 @@ class VideoControlsHeader extends StatelessWidget {
     final List<String> secondLineParts = [];
 
     if (metadata.parentIndex != null && metadata.index != null) {
-      secondLineParts.add('S${metadata.parentIndex}');
-      secondLineParts.add('E${metadata.index}');
+      secondLineParts.add('Season ${metadata.parentIndex.toString().padLeft(2, '0')}');
+      secondLineParts.add('Episode ${metadata.index.toString().padLeft(2, '0')}');
       secondLineParts.add(metadata.title!);
-    }
-
-    if (metadata.durationMs != null) {
-      secondLineParts.add(formatDurationTextual(metadata.durationMs!));
+    } else if (metadata.year != null) {
+      secondLineParts.add(metadata.year.toString());
     }
 
     return Column(
@@ -105,7 +106,7 @@ class VideoControlsHeader extends StatelessWidget {
         ),
         if (secondLineParts.isNotEmpty)
           Text(
-            toBulletedString(secondLineParts),
+            secondLineParts.join(' * '),
             style: const TextStyle(color: Colors.white70, fontSize: 14),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
