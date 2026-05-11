@@ -236,15 +236,14 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
                     });
                     _applyFilters();
                   },
-                  child: TextButton.icon(
+                  child: TextButton(
                     onPressed: () {
                       setState(() {
                         _tempSelectedFilters.clear();
                       });
                       _applyFilters();
                     },
-                    icon: const AppIcon(Symbols.clear_all_rounded, fill: 1),
-                    label: Text(t.libraries.clearAll),
+                    child: Text(t.common.clear),
                   ),
                 )
               : null,
