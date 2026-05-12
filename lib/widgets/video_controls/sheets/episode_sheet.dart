@@ -7,6 +7,7 @@ import '../../../media/media_server_client.dart';
 import '../../../providers/multi_server_provider.dart';
 import '../../../screens/video_player_screen.dart';
 import '../../../utils/scroll_utils.dart';
+import '../../../utils/formatters.dart';
 import '../../../widgets/optimized_media_image.dart';
 import '../../../widgets/overlay_sheet.dart';
 import 'base_video_control_sheet.dart';
@@ -258,32 +259,50 @@ class _EpisodeTile extends StatelessWidget {
                 ),
               ),
             ),
-          Positioned(
-            top: 4,
-            right: 4,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+        ],
+      ),
+      title: Row(
+        children: [
+          if (episode.index != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.black87,
-                borderRadius: BorderRadius.circular(2),
+                color: Colors.black.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                'E${episode.index.toString().padLeft(2, '0')}',
-                style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                'E${episode.index}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Text(
+              episode.title ?? '',
+              style: TextStyle(
+                color: isPlaying ? highlightColor : Colors.white,
+                fontWeight: isPlaying ? FontWeight.bold : FontWeight.normal,
+                fontSize: 14,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
       ),
-      title: Text(
-        episode.title ?? '',
-        style: TextStyle(
-          color: isPlaying ? highlightColor : Colors.white,
-          fontWeight: isPlaying ? FontWeight.bold : FontWeight.normal,
-          fontSize: 14,
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Text(
+          episode.durationMs != null
+              ? formatDurationTimestamp(Duration(milliseconds: episode.durationMs!))
+              : '',
+          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
       ),
     );
   }

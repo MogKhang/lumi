@@ -267,13 +267,13 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primaryContainer,
-                                      borderRadius: const BorderRadius.all(Radius.circular(3)),
+                                      color: Colors.black.withValues(alpha: 0.4),
+                                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                                     ),
                                     child: Text(
                                       'E${widget.episode.index}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                      style: const TextStyle(
+                                        color: Colors.white,
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
                                       ),
