@@ -1184,9 +1184,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
 
     if (serverIds.length > 1) {
       if (currentSelection == null || !serverIds.contains(currentSelection)) {
-        await Navigator.of(context).push<bool>(
-          MaterialPageRoute(builder: (_) => const SelectServerScreen()),
-        );
+        await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const SelectServerScreen()));
         if (!mounted) return;
       }
     } else if (serverIds.length == 1 && currentSelection == null) {
@@ -1289,7 +1287,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: [
-          Center(child: SvgPicture.asset('assets/plezy_adaptive_foreground.svg', width: 288, height: 288)),
+          Center(child: SvgPicture.asset('assets/lumi.svg', width: 150)),
           Positioned(
             left: 0,
             right: 0,

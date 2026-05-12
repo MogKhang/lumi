@@ -167,7 +167,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (!mounted) return;
 
       final multiServer = context.read<MultiServerProvider>();
-      
+
       // Wait for the active profile binder to settle so we have an accurate server list
       await context.read<ActiveProfileProvider>().awaitBindingSettle();
       if (!mounted) return;
@@ -179,9 +179,7 @@ class _AuthScreenState extends State<AuthScreen> {
       // Otherwise, if there are multiple servers, we need to prompt.
       if (serverIds.length > 1) {
         if (currentSelection == null || !serverIds.contains(currentSelection)) {
-          await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => const SelectServerScreen()),
-          );
+          await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const SelectServerScreen()));
           if (!mounted) return;
         }
       } else if (serverIds.length == 1 && currentSelection == null) {
@@ -248,7 +246,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset('assets/plezy.png', width: 120, height: 120),
+                            Image.asset('assets/lumi.png', width: 200),
                             const SizedBox(height: 24),
                             Text(
                               t.app.title,
@@ -277,7 +275,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Image.asset('assets/plezy.png', width: 120, height: 120),
+                        Center(child: Image.asset('assets/lumi.png', width: 150)),
                         const SizedBox(height: 24),
                         Text(
                           t.app.title,

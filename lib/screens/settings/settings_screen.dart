@@ -105,8 +105,6 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     return KeyEventResult.ignored;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -365,10 +363,10 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
       builder: (context, provider, _) {
         final allowedServers = provider.allowedServerIds ?? provider.serverManager.serverIds;
         final selectedId = provider.selectedServerId;
-        
+
         // Use the first server as the effective selection if none explicitly selected
         final effectiveSelection = (selectedId != null && allowedServers.contains(selectedId))
-            ? selectedId 
+            ? selectedId
             : (allowedServers.isNotEmpty ? allowedServers.first : null);
 
         final String subtitle;
@@ -386,10 +384,9 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
           onTap: () async {
             if (allowedServers.isEmpty) return;
 
-            final options = allowedServers.map((id) => DialogOption(
-                  value: id,
-                  title: provider.serverManager.getClient(id)?.serverName ?? id,
-                )).toList();
+            final options = allowedServers
+                .map((id) => DialogOption(value: id, title: provider.serverManager.getClient(id)?.serverName ?? id))
+                .toList();
 
             final value = await showSelectionDialog<String>(
               context: context,
@@ -442,10 +439,10 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
     if (context.mounted) {
       unawaited(
-        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const AuthScreen()),
-          (route) => false,
-        ),
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const AuthScreen()), (route) => false),
       );
     }
   }
@@ -458,13 +455,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         return Center(
           child: Column(
             children: [
-              Image.asset('assets/plezy.png', width: 64, height: 64),
-              const SizedBox(height: 4),
-              Text(
-                t.app.title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 4),
+              Image.asset('assets/lumi.png', width: 150),
+              const SizedBox(height: 8),
               Text(
                 t.about.versionLabel(version: appVersion),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
