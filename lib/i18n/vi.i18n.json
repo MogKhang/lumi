@@ -525,7 +525,7 @@
   },
   "profiles": {
     "addPlezyProfile": "Thêm hồ sơ",
-    "switchingProfile": "Đổi hồ sơ…",
+    "switchingProfile": "Tải hồ sơ…",
     "deleteThisProfileTitle": "Delete this profile?",
     "deleteThisProfileMessage": "${displayName} will be removed. Connections themselves are not affected.",
     "active": "Active",

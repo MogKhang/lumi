@@ -846,7 +846,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       shadowColor: Colors.transparent,
       scrolledUnderElevation: 0,
-      actions: DesktopAppBarHelper.buildAdjustedActions([
+      actions: [
         FocusableActionBar(
           key: _actionBarKey,
           onNavigateLeft: _navigateToSidebar,
@@ -860,7 +860,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             ),
           ],
         ),
-      ]),
+      ],
     );
   }
 
@@ -884,10 +884,10 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
     final theme = Theme.of(context);
-    return Material(
-      color: theme.scaffoldBackgroundColor,
-      child: NestedScrollView(
+    return Scaffold(
+      body: NestedScrollView(
         controller: _scrollController,
+        floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverOverlapAbsorber(
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
