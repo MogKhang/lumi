@@ -119,6 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 pinned: true,
+                automaticallyImplyLeading: false,
               ),
             ),
             SliverList(

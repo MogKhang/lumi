@@ -138,6 +138,7 @@ class DesktopSliverAppBar extends StatelessWidget {
       leading: effectiveLeading,
       leadingWidth: DesktopAppBarSections.calculateLeadingWidthForSection(leading: effectiveLeading, context: context),
       automaticallyImplyLeading: false, // Always false since we handle it manually
+      centerTitle: false,
       elevation: elevation,
       backgroundColor: backgroundColor,
       surfaceTintColor: surfaceTintColor,

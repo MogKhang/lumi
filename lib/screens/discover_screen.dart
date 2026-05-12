@@ -834,11 +834,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   Widget _buildAppBar({required bool pinned, bool floating = false}) {
     return DesktopSliverAppBar(
-      title: DesktopTitleBarPadding(
-        child: Text(
-          t.common.home,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-        ),
+      title: Text(
+        t.common.home,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
       ),
       pinned: pinned,
       floating: floating,
