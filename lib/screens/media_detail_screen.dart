@@ -1529,10 +1529,14 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   }
 
   /// Build inline season tab chips with LEFT/RIGHT/DOWN focus navigation
-  Widget _buildSeasonTabs() {
-    return SettingValueBuilder<bool>(
-      pref: SettingsService.showSeasonPostersOnTabs,
-      builder: (context, showPosters, _) => _buildSeasonTabsContent(context, showPosters),
+  Widget _buildSeasonTabs({Key? key}) {
+    return Padding(
+      key: key,
+      padding: EdgeInsets.zero,
+      child: SettingValueBuilder<bool>(
+        pref: SettingsService.showSeasonPostersOnTabs,
+        builder: (context, showPosters, _) => _buildSeasonTabsContent(context, showPosters),
+      ),
     );
   }
 
@@ -2238,14 +2242,14 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                             else if (_seasons.isEmpty)
                               _sectionEmpty(context, t.messages.noSeasonsFound)
                             else ...[
+                              // Season tabs slide above the heading
+                              _buildSeasonTabs(key: _seasonsSectionKey),
+                              const SizedBox(height: 16),
                               Text(
-                                key: _seasonsSectionKey,
                                 t.libraries.groupings.episodes,
                                 style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 12),
-                              _buildSeasonTabs(),
-                              const SizedBox(height: 16),
                               if (_isLoadingSeasonEpisodes)
                                 _sectionLoading
                               else if (_episodes.isNotEmpty)
