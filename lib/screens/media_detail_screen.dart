@@ -2188,7 +2188,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                           if (metadata.summary != null && metadata.summary!.isNotEmpty) ...[
                             Text(
                               key: _overviewSectionKey,
-                              metadata.isMovie ? 'Plot' : t.discover.overview,
+                              (metadata.isMovie || metadata.isShow) ? 'Plot' : t.discover.overview,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),
@@ -2296,7 +2296,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                           ],
 
                           // Related Hubs (Collections, Similar, More From...)
-                          if (!metadata.isMovie)
+                          if (!metadata.isMovie && !metadata.isShow)
                             for (int i = 0; i < _relatedHubs.length; i++) ...[
                             HubSection(
                               key: _relatedHubKeys[i],
@@ -2310,8 +2310,8 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
 
                           // Additional info — wrapped in Focus so DPAD DOWN from the
                           // last focusable section lands here and scrolls it into view.
-                          // Additional info (Studio, Rating) — hidden for movies per user request
-                          if (_hasInfoRows && !metadata.isMovie)
+                          // Additional info (Studio, Rating) — hidden for movies/shows per user request
+                          if (_hasInfoRows && !metadata.isMovie && !metadata.isShow)
                             Focus(
                               focusNode: _infoRowsFocusNode,
                               onKeyEvent: _handleInfoRowsKeyEvent,
@@ -2401,7 +2401,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   }
 
   Widget _buildHeroHeader(BuildContext context, MediaItem metadata, Size size, double headerHeight, ThemeData theme) {
-    if (metadata.isMovie) {
+    if (metadata.isMovie || metadata.isShow) {
       return Padding(
         padding: EdgeInsets.only(
           top: MediaQuery.paddingOf(context).top + 32,
@@ -2448,16 +2448,6 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                 if (metadata.year != null)
                   Text(
                     '${metadata.year}',
-                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                if (metadata.year != null && metadata.durationMs != null)
-                  Text(
-                    '  •  ',
-                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                  ),
-                if (metadata.durationMs != null)
-                  Text(
-                    formatDurationTextual(metadata.durationMs!),
                     style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),
               ],

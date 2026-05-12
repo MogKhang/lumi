@@ -108,14 +108,14 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
                   playButtonIcon,
                   const SizedBox(width: 8),
                   Text(
-                    metadata.isMovie ? 'Watch Now' : playButtonLabel,
+                    (metadata.isMovie || metadata.isShow) ? 'Watch Now' : playButtonLabel,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
           ),
-          if (minimal && metadata.isMovie) ...[
+          if (minimal && (metadata.isMovie || metadata.isShow)) ...[
             const SizedBox(width: 12),
             FilledButton.tonal(
               onPressed: () => _showAddToPlaylistDialog(context, metadata),
