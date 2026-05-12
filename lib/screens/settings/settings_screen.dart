@@ -457,6 +457,17 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
             children: [
               Image.asset('assets/lumi.png', width: 150),
               const SizedBox(height: 8),
+              const Text(
+                'App coi phim dở nhất Việt Nam',
+                style: TextStyle(
+                  fontFamily: 'Lexend',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xFFEC609B),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
               Text(
                 t.about.versionLabel(version: appVersion),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),

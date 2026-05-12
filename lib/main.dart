@@ -1287,7 +1287,26 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: [
-          Center(child: Image.asset('assets/lumi.png', width: 150)),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset('assets/lumi.png', width: 150),
+                const SizedBox(height: 16),
+                const Text(
+                  'App coi phim dở nhất Việt Nam',
+                  style: TextStyle(
+                    fontFamily: 'Lexend',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Color(0xFFEC609B),
+                    decoration: TextDecoration.none,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
           Positioned(
             left: 0,
             right: 0,
