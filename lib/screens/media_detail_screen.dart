@@ -26,7 +26,9 @@ import '../utils/provider_extensions.dart';
 import '../media/media_item.dart';
 import '../media/media_item_types.dart';
 import '../media/media_kind.dart';
+import '../media/media_playlist.dart';
 import '../media/media_role.dart';
+import '../providers/multi_server_provider.dart';
 import '../widgets/media_card.dart';
 import '../i18n/strings.g.dart';
 import '../widgets/optimized_media_image.dart';
@@ -2186,7 +2188,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                           if (metadata.summary != null && metadata.summary!.isNotEmpty) ...[
                             Text(
                               key: _overviewSectionKey,
-                              t.discover.overview,
+                              metadata.isMovie ? 'Plot' : t.discover.overview,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 12),
@@ -2294,7 +2296,8 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                           ],
 
                           // Related Hubs (Collections, Similar, More From...)
-                          for (int i = 0; i < _relatedHubs.length; i++) ...[
+                          if (!metadata.isMovie)
+                            for (int i = 0; i < _relatedHubs.length; i++) ...[
                             HubSection(
                               key: _relatedHubKeys[i],
                               hub: _relatedHubs[i],
@@ -2737,8 +2740,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(tokens(context).radiusSm),
+                              ClipOval(
                                 child: OptimizedMediaImage(
                                   client: getServerBoundMediaClient(context),
                                   imagePath: actor.thumbPath,

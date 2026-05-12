@@ -101,19 +101,30 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
               focusNode: _playButtonFocusNode,
               autofocus: isKeyboardMode,
               onPressed: onPlayPressed,
-              style: actionButtonStyle(padding: const EdgeInsets.symmetric(horizontal: 16)),
-              child: playButtonLabel.isNotEmpty
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        playButtonIcon,
-                        const SizedBox(width: 8),
-                        Text(playButtonLabel, style: const TextStyle(fontSize: 16)),
-                      ],
-                    )
-                  : playButtonIcon,
+              style: actionButtonStyle(padding: const EdgeInsets.symmetric(horizontal: 24)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  playButtonIcon,
+                  const SizedBox(width: 8),
+                  Text(
+                    metadata.isMovie ? 'Watch Now' : playButtonLabel,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ),
+          if (minimal && metadata.isMovie) ...[
+            const SizedBox(width: 12),
+            IconButton.filledTonal(
+              onPressed: () => _showAddToPlaylistDialog(context, metadata),
+              icon: const AppIcon(Symbols.playlist_add_rounded, fill: 1),
+              tooltip: 'Add to Playlist...',
+              iconSize: 20,
+              style: actionButtonStyle(),
+            ),
+          ],
           if (!minimal) ...[
             const SizedBox(width: 12),
             // Trailer button (only if trailer is available)
@@ -518,6 +529,106 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
           style: actionButtonStyle(),
         );
       },
+    );
+  }
+  Future<void> _showAddToPlaylistDialog(BuildContext context, MediaItem item) async {
+    final serverId = item.serverId;
+    if (serverId == null) return;
+    final client = context.read<MultiServerProvider>().getClientForServer(serverId);
+    if (client == null) return;
+
+    try {
+      final playlists = await client.fetchPlaylists(playlistType: 'video');
+
+      if (!context.mounted) return;
+
+      final result = await OverlaySheetController.showAdaptive<String>(
+        context,
+        showDragHandle: true,
+        builder: (context) => _PlaylistSelectionSheet(playlists: playlists),
+      );
+
+      if (result == null || !context.mounted) return;
+
+      if (result == '_create_new') {
+        final playlistName = await showTextInputDialog(
+          context,
+          title: t.playlists.create,
+          labelText: t.playlists.playlistName,
+          hintText: t.playlists.enterPlaylistName,
+        );
+
+        if (playlistName == null || playlistName.isEmpty || !context.mounted) {
+          return;
+        }
+
+        final newPlaylist = await client.createPlaylist(title: playlistName, items: [item]);
+
+        if (context.mounted) {
+          if (newPlaylist != null) {
+            showSuccessSnackBar(context, t.playlists.created);
+          } else {
+            showErrorSnackBar(context, t.playlists.errorCreating);
+          }
+        }
+      } else {
+        final success = await client.addToPlaylist(playlistId: result, items: [item]);
+        if (context.mounted) {
+          if (success) {
+            showSuccessSnackBar(context, t.playlists.itemAdded);
+          } else {
+            showErrorSnackBar(context, t.playlists.errorAdding);
+          }
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showErrorSnackBar(context, '${t.playlists.errorLoading}: $e');
+      }
+    }
+  }
+}
+
+class _PlaylistSelectionSheet extends StatelessWidget {
+  final List<MediaPlaylist> playlists;
+
+  const _PlaylistSelectionSheet({required this.playlists});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              'Add to Playlist...',
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Flexible(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                ListTile(
+                  leading: const Icon(Symbols.add_circle_rounded),
+                  title: Text(t.common.createNew),
+                  onTap: () => Navigator.pop(context, '_create_new'),
+                ),
+                const Divider(),
+                ...playlists.map((p) => ListTile(
+                      leading: const Icon(Symbols.playlist_play_rounded),
+                      title: Text(p.title),
+                      onTap: () => Navigator.pop(context, p.id),
+                    )),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
