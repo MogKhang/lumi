@@ -1554,8 +1554,8 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
             final posterPath = season.thumbPath;
             Widget? topImage;
             if (showPosters && posterPath != null && posterPath.isNotEmpty) {
-              const posterWidth = 72.0;
-              const posterHeight = 108.0;
+              const posterWidth = 100.0;
+              const posterHeight = 150.0;
               final dpr = MediaImageHelper.effectiveDevicePixelRatio(context);
               final client = _getMediaClientForMetadata(context);
               final imageUrl = MediaImageHelper.getOptimizedImageUrl(
