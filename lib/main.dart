@@ -1287,7 +1287,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: [
-          Center(child: SvgPicture.asset('assets/lumi.svg', width: 150)),
+          Center(child: Image.asset('assets/lumi.png', width: 150)),
           Positioned(
             left: 0,
             right: 0,

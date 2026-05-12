@@ -247,10 +247,15 @@ class _AuthScreenState extends State<AuthScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset('assets/lumi.png', width: 200),
-                            const SizedBox(height: 24),
-                            Text(
-                              t.app.title,
-                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'App coi phim dở nhất Việt Nam',
+                              style: TextStyle(
+                                fontFamily: 'Lexend',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Color(0xFFEC609B),
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -276,12 +281,18 @@ class _AuthScreenState extends State<AuthScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Center(child: Image.asset('assets/lumi.png', width: 150)),
-                        const SizedBox(height: 24),
-                        Text(
-                          t.app.title,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'App coi phim dở nhất Việt Nam',
+                          style: TextStyle(
+                            fontFamily: 'Lexend',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: Color(0xFFEC609B),
+                          ),
                           textAlign: TextAlign.center,
                         ),
+                        const SizedBox(height: 12),
                         const SizedBox(height: 48),
                         _buildAuthBody(),
                       ],
@@ -371,43 +382,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
         ],
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Expanded(child: Divider(color: Theme.of(context).colorScheme.outlineVariant)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                t.auth.or,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)),
-              ),
-            ),
-            Expanded(child: Divider(color: Theme.of(context).colorScheme.outlineVariant)),
-          ],
-        ),
-        const SizedBox(height: 12),
-        if (isTV)
-          FocusableButton(
-            onPressed: _connectToJellyfin,
-            child: OutlinedButton.icon(
-              onPressed: _connectToJellyfin,
-              style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-              icon: const BackendBadge(backend: MediaBackend.jellyfin, size: 18),
-              label: Text(t.auth.connectToJellyfin),
-            ),
-          )
-        else
-          FocusableButton(
-            onPressed: _connectToJellyfin,
-            child: OutlinedButton.icon(
-              onPressed: _connectToJellyfin,
-              style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-              icon: const BackendBadge(backend: MediaBackend.jellyfin, size: 18),
-              label: Text(t.auth.connectToJellyfin),
-            ),
-          ),
         if (kDebugMode) ...[
           const SizedBox(height: 12),
           FocusableButton(
