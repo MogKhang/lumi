@@ -995,12 +995,26 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
       audioTrackGroupMap[trackId] = trackGroup
       val isSelected = group.isSelected
 
+      val audioCodec = when (format.sampleMimeType) {
+        MimeTypes.AUDIO_AAC -> "aac"
+        MimeTypes.AUDIO_AC3 -> "ac3"
+        MimeTypes.AUDIO_E_AC3 -> "eac3"
+        MimeTypes.AUDIO_DTS -> "dts"
+        MimeTypes.AUDIO_DTS_HD -> "dtshd"
+        MimeTypes.AUDIO_TRUEHD -> "truehd"
+        MimeTypes.AUDIO_FLAC -> "flac"
+        MimeTypes.AUDIO_OPUS -> "opus"
+        MimeTypes.AUDIO_VORBIS -> "vorbis"
+        MimeTypes.AUDIO_MPEG -> "mp3"
+        else -> format.codecs
+      }
+
       val track = mutableMapOf<String, Any?>(
         "type" to "audio",
         "id" to trackId,
         "title" to format.label,
         "lang" to format.language,
-        "codec" to format.codecs,
+        "codec" to audioCodec,
         "default" to (format.selectionFlags and C.SELECTION_FLAG_DEFAULT != 0),
         "selected" to isSelected,
         "demux-channel-count" to format.channelCount,
