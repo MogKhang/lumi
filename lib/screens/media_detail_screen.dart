@@ -2249,7 +2249,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                                 t.libraries.groupings.episodes,
                                 style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 8),
                               if (_isLoadingSeasonEpisodes)
                                 _sectionLoading
                               else if (_episodes.isNotEmpty)
@@ -2265,7 +2265,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                               t.libraries.groupings.episodes,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
                             if (_isLoadingSeasons || _isLoadingEpisodes)
                               _sectionLoading
                             else if (_episodes.isNotEmpty)
