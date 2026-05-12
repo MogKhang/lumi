@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+
 import '../media/media_hub.dart';
 import '../media/media_item.dart';
 import '../media/media_sort.dart';
@@ -16,7 +16,7 @@ import '../widgets/overlay_sheet.dart';
 import '../focus/focusable_action_bar.dart';
 import '../focus/key_event_utils.dart';
 import '../mixins/grid_focus_node_mixin.dart';
-import 'libraries/sort_bottom_sheet.dart';
+
 import 'libraries/content_state_builder.dart';
 import '../mixins/refreshable.dart';
 import '../i18n/strings.g.dart';
@@ -37,6 +37,7 @@ class _HubDetailScreenState extends State<HubDetailScreen>
   List<MediaItem> _items = [];
   List<MediaItem> _filteredItems = [];
   List<MediaSort> _sortOptions = [];
+
   MediaSort? _selectedSort;
   bool _isSortDescending = false;
   bool _isLoading = false;
@@ -185,30 +186,7 @@ class _HubDetailScreenState extends State<HubDetailScreen>
     });
   }
 
-  void _showSortBottomSheet() {
-    final overlayContext = _overlayChildKey.currentContext ?? context;
-    OverlaySheetController.of(overlayContext).show(
-      builder: (context) => SortBottomSheet(
-        sortOptions: _sortOptions,
-        selectedSort: _selectedSort,
-        isSortDescending: _isSortDescending,
-        onSortChanged: (sort, descending) {
-          setState(() {
-            _selectedSort = sort;
-            _isSortDescending = descending;
-          });
-          _applySort();
-        },
-        onClear: () {
-          setState(() {
-            _selectedSort = null;
-            _isSortDescending = false;
-          });
-          _applySort();
-        },
-      ),
-    );
-  }
+
 
   Future<void> _loadMoreItems() async {
     if (_isLoading) return;

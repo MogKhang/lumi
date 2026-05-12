@@ -56,6 +56,7 @@ import io.github.peerless2012.ass.media.AssHandler
 import io.github.peerless2012.ass.media.parser.AssSubtitleParserFactory
 import io.github.peerless2012.ass.media.type.AssRenderType
 import io.github.peerless2012.ass.media.widget.AssSubtitleSurfaceView
+import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicLong
 import org.chromium.net.CronetEngine
@@ -535,6 +536,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
       // only keeps one listener). Skip AssHandler's wiring and invoke
       // assView.requestRender directly from the listener below.
       handler.init(exoPlayer!!)
+      setupAssFonts(handler)
 
       // Suppress ass-media GL thread crash when EGL init partially fails (e.g. Tegra).
       // AssRender.onSurfaceDestroyed() accesses uninitialized glProgram lateinit property
@@ -986,10 +988,14 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     var selectedAudioId: String? = null
     var selectedSubId: String? = null
 
+    // Separate tracks by type to allow sorting within types
+    val audioTracks = mutableListOf<Map<String, Any?>>()
+    val subtitleTracks = mutableListOf<Map<String, Any?>>()
+    val videoTracks = mutableListOf<Map<String, Any?>>()
+
     // Process audio tracks
     audioGroups.forEachIndexed { groupIndex, group ->
       val trackGroup = group.mediaTrackGroup
-      // Use first format in group as the representative track
       val format = trackGroup.getFormat(0)
       val trackId = "${C.TRACK_TYPE_AUDIO}_$groupIndex"
       audioTrackGroupMap[trackId] = trackGroup
@@ -1020,7 +1026,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         "demux-channel-count" to format.channelCount,
         "demux-samplerate" to format.sampleRate
       )
-      trackList.add(track)
+      audioTracks.add(track)
 
       if (isSelected) {
         selectedAudioId = trackId
@@ -1028,7 +1034,6 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     }
 
     // Process subtitle tracks (embedded + side-loaded external)
-    Log.d(TAG, "emitTrackList: found ${textGroups.size} subtitle track groups")
     textGroups.forEachIndexed { groupIndex, group ->
       val trackGroup = group.mediaTrackGroup
       val format = trackGroup.getFormat(0)
@@ -1036,17 +1041,15 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
       subtitleTrackGroupMap[trackId] = trackGroup
       val isSelected = group.isSelected
 
-      // Detect external (side-loaded) subtitle by the ID prefix or label fallback
-      val labelStr = format.label?.toString()
-      val isExternalByLabel = currentExternalSubtitleList.any { it["title"] == labelStr }
-      val isExternal = format.id?.contains("external") == true || isExternalByLabel
+      // Detect external (side-loaded) subtitle by presence of "external" string in ID
+      val isExternal = format.id?.contains("external", ignoreCase = true) == true
       val externalIndex = if (isExternal) {
         val match = "external_(\\d+)".toRegex().find(format.id ?: "")
-        match?.groupValues?.get(1)?.toIntOrNull() ?: currentExternalSubtitleList.indexOfFirst { it["title"] == labelStr }
+        match?.groupValues?.get(1)?.toIntOrNull()
       } else null
       val externalUri = externalIndex?.takeIf { it in externalSubtitleUris.indices }?.let { externalSubtitleUris[it] }
 
-      Log.d(TAG, "Subtitle track $groupIndex: codec=${format.codecs}, lang=${format.language}, selected=$isSelected, external=$isExternal")
+      Log.d(TAG, "Subtitle track $groupIndex: id=${format.id}, label=${format.label}, codec=${format.codecs}, lang=${format.language}, selected=$isSelected, external=$isExternal")
 
       val codec = when (format.sampleMimeType) {
         MimeTypes.APPLICATION_SUBRIP -> "srt"
@@ -1069,14 +1072,17 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         "external" to isExternal,
         "external-filename" to externalUri
       )
-      trackList.add(track)
+      subtitleTracks.add(track)
 
       if (isSelected) {
         selectedSubId = trackId
       }
     }
 
-    // Process video tracks (for completeness, typically only one)
+    // Sort subtitles: External ones first
+    val sortedSubtitleTracks = subtitleTracks.sortedWith(compareByDescending<Map<String, Any?>> { it["external"] as? Boolean == true })
+
+    // Process video tracks
     videoGroups.forEachIndexed { groupIndex, group ->
       val trackGroup = group.mediaTrackGroup
       val format = trackGroup.getFormat(0)
@@ -1091,8 +1097,14 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         "default" to (format.selectionFlags and C.SELECTION_FLAG_DEFAULT != 0),
         "selected" to group.isSelected
       )
-      trackList.add(track)
+      videoTracks.add(track)
     }
+
+    // Combine all tracks into a single list
+    trackList.clear()
+    trackList.addAll(audioTracks)
+    trackList.addAll(sortedSubtitleTracks)
+    trackList.addAll(videoTracks)
 
     // Emit selected track IDs
     if (selectedAudioId != null) {
@@ -2104,5 +2116,109 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     }
 
     Log.d(TAG, "Disposed")
+  }
+  private fun setupAssFonts(handler: AssHandler) {
+    val fonts = listOf(
+      "Lexend-VariableFont_wght.ttf" to "assets/fonts/",
+      "netflix-sans-core.ttf" to "assets/fonts/",
+      "NotoSans-VariableFont_wdth,wght.ttf" to "assets/fonts/",
+      "ClearfaceGothic.ttf" to "assets/fonts/",
+      "SVN-Mikado.ttf" to "assets/fonts/",
+      "Arial-Rounded-MT-Bold.ttf" to "assets/fonts/",
+      "go-noto-current-regular.ttf" to "assets/"
+    )
+    val fontDir = File(activity.filesDir, "fonts")
+    if (!fontDir.exists()) fontDir.mkdirs()
+
+    val render = try {
+      val field = handler.javaClass.getDeclaredField("render")
+      field.isAccessible = true
+      field.get(handler)
+    } catch (e: Throwable) {
+      try {
+        val method = handler.javaClass.getMethod("getRender")
+        method.invoke(handler)
+      } catch (e2: Throwable) {
+        null
+      }
+    }
+
+    // 1. Set font directory
+    if (render != null) {
+      val methods = listOf("setFontDir", "setFontsDir")
+      var dirSet = false
+      for (methodName in methods) {
+        try {
+          render.javaClass.getMethod(methodName, String::class.java).invoke(render, fontDir.absolutePath)
+          Log.d(TAG, "ASS font directory set via $methodName: ${fontDir.absolutePath}")
+          dirSet = true
+          break
+        } catch (e: Throwable) {
+          // continue
+        }
+      }
+      if (!dirSet) {
+        try {
+          handler.javaClass.getMethod("setCustomFontDir", String::class.java).invoke(handler, fontDir.absolutePath)
+          Log.d(TAG, "ASS font directory set via setCustomFontDir: ${fontDir.absolutePath}")
+        } catch (e: Throwable) {
+          Log.e(TAG, "Failed to find or call setFontDir, setFontsDir, or setCustomFontDir")
+        }
+      }
+    }
+
+    // 2. Extract and Register fonts
+    fonts.forEach { pair ->
+      val fontName = pair.first
+      val assetPath = pair.second
+      val fontFile = File(fontDir, fontName)
+      if (!fontFile.exists()) {
+        try {
+          activity.assets.open("flutter_assets/${assetPath}${fontName}").use { input ->
+            fontFile.outputStream().use { output ->
+              input.copyTo(output)
+            }
+          }
+          Log.d(TAG, "Extracted ASS font: $fontName")
+        } catch (e: Throwable) {
+          Log.e(TAG, "Failed to extract ASS font $fontName: ${e.message}")
+        }
+      }
+      
+      if (fontFile.exists() && render != null) {
+        val registrationMethods = listOf("addFont", "registerFont", "loadFont")
+        for (methodName in registrationMethods) {
+          try {
+            render.javaClass.getMethod(methodName, String::class.java).invoke(render, fontFile.absolutePath)
+            Log.d(TAG, "Registered ASS font via $methodName: $fontName")
+            break
+          } catch (e: Throwable) {
+            // continue
+          }
+        }
+      }
+    }
+
+    // 3. Try to set Lexend as default
+    if (render != null) {
+      val defaultFontMethods = listOf("setDefaultFont", "setFontFamily", "setFontName")
+      // Try both "Lexend" and "Lexend Medium" to match common ASS metadata naming
+      val fontAliases = listOf("Lexend", "Lexend Medium", "Lexend-Medium")
+      
+      for (methodName in defaultFontMethods) {
+        var aliasSet = false
+        for (alias in fontAliases) {
+          try {
+            render.javaClass.getMethod(methodName, String::class.java).invoke(render, alias)
+            Log.d(TAG, "ASS default font set via $methodName: $alias")
+            aliasSet = true
+            break
+          } catch (e: Throwable) {
+            // continue
+          }
+        }
+        if (aliasSet) break
+      }
+    }
   }
 }

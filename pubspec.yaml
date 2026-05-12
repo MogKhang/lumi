@@ -138,3 +138,18 @@ flutter:
     - family: Lexend
       fonts:
         - asset: assets/fonts/Lexend-VariableFont_wght.ttf
+    - family: NetflixSans
+      fonts:
+        - asset: assets/fonts/netflix-sans-core.ttf
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-VariableFont_wdth,wght.ttf
+    - family: ClearfaceGothic
+      fonts:
+        - asset: assets/fonts/ClearfaceGothic.ttf
+    - family: SVNMikado
+      fonts:
+        - asset: assets/fonts/SVN-Mikado.ttf
+    - family: ArialRounded
+      fonts:
+        - asset: assets/fonts/Arial-Rounded-MT-Bold.ttf

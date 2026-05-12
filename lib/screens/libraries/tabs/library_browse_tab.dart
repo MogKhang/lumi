@@ -10,7 +10,7 @@ import '../../../media/media_item.dart';
 import '../../../providers/multi_server_provider.dart';
 import '../../../utils/media_server_http_client.dart';
 import '../../../exceptions/media_server_exceptions.dart';
-import '../../../focus/dpad_navigator.dart';
+
 import '../../../focus/input_mode_tracker.dart';
 import '../../../media/media_filter.dart';
 import '../../../media/media_sort.dart';
