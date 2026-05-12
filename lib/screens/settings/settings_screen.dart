@@ -179,34 +179,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     switch (locale) {
       case AppLocale.en:
         return 'English';
-      case AppLocale.sv:
-        return 'Svenska';
-      case AppLocale.fr:
-        return 'Français';
-      case AppLocale.it:
-        return 'Italiano';
-      case AppLocale.nl:
-        return 'Nederlands';
-      case AppLocale.de:
-        return 'Deutsch';
-      case AppLocale.zh:
-        return '中文';
-      case AppLocale.ko:
-        return '한국어';
-      case AppLocale.es:
-        return 'Español';
-      case AppLocale.pt:
-        return 'Português';
-      case AppLocale.ja:
-        return '日本語';
-      case AppLocale.ru:
-        return 'Русский';
-      case AppLocale.pl:
-        return 'Polski';
-      case AppLocale.da:
-        return 'Dansk';
-      case AppLocale.nb:
-        return 'Norsk bokmål';
+      case AppLocale.vi:
+        return 'Tiếng Việt';
     }
   }
 
@@ -253,9 +227,10 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         final value = await showSelectionDialog<AppLocale>(
           context: context,
           title: t.settings.language,
-          options: AppLocale.values
-              .map((locale) => DialogOption(value: locale, title: _getLanguageDisplayName(locale)))
-              .toList(),
+          options: [
+            DialogOption(value: AppLocale.en, title: _getLanguageDisplayName(AppLocale.en)),
+            DialogOption(value: AppLocale.vi, title: _getLanguageDisplayName(AppLocale.vi)),
+          ],
           currentValue: LocaleSettings.currentLocale,
         );
         if (value != null) {
