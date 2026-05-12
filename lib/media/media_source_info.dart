@@ -161,7 +161,7 @@ class MediaSubtitleTrack with _TrackLabelMixin {
   /// Returns true if this subtitle track is an external file (sidecar subtitle).
   /// Some backends provide a direct key/URL, others require constructing one
   /// from stream metadata.
-  bool get isExternal => external || (key != null && key!.isNotEmpty);
+  bool get isExternal => external || (key != null && key!.isNotEmpty && !key!.contains('/parts/'));
 }
 
 class MediaChapter {

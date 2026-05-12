@@ -170,6 +170,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
   private var currentMediaUri: String? = null
   private var currentHeaders: Map<String, String>? = null
   private var currentMediaIsLive: Boolean = false
+  private var currentExternalSubtitleList = mutableListOf<Map<String, String?>>()
   private var currentVisible: Boolean = false
   private var selectedAudioTrackId: String? = null
   private var selectedSubtitleTrackId: String? = null
@@ -1021,19 +1022,33 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
       subtitleTrackGroupMap[trackId] = trackGroup
       val isSelected = group.isSelected
 
-      // Detect external (side-loaded) subtitle by the ID prefix set in open()
-      val isExternal = format.id?.startsWith("external_") == true
-      val externalIndex = if (isExternal) format.id?.removePrefix("external_")?.toIntOrNull() else null
+      // Detect external (side-loaded) subtitle by the ID prefix or label fallback
+      val labelStr = format.label?.toString()
+      val isExternalByLabel = currentExternalSubtitleList.any { it["title"] == labelStr }
+      val isExternal = format.id?.contains("external") == true || isExternalByLabel
+      val externalIndex = if (isExternal) {
+        val match = "external_(\\d+)".toRegex().find(format.id ?: "")
+        match?.groupValues?.get(1)?.toIntOrNull() ?: currentExternalSubtitleList.indexOfFirst { it["title"] == labelStr }
+      } else null
       val externalUri = externalIndex?.takeIf { it in externalSubtitleUris.indices }?.let { externalSubtitleUris[it] }
 
       Log.d(TAG, "Subtitle track $groupIndex: codec=${format.codecs}, lang=${format.language}, selected=$isSelected, external=$isExternal")
+
+      val codec = when (format.sampleMimeType) {
+        MimeTypes.APPLICATION_SUBRIP -> "srt"
+        MimeTypes.TEXT_SSA -> "ass"
+        MimeTypes.TEXT_VTT -> "vtt"
+        MimeTypes.APPLICATION_PGS -> "pgs"
+        MimeTypes.APPLICATION_DVBSUBS -> "dvbsub"
+        else -> format.codecs ?: format.sampleMimeType?.split("/")?.lastOrNull()
+      }
 
       val track = mutableMapOf<String, Any?>(
         "type" to "sub",
         "id" to trackId,
         "title" to format.label,
         "lang" to format.language,
-        "codec" to format.codecs,
+        "codec" to codec,
         "default" to (format.selectionFlags and C.SELECTION_FLAG_DEFAULT != 0),
         "forced" to (format.selectionFlags and C.SELECTION_FLAG_FORCED != 0),
         "selected" to isSelected,
@@ -1403,6 +1418,8 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     subtitleTrackGroupMap.clear()
     selectedAudioTrackId = null
     selectedSubtitleTrackId = null
+    currentExternalSubtitleList.clear()
+    externalSubtitleList?.let { currentExternalSubtitleList.addAll(it) }
 
     // Build external subtitle configurations (attached to MediaItem before prepare)
     externalSubtitleList?.forEachIndexed { index, sub ->
@@ -1411,7 +1428,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         .setId("external_$index")
         .setLabel(sub["title"] ?: "External")
         .setLanguage(sub["language"])
-        .setMimeType(sub["mimeType"] ?: detectSubtitleMimeType(subUri))
+        .setMimeType(sub["mimeType"] ?: sub["codec"]?.let { mapCodecToMimeType(it) } ?: detectSubtitleMimeType(subUri))
         .build()
       externalSubtitles.add(config)
       externalSubtitleUris.add(subUri)
@@ -1603,6 +1620,9 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     val existingIndex = externalSubtitleUris.indexOf(uri)
     val isNew = existingIndex < 0
     val index = if (isNew) externalSubtitles.size else existingIndex
+    if (isNew) {
+      currentExternalSubtitleList.add(mapOf("uri" to uri, "title" to title, "language" to language, "codec" to mimeType))
+    }
     val formatId = "external_$index"
 
     if (isNew) {
@@ -1616,7 +1636,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         .setId(formatId)
         .setLabel(title ?: "External")
         .setLanguage(language)
-        .setMimeType(mimeType ?: detectSubtitleMimeType(uri))
+        .setMimeType(mimeType ?: language?.let { mapCodecToMimeType(it) } ?: detectSubtitleMimeType(uri))
         .setSelectionFlags(selectionFlags)
         .build()
       externalSubtitles.add(subtitleConfig)
@@ -1665,6 +1685,18 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     if (isNew) emitTrackList()
   }
 
+  private fun mapCodecToMimeType(codec: String): String? {
+    return when (codec.lowercase()) {
+      "srt", "subrip" -> MimeTypes.APPLICATION_SUBRIP
+      "ass", "ssa" -> MimeTypes.TEXT_SSA
+      "vtt", "webvtt" -> MimeTypes.TEXT_VTT
+      "pgs" -> MimeTypes.APPLICATION_PGS
+      "dvbsub" -> MimeTypes.APPLICATION_DVBSUBS
+      "ttml" -> MimeTypes.APPLICATION_TTML
+      else -> null
+    }
+  }
+
   private fun detectSubtitleMimeType(uri: String): String {
     // Strip query params before checking extension (Plex URLs have ?X-Plex-Token=...)
     val path = Uri.parse(uri).path?.lowercase() ?: uri.lowercase()
@@ -1672,6 +1704,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
       path.endsWith(".srt") -> MimeTypes.APPLICATION_SUBRIP
       path.endsWith(".ass") || path.endsWith(".ssa") -> MimeTypes.TEXT_SSA
       path.endsWith(".vtt") -> MimeTypes.TEXT_VTT
+      path.endsWith(".sup") || path.contains("pgs") -> MimeTypes.APPLICATION_PGS
       path.endsWith(".ttml") -> MimeTypes.APPLICATION_TTML
       else -> MimeTypes.APPLICATION_SUBRIP
     }

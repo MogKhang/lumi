@@ -52,7 +52,7 @@ class _FakePlayer implements Player {
   }
 
   // ── Recording surface ────────────────────────────────────────────
-  final List<({String uri, String? title, String? language, bool select})> addSubtitleCalls = [];
+  final List<({String uri, String? title, String? language, String? codec, bool select})> addSubtitleCalls = [];
   final List<AudioTrack> selectedAudio = [];
   final List<SubtitleTrack> selectedSubtitle = [];
 
@@ -60,12 +60,12 @@ class _FakePlayer implements Player {
   int failAddSubtitleTimes = 0;
 
   @override
-  Future<void> addSubtitleTrack({required String uri, String? title, String? language, bool select = false}) async {
+  Future<void> addSubtitleTrack({required String uri, String? title, String? language, String? codec, bool select = false}) async {
     if (failAddSubtitleTimes > 0) {
       failAddSubtitleTimes--;
       throw StateError('simulated addSubtitleTrack failure');
     }
-    addSubtitleCalls.add((uri: uri, title: title, language: language, select: select));
+    addSubtitleCalls.add((uri: uri, title: title, language: language, codec: codec, select: select));
   }
 
   @override

@@ -121,11 +121,11 @@ class TrackLabelBuilder {
     required int index,
   }) {
     final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : 'Unknown';
-    final ext = codec != null ? CodecUtils.getSubtitleExtension(codec).toUpperCase() : 'SRT';
+    final displayCodec = codec != null ? CodecUtils.formatSubtitleCodec(codec) : 'SRT';
     final externalStr = isExternal ? ' External' : '';
     final forcedStr = forced ? ' (Forced)' : '';
 
-    final label = '$lang ($ext$externalStr)$forcedStr';
+    final label = '$lang ($displayCodec$externalStr)$forcedStr';
     if (title != null && title.isNotEmpty && title != label) {
       return '$label | $title';
     }

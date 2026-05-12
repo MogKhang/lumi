@@ -97,7 +97,7 @@ abstract class Player {
   /// [title] - Optional display title.
   /// [language] - Optional language code.
   /// [select] - Whether to select this track immediately.
-  Future<void> addSubtitleTrack({required String uri, String? title, String? language, bool select = false});
+  Future<void> addSubtitleTrack({required String uri, String? title, String? language, String? codec, bool select = false});
 
   /// Set the playback volume.
   ///

@@ -395,7 +395,8 @@ class ExoPlayerPlugin :
     val uri = call.argument<String>("uri")
     val title = call.argument<String>("title")
     val language = call.argument<String>("language")
-    val mimeType = call.argument<String>("mimeType")
+    val codec = call.argument<String>("codec")
+    val mimeType = call.argument<String>("mimeType") ?: codec
     val select = call.argument<Boolean>("select") ?: false
 
     if (uri == null) {

@@ -2869,6 +2869,8 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
             url,
             title: sub.displayTitle ?? sub.language ?? 'Track ${sub.id}',
             language: sub.languageCode,
+            codec: sub.codec,
+            isExternal: sub.isExternal,
           ),
         );
       } catch (e) {
@@ -2905,6 +2907,7 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
             url,
             title: plexTrack.displayTitle ?? plexTrack.language ?? 'Track ${plexTrack.id}',
             language: plexTrack.languageCode,
+            codec: plexTrack.codec,
           ),
         );
       } catch (e) {

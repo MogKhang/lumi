@@ -36,10 +36,24 @@ class CodecUtils {
   /// Converts internal codec names like 'SUBRIP' to friendly names like 'SRT'.
   static String formatSubtitleCodec(String codec) {
     final upper = codec.toUpperCase();
+    
+    // Handle full MIME types often returned by ExoPlayer
+    if (upper.contains('SUBRIP')) return 'SRT';
+    if (upper.contains('WEBVTT')) return 'VTT';
+    if (upper.contains('SSA')) return 'SSA';
+    if (upper.contains('ASS')) return 'ASS';
+    if (upper.contains('PGS')) return 'PGS';
+    if (upper.contains('DVBSUB')) return 'DVB';
+    if (upper.contains('DVD')) return 'DVD';
+    if (upper.contains('TTML')) return 'TTML';
+    if (upper.contains('MOV_TEXT')) return 'MOV';
+
     return switch (upper) {
       'SUBRIP' => 'SRT',
       'DVD_SUBTITLE' => 'DVD',
       'WEBVTT' => 'VTT',
+      'SSA' => 'SSA',
+      'ASS' => 'ASS',
       'HDMV_PGS_SUBTITLE' => 'PGS',
       'MOV_TEXT' => 'MOV',
       _ => upper,

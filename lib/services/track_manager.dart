@@ -109,6 +109,7 @@ class TrackManager {
             uri: subtitleTrack.uri!,
             title: subtitleTrack.title,
             language: subtitleTrack.language,
+            codec: subtitleTrack.codec,
             select: false,
           );
           appLogger.d('Added external subtitle: ${subtitleTrack.title ?? subtitleTrack.uri}');

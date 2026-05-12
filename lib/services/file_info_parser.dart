@@ -223,6 +223,7 @@ class PlexFileInfoStreamReader implements FileInfoStreamReader {
       selected: flexibleBool(stream['selected']),
       forced: flexibleBool(stream['forced']),
       key: stream['key'] as String?,
+      external: flexibleBool(stream['external']),
     );
   }
 

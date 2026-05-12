@@ -195,7 +195,7 @@ class PlayerNative extends PlayerBase {
   }
 
   @override
-  Future<void> addSubtitleTrack({required String uri, String? title, String? language, bool select = false}) async {
+  Future<void> addSubtitleTrack({required String uri, String? title, String? language, String? codec, bool select = false}) async {
     final args = ['sub-add', uri, select ? 'select' : 'auto'];
     if (title != null) args.add('title=$title');
     if (language != null) args.add('lang=$language');

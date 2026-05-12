@@ -114,7 +114,7 @@ class PlayerAndroid extends PlayerBase {
       if (externalSubtitles != null && externalSubtitles.isNotEmpty)
         'externalSubtitles': externalSubtitles
             .where((s) => s.uri != null)
-            .map((s) => {'uri': s.uri, 'title': s.title, 'language': s.language})
+            .map((s) => {'uri': s.uri, 'title': s.title, 'language': s.language, 'codec': s.codec})
             .toList(),
     });
   }
@@ -166,8 +166,8 @@ class PlayerAndroid extends PlayerBase {
   }
 
   @override
-  Future<void> addSubtitleTrack({required String uri, String? title, String? language, bool select = false}) async {
-    await invoke('addSubtitleTrack', {'uri': uri, 'title': title, 'language': language, 'select': select});
+  Future<void> addSubtitleTrack({required String uri, String? title, String? language, String? codec, bool select = false}) async {
+    await invoke('addSubtitleTrack', {'uri': uri, 'title': title, 'language': language, 'codec': codec, 'select': select});
   }
 
   @override

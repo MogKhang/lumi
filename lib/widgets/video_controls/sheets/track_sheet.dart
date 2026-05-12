@@ -77,7 +77,10 @@ class TrackSheet extends StatelessWidget {
         final subtitleTracks = TrackFilterHelper.extractAndFilterTracks<SubtitleTrack>(
           tracks,
           (t) => t?.subtitle ?? [],
-        );
+        )..sort((a, b) {
+            if (a.isExternal != b.isExternal) return a.isExternal ? -1 : 1;
+            return 0;
+          });
 
         final useSourceAudio = isTranscoding && sourceAudioTracks.length > 1 && onSwitchAudioStreamId != null;
         final showAudio = useSourceAudio || playerAudioTracks.length > 1;

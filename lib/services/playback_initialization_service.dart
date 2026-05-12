@@ -242,6 +242,7 @@ class PlaybackInitializationService {
             'file://${entity.path}',
             title: cachedTrack?.displayTitle ?? cachedTrack?.language ?? 'Subtitle $fileName',
             language: cachedTrack?.languageCode,
+            codec: cachedTrack?.codec,
           ),
         );
       }

@@ -87,8 +87,15 @@ class SubtitleTrack {
     this.uri,
   });
 
-  factory SubtitleTrack.uri(String uri, {String? title, String? language}) {
-    return SubtitleTrack(id: 'external:$uri', title: title, language: language, isExternal: true, uri: uri);
+  factory SubtitleTrack.uri(String uri, {String? title, String? language, String? codec, bool isExternal = true}) {
+    return SubtitleTrack(
+      id: isExternal ? 'external:$uri' : 'internal:$uri',
+      title: title,
+      language: language,
+      codec: codec,
+      isExternal: isExternal,
+      uri: uri,
+    );
   }
 
   static const auto = SubtitleTrack(id: 'auto', title: 'Auto');
