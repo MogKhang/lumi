@@ -834,9 +834,10 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   Widget _buildAppBar({required bool pinned, bool floating = false}) {
     return DesktopSliverAppBar(
-      title: Text(
-        t.common.home,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+      title: Image.asset(
+        'assets/lumi.png',
+        width: 100,
+        filterQuality: FilterQuality.medium,
       ),
       pinned: pinned,
       floating: floating,

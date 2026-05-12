@@ -661,8 +661,8 @@
     "groupings": {
       "title": "Grouping",
       "all": "All",
-      "movies": "Phim lẻ",
-      "shows": "Phim bộ",
+      "movies": "Movies",
+      "shows": "TV Shows",
       "seasons": "Seasons",
       "episodes": "Episodes",
       "folders": "Folders"

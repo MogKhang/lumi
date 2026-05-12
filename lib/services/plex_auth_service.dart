@@ -113,7 +113,11 @@ class PlexAuthService {
 
   /// Construct the Auth App URL for the user to visit
   String getAuthUrl(String pinCode) {
-    final params = {'clientID': _clientIdentifier, 'code': pinCode, 'context[device][product]': _appName};
+    final params = {
+      'clientID': _clientIdentifier,
+      'code': pinCode,
+      'context[device][product]': _appName,
+    };
 
     final queryString = params.entries
         .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
