@@ -114,10 +114,10 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
       child: FocusableWrapper(
         focusNode: widget.focusNode,
         autofocus: widget.autofocus,
-        enableLongPress: true,
+        enableLongPress: false,
         onNavigateUp: widget.onNavigateUp,
         onSelect: widget.onTap,
-        onLongPress: showContextMenuFromTap,
+        onLongPress: null,
         disableScale: true,
         child: MediaContextMenu(
           key: contextMenuKey,
@@ -131,7 +131,7 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
             onTap: widget.onTap,
             canRequestFocus: false,
             onTapDown: storeTapPosition,
-            onLongPress: showContextMenuFromTap,
+            onLongPress: null,
             onSecondaryTapDown: storeTapPosition,
             onSecondaryTap: showContextMenuFromTap,
             hoverColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.05),

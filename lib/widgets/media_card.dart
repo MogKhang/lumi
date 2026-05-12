@@ -196,7 +196,7 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
             semanticLabel: semanticLabel,
             onTap: () => _handleTap(context),
             onTapDown: storeTapPosition,
-            onLongPress: showContextMenuFromTap,
+            onLongPress: null,
             onSecondaryTapDown: storeTapPosition,
             onSecondaryTap: showContextMenuFromTap,
             density: SettingsService.instanceOrNull!.read(SettingsService.libraryDensity),
@@ -235,7 +235,7 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
         canRequestFocus: false,
         onTap: () => _handleTap(context),
         onTapDown: storeTapPosition,
-        onLongPress: showContextMenuFromTap,
+        onLongPress: null,
         onSecondaryTapDown: storeTapPosition,
         onSecondaryTap: showContextMenuFromTap,
         borderRadius: BorderRadius.circular(tokens(context).radiusSm),
@@ -322,7 +322,7 @@ class _MediaCardList extends StatelessWidget {
   final Object item;
   final String semanticLabel;
   final VoidCallback onTap;
-  final VoidCallback onLongPress;
+  final VoidCallback? onLongPress;
   final void Function(TapDownDetails)? onTapDown;
   final VoidCallback? onSecondaryTap;
   final void Function(TapDownDetails)? onSecondaryTapDown;
@@ -336,7 +336,7 @@ class _MediaCardList extends StatelessWidget {
     required this.item,
     required this.semanticLabel,
     required this.onTap,
-    required this.onLongPress,
+    this.onLongPress,
     this.onTapDown,
     this.onSecondaryTap,
     this.onSecondaryTapDown,
@@ -514,7 +514,7 @@ class _MediaCardList extends StatelessWidget {
       canRequestFocus: false, // Keyboard handled by FocusableMediaCard
       onTap: onTap,
       onTapDown: onTapDown,
-      onLongPress: onLongPress,
+      onLongPress: null,
       onSecondaryTapDown: onSecondaryTapDown,
       onSecondaryTap: onSecondaryTap,
       borderRadius: BorderRadius.circular(tokens(context).radiusSm),

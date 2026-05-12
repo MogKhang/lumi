@@ -1601,7 +1601,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                 },
                 child: GestureDetector(
                   onTapDown: (details) => tapPosition = details.globalPosition,
-                  onLongPress: () => _showSeasonTabContextMenu(index, position: tapPosition),
+                  // onLongPress: () => _showSeasonTabContextMenu(index, position: tapPosition),
                   onSecondaryTapDown: (details) => tapPosition = details.globalPosition,
                   onSecondaryTap: () => _showSeasonTabContextMenu(index, position: tapPosition),
                   child: FocusableTabChip(
@@ -1635,7 +1635,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                     onNavigateDown: () {
                       _firstEpisodeFocusNode.requestFocus();
                     },
-                    onLongPress: () => _showSeasonTabContextMenu(index),
+                    // onLongPress: () => _showSeasonTabContextMenu(index),
                     onBack: () {
                       Navigator.of(context).maybePop();
                     },

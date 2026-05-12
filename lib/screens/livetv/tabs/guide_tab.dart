@@ -1157,7 +1157,7 @@ class _ChannelCellState extends State<_ChannelCell> {
           child: InkWell(
             canRequestFocus: false,
             onTap: widget.onTap,
-            onLongPress: widget.onLongPress,
+            onLongPress: null,
             child: Container(
               height: widget.rowHeight,
               padding: const EdgeInsets.symmetric(horizontal: 8),

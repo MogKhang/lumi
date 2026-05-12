@@ -81,7 +81,7 @@ class _PlaylistItemCardState extends State<PlaylistItemCard> with ContextMenuTap
         child: InkWell(
           onTap: widget.onTap,
           onTapDown: storeTapPosition,
-          onLongPress: showContextMenuFromTap,
+          onLongPress: null,
           onSecondaryTapDown: storeTapPosition,
           onSecondaryTap: showContextMenuFromTap,
           child: Padding(

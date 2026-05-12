@@ -344,11 +344,13 @@ class _FocusableWrapperState extends State<FocusableWrapper> with SingleTickerPr
             _isSelectKeyDown = true;
             _longPressTimer?.cancel();
             _longPressTimer = Timer(widget.longPressDuration, () {
-              // Long press detected
+              // Long press detected (disabled)
+              /*
               if (mounted) {
                 SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
                 widget.onLongPress?.call();
               }
+              */
             });
           }
           return KeyEventResult.handled;
@@ -376,10 +378,10 @@ class _FocusableWrapperState extends State<FocusableWrapper> with SingleTickerPr
       return KeyEventResult.ignored;
     }
 
-    // Context menu key
+    // Context menu key (disabled)
     if (key.isContextMenuKey) {
-      SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
-      widget.onLongPress?.call();
+      // SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
+      // widget.onLongPress?.call();
       return KeyEventResult.handled;
     }
 

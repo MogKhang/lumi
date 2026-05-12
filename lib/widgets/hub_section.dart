@@ -202,8 +202,9 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
             if (!mounted) return;
             if (_isSelectKeyDown) {
               _longPressTriggered = true;
-              SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
-              _showContextMenuForCurrentItem();
+              // Disabled globally
+              // SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
+              // _showContextMenuForCurrentItem();
             }
           });
         }
@@ -279,9 +280,9 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
       return KeyEventResult.handled;
     }
 
-    // Context menu key: show context menu
+    // Context menu key: show context menu (disabled)
     if (key.isContextMenuKey) {
-      _showContextMenuForCurrentItem();
+      // _showContextMenuForCurrentItem();
       return KeyEventResult.handled;
     }
 
@@ -303,12 +304,6 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
     if (_focusedIndex >= widget.hub.items.length) return;
     final item = widget.hub.items[_focusedIndex];
     _navigateToItem(item);
-  }
-
-  void _showContextMenuForCurrentItem() {
-    // No context menu for the "View All" card
-    if (_focusedIndex >= widget.hub.items.length) return;
-    _mediaCardKeys[_focusedIndex]?.currentState?.showContextMenu();
   }
 
   Future<void> _navigateToItem(dynamic item) async {
@@ -488,7 +483,7 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
                               context: context,
                               isFocused: isItemFocused,
                               onTap: () => _onItemTapped(index),
-                              onLongPress: () => _mediaCardKeys[index]?.currentState?.showContextMenu(),
+                              onLongPress: null,
                               child: MediaCard(
                                 key: _getMediaCardKey(index),
                                 item: item,

@@ -187,12 +187,7 @@ class WhatsOnTabState extends State<WhatsOnTab> with LiveTvActionsMixin<WhatsOnT
             key: _hubKeys[index],
             hub: _hubs[index],
             onTap: _onItemTap,
-            onLongPress: (entry) => showProgramDetails(
-              program: entry.program,
-              channel: findChannel(entry.program.channelIdentifier),
-              posterThumb: entry.metadata.grandparentThumbPath ?? entry.metadata.thumbPath,
-              posterServerId: entry.metadata.serverId ?? '',
-            ),
+            onLongPress: (entry) {},
             onVerticalNavigation: (isUp) => _handleVerticalNavigation(index, isUp),
             onBack: widget.onBack,
           );
@@ -328,8 +323,9 @@ class _LiveTvHubSectionState extends State<_LiveTvHubSection> with MountedSetSta
             if (!mounted) return;
             if (_isSelectKeyDown) {
               _longPressTriggered = true;
-              SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
-              _activateLongPress();
+              // Disabled globally
+              // SelectKeyUpSuppressor.suppressSelectUntilKeyUp();
+              // _activateLongPress();
             }
           });
         }
@@ -396,7 +392,7 @@ class _LiveTvHubSectionState extends State<_LiveTvHubSection> with MountedSetSta
     }
 
     if (key.isContextMenuKey) {
-      _activateLongPress();
+      // _activateLongPress();
       return KeyEventResult.handled;
     }
 
@@ -406,11 +402,6 @@ class _LiveTvHubSectionState extends State<_LiveTvHubSection> with MountedSetSta
   void _activateCurrentItem() {
     if (_focusedIndex >= widget.hub.entries.length) return;
     widget.onTap(widget.hub.entries[_focusedIndex]);
-  }
-
-  void _activateLongPress() {
-    if (_focusedIndex >= widget.hub.entries.length) return;
-    widget.onLongPress(widget.hub.entries[_focusedIndex]);
   }
 
   void _onItemTapped(int index) {
@@ -491,10 +482,7 @@ class _LiveTvHubSectionState extends State<_LiveTvHubSection> with MountedSetSta
                               _onItemTapped(index);
                               widget.onTap(entry);
                             },
-                            onLongPress: () {
-                              _onItemTapped(index);
-                              widget.onLongPress(entry);
-                            },
+                            onLongPress: null,
                           ),
                         );
                       },
@@ -515,7 +503,7 @@ class _LiveTvPosterCard extends StatelessWidget {
   final double posterHeight;
   final bool isFocused;
   final VoidCallback onTap;
-  final VoidCallback onLongPress;
+  final VoidCallback? onLongPress;
 
   const _LiveTvPosterCard({
     required this.entry,

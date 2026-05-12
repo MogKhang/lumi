@@ -6,6 +6,7 @@ import '../widgets/media_context_menu.dart';
 /// that wrap their tappable area in a [MediaContextMenu].
 mixin ContextMenuTapMixin<T extends StatefulWidget> on State<T> {
   final GlobalKey<MediaContextMenuState> contextMenuKey = GlobalKey<MediaContextMenuState>();
+  // ignore: unused_field
   Offset? _tapPosition;
 
   void storeTapPosition(TapDownDetails details) {
@@ -16,7 +17,8 @@ mixin ContextMenuTapMixin<T extends StatefulWidget> on State<T> {
 
   /// Show at the last tap position (long-press, mouse).
   void showContextMenuFromTap() {
-    contextMenuKey.currentState?.showContextMenu(context, position: _tapPosition);
+    // Disabled globally per user request
+    // contextMenuKey.currentState?.showContextMenu(context, position: _tapPosition);
   }
 
   /// Show without a tap position (keyboard, gamepad).
