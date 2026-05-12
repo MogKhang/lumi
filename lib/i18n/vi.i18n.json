@@ -17,11 +17,11 @@
     "quickConnectCode": "Quick Connect code",
     "quickConnectInstructions": "Open your Jellyfin server in a web browser, sign in, and choose Quick Connect from the user menu. Enter this code to approve sign-in.",
     "quickConnectWaiting": "Waiting for approval…",
-    "quickConnectCancel": "Cancel",
+    "quickConnectCancel": "Hủy",
     "quickConnectExpired": "Quick Connect code expired before approval. Please try again."
   },
   "common": {
-    "cancel": "Cancel",
+    "cancel": "Hủy",
     "save": "Save",
     "close": "Close",
     "clear": "Clear",
@@ -45,8 +45,8 @@
     "pause": "Pause",
     "resume": "Resume",
     "error": "Error",
-    "search": "Search",
-    "home": "Home",
+    "search": "Tìm kiếm",
+    "home": "Trang chủ",
     "back": "Back",
     "settings": "Settings",
     "mute": "Mute",
@@ -67,7 +67,7 @@
   },
   "screens": {
     "licenses": "Licenses",
-    "switchProfile": "Switch Profile",
+    "switchProfile": "Đổi hồ sơ",
     "subtitleStyling": "Subtitle Styling",
     "mpvConfig": "mpv.conf",
     "logs": "Logs"
@@ -272,10 +272,10 @@
     "behavior": "Behavior"
   },
   "search": {
-    "hint": "Search movies, shows, music...",
-    "tryDifferentTerm": "Try a different search term",
-    "searchYourMedia": "Search your media",
-    "enterTitleActorOrKeyword": "Enter a title, actor, or keyword"
+    "hint": "Tên của phim cần tìm kiếm...",
+    "tryDifferentTerm": "Thử lại với từ khóa khác",
+    "searchYourMedia": "Tìm kiếm phim",
+    "enterTitleActorOrKeyword": "Gõ từ khóa vào khung tìm kiếm"
   },
   "hotkeys": {
     "setShortcutFor": "Set Shortcut for ${actionName}",
@@ -477,7 +477,7 @@
     "noSeasonsFound": "No seasons found",
     "noEpisodesFound": "No episodes found in first season",
     "noEpisodesFoundGeneral": "No episodes found",
-    "noResultsFound": "No results found",
+    "noResultsFound": "Không tìm thấy kết quả",
     "sleepTimerSet": "Sleep timer set for ${label}",
     "noItemsAvailable": "No items available",
     "failedToCreatePlayQueueNoItems": "Failed to create play queue - no items",
@@ -524,8 +524,8 @@
     "confirmAction": "Confirm Action"
   },
   "profiles": {
-    "addPlezyProfile": "Add Plezy profile",
-    "switchingProfile": "Switching profile…",
+    "addPlezyProfile": "Thêm hồ sơ",
+    "switchingProfile": "Đổi hồ sơ…",
     "deleteThisProfileTitle": "Delete this profile?",
     "deleteThisProfileMessage": "${displayName} will be removed. Connections themselves are not affected.",
     "active": "Active",
@@ -582,7 +582,7 @@
     "switchProfile": "Switch Profile",
     "noContentAvailable": "No content available",
     "addMediaToLibraries": "Add some media to your libraries",
-    "continueWatching": "Continue Watching",
+    "continueWatching": "Phim đang xem",
     "continueWatchingIn": "Continue Watching in ${library}",
     "nextUp": "Next Up",
     "nextUpIn": "Next Up in ${library}",
@@ -609,7 +609,7 @@
     "pleaseEnterToken": "Please enter a token",
     "invalidToken": "Invalid token",
     "failedToVerifyToken": "Failed to verify token: ${error}",
-    "failedToSwitchProfile": "Failed to switch to ${displayName}",
+    "failedToSwitchProfile": "${displayName} đăng nhập thất bại",
     "failedToDeleteProfile": "Failed to delete ${displayName}",
     "failedToRate": "Couldn't update rating"
   },
@@ -640,7 +640,7 @@
     "manageLibraries": "Manage Libraries",
     "sort": "Sort",
     "sortBy": "Sort By",
-    "filters": "Filters",
+    "filters": "Bộ lọc",
     "confirmActionMessage": "Are you sure you want to perform this action?",
     "showLibrary": "Show library",
     "hideLibrary": "Hide library",
@@ -654,15 +654,15 @@
     "folders": "folders",
     "tabs": {
       "recommended": "Recommended",
-      "browse": "Browse",
-      "collections": "Collections",
-      "playlists": "Playlists"
+      "browse": "Tất cả",
+      "collections": "Bộ sưu tập",
+      "playlists": "Danh sách"
     },
     "groupings": {
       "title": "Grouping",
       "all": "All",
-      "movies": "Movies",
-      "shows": "TV Shows",
+      "movies": "Phim lẻ",
+      "shows": "Phim bộ",
       "seasons": "Seasons",
       "episodes": "Episodes",
       "folders": "Folders"
@@ -696,11 +696,11 @@
     "allServerConnectionsFailed": "Failed to connect to any servers. Please check your network and try again.",
     "noServersFoundForAccount": "No servers found for ${username} (${email})",
     "failedToLoadServers": "Failed to load servers: ${error}",
-    "selectServer": "Select Server",
-    "selectServerDescription": "Choose which server you'd like to use",
+    "selectServer": "Chọn máy chủ",
+    "selectServerDescription": "Chọn máy chủ kho phim mặc định",
     "noServersAvailable": "No servers available",
-    "online": "Online",
-    "offline": "Offline"
+    "online": "Đang hoạt động",
+    "offline": "Mất tín hiệu"
   },
   "hubDetail": {
     "title": "Title",
@@ -1020,7 +1020,7 @@
       "tabLibraries": "Libraries",
       "tabSearch": "Search",
       "tabDownloads": "Downloads",
-      "tabSettings": "Settings",
+      "tabSettings": "Cài đặt",
       "previous": "Previous",
       "playPause": "Play/Pause",
       "next": "Next",
