@@ -1,7 +1,7 @@
 part of '../media_detail_screen.dart';
 
 extension _MediaDetailActionButtons on _MediaDetailScreenState {
-  Widget _buildActionButtons(MediaItem metadata) {
+  Widget _buildActionButtons(MediaItem metadata, {bool minimal = false}) {
     final playButtonLabel = _getPlayButtonLabel(metadata);
     final playButtonIcon = AppIcon(_getPlayButtonIcon(metadata), fill: 1, size: 20);
 
@@ -93,6 +93,7 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
       skipTraversal: true,
       onKeyEvent: _handlePlayButtonKeyEvent,
       child: Row(
+        mainAxisSize: minimal ? MainAxisSize.min : MainAxisSize.max,
         children: [
           SizedBox(
             height: 48,
@@ -113,41 +114,43 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
                   : playButtonIcon,
             ),
           ),
-          const SizedBox(width: 12),
-          // Trailer button (only if trailer is available)
-          if (primaryTrailer != null) ...[
-            IconButton.filledTonal(
-              onPressed: () async {
-                await navigateToVideoPlayer(context, metadata: primaryTrailer);
-              },
-              icon: const AppIcon(Symbols.theaters_rounded, fill: 1),
-              tooltip: t.tooltips.playTrailer,
-              iconSize: 20,
-              style: actionButtonStyle(),
-            ),
+          if (!minimal) ...[
             const SizedBox(width: 12),
-          ],
-          // Shuffle button (only for shows and seasons)
-          if (metadata.isShow || metadata.isSeason) ...[
-            IconButton.filledTonal(
-              onPressed: () async {
-                await _handleShufflePlayWithQueue(context, metadata);
-              },
-              icon: const AppIcon(Symbols.shuffle_rounded, fill: 1),
-              tooltip: t.tooltips.shufflePlay,
-              iconSize: 20,
-              style: actionButtonStyle(),
-            ),
+            // Trailer button (only if trailer is available)
+            if (primaryTrailer != null) ...[
+              IconButton.filledTonal(
+                onPressed: () async {
+                  await navigateToVideoPlayer(context, metadata: primaryTrailer);
+                },
+                icon: const AppIcon(Symbols.theaters_rounded, fill: 1),
+                tooltip: t.tooltips.playTrailer,
+                iconSize: 20,
+                style: actionButtonStyle(),
+              ),
+              const SizedBox(width: 12),
+            ],
+            // Shuffle button (only for shows and seasons)
+            if (metadata.isShow || metadata.isSeason) ...[
+              IconButton.filledTonal(
+                onPressed: () async {
+                  await _handleShufflePlayWithQueue(context, metadata);
+                },
+                icon: const AppIcon(Symbols.shuffle_rounded, fill: 1),
+                tooltip: t.tooltips.shufflePlay,
+                iconSize: 20,
+                style: actionButtonStyle(),
+              ),
+              const SizedBox(width: 12),
+            ],
+            // Download button (hide in offline mode - already downloaded,
+            // and on Apple TV where there's no user file storage).
+            if (!widget.isOffline && !PlatformDetector.isAppleTV()) _buildDownloadButton(metadata, actionButtonStyle),
             const SizedBox(width: 12),
+            // Mark as watched/unwatched toggle (works offline too)
+            _buildWatchedToggleButton(metadata, actionButtonStyle),
+            // Three-dots menu button (hidden in offline mode)
+            if (!widget.isOffline) ...[const SizedBox(width: 12), _buildMoreActionsButton(metadata, actionButtonStyle)],
           ],
-          // Download button (hide in offline mode - already downloaded,
-          // and on Apple TV where there's no user file storage).
-          if (!widget.isOffline && !PlatformDetector.isAppleTV()) _buildDownloadButton(metadata, actionButtonStyle),
-          const SizedBox(width: 12),
-          // Mark as watched/unwatched toggle (works offline too)
-          _buildWatchedToggleButton(metadata, actionButtonStyle),
-          // Three-dots menu button (hidden in offline mode)
-          if (!widget.isOffline) ...[const SizedBox(width: 12), _buildMoreActionsButton(metadata, actionButtonStyle)],
         ],
       ),
     );

@@ -2397,6 +2397,100 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   }
 
   Widget _buildHeroHeader(BuildContext context, MediaItem metadata, Size size, double headerHeight, ThemeData theme) {
+    if (metadata.isMovie) {
+      return Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.paddingOf(context).top + 32,
+          left: 24,
+          right: 24,
+          bottom: 24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Movie Poster (Center aligned)
+            SizedBox(
+              width: size.width * 0.45,
+              child: AspectRatio(
+                aspectRatio: 2 / 3,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: OptimizedMediaImage(
+                    client: _getArtworkMediaClient(context),
+                    imagePath: metadata.thumbPath,
+                    fit: BoxFit.cover,
+                    imageType: ImageType.poster,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            // Movie Title (Center aligned)
+            Text(
+              metadata.displayTitle,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 8),
+            // Year and Duration
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (metadata.year != null)
+                  Text(
+                    '${metadata.year}',
+                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                if (metadata.year != null && metadata.durationMs != null)
+                  Text(
+                    '  •  ',
+                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                if (metadata.durationMs != null)
+                  Text(
+                    formatDurationTextual(metadata.durationMs!),
+                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Genres block (Center aligned)
+            if (metadata.genres != null && metadata.genres!.isNotEmpty) ...[
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: metadata.genres!.map((genre) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.4)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      genre,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 32),
+            ],
+            // Play Button (Minimal mode, centered)
+            _buildActionButtons(metadata, minimal: true),
+          ],
+        ),
+      );
+    }
+
     return Stack(
       children: [
         // Background Art (fixed height, no parallax)
