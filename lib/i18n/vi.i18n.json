@@ -54,7 +54,7 @@
     "reconnect": "Reconnect",
     "exit": "Exit",
     "viewAll": "View All",
-    "checkingNetwork": "Checking network...",
+    "checkingNetwork": "Kiểm tra tín hiệu mạng...",
     "refreshingServers": "Refreshing servers...",
     "loadingServers": "Loading servers...",
     "connectingToServers": "Kiểm tra tín hiệu máy chủ...",

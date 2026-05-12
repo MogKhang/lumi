@@ -44,7 +44,6 @@ import '../services/watch_next_service.dart';
 import 'libraries/content_state_builder.dart';
 import 'main_screen.dart';
 import 'search_screen.dart';
-import '../utils/desktop_window_padding.dart';
 import '../widgets/desktop_app_bar.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -834,10 +833,17 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   Widget _buildAppBar({required bool pinned, bool floating = false}) {
     return DesktopSliverAppBar(
-      title: Image.asset(
-        'assets/lumi.png',
-        width: 100,
-        filterQuality: FilterQuality.medium,
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/lumi.png',
+            width: 100,
+            filterQuality: FilterQuality.medium,
+          ),
+          const SizedBox(width: 24),
+        ],
       ),
       pinned: pinned,
       floating: floating,
@@ -885,9 +891,11 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
     final theme = Theme.of(context);
     return Scaffold(
-      body: NestedScrollView(
-        controller: _scrollController,
-        floatHeaderSlivers: true,
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: NestedScrollView(
+          controller: _scrollController,
+          floatHeaderSlivers: false,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverOverlapAbsorber(
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -1025,8 +1033,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildHeroSection() {
     final statusBarHeight = MediaQuery.paddingOf(context).top;
