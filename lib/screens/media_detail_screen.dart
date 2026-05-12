@@ -2180,7 +2180,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                   // Main content
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -2191,7 +2191,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                               metadata.isMovie ? 'Plot' : t.discover.overview,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
                             Focus(
                               focusNode: _overviewFocusNode,
                               onKeyEvent: _handleOverviewKeyEvent,
@@ -2310,7 +2310,8 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
 
                           // Additional info — wrapped in Focus so DPAD DOWN from the
                           // last focusable section lands here and scrolls it into view.
-                          if (_hasInfoRows)
+                          // Additional info (Studio, Rating) — hidden for movies per user request
+                          if (_hasInfoRows && !metadata.isMovie)
                             Focus(
                               focusNode: _infoRowsFocusNode,
                               onKeyEvent: _handleInfoRowsKeyEvent,
@@ -2427,11 +2428,11 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             // Movie Title (Center aligned)
             Text(
               metadata.displayTitle,
-              style: theme.textTheme.headlineMedium?.copyWith(
+              style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -2439,7 +2440,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             // Year and Duration
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -2461,7 +2462,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                   ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             // Genres block (Center aligned)
             if (metadata.genres != null && metadata.genres!.isNotEmpty) ...[
               Wrap(
@@ -2485,7 +2486,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
             ],
             // Play Button (Minimal mode, centered)
             _buildActionButtons(metadata, minimal: true),
