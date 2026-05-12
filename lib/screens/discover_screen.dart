@@ -908,9 +908,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     if (_onDeck.isNotEmpty && showHeroSection) {
                       return _buildHeroSection();
                     }
-                    // Add standard padding when hero is not shown
+                    // Remove standard padding when hero is not shown
                     return const SliverToBoxAdapter(
-                      child: SizedBox(height: 16),
+                      child: SizedBox.shrink(),
                     );
                   },
                 ),
@@ -920,40 +920,46 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   // On Deck / Continue Watching
                   if (_onDeck.isNotEmpty)
                     SliverToBoxAdapter(
-                      child: HubSection(
-                        key: _continueWatchingHubKey,
-                        hub: MediaHub(
-                          id: 'continue_watching',
-                          title: t.discover.continueWatching,
-                          type: 'mixed',
-                          identifier: '_continue_watching_',
-                          size: _onDeck.length,
-                          more: false,
-                          items: _onDeck,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: HubSection(
+                          key: _continueWatchingHubKey,
+                          hub: MediaHub(
+                            id: 'continue_watching',
+                            title: t.discover.continueWatching,
+                            type: 'mixed',
+                            identifier: '_continue_watching_',
+                            size: _onDeck.length,
+                            more: false,
+                            items: _onDeck,
+                          ),
+                          emoji: '⏳',
+                          onRefresh: updateItem,
+                          onRemoveFromContinueWatching: _refreshContinueWatching,
+                          isInContinueWatching: true,
+                          onVerticalNavigation: (isUp) => _handleVerticalNavigation(0, isUp),
+                          onNavigateUp: _focusTopBoundary,
+                          onNavigateToSidebar: _navigateToSidebar,
                         ),
-                        emoji: '⏳',
-                        onRefresh: updateItem,
-                        onRemoveFromContinueWatching: _refreshContinueWatching,
-                        isInContinueWatching: true,
-                        onVerticalNavigation: (isUp) => _handleVerticalNavigation(0, isUp),
-                        onNavigateUp: _focusTopBoundary,
-                        onNavigateToSidebar: _navigateToSidebar,
                       ),
                     ),
 
                   // Recommendation Hubs (Trending, Top in Genre, etc.)
                   for (int i = 0; i < _hubs.length; i++)
                     SliverToBoxAdapter(
-                      child: HubSection(
-                        key: i < _hubKeys.length ? _hubKeys[i] : null,
-                        hub: _hubs[i],
-                        icon: _getHubIcon(_hubs[i].title),
-                        showServerName: showServerNameOnHubs && duplicateHubTitles.contains(_hubs[i].title),
-                        onRefresh: updateItem,
-                        // Hub index is i + 1 if continue watching exists, otherwise i
-                        onVerticalNavigation: (isUp) => _handleVerticalNavigation(_onDeck.isNotEmpty ? i + 1 : i, isUp),
-                        onNavigateUp: (i == 0 && _onDeck.isEmpty) ? _focusTopBoundary : null,
-                        onNavigateToSidebar: _navigateToSidebar,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: HubSection(
+                          key: i < _hubKeys.length ? _hubKeys[i] : null,
+                          hub: _hubs[i],
+                          icon: _getHubIcon(_hubs[i].title),
+                          showServerName: showServerNameOnHubs && duplicateHubTitles.contains(_hubs[i].title),
+                          onRefresh: updateItem,
+                          // Hub index is i + 1 if continue watching exists, otherwise i
+                          onVerticalNavigation: (isUp) => _handleVerticalNavigation(_onDeck.isNotEmpty ? i + 1 : i, isUp),
+                          onNavigateUp: (i == 0 && _onDeck.isEmpty) ? _focusTopBoundary : null,
+                          onNavigateToSidebar: _navigateToSidebar,
+                        ),
                       ),
                     ),
 
@@ -1026,7 +1032,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
   Widget _buildHeroSection() {
     final statusBarHeight = MediaQuery.paddingOf(context).top;
     final useSideNav = PlatformDetector.shouldUseSideNavigation(context);
-    final heroHeight = useSideNav ? MediaQuery.sizeOf(context).height * 0.75 : 500 + statusBarHeight;
+    final heroHeight = useSideNav ? MediaQuery.sizeOf(context).height * 0.75 : 400 + statusBarHeight;
     return SliverToBoxAdapter(
       child: Focus(
         focusNode: _heroFocusNode,
@@ -1253,7 +1259,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [Colors.transparent, bgColor.withValues(alpha: 0.9), bgColor],
-                          stops: const [0.5, 0.85, 1.0],
+                          stops: const [0.7, 0.95, 1.0],
                         ),
                       ),
                     );

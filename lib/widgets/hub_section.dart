@@ -417,7 +417,7 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
                   final containerHeight = posterHeight + 33;
                   final focusBorderWidth = FocusTheme.focusBorderWidth;
                   final focusExtra = focusBorderWidth * 2; // border on both sides
-                  _itemExtent = cardWidth + focusExtra + 4;
+                  _itemExtent = cardWidth + focusExtra + 12;
 
                   return SizedBox(
                     height: containerHeight + focusExtra + 4, // extra for scale + border top/bottom
@@ -438,7 +438,7 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
                             return Padding(
                               padding: widget.inset
                                   ? const EdgeInsets.only(right: 4)
-                                  : const EdgeInsets.symmetric(horizontal: 2),
+                                  : const EdgeInsets.symmetric(horizontal: 6),
                               child: FocusBuilders.buildLockedFocusWrapper(
                                 context: context,
                                 isFocused: isItemFocused,
