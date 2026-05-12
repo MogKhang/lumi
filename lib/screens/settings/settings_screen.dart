@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:plezy/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,8 @@ import '../auth_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  static final Future<PackageInfo> _packageInfoFuture = PackageInfo.fromPlatform();
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -147,7 +150,9 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                 ),
 
                 _buildLogoutTile(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
+                _buildAppInfoSection(),
+                const SizedBox(height: 12),
               ]),
             ),
           ],
@@ -443,5 +448,31 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         ),
       );
     }
+  }
+
+  Widget _buildAppInfoSection() {
+    return FutureBuilder<PackageInfo>(
+      future: SettingsScreen._packageInfoFuture,
+      builder: (context, snapshot) {
+        final appVersion = snapshot.data?.version ?? '';
+        return Center(
+          child: Column(
+            children: [
+              Image.asset('assets/plezy.png', width: 64, height: 64),
+              const SizedBox(height: 4),
+              Text(
+                t.app.title,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                t.about.versionLabel(version: appVersion),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
