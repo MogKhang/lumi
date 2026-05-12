@@ -773,16 +773,18 @@ class _LibrariesScreenState extends State<LibrariesScreen>
   }
 
   Widget _buildAppBarTitle(MediaLibrary? selectedLibrary) {
-    final title = switch (widget.filterKind) {
-      MediaKind.movie => t.navigation.movies,
-      MediaKind.show => t.navigation.shows,
-      _ => selectedLibrary?.title ?? t.libraries.title,
-    };
+    final useLogo = widget.filterKind == MediaKind.movie || widget.filterKind == MediaKind.show;
 
-    final titleWidget = Text(
-      title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-    );
+    final titleWidget = useLogo
+        ? Image.asset(
+            'assets/lumi.png',
+            width: 100,
+            filterQuality: FilterQuality.medium,
+          )
+        : Text(
+            selectedLibrary?.title ?? t.libraries.title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          );
 
     // On desktop/TV with side nav, show title and tabs in app bar
     if (PlatformDetector.shouldUseSideNavigation(context)) {
