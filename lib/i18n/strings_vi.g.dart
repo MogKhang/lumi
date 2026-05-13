@@ -1589,10 +1589,20 @@ class _TranslationsLibrariesFilterCategoriesVi extends TranslationsLibrariesFilt
 	@override String get contentRating => 'Phân loại nội dung';
 	@override String get tag => 'Thẻ';
 	@override String get unwatched => 'Chưa xem';
+	@override String get unwatchedOnly => 'Chỉ chưa xem';
+	@override String get unwatchedShows => 'Chưa xem';
+	@override String get unwatchedEpisodes => 'Tập chưa xem';
+	@override String get unplayed => 'Chưa xem';
+	@override String get show_unwatched => 'Phim chưa xem';
+	@override String get episode_unwatched => 'Tập chưa xem';
+	@override String get show_unplayed => 'Phim chưa xem';
+	@override String get episode_unplayed => 'Tập chưa xem';
+	@override String get shows_unwatched => 'Phim chưa xem';
+	@override String get episodes_unwatched => 'Tập chưa xem';
 	@override String get inProgress => 'Đang xem';
 	@override String get audioLanguage => 'Ngôn ngữ âm thanh';
 	@override String get subtitleLanguage => 'Ngôn ngữ phụ đề';
-	@override String get decade => 'Thập kỷ';
+	@override String get decade => 'Thập niên';
 	@override String get actor => 'Diễn viên';
 	@override String get director => 'Đạo diễn';
 	@override String get writer => 'Biên kịch';
@@ -1611,12 +1621,13 @@ class _TranslationsLibrariesSortLabelsVi extends TranslationsLibrariesSortLabels
 	@override String get title => 'Tên phim';
 	@override String get dateAdded => 'Ngày cập nhật';
 	@override String get releaseDate => 'Ngày phát hành';
-	@override String get rating => 'Rating';
-	@override String get lastPlayed => 'Last Played';
-	@override String get playCount => 'Play Count';
-	@override String get random => 'Random';
-	@override String get dateShared => 'Date Shared';
-	@override String get latestEpisodeAirDate => 'Latest Episode Air Date';
+	@override String get rating => 'Điểm đánh giá';
+	@override String get lastPlayed => 'Xem gần đây';
+	@override String get playCount => 'Lượt xem';
+	@override String get random => 'Ngẫu nhiên';
+	@override String get dateShared => 'Ngày chia sẻ';
+	@override String get latestEpisodeAirDate => 'Ngày phát sóng tập mới nhất';
+	@override String get latestEpisodeAddedDate => 'Ngày thêm tập mới nhất';
 }
 
 // Path: companionRemote.session
@@ -2391,10 +2402,20 @@ extension on TranslationsVi {
 			'libraries.filterCategories.contentRating' => 'Phân loại nội dung',
 			'libraries.filterCategories.tag' => 'Thẻ',
 			'libraries.filterCategories.unwatched' => 'Chưa xem',
+			'libraries.filterCategories.unwatchedOnly' => 'Chỉ chưa xem',
+			'libraries.filterCategories.unwatchedShows' => 'Chưa xem',
+			'libraries.filterCategories.unwatchedEpisodes' => 'Tập chưa xem',
+			'libraries.filterCategories.unplayed' => 'Chưa xem',
+			'libraries.filterCategories.show_unwatched' => 'Phim chưa xem',
+			'libraries.filterCategories.episode_unwatched' => 'Tập chưa xem',
+			'libraries.filterCategories.show_unplayed' => 'Phim chưa xem',
+			'libraries.filterCategories.episode_unplayed' => 'Tập chưa xem',
+			'libraries.filterCategories.shows_unwatched' => 'Phim chưa xem',
+			'libraries.filterCategories.episodes_unwatched' => 'Tập chưa xem',
 			'libraries.filterCategories.inProgress' => 'Đang xem',
 			'libraries.filterCategories.audioLanguage' => 'Ngôn ngữ âm thanh',
 			'libraries.filterCategories.subtitleLanguage' => 'Ngôn ngữ phụ đề',
-			'libraries.filterCategories.decade' => 'Thập kỷ',
+			'libraries.filterCategories.decade' => 'Thập niên',
 			'libraries.filterCategories.actor' => 'Diễn viên',
 			'libraries.filterCategories.director' => 'Đạo diễn',
 			'libraries.filterCategories.writer' => 'Biên kịch',
@@ -2404,12 +2425,13 @@ extension on TranslationsVi {
 			'libraries.sortLabels.title' => 'Tên phim',
 			'libraries.sortLabels.dateAdded' => 'Ngày cập nhật',
 			'libraries.sortLabels.releaseDate' => 'Ngày phát hành',
-			'libraries.sortLabels.rating' => 'Rating',
-			'libraries.sortLabels.lastPlayed' => 'Last Played',
-			'libraries.sortLabels.playCount' => 'Play Count',
-			'libraries.sortLabels.random' => 'Random',
-			'libraries.sortLabels.dateShared' => 'Date Shared',
-			'libraries.sortLabels.latestEpisodeAirDate' => 'Latest Episode Air Date',
+			'libraries.sortLabels.rating' => 'Điểm đánh giá',
+			'libraries.sortLabels.lastPlayed' => 'Xem gần đây',
+			'libraries.sortLabels.playCount' => 'Lượt xem',
+			'libraries.sortLabels.random' => 'Ngẫu nhiên',
+			'libraries.sortLabels.dateShared' => 'Ngày chia sẻ',
+			'libraries.sortLabels.latestEpisodeAirDate' => 'Ngày phát sóng tập mới nhất',
+			'libraries.sortLabels.latestEpisodeAddedDate' => 'Ngày thêm tập mới nhất',
 			'about.title' => 'About',
 			'about.openSourceLicenses' => 'Open Source Licenses',
 			'about.versionLabel' => ({required Object version}) => 'Version ${version}',
@@ -2783,6 +2805,8 @@ extension on TranslationsVi {
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
@@ -2794,8 +2818,6 @@ extension on TranslationsVi {
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
 			'metadataEdit.latestEpisode' => 'Latest episode',

@@ -675,6 +675,16 @@
       "contentRating": "Phân loại nội dung",
       "tag": "Thẻ",
       "unwatched": "Chưa xem",
+      "unwatchedOnly": "Chỉ chưa xem",
+      "unwatchedShows": "Chưa xem",
+      "unwatchedEpisodes": "Tập chưa xem",
+      "unplayed": "Chưa xem",
+      "show_unwatched": "Phim chưa xem",
+      "episode_unwatched": "Tập chưa xem",
+      "show_unplayed": "Phim chưa xem",
+      "episode_unplayed": "Tập chưa xem",
+      "shows_unwatched": "Phim chưa xem",
+      "episodes_unwatched": "Tập chưa xem",
       "inProgress": "Đang xem",
       "audioLanguage": "Ngôn ngữ âm thanh",
       "subtitleLanguage": "Ngôn ngữ phụ đề",
@@ -695,7 +705,8 @@
       "playCount": "Lượt xem",
       "random": "Ngẫu nhiên",
       "dateShared": "Ngày chia sẻ",
-      "latestEpisodeAirDate": "Ngày phát sóng tập mới nhất"
+      "latestEpisodeAirDate": "Ngày phát sóng tập mới nhất",
+      "latestEpisodeAddedDate": "Ngày thêm tập mới nhất"
     }
   },
   "about": {

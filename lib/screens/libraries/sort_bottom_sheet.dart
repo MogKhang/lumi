@@ -53,6 +53,8 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
       'duration',
       'viewedAt',
       'resolution',
+      'random',
+      'unwatched',
     };
 
     _filteredSortOptions = widget.sortOptions.where((s) {
@@ -65,7 +67,9 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           title.contains('audience rating') ||
           title.contains('duration') ||
           title.contains('date viewed') ||
-          title.contains('resolution');
+          title.contains('resolution') ||
+          title.contains('random') ||
+          title.contains('unwatched');
           
       return !isExcluded;
     }).toList();
@@ -177,6 +181,8 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
         return t.libraries.sortLabels.dateShared;
       case 'episode.originallyAvailableAt':
         return t.libraries.sortLabels.latestEpisodeAirDate;
+      case 'episode.addedAt':
+        return t.libraries.sortLabels.latestEpisodeAddedDate;
       default:
         return sort.title;
     }
@@ -189,7 +195,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
       children: [
         BottomSheetHeader(
           title: t.libraries.sortBy,
-          action: widget.onClear != null
+          action: (widget.onClear != null && _currentSort != null)
               ? FocusableButton(
                   onPressed: _handleClear,
                   child: TextButton(onPressed: _handleClear, child: Text(t.common.clear)),

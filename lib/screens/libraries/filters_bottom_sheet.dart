@@ -212,9 +212,28 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
 
   String _getFilterTitle(MediaFilter filter) {
     final key = filter.filter;
+    final title = filter.title.toLowerCase();
+
+    // Handle unwatched variations first as they are most common and have many backend variants
+    if (key == 'unwatched' || key == 'unplayed' || title == 'unwatched' || title == 'unplayed') {
+      return t.libraries.filterCategories.unwatched;
+    }
+
     switch (key) {
-      case 'unwatched':
-        return t.libraries.filterCategories.unwatched;
+      case 'unwatchedOnly':
+        return t.libraries.filterCategories.unwatchedOnly;
+      case 'unwatchedShows':
+      case 'shows.unwatched':
+        return t.libraries.filterCategories.unwatchedShows;
+      case 'unwatchedEpisodes':
+      case 'episodes.unwatched':
+        return t.libraries.filterCategories.unwatchedEpisodes;
+      case 'show.unwatched':
+      case 'show.unplayed':
+        return t.libraries.filterCategories.show_unwatched;
+      case 'episode.unwatched':
+      case 'episode.unplayed':
+        return t.libraries.filterCategories.episode_unwatched;
       case 'inProgress':
         return t.libraries.filterCategories.inProgress;
       case 'audioLanguage':

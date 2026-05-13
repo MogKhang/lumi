@@ -3694,6 +3694,36 @@ class TranslationsLibrariesFilterCategoriesEn {
 	/// en: 'Unwatched'
 	String get unwatched => 'Unwatched';
 
+	/// en: 'Unwatched only'
+	String get unwatchedOnly => 'Unwatched only';
+
+	/// en: 'Unwatched Shows'
+	String get unwatchedShows => 'Unwatched Shows';
+
+	/// en: 'Unwatched Episodes'
+	String get unwatchedEpisodes => 'Unwatched Episodes';
+
+	/// en: 'Unplayed'
+	String get unplayed => 'Unplayed';
+
+	/// en: 'Unwatched Shows'
+	String get show_unwatched => 'Unwatched Shows';
+
+	/// en: 'Unwatched Episodes'
+	String get episode_unwatched => 'Unwatched Episodes';
+
+	/// en: 'Unwatched Shows'
+	String get show_unplayed => 'Unwatched Shows';
+
+	/// en: 'Unwatched Episodes'
+	String get episode_unplayed => 'Unwatched Episodes';
+
+	/// en: 'Unwatched Shows'
+	String get shows_unwatched => 'Unwatched Shows';
+
+	/// en: 'Unwatched Episodes'
+	String get episodes_unwatched => 'Unwatched Episodes';
+
 	/// en: 'In Progress'
 	String get inProgress => 'In Progress';
 
@@ -3759,6 +3789,9 @@ class TranslationsLibrariesSortLabelsEn {
 
 	/// en: 'Latest Episode Air Date'
 	String get latestEpisodeAirDate => 'Latest Episode Air Date';
+
+	/// en: 'Last Episode Date Added'
+	String get latestEpisodeAddedDate => 'Last Episode Date Added';
 }
 
 // Path: companionRemote.session
@@ -4689,6 +4722,16 @@ extension on Translations {
 			'libraries.filterCategories.contentRating' => 'Content Rating',
 			'libraries.filterCategories.tag' => 'Tag',
 			'libraries.filterCategories.unwatched' => 'Unwatched',
+			'libraries.filterCategories.unwatchedOnly' => 'Unwatched only',
+			'libraries.filterCategories.unwatchedShows' => 'Unwatched Shows',
+			'libraries.filterCategories.unwatchedEpisodes' => 'Unwatched Episodes',
+			'libraries.filterCategories.unplayed' => 'Unplayed',
+			'libraries.filterCategories.show_unwatched' => 'Unwatched Shows',
+			'libraries.filterCategories.episode_unwatched' => 'Unwatched Episodes',
+			'libraries.filterCategories.show_unplayed' => 'Unwatched Shows',
+			'libraries.filterCategories.episode_unplayed' => 'Unwatched Episodes',
+			'libraries.filterCategories.shows_unwatched' => 'Unwatched Shows',
+			'libraries.filterCategories.episodes_unwatched' => 'Unwatched Episodes',
 			'libraries.filterCategories.inProgress' => 'In Progress',
 			'libraries.filterCategories.audioLanguage' => 'Audio Language',
 			'libraries.filterCategories.subtitleLanguage' => 'Subtitle Language',
@@ -4708,6 +4751,7 @@ extension on Translations {
 			'libraries.sortLabels.random' => 'Random',
 			'libraries.sortLabels.dateShared' => 'Date Shared',
 			'libraries.sortLabels.latestEpisodeAirDate' => 'Latest Episode Air Date',
+			'libraries.sortLabels.latestEpisodeAddedDate' => 'Last Episode Date Added',
 			'about.title' => 'About',
 			'about.openSourceLicenses' => 'Open Source Licenses',
 			'about.versionLabel' => ({required Object version}) => 'Version ${version}',
@@ -5081,6 +5125,8 @@ extension on Translations {
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',
 			'metadataEdit.libraryDefault' => 'Library default',
@@ -5092,8 +5138,6 @@ extension on Translations {
 			'metadataEdit.keep' => 'Keep',
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.latestEpisode' => 'Latest episode',
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',

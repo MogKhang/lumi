@@ -674,6 +674,16 @@
       "contentRating": "Content Rating",
       "tag": "Tag",
       "unwatched": "Unwatched",
+      "unwatchedOnly": "Unwatched only",
+      "unwatchedShows": "Unwatched Shows",
+      "unwatchedEpisodes": "Unwatched Episodes",
+      "unplayed": "Unplayed",
+      "show_unwatched": "Unwatched Shows",
+      "episode_unwatched": "Unwatched Episodes",
+      "show_unplayed": "Unwatched Shows",
+      "episode_unplayed": "Unwatched Episodes",
+      "shows_unwatched": "Unwatched Shows",
+      "episodes_unwatched": "Unwatched Episodes",
       "inProgress": "In Progress",
       "audioLanguage": "Audio Language",
       "subtitleLanguage": "Subtitle Language",
@@ -694,7 +704,8 @@
       "playCount": "Play Count",
       "random": "Random",
       "dateShared": "Date Shared",
-      "latestEpisodeAirDate": "Latest Episode Air Date"
+      "latestEpisodeAirDate": "Latest Episode Air Date",
+      "latestEpisodeAddedDate": "Last Episode Date Added"
     }
   },
   "about": {
