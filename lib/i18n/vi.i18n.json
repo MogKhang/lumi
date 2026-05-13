@@ -716,6 +716,7 @@
     "copyLogs": "Copy Logs",
     "uploadLogs": "Upload Logs"
   },
+  "settings": {
   "licenses": {
     "relatedPackages": "Related Packages",
     "license": "License",
@@ -723,9 +724,11 @@
     "licensesCount": "${count} licenses"
   },
   "navigation": {
-    "movies": "Movies",
-    "shows": "TV Shows",
-    "liveTv": "Live TV"
+    "movies": "Phim lẻ",
+    "shows": "Phim bộ",
+    "liveTv": "Live TV",
+    "collections": "Bộ sưu tập",
+    "playlists": "Danh sách",
   },
   "liveTv": {
     "title": "Live TV",
