@@ -9,6 +9,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'settings_utils.dart';
+import '../../utils/app_logger.dart';
 
 import '../../focus/focus_memory_tracker.dart';
 import '../../focus/input_mode_tracker.dart';
@@ -235,10 +236,19 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
           currentValue: LocaleSettings.currentLocale,
         );
         if (value != null) {
-          await settings.SettingsService.instanceOrNull!.write(settings.SettingsService.appLocale, value);
-          await LocaleSettings.setLocale(value);
-          await initializeDateFormatting(value.languageCode, null);
-          if (context.mounted) _restartApp(context);
+          try {
+            await settings.SettingsService.instanceOrNull!.write(settings.SettingsService.appLocale, value);
+            await LocaleSettings.setLocale(value);
+            await initializeDateFormatting(value.languageCode, null);
+            
+            // Allow the UI to settle and show the new language for a moment 
+            // before resetting the navigation stack.
+            await Future.delayed(const Duration(milliseconds: 200));
+            
+            if (context.mounted) _restartApp(context);
+          } catch (e, st) {
+            appLogger.e('Failed to switch language', error: e, stackTrace: st);
+          }
         }
       },
     );

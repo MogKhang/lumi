@@ -50,7 +50,7 @@
     "search": "Tìm kiếm",
     "home": "Trang chủ",
     "back": "Back",
-    "settings": "Settings",
+    "settings": "Cài đặt",
     "mute": "Mute",
     "ok": "OK",
     "reconnect": "Reconnect",
@@ -84,7 +84,7 @@
     "checkFailed": "Failed to check for updates"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Cài đặt",
     "supportDeveloper": "Support Lumi",
     "supportDeveloperDescription": "Donate via Liberapay to fund development",
     "language": "Language",
@@ -716,7 +716,7 @@
     "copyLogs": "Copy Logs",
     "uploadLogs": "Upload Logs"
   },
-  "settings": {
+
   "licenses": {
     "relatedPackages": "Related Packages",
     "license": "License",
@@ -728,7 +728,7 @@
     "shows": "Phim bộ",
     "liveTv": "Live TV",
     "collections": "Bộ sưu tập",
-    "playlists": "Danh sách",
+    "playlists": "Danh sách"
   },
   "liveTv": {
     "title": "Live TV",

@@ -130,6 +130,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	// Translations
 	@override String get cancel => 'Hủy';
 	@override String get save => 'Save';
+	@override String get ok => 'OK';
 	@override String get close => 'Close';
 	@override String get clear => 'Thiết lập lại';
 	@override String get reset => 'Reset';
@@ -157,7 +158,6 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get back => 'Back';
 	@override String get settings => 'Settings';
 	@override String get mute => 'Mute';
-	@override String get ok => 'OK';
 	@override String get reconnect => 'Reconnect';
 	@override String get exit => 'Exit';
 	@override String get viewAll => 'View All';
@@ -785,7 +785,7 @@ class _TranslationsDiscoverVi extends TranslationsDiscoverEn {
 	@override String get switchProfile => 'Switch Profile';
 	@override String get noContentAvailable => 'No content available';
 	@override String get addMediaToLibraries => 'Add some media to your libraries';
-	@override String get continueWatching => 'Phim đang xem';
+	@override String get continueWatching => 'Phim Đang Xem';
 	@override String continueWatchingIn({required Object library}) => 'Continue Watching in ${library}';
 	@override String get nextUp => 'Next Up';
 	@override String nextUpIn({required Object library}) => 'Next Up in ${library}';
@@ -952,9 +952,11 @@ class _TranslationsNavigationVi extends TranslationsNavigationEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get movies => 'Movies';
-	@override String get shows => 'TV Shows';
+	@override String get movies => 'Phim lẻ';
+	@override String get shows => 'Phim bộ';
 	@override String get liveTv => 'Live TV';
+	@override String get collections => 'Bộ sưu tập';
+	@override String get playlists => 'Danh sách';
 }
 
 // Path: liveTv
@@ -1775,6 +1777,7 @@ extension on TranslationsVi {
 			'auth.quickConnectExpired' => 'Quick Connect code expired before approval. Please try again.',
 			'common.cancel' => 'Hủy',
 			'common.save' => 'Save',
+			'common.ok' => 'OK',
 			'common.close' => 'Close',
 			'common.clear' => 'Thiết lập lại',
 			'common.reset' => 'Reset',
@@ -1802,7 +1805,6 @@ extension on TranslationsVi {
 			'common.back' => 'Back',
 			'common.settings' => 'Settings',
 			'common.mute' => 'Mute',
-			'common.ok' => 'OK',
 			'common.reconnect' => 'Reconnect',
 			'common.exit' => 'Exit',
 			'common.viewAll' => 'View All',
@@ -2296,7 +2298,7 @@ extension on TranslationsVi {
 			'discover.switchProfile' => 'Switch Profile',
 			'discover.noContentAvailable' => 'No content available',
 			'discover.addMediaToLibraries' => 'Add some media to your libraries',
-			'discover.continueWatching' => 'Phim đang xem',
+			'discover.continueWatching' => 'Phim Đang Xem',
 			'discover.continueWatchingIn' => ({required Object library}) => 'Continue Watching in ${library}',
 			'discover.nextUp' => 'Next Up',
 			'discover.nextUpIn' => ({required Object library}) => 'Next Up in ${library}',
@@ -2411,9 +2413,11 @@ extension on TranslationsVi {
 			'licenses.license' => 'License',
 			'licenses.licenseNumber' => ({required Object number}) => 'License ${number}',
 			'licenses.licensesCount' => ({required Object count}) => '${count} licenses',
-			'navigation.movies' => 'Movies',
-			'navigation.shows' => 'TV Shows',
+			'navigation.movies' => 'Phim lẻ',
+			'navigation.shows' => 'Phim bộ',
 			'navigation.liveTv' => 'Live TV',
+			'navigation.collections' => 'Bộ sưu tập',
+			'navigation.playlists' => 'Danh sách',
 			'liveTv.title' => 'Live TV',
 			'liveTv.guide' => 'Guide',
 			'liveTv.noChannels' => 'No channels available',
@@ -2779,10 +2783,10 @@ extension on TranslationsVi {
 			'metadataEdit.afterAMonth' => 'After a month',
 			'metadataEdit.onNextRefresh' => 'On next refresh',
 			'metadataEdit.seasons' => 'Seasons',
-			'metadataEdit.show' => 'Show',
-			'metadataEdit.hide' => 'Hide',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.show' => 'Show',
+			'metadataEdit.hide' => 'Hide',
 			'metadataEdit.episodeOrdering' => 'Episode Ordering',
 			'metadataEdit.tmdbAiring' => 'The Movie Database (Aired)',
 			'metadataEdit.tvdbAiring' => 'TheTVDB (Aired)',

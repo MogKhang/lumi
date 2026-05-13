@@ -12,6 +12,7 @@ import 'package:shared_preferences/util/legacy_to_async_migration_util.dart';
 /// 3. Optionally override onInit() for post-initialization setup
 abstract class BaseSharedPreferencesService {
   static final Map<Type, BaseSharedPreferencesService> _instances = {};
+  static final Map<Type, Future<BaseSharedPreferencesService>> _initFutures = {};
   // Single shared cache across all subclasses so writes from one service are
   // visible to reads from another without per-instance cache divergence.
   static Future<SharedPreferencesWithCache>? _cacheFuture;
@@ -30,13 +31,17 @@ abstract class BaseSharedPreferencesService {
   ///   SharedPreferencesAsync-backed cache (idempotent across launches)
   /// - Calling onInit() hook for subclass-specific setup
   static Future<T> initializeInstance<T extends BaseSharedPreferencesService>(T Function() constructor) async {
-    if (_instances[T] == null) {
+    if (_instances[T] != null) return _instances[T] as T;
+
+    final future = _initFutures[T] ??= () async {
       final instance = constructor();
-      _instances[T] = instance;
       instance._cache = await sharedCache();
       await instance.onInit();
-    }
-    return _instances[T] as T;
+      _instances[T] = instance;
+      return instance;
+    }();
+
+    return (await future) as T;
   }
 
   /// Shared preferences cache used app-wide. Runs the legacy → async

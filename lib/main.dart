@@ -151,7 +151,7 @@ Future<void> _bootstrapApp() async {
   final settings = await SettingsService.getInstance();
   final savedLocale = settings.read(SettingsService.appLocale);
 
-  unawaited(LocaleSettings.setLocale(savedLocale));
+  await LocaleSettings.setLocale(savedLocale);
 
   await initializeDateFormatting(savedLocale.languageCode, null);
 
@@ -1003,6 +1003,8 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
   // Per-server connection status: serverId -> (name, connected?)
   final Map<String, (String name, bool? connected)> _serverStatus = {};
 
+  bool _isInitializing = false;
+
   @override
   void initState() {
     super.initState();
@@ -1014,16 +1016,37 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
   }
 
   Future<void> _loadSavedCredentials() async {
+    if (_isInitializing) return;
+    _isInitializing = true;
+
+    appLogger.d('Setup: _loadSavedCredentials starting');
     _setStatus(t.common.checkingNetwork);
+
+    // Check network connectivity first thing to avoid hanging on other initialization tasks
+    // that might try to hit the network (like Plex bootstrap or Sentry breadcrumbs).
+    appLogger.d('Setup: checking network connectivity');
+    bool hasNetwork;
+    try {
+      final connectivityResult = await Connectivity().checkConnectivity().timeout(
+        const Duration(seconds: 3),
+        onTimeout: () {
+          appLogger.w('Setup: network check timed out');
+          return [ConnectivityResult.other];
+        },
+      );
+      hasNetwork = !connectivityResult.contains(ConnectivityResult.none);
+      appLogger.d('Setup: network check done, hasNetwork=$hasNetwork');
+    } catch (e) {
+      appLogger.w('Setup: network check failed, assuming online: $e');
+      hasNetwork = true;
+    }
 
     final storage = await StorageService.getInstance();
     final registry = ServerRegistry(storage);
 
-    // Idempotent: brings legacy SharedPreferences state (plexToken,
-    // currentUserUUID, homeUsersCache) into the new ConnectionRegistry +
-    // ProfileRegistry tables. No-op on subsequent launches.
     if (mounted) {
       try {
+        appLogger.d('Setup: checking boot-time migration');
         final connRegistry = context.read<ConnectionRegistry>();
         final profileRegistry = context.read<ProfileRegistry>();
         final activeProfiles = context.read<ActiveProfileProvider>();
@@ -1033,39 +1056,23 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
           serverRegistry: registry,
           profileRegistry: profileRegistry,
         );
+        // bootstrap.run() is idempotent and handles its own internal migration flags.
         await bootstrap.run();
-        // Provider initialization starts before this screen runs the legacy
-        // migration. Reload after bootstrap so copied Plex Home users and the
-        // selected active profile are visible before setup decides binding is
-        // already settled and navigates to MainScreen.
+        
+        appLogger.d('Setup: active profiles reloading');
         await activeProfiles.reloadFromStorage();
+        appLogger.d('Setup: active profiles reloaded');
       } catch (e, st) {
-        appLogger.w('Boot-time migration failed', error: e, stackTrace: st);
+        appLogger.w('Boot-time migration/reload failed', error: e, stackTrace: st);
       }
     }
 
-    // Check network connectivity early to fast-path airplane mode.
-    // Timeout guards against connectivity_plus hanging on some Android TV devices after force-close.
-    bool hasNetwork;
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'Checking network connectivity', category: 'setup')));
-    try {
-      final connectivityResult = await Connectivity().checkConnectivity().timeout(
-        const Duration(seconds: 3),
-        onTimeout: () => [ConnectivityResult.other],
-      );
-      hasNetwork = !connectivityResult.contains(ConnectivityResult.none);
-    } catch (e) {
-      // connectivity_plus throws DBusServiceUnknownException on Linux without NetworkManager
-      hasNetwork = true;
-    }
-
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'Network check done: hasNetwork=$hasNetwork', category: 'setup')),
-    );
-
     _setStatus(t.common.loadingServers);
 
-    if (!mounted) return;
+    if (!mounted) {
+      _isInitializing = false;
+      return;
+    }
 
     // Snapshot ConnectionRegistry before we cross any awaits — Provider lookups
     // through `context` after async gaps trip the use_build_context_synchronously
@@ -1074,6 +1081,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     final allConnections = await connectionRegistry.list();
 
     if (allConnections.isEmpty) {
+      _isInitializing = false;
       if (mounted) {
         unawaited(Navigator.pushReplacement(context, fadeRoute(const AuthScreen())));
       }
@@ -1086,6 +1094,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     if (!hasNetwork) {
       _setStatus(t.common.startingOfflineMode);
       await context.read<DownloadProvider>().ensureInitialized();
+      _isInitializing = false;
       if (!mounted) return;
       unawaited(Navigator.pushReplacement(context, fadeRoute(const MainScreen(isOfflineMode: true))));
       return;
@@ -1129,7 +1138,10 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     // profile to bind. `initialize` is fire-and-forget at provider creation,
     // so awaiting here pulls control through the same future and triggers
     // the listener-driven rebind synchronously.
+    // We already reloaded it earlier during migration, but one final sync
+    // check here ensures the binder loop picks up the settled state.
     await activeProfile.reloadFromStorage();
+    _isInitializing = false;
     if (!mounted) return;
 
     if (activeProfile.active == null && activeProfile.profiles.isEmpty) {
