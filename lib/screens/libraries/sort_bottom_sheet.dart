@@ -156,6 +156,32 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     );
   }
 
+  String _getSortTitle(MediaSort sort) {
+    final key = sort.key;
+    switch (key) {
+      case 'titleSort':
+        return t.libraries.sortLabels.title;
+      case 'addedAt':
+        return t.libraries.sortLabels.dateAdded;
+      case 'originallyAvailableAt':
+        return t.libraries.sortLabels.releaseDate;
+      case 'rating':
+        return t.libraries.sortLabels.rating;
+      case 'lastViewedAt':
+        return t.libraries.sortLabels.lastPlayed;
+      case 'viewCount':
+        return t.libraries.sortLabels.playCount;
+      case 'random':
+        return t.libraries.sortLabels.random;
+      case 'taggingCreatedAt':
+        return t.libraries.sortLabels.dateShared;
+      case 'episode.originallyAvailableAt':
+        return t.libraries.sortLabels.latestEpisodeAirDate;
+      default:
+        return sort.title;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -207,7 +233,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                     focusNode: (widget.selectedSort?.key == sort.key || (widget.selectedSort == null && index == 0))
                         ? _initialFocusNode
                         : null,
-                    title: Text(sort.title),
+                    title: Text(_getSortTitle(sort)),
                     value: sort,
                     secondary: isSelected
                         ? Container(

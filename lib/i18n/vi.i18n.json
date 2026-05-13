@@ -690,12 +690,12 @@
       "title": "Tên phim",
       "dateAdded": "Ngày cập nhật",
       "releaseDate": "Ngày phát hành",
-      "rating": "Rating",
-      "lastPlayed": "Last Played",
-      "playCount": "Play Count",
-      "random": "Random",
-      "dateShared": "Date Shared",
-      "latestEpisodeAirDate": "Latest Episode Air Date"
+      "rating": "Điểm đánh giá",
+      "lastPlayed": "Xem gần đây",
+      "playCount": "Lượt xem",
+      "random": "Ngẫu nhiên",
+      "dateShared": "Ngày chia sẻ",
+      "latestEpisodeAirDate": "Ngày phát sóng tập mới nhất"
     }
   },
   "about": {
