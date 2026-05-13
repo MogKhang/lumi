@@ -94,8 +94,11 @@ class TranslationsAppEn {
 
 	// Translations
 
-	/// en: 'Plezy'
-	String get title => 'Plezy';
+	/// en: 'Lumi'
+	String get title => 'Lumi';
+
+	/// en: 'The best movie app in Vietnam'
+	String get tagline => 'The best movie app in Vietnam';
 }
 
 // Path: auth
@@ -358,8 +361,8 @@ class TranslationsSettingsEn {
 	/// en: 'Settings'
 	String get title => 'Settings';
 
-	/// en: 'Support Plezy'
-	String get supportDeveloper => 'Support Plezy';
+	/// en: 'Support Lumi'
+	String get supportDeveloper => 'Support Lumi';
 
 	/// en: 'Donate via Liberapay to fund development'
 	String get supportDeveloperDescription => 'Donate via Liberapay to fund development';
@@ -658,8 +661,8 @@ class TranslationsSettingsEn {
 	/// en: 'Could not import settings'
 	String get importSettingsFailed => 'Could not import settings';
 
-	/// en: 'This file isn't a valid Plezy settings export'
-	String get importSettingsInvalidFile => 'This file isn\'t a valid Plezy settings export';
+	/// en: 'This file isn't a valid Lumi settings export'
+	String get importSettingsInvalidFile => 'This file isn\'t a valid Lumi settings export';
 
 	/// en: 'Sign in before importing settings'
 	String get importSettingsNoUser => 'Sign in before importing settings';
@@ -871,8 +874,8 @@ class TranslationsSettingsEn {
 	/// en: 'Start in fullscreen'
 	String get startInFullscreen => 'Start in fullscreen';
 
-	/// en: 'Open Plezy in fullscreen mode at launch'
-	String get startInFullscreenDescription => 'Open Plezy in fullscreen mode at launch';
+	/// en: 'Open Lumi in fullscreen mode at launch'
+	String get startInFullscreenDescription => 'Open Lumi in fullscreen mode at launch';
 
 	/// en: 'Auto-Hide Performance Overlay'
 	String get autoHidePerformanceOverlay => 'Auto-Hide Performance Overlay';
@@ -1628,8 +1631,8 @@ class TranslationsProfilesEn {
 
 	// Translations
 
-	/// en: 'Add Plezy profile'
-	String get addPlezyProfile => 'Add Plezy profile';
+	/// en: 'Add Lumi profile'
+	String get addLumiProfile => 'Add Lumi profile';
 
 	/// en: 'Switching profile…'
 	String get switchingProfile => 'Switching profile…';
@@ -3353,8 +3356,8 @@ class TranslationsTraktEn {
 	/// en: 'Disconnect Trakt account?'
 	String get disconnectConfirm => 'Disconnect Trakt account?';
 
-	/// en: 'Plezy will stop sending playback events to Trakt. You can reconnect at any time.'
-	String get disconnectConfirmBody => 'Plezy will stop sending playback events to Trakt. You can reconnect at any time.';
+	/// en: 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.'
+	String get disconnectConfirmBody => 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.';
 
 	/// en: 'Real-time scrobbling'
 	String get scrobble => 'Real-time scrobbling';
@@ -3365,8 +3368,8 @@ class TranslationsTraktEn {
 	/// en: 'Sync watched status'
 	String get watchedSync => 'Sync watched status';
 
-	/// en: 'When you mark items watched in Plezy, mark them on Trakt.'
-	String get watchedSyncDescription => 'When you mark items watched in Plezy, mark them on Trakt.';
+	/// en: 'When you mark items watched in Lumi, mark them on Trakt.'
+	String get watchedSyncDescription => 'When you mark items watched in Lumi, mark them on Trakt.';
 }
 
 // Path: trackers
@@ -3398,8 +3401,8 @@ class TranslationsTrackersEn {
 	/// en: 'Disconnect ${service}?'
 	String disconnectConfirm({required Object service}) => 'Disconnect ${service}?';
 
-	/// en: 'Plezy will stop updating your ${service} list. You can reconnect at any time.'
-	String disconnectConfirmBody({required Object service}) => 'Plezy will stop updating your ${service} list. You can reconnect at any time.';
+	/// en: 'Lumi will stop updating your ${service} list. You can reconnect at any time.'
+	String disconnectConfirmBody({required Object service}) => 'Lumi will stop updating your ${service} list. You can reconnect at any time.';
 
 	/// en: 'Couldn't connect to ${service}. Try again.'
 	String connectFailed({required Object service}) => 'Couldn\'t connect to ${service}. Try again.';
@@ -3601,8 +3604,8 @@ class TranslationsVideoControlsPipErrorsEn {
 	/// en: 'Requires iOS 15.0 or newer'
 	String get iosVersion => 'Requires iOS 15.0 or newer';
 
-	/// en: 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Plezy > Picture-in-picture'
-	String get permissionDisabled => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Plezy > Picture-in-picture';
+	/// en: 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Lumi > Picture-in-picture'
+	String get permissionDisabled => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Lumi > Picture-in-picture';
 
 	/// en: 'Device doesn't support picture-in-picture mode'
 	String get notSupported => 'Device doesn\'t support picture-in-picture mode';
@@ -3778,8 +3781,8 @@ class TranslationsCompanionRemotePairingEn {
 
 	// Translations
 
-	/// en: 'Devices on your network running Plezy with the same Plex account will appear automatically'
-	String get discoveryDescription => 'Devices on your network running Plezy with the same Plex account will appear automatically';
+	/// en: 'Devices on your network running Lumi with the same Plex account will appear automatically'
+	String get discoveryDescription => 'Devices on your network running Lumi with the same Plex account will appear automatically';
 
 	/// en: '192.168.1.100:48632'
 	String get hostAddressHint => '192.168.1.100:48632';
@@ -3793,8 +3796,8 @@ class TranslationsCompanionRemotePairingEn {
 	/// en: 'No devices found on your network'
 	String get noDevicesFound => 'No devices found on your network';
 
-	/// en: 'Make sure Plezy is open on your desktop and both devices are on the same WiFi network'
-	String get noDevicesHint => 'Make sure Plezy is open on your desktop and both devices are on the same WiFi network';
+	/// en: 'Make sure Lumi is open on your desktop and both devices are on the same WiFi network'
+	String get noDevicesHint => 'Make sure Lumi is open on your desktop and both devices are on the same WiFi network';
 
 	/// en: 'Available Devices'
 	String get availableDevices => 'Available Devices';
@@ -3814,8 +3817,8 @@ class TranslationsCompanionRemotePairingEn {
 	/// en: 'Connection timed out. Make sure both devices are on the same network.'
 	String get connectionTimedOut => 'Connection timed out. Make sure both devices are on the same network.';
 
-	/// en: 'Could not find the device. Make sure Plezy is running on the host.'
-	String get sessionNotFound => 'Could not find the device. Make sure Plezy is running on the host.';
+	/// en: 'Could not find the device. Make sure Lumi is running on the host.'
+	String get sessionNotFound => 'Could not find the device. Make sure Lumi is running on the host.';
 
 	/// en: 'Authentication failed. Make sure both devices are on the same Plex account.'
 	String get authFailed => 'Authentication failed. Make sure both devices are on the same Plex account.';
@@ -3940,8 +3943,8 @@ class TranslationsTrackersDeviceCodeEn {
 
 	// Translations
 
-	/// en: 'Activate Plezy on ${service}'
-	String title({required Object service}) => 'Activate Plezy on ${service}';
+	/// en: 'Activate Lumi on ${service}'
+	String title({required Object service}) => 'Activate Lumi on ${service}';
 
 	/// en: 'Visit ${url} and enter this code:'
 	String body({required Object url}) => 'Visit ${url} and enter this code:';
@@ -4030,7 +4033,8 @@ class TranslationsTrackersLibraryFilterEn {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'app.title' => 'Plezy',
+			'app.title' => 'Lumi',
+			'app.tagline' => 'The best movie app in Vietnam',
 			'auth.signIn' => 'Sign in',
 			'auth.signInWithPlex' => 'Sign in with Plex',
 			'auth.showQRCode' => 'Show QR Code',
@@ -4103,7 +4107,7 @@ extension on Translations {
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
 			'settings.title' => 'Settings',
-			'settings.supportDeveloper' => 'Support Plezy',
+			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
 			'settings.language' => 'Language',
 			'settings.theme' => 'Theme',
@@ -4203,7 +4207,7 @@ extension on Translations {
 			'settings.importSettingsConfirm' => 'This will replace your current settings. Continue?',
 			'settings.importSettingsSuccess' => 'Settings imported',
 			'settings.importSettingsFailed' => 'Could not import settings',
-			'settings.importSettingsInvalidFile' => 'This file isn\'t a valid Plezy settings export',
+			'settings.importSettingsInvalidFile' => 'This file isn\'t a valid Lumi settings export',
 			'settings.importSettingsNoUser' => 'Sign in before importing settings',
 			'settings.shortcutsReset' => 'Shortcuts reset to defaults',
 			'settings.about' => 'About',
@@ -4274,7 +4278,7 @@ extension on Translations {
 			'settings.forceTvMode' => 'Force TV mode',
 			'settings.forceTvModeDescription' => 'Use the TV layout regardless of auto-detection. Useful on Android TV devices that don\'t report the leanback feature. Restarts the app on change.',
 			'settings.startInFullscreen' => 'Start in fullscreen',
-			'settings.startInFullscreenDescription' => 'Open Plezy in fullscreen mode at launch',
+			'settings.startInFullscreenDescription' => 'Open Lumi in fullscreen mode at launch',
 			'settings.autoHidePerformanceOverlay' => 'Auto-Hide Performance Overlay',
 			'settings.autoHidePerformanceOverlayDescription' => 'Fade the performance overlay with the playback controls',
 			'settings.showNavBarLabels' => 'Show Navigation Bar Labels',
@@ -4427,7 +4431,7 @@ extension on Translations {
 			'videoControls.pipFailed' => 'Picture-in-picture failed to start',
 			'videoControls.pipErrors.androidVersion' => 'Requires Android 8.0 or newer',
 			'videoControls.pipErrors.iosVersion' => 'Requires iOS 15.0 or newer',
-			'videoControls.pipErrors.permissionDisabled' => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Plezy > Picture-in-picture',
+			'videoControls.pipErrors.permissionDisabled' => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Lumi > Picture-in-picture',
 			'videoControls.pipErrors.notSupported' => 'Device doesn\'t support picture-in-picture mode',
 			'videoControls.pipErrors.voSwitchFailed' => 'Failed to switch video output for picture-in-picture',
 			'videoControls.pipErrors.failed' => 'Picture-in-picture failed to start',
@@ -4514,7 +4518,7 @@ extension on Translations {
 			'mpvConfig.confirmDeletePreset' => 'Are you sure you want to delete this preset?',
 			'mpvConfig.configPlaceholder' => 'gpu-api=vulkan\nhwdec=auto\n# comment',
 			'dialog.confirmAction' => 'Confirm Action',
-			'profiles.addPlezyProfile' => 'Add Plezy profile',
+			'profiles.addLumiProfile' => 'Add Lumi profile',
 			'profiles.switchingProfile' => 'Switching profile…',
 			'profiles.deleteThisProfileTitle' => 'Delete this profile?',
 			'profiles.deleteThisProfileMessage' => ({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.',
@@ -4541,9 +4545,9 @@ extension on Translations {
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
 			'profiles.add' => 'Add',
-			'profiles.deleteProfileButton' => 'Delete profile',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.deleteProfileButton' => 'Delete profile',
 			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
 			'profiles.plexHomeAccount' => 'Plex Home account',
 			'profiles.connectionDefault' => 'Default',
@@ -4937,19 +4941,19 @@ extension on Translations {
 			'companionRemote.session.startServer' => 'Start Server',
 			'companionRemote.session.stopServer' => 'Stop Server',
 			'companionRemote.session.minimize' => 'Minimize',
-			'companionRemote.pairing.discoveryDescription' => 'Devices on your network running Plezy with the same Plex account will appear automatically',
+			'companionRemote.pairing.discoveryDescription' => 'Devices on your network running Lumi with the same Plex account will appear automatically',
 			'companionRemote.pairing.hostAddressHint' => '192.168.1.100:48632',
 			'companionRemote.pairing.connecting' => 'Connecting...',
 			'companionRemote.pairing.searchingForDevices' => 'Looking for devices...',
 			'companionRemote.pairing.noDevicesFound' => 'No devices found on your network',
-			'companionRemote.pairing.noDevicesHint' => 'Make sure Plezy is open on your desktop and both devices are on the same WiFi network',
+			'companionRemote.pairing.noDevicesHint' => 'Make sure Lumi is open on your desktop and both devices are on the same WiFi network',
 			'companionRemote.pairing.availableDevices' => 'Available Devices',
 			'companionRemote.pairing.manualConnection' => 'Manual Connection',
 			'companionRemote.pairing.cryptoInitFailed' => 'Could not initialize secure connection. Make sure you are signed in to a Plex account.',
 			'companionRemote.pairing.validationHostRequired' => 'Please enter host address',
 			'companionRemote.pairing.validationHostFormat' => 'Format must be IP:port (e.g., 192.168.1.100:48632)',
 			'companionRemote.pairing.connectionTimedOut' => 'Connection timed out. Make sure both devices are on the same network.',
-			'companionRemote.pairing.sessionNotFound' => 'Could not find the device. Make sure Plezy is running on the host.',
+			'companionRemote.pairing.sessionNotFound' => 'Could not find the device. Make sure Lumi is running on the host.',
 			'companionRemote.pairing.authFailed' => 'Authentication failed. Make sure both devices are on the same Plex account.',
 			'companionRemote.pairing.failedToConnect' => ({required Object error}) => 'Failed to connect: ${error}',
 			'companionRemote.remote.disconnectConfirm' => 'Do you want to disconnect from the remote session?',
@@ -5055,9 +5059,9 @@ extension on Translations {
 			'metadataEdit.seasons' => 'Seasons',
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',
-			'metadataEdit.episodeOrdering' => 'Episode Ordering',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.episodeOrdering' => 'Episode Ordering',
 			'metadataEdit.tmdbAiring' => 'The Movie Database (Aired)',
 			'metadataEdit.tvdbAiring' => 'TheTVDB (Aired)',
 			'metadataEdit.tvdbAbsolute' => 'TheTVDB (Absolute)',
@@ -5099,11 +5103,11 @@ extension on Translations {
 			'trakt.connected' => 'Connected',
 			'trakt.connectedAs' => ({required Object username}) => 'Connected as @${username}',
 			'trakt.disconnectConfirm' => 'Disconnect Trakt account?',
-			'trakt.disconnectConfirmBody' => 'Plezy will stop sending playback events to Trakt. You can reconnect at any time.',
+			'trakt.disconnectConfirmBody' => 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.',
 			'trakt.scrobble' => 'Real-time scrobbling',
 			'trakt.scrobbleDescription' => 'Send play, pause, and stop events to Trakt during playback.',
 			'trakt.watchedSync' => 'Sync watched status',
-			'trakt.watchedSyncDescription' => 'When you mark items watched in Plezy, mark them on Trakt.',
+			'trakt.watchedSyncDescription' => 'When you mark items watched in Lumi, mark them on Trakt.',
 			'trackers.title' => 'Trackers',
 			'trackers.hubSubtitle' => 'Keep your watch progress in sync with Trakt and other services.',
 			'trackers.notConnected' => 'Not connected',
@@ -5111,12 +5115,12 @@ extension on Translations {
 			'trackers.scrobble' => 'Track progress automatically',
 			'trackers.scrobbleDescription' => 'Update your list when you finish an episode or movie.',
 			'trackers.disconnectConfirm' => ({required Object service}) => 'Disconnect ${service}?',
-			'trackers.disconnectConfirmBody' => ({required Object service}) => 'Plezy will stop updating your ${service} list. You can reconnect at any time.',
+			'trackers.disconnectConfirmBody' => ({required Object service}) => 'Lumi will stop updating your ${service} list. You can reconnect at any time.',
 			'trackers.connectFailed' => ({required Object service}) => 'Couldn\'t connect to ${service}. Try again.',
 			'trackers.services.mal' => 'MyAnimeList',
 			'trackers.services.anilist' => 'AniList',
 			'trackers.services.simkl' => 'Simkl',
-			'trackers.deviceCode.title' => ({required Object service}) => 'Activate Plezy on ${service}',
+			'trackers.deviceCode.title' => ({required Object service}) => 'Activate Lumi on ${service}',
 			'trackers.deviceCode.body' => ({required Object url}) => 'Visit ${url} and enter this code:',
 			'trackers.deviceCode.openToActivate' => ({required Object service}) => 'Open ${service} to activate',
 			'trackers.deviceCode.waitingForAuthorization' => 'Waiting for authorization…',

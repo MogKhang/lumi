@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Plezy"
+    "title": "Lumi",
+    "tagline": "The best movie app in Vietnam"
   },
   "auth": {
     "signIn": "Sign in",
@@ -83,7 +84,7 @@
   },
   "settings": {
     "title": "Settings",
-    "supportDeveloper": "Support Plezy",
+    "supportDeveloper": "Support Lumi",
     "supportDeveloperDescription": "Donate via Liberapay to fund development",
     "language": "Language",
     "theme": "Theme",
@@ -183,7 +184,7 @@
     "importSettingsConfirm": "This will replace your current settings. Continue?",
     "importSettingsSuccess": "Settings imported",
     "importSettingsFailed": "Could not import settings",
-    "importSettingsInvalidFile": "This file isn't a valid Plezy settings export",
+    "importSettingsInvalidFile": "This file isn't a valid Lumi settings export",
     "importSettingsNoUser": "Sign in before importing settings",
     "shortcutsReset": "Shortcuts reset to defaults",
     "about": "About",
@@ -254,7 +255,7 @@
     "forceTvMode": "Force TV mode",
     "forceTvModeDescription": "Use the TV layout regardless of auto-detection. Useful on Android TV devices that don't report the leanback feature. Restarts the app on change.",
     "startInFullscreen": "Start in fullscreen",
-    "startInFullscreenDescription": "Open Plezy in fullscreen mode at launch",
+    "startInFullscreenDescription": "Open Lumi in fullscreen mode at launch",
     "autoHidePerformanceOverlay": "Auto-Hide Performance Overlay",
     "autoHidePerformanceOverlayDescription": "Fade the performance overlay with the playback controls",
     "showNavBarLabels": "Show Navigation Bar Labels",
@@ -424,7 +425,7 @@
     "pipErrors": {
       "androidVersion": "Requires Android 8.0 or newer",
       "iosVersion": "Requires iOS 15.0 or newer",
-      "permissionDisabled": "Picture-in-picture permission is disabled. Enable it in Settings > Apps > Plezy > Picture-in-picture",
+      "permissionDisabled": "Picture-in-picture permission is disabled. Enable it in Settings > Apps > Lumi > Picture-in-picture",
       "notSupported": "Device doesn't support picture-in-picture mode",
       "voSwitchFailed": "Failed to switch video output for picture-in-picture",
       "failed": "Picture-in-picture failed to start",
@@ -524,7 +525,7 @@
     "confirmAction": "Confirm Action"
   },
   "profiles": {
-    "addPlezyProfile": "Add Plezy profile",
+    "addLumiProfile": "Add Lumi profile",
     "switchingProfile": "Switching profile…",
     "deleteThisProfileTitle": "Delete this profile?",
     "deleteThisProfileMessage": "${displayName} will be removed. Connections themselves are not affected.",
@@ -990,19 +991,19 @@
       "minimize": "Minimize"
     },
     "pairing": {
-      "discoveryDescription": "Devices on your network running Plezy with the same Plex account will appear automatically",
+      "discoveryDescription": "Devices on your network running Lumi with the same Plex account will appear automatically",
       "hostAddressHint": "192.168.1.100:48632",
       "connecting": "Connecting...",
       "searchingForDevices": "Looking for devices...",
       "noDevicesFound": "No devices found on your network",
-      "noDevicesHint": "Make sure Plezy is open on your desktop and both devices are on the same WiFi network",
+      "noDevicesHint": "Make sure Lumi is open on your desktop and both devices are on the same WiFi network",
       "availableDevices": "Available Devices",
       "manualConnection": "Manual Connection",
       "cryptoInitFailed": "Could not initialize secure connection. Make sure you are signed in to a Plex account.",
       "validationHostRequired": "Please enter host address",
       "validationHostFormat": "Format must be IP:port (e.g., 192.168.1.100:48632)",
       "connectionTimedOut": "Connection timed out. Make sure both devices are on the same network.",
-      "sessionNotFound": "Could not find the device. Make sure Plezy is running on the host.",
+      "sessionNotFound": "Could not find the device. Make sure Lumi is running on the host.",
       "authFailed": "Authentication failed. Make sure both devices are on the same Plex account.",
       "failedToConnect": "Failed to connect: ${error}"
     },
@@ -1165,11 +1166,11 @@
     "connected": "Connected",
     "connectedAs": "Connected as @${username}",
     "disconnectConfirm": "Disconnect Trakt account?",
-    "disconnectConfirmBody": "Plezy will stop sending playback events to Trakt. You can reconnect at any time.",
+    "disconnectConfirmBody": "Lumi will stop sending playback events to Trakt. You can reconnect at any time.",
     "scrobble": "Real-time scrobbling",
     "scrobbleDescription": "Send play, pause, and stop events to Trakt during playback.",
     "watchedSync": "Sync watched status",
-    "watchedSyncDescription": "When you mark items watched in Plezy, mark them on Trakt."
+    "watchedSyncDescription": "When you mark items watched in Lumi, mark them on Trakt."
   },
   "trackers": {
     "title": "Trackers",
@@ -1179,7 +1180,7 @@
     "scrobble": "Track progress automatically",
     "scrobbleDescription": "Update your list when you finish an episode or movie.",
     "disconnectConfirm": "Disconnect ${service}?",
-    "disconnectConfirmBody": "Plezy will stop updating your ${service} list. You can reconnect at any time.",
+    "disconnectConfirmBody": "Lumi will stop updating your ${service} list. You can reconnect at any time.",
     "connectFailed": "Couldn't connect to ${service}. Try again.",
     "services": {
       "mal": "MyAnimeList",
@@ -1187,7 +1188,7 @@
       "simkl": "Simkl"
     },
     "deviceCode": {
-      "title": "Activate Plezy on ${service}",
+      "title": "Activate Lumi on ${service}",
       "body": "Visit ${url} and enter this code:",
       "openToActivate": "Open ${service} to activate",
       "waitingForAuthorization": "Waiting for authorization…",

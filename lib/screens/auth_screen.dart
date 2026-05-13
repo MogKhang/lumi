@@ -27,7 +27,7 @@ import 'auth/plex_pin_auth_flow.dart';
 import 'main_screen.dart';
 import 'profile/profile_switch_screen.dart';
 import 'select_server_screen.dart';
-import 'settings/add_jellyfin_screen.dart';
+
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -206,14 +206,7 @@ class _AuthScreenState extends State<AuthScreen> {
     _showDebugTokenDialog();
   }
 
-  Future<void> _connectToJellyfin() async {
-    final added = await Navigator.push<bool>(context, MaterialPageRoute(builder: (_) => const AddJellyfinScreen()));
-    if (!mounted || added != true) return;
-    // The connection persisted and the manager registered the client; move
-    // straight to the main screen. [MainScreen] reads the active client
-    // from the server provider, so no client argument is needed here.
-    unawaited(Navigator.pushReplacement(context, fadeRoute(const MainScreen())));
-  }
+
 
   void _showDebugTokenDialog() {
     showDialog<void>(
@@ -248,9 +241,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           children: [
                             Image.asset('assets/lumi-text.png', width: 200),
                             const SizedBox(height: 16),
-                            const Text(
-                              'App coi phim dỏm nhất Việt Nam',
-                              style: TextStyle(
+                            Text(
+                              t.app.tagline,
+                              style: const TextStyle(
                                 fontFamily: 'Lexend',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
@@ -282,9 +275,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       children: [
                         Center(child: Image.asset('assets/lumi-text.png', width: 150)),
                         const SizedBox(height: 16),
-                        const Text(
-                          'App coi phim dỏm nhất Việt Nam',
-                          style: TextStyle(
+                        Text(
+                          t.app.tagline,
+                          style: const TextStyle(
                             fontFamily: 'Lexend',
                             fontWeight: FontWeight.w500,
                             fontSize: 14,

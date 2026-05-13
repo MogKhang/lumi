@@ -9,7 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'connection/connection.dart';
 import 'connection/connection_bootstrap.dart';
@@ -128,8 +128,8 @@ Future<void> main() async {
     await SentryFlutter.init((options) {
       options.dsn = 'https://6a1a6ef8c72140099b2798973c1bfb2f@bugs.plezy.app/1';
       options.release = gitCommit.isNotEmpty
-          ? 'plezy@${gitCommit.substring(0, 7)}'
-          : 'plezy@${packageInfo.version}+${packageInfo.buildNumber}';
+          ? 'lumi@${gitCommit.substring(0, 7)}'
+          : 'lumi@${packageInfo.version}+${packageInfo.buildNumber}';
       if (_sentryEnvironment.isNotEmpty) options.environment = _sentryEnvironment;
       options.tracesSampleRate = 0;
       options.attachStacktrace = true;
@@ -200,7 +200,7 @@ Future<void> _bootstrapApp() async {
   if (Platform.isAndroid) {
     renderer = ' [${await const MethodChannel('com.plezy/theme').invokeMethod<String>('getRenderer')}]';
   }
-  appLogger.i('Plezy v${packageInfo.version}+${packageInfo.buildNumber}$commitSuffix$renderer');
+  appLogger.i('Lumi v${packageInfo.version}+${packageInfo.buildNumber}$commitSuffix$renderer');
 
   await DownloadStorageService.instance.initialize(settings);
 
@@ -1293,9 +1293,9 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
               children: [
                 Image.asset('assets/lumi-text.png', width: 150),
                 const SizedBox(height: 16),
-                const Text(
-                  'App coi phim dỏm nhất Việt Nam',
-                  style: TextStyle(
+                Text(
+                  t.app.tagline,
+                  style: const TextStyle(
                     fontFamily: 'Lexend',
                     fontWeight: FontWeight.w500,
                     fontSize: 14,

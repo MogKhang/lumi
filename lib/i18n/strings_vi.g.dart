@@ -92,7 +92,8 @@ class _TranslationsAppVi extends TranslationsAppEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Plezy';
+	@override String get title => 'Lumi';
+	@override String get tagline => 'App coi phim dỏm nhất Việt Nam';
 }
 
 // Path: auth
@@ -103,12 +104,12 @@ class _TranslationsAuthVi extends TranslationsAuthEn {
 
 	// Translations
 	@override String get signIn => 'Sign in';
-	@override String get signInWithPlex => 'Sign in with Plex';
-	@override String get showQRCode => 'Show QR Code';
+	@override String get signInWithPlex => 'Đăng nhập tài khoản Plex';
+	@override String get showQRCode => 'Quét mã QR';
 	@override String get authenticate => 'Authenticate';
-	@override String get authenticationTimeout => 'Authentication timed out. Please try again.';
-	@override String get scanQRToSignIn => 'Scan this QR code to sign in';
-	@override String get waitingForAuth => 'Waiting for authentication...\nPlease complete sign-in in your browser.';
+	@override String get authenticationTimeout => 'Phiên xác thực đã quá hạn. Hãy thử lại.';
+	@override String get scanQRToSignIn => 'Quét mã QR này để đăng nhập';
+	@override String get waitingForAuth => 'Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.';
 	@override String get useBrowser => 'Use browser';
 	@override String get or => 'or';
 	@override String get connectToJellyfin => 'Connect to Jellyfin';
@@ -116,7 +117,7 @@ class _TranslationsAuthVi extends TranslationsAuthEn {
 	@override String get quickConnectCode => 'Quick Connect code';
 	@override String get quickConnectInstructions => 'Open your Jellyfin server in a web browser, sign in, and choose Quick Connect from the user menu. Enter this code to approve sign-in.';
 	@override String get quickConnectWaiting => 'Waiting for approval…';
-	@override String get quickConnectCancel => 'Cancel';
+	@override String get quickConnectCancel => 'Hủy';
 	@override String get quickConnectExpired => 'Quick Connect code expired before approval. Please try again.';
 }
 
@@ -127,16 +128,16 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Cancel';
+	@override String get cancel => 'Hủy';
 	@override String get save => 'Save';
 	@override String get close => 'Close';
-	@override String get clear => 'Clear';
+	@override String get clear => 'Thiết lập lại';
 	@override String get reset => 'Reset';
 	@override String get later => 'Later';
 	@override String get submit => 'Submit';
 	@override String get confirm => 'Confirm';
-	@override String get retry => 'Retry';
-	@override String get logout => 'Logout';
+	@override String get retry => 'Thử lại';
+	@override String get logout => 'Đăng xuất';
 	@override String get unknown => 'Unknown';
 	@override String get refresh => 'Refresh';
 	@override String get yes => 'Yes';
@@ -151,8 +152,8 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get pause => 'Pause';
 	@override String get resume => 'Resume';
 	@override String get error => 'Error';
-	@override String get search => 'Search';
-	@override String get home => 'Home';
+	@override String get search => 'Tìm kiếm';
+	@override String get home => 'Trang chủ';
 	@override String get back => 'Back';
 	@override String get settings => 'Settings';
 	@override String get mute => 'Mute';
@@ -160,10 +161,10 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get reconnect => 'Reconnect';
 	@override String get exit => 'Exit';
 	@override String get viewAll => 'View All';
-	@override String get checkingNetwork => 'Checking network...';
+	@override String get checkingNetwork => 'Kiểm tra tín hiệu mạng...';
 	@override String get refreshingServers => 'Refreshing servers...';
 	@override String get loadingServers => 'Loading servers...';
-	@override String get connectingToServers => 'Connecting to servers...';
+	@override String get connectingToServers => 'Kiểm tra tín hiệu máy chủ...';
 	@override String get startingOfflineMode => 'Starting offline mode...';
 	@override String get loading => 'Loading...';
 	@override String get fullscreen => 'Fullscreen';
@@ -180,7 +181,7 @@ class _TranslationsScreensVi extends TranslationsScreensEn {
 
 	// Translations
 	@override String get licenses => 'Licenses';
-	@override String get switchProfile => 'Switch Profile';
+	@override String get switchProfile => 'Đổi hồ sơ';
 	@override String get subtitleStyling => 'Subtitle Styling';
 	@override String get mpvConfig => 'mpv.conf';
 	@override String get logs => 'Logs';
@@ -210,7 +211,7 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 
 	// Translations
 	@override String get title => 'Settings';
-	@override String get supportDeveloper => 'Support Plezy';
+	@override String get supportDeveloper => 'Support Lumi';
 	@override String get supportDeveloperDescription => 'Donate via Liberapay to fund development';
 	@override String get language => 'Language';
 	@override String get theme => 'Theme';
@@ -310,7 +311,7 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get importSettingsConfirm => 'This will replace your current settings. Continue?';
 	@override String get importSettingsSuccess => 'Settings imported';
 	@override String get importSettingsFailed => 'Could not import settings';
-	@override String get importSettingsInvalidFile => 'This file isn\'t a valid Plezy settings export';
+	@override String get importSettingsInvalidFile => 'This file isn\'t a valid Lumi settings export';
 	@override String get importSettingsNoUser => 'Sign in before importing settings';
 	@override String get shortcutsReset => 'Shortcuts reset to defaults';
 	@override String get about => 'About';
@@ -381,7 +382,7 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get forceTvMode => 'Force TV mode';
 	@override String get forceTvModeDescription => 'Use the TV layout regardless of auto-detection. Useful on Android TV devices that don\'t report the leanback feature. Restarts the app on change.';
 	@override String get startInFullscreen => 'Start in fullscreen';
-	@override String get startInFullscreenDescription => 'Open Plezy in fullscreen mode at launch';
+	@override String get startInFullscreenDescription => 'Open Lumi in fullscreen mode at launch';
 	@override String get autoHidePerformanceOverlay => 'Auto-Hide Performance Overlay';
 	@override String get autoHidePerformanceOverlayDescription => 'Fade the performance overlay with the playback controls';
 	@override String get showNavBarLabels => 'Show Navigation Bar Labels';
@@ -406,10 +407,10 @@ class _TranslationsSearchVi extends TranslationsSearchEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get hint => 'Search movies, shows, music...';
-	@override String get tryDifferentTerm => 'Try a different search term';
-	@override String get searchYourMedia => 'Search your media';
-	@override String get enterTitleActorOrKeyword => 'Enter a title, actor, or keyword';
+	@override String get hint => 'Tên của phim cần tìm kiếm...';
+	@override String get tryDifferentTerm => 'Thử lại với từ khóa khác';
+	@override String get searchYourMedia => 'Tìm kiếm phim';
+	@override String get enterTitleActorOrKeyword => 'Gõ từ khóa vào khung tìm kiếm';
 }
 
 // Path: hotkeys
@@ -637,7 +638,7 @@ class _TranslationsMessagesVi extends TranslationsMessagesEn {
 	@override String get noSeasonsFound => 'No seasons found';
 	@override String get noEpisodesFound => 'No episodes found in first season';
 	@override String get noEpisodesFoundGeneral => 'No episodes found';
-	@override String get noResultsFound => 'No results found';
+	@override String get noResultsFound => 'Không tìm thấy kết quả';
 	@override String sleepTimerSet({required Object label}) => 'Sleep timer set for ${label}';
 	@override String get noItemsAvailable => 'No items available';
 	@override String get failedToCreatePlayQueueNoItems => 'Failed to create play queue - no items';
@@ -712,8 +713,8 @@ class _TranslationsProfilesVi extends TranslationsProfilesEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get addPlezyProfile => 'Add Plezy profile';
-	@override String get switchingProfile => 'Switching profile…';
+	@override String get addLumiProfile => 'Thêm hồ sơ';
+	@override String get switchingProfile => 'Tải hồ sơ…';
 	@override String get deleteThisProfileTitle => 'Delete this profile?';
 	@override String deleteThisProfileMessage({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.';
 	@override String get active => 'Active';
@@ -784,7 +785,7 @@ class _TranslationsDiscoverVi extends TranslationsDiscoverEn {
 	@override String get switchProfile => 'Switch Profile';
 	@override String get noContentAvailable => 'No content available';
 	@override String get addMediaToLibraries => 'Add some media to your libraries';
-	@override String get continueWatching => 'Continue Watching';
+	@override String get continueWatching => 'Phim đang xem';
 	@override String continueWatchingIn({required Object library}) => 'Continue Watching in ${library}';
 	@override String get nextUp => 'Next Up';
 	@override String nextUpIn({required Object library}) => 'Next Up in ${library}';
@@ -818,7 +819,7 @@ class _TranslationsErrorsVi extends TranslationsErrorsEn {
 	@override String get pleaseEnterToken => 'Please enter a token';
 	@override String get invalidToken => 'Invalid token';
 	@override String failedToVerifyToken({required Object error}) => 'Failed to verify token: ${error}';
-	@override String failedToSwitchProfile({required Object displayName}) => 'Failed to switch to ${displayName}';
+	@override String failedToSwitchProfile({required Object displayName}) => '${displayName} đăng nhập thất bại';
 	@override String failedToDeleteProfile({required Object displayName}) => 'Failed to delete ${displayName}';
 	@override String get failedToRate => 'Couldn\'t update rating';
 }
@@ -855,8 +856,8 @@ class _TranslationsLibrariesVi extends TranslationsLibrariesEn {
 	@override String emptyTrashConfirm({required Object title}) => 'Are you sure you want to empty trash for "${title}"?';
 	@override String get manageLibraries => 'Manage Libraries';
 	@override String get sort => 'Sort';
-	@override String get sortBy => 'Sort By';
-	@override String get filters => 'Filters';
+	@override String get sortBy => 'Sắp xếp';
+	@override String get filters => 'Lọc phim';
 	@override String get confirmActionMessage => 'Are you sure you want to perform this action?';
 	@override String get showLibrary => 'Show library';
 	@override String get hideLibrary => 'Hide library';
@@ -898,11 +899,11 @@ class _TranslationsServerSelectionVi extends TranslationsServerSelectionEn {
 	@override String get allServerConnectionsFailed => 'Failed to connect to any servers. Please check your network and try again.';
 	@override String noServersFoundForAccount({required Object username, required Object email}) => 'No servers found for ${username} (${email})';
 	@override String failedToLoadServers({required Object error}) => 'Failed to load servers: ${error}';
-	@override String get selectServer => 'Select Server';
-	@override String get selectServerDescription => 'Choose which server you\'d like to use';
+	@override String get selectServer => 'Chọn máy chủ';
+	@override String get selectServerDescription => 'Chọn máy chủ kho phim mặc định';
 	@override String get noServersAvailable => 'No servers available';
-	@override String get online => 'Online';
-	@override String get offline => 'Offline';
+	@override String get online => 'Đang hoạt động';
+	@override String get offline => 'Mất tín hiệu';
 }
 
 // Path: hubDetail
@@ -1429,11 +1430,11 @@ class _TranslationsTraktVi extends TranslationsTraktEn {
 	@override String get connected => 'Connected';
 	@override String connectedAs({required Object username}) => 'Connected as @${username}';
 	@override String get disconnectConfirm => 'Disconnect Trakt account?';
-	@override String get disconnectConfirmBody => 'Plezy will stop sending playback events to Trakt. You can reconnect at any time.';
+	@override String get disconnectConfirmBody => 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.';
 	@override String get scrobble => 'Real-time scrobbling';
 	@override String get scrobbleDescription => 'Send play, pause, and stop events to Trakt during playback.';
 	@override String get watchedSync => 'Sync watched status';
-	@override String get watchedSyncDescription => 'When you mark items watched in Plezy, mark them on Trakt.';
+	@override String get watchedSyncDescription => 'When you mark items watched in Lumi, mark them on Trakt.';
 }
 
 // Path: trackers
@@ -1450,7 +1451,7 @@ class _TranslationsTrackersVi extends TranslationsTrackersEn {
 	@override String get scrobble => 'Track progress automatically';
 	@override String get scrobbleDescription => 'Update your list when you finish an episode or movie.';
 	@override String disconnectConfirm({required Object service}) => 'Disconnect ${service}?';
-	@override String disconnectConfirmBody({required Object service}) => 'Plezy will stop updating your ${service} list. You can reconnect at any time.';
+	@override String disconnectConfirmBody({required Object service}) => 'Lumi will stop updating your ${service} list. You can reconnect at any time.';
 	@override String connectFailed({required Object service}) => 'Couldn\'t connect to ${service}. Try again.';
 	@override late final _TranslationsTrackersServicesVi services = _TranslationsTrackersServicesVi._(_root);
 	@override late final _TranslationsTrackersDeviceCodeVi deviceCode = _TranslationsTrackersDeviceCodeVi._(_root);
@@ -1538,7 +1539,7 @@ class _TranslationsVideoControlsPipErrorsVi extends TranslationsVideoControlsPip
 	// Translations
 	@override String get androidVersion => 'Requires Android 8.0 or newer';
 	@override String get iosVersion => 'Requires iOS 15.0 or newer';
-	@override String get permissionDisabled => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Plezy > Picture-in-picture';
+	@override String get permissionDisabled => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Lumi > Picture-in-picture';
 	@override String get notSupported => 'Device doesn\'t support picture-in-picture mode';
 	@override String get voSwitchFailed => 'Failed to switch video output for picture-in-picture';
 	@override String get failed => 'Picture-in-picture failed to start';
@@ -1553,9 +1554,9 @@ class _TranslationsLibrariesTabsVi extends TranslationsLibrariesTabsEn {
 
 	// Translations
 	@override String get recommended => 'Recommended';
-	@override String get browse => 'Browse';
-	@override String get collections => 'Collections';
-	@override String get playlists => 'Playlists';
+	@override String get browse => 'Tất cả';
+	@override String get collections => 'Bộ sưu tập';
+	@override String get playlists => 'Danh sách';
 }
 
 // Path: libraries.groupings
@@ -1581,9 +1582,9 @@ class _TranslationsLibrariesFilterCategoriesVi extends TranslationsLibrariesFilt
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get genre => 'Genre';
-	@override String get year => 'Year';
-	@override String get contentRating => 'Content Rating';
+	@override String get genre => 'Thể loại';
+	@override String get year => 'Năm';
+	@override String get contentRating => 'Phân loại nội dung';
 	@override String get tag => 'Tag';
 }
 
@@ -1594,9 +1595,9 @@ class _TranslationsLibrariesSortLabelsVi extends TranslationsLibrariesSortLabels
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Title';
-	@override String get dateAdded => 'Date Added';
-	@override String get releaseDate => 'Release Date';
+	@override String get title => 'Tên phim';
+	@override String get dateAdded => 'Ngày cập nhật';
+	@override String get releaseDate => 'Ngày phát hành';
 	@override String get rating => 'Rating';
 	@override String get lastPlayed => 'Last Played';
 	@override String get playCount => 'Play Count';
@@ -1633,19 +1634,19 @@ class _TranslationsCompanionRemotePairingVi extends TranslationsCompanionRemoteP
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get discoveryDescription => 'Devices on your network running Plezy with the same Plex account will appear automatically';
+	@override String get discoveryDescription => 'Devices on your network running Lumi with the same Plex account will appear automatically';
 	@override String get hostAddressHint => '192.168.1.100:48632';
 	@override String get connecting => 'Connecting...';
 	@override String get searchingForDevices => 'Looking for devices...';
 	@override String get noDevicesFound => 'No devices found on your network';
-	@override String get noDevicesHint => 'Make sure Plezy is open on your desktop and both devices are on the same WiFi network';
+	@override String get noDevicesHint => 'Make sure Lumi is open on your desktop and both devices are on the same WiFi network';
 	@override String get availableDevices => 'Available Devices';
 	@override String get manualConnection => 'Manual Connection';
 	@override String get cryptoInitFailed => 'Could not initialize secure connection. Make sure you are signed in to a Plex account.';
 	@override String get validationHostRequired => 'Please enter host address';
 	@override String get validationHostFormat => 'Format must be IP:port (e.g., 192.168.1.100:48632)';
 	@override String get connectionTimedOut => 'Connection timed out. Make sure both devices are on the same network.';
-	@override String get sessionNotFound => 'Could not find the device. Make sure Plezy is running on the host.';
+	@override String get sessionNotFound => 'Could not find the device. Make sure Lumi is running on the host.';
 	@override String get authFailed => 'Authentication failed. Make sure both devices are on the same Plex account.';
 	@override String failedToConnect({required Object error}) => 'Failed to connect: ${error}';
 }
@@ -1670,7 +1671,7 @@ class _TranslationsCompanionRemoteRemoteVi extends TranslationsCompanionRemoteRe
 	@override String get tabLibraries => 'Libraries';
 	@override String get tabSearch => 'Search';
 	@override String get tabDownloads => 'Downloads';
-	@override String get tabSettings => 'Settings';
+	@override String get tabSettings => 'Cài đặt';
 	@override String get previous => 'Previous';
 	@override String get playPause => 'Play/Pause';
 	@override String get next => 'Next';
@@ -1705,7 +1706,7 @@ class _TranslationsTrackersDeviceCodeVi extends TranslationsTrackersDeviceCodeEn
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String title({required Object service}) => 'Activate Plezy on ${service}';
+	@override String title({required Object service}) => 'Activate Lumi on ${service}';
 	@override String body({required Object url}) => 'Visit ${url} and enter this code:';
 	@override String openToActivate({required Object service}) => 'Open ${service} to activate';
 	@override String get waitingForAuthorization => 'Waiting for authorization…';
@@ -1754,14 +1755,15 @@ class _TranslationsTrackersLibraryFilterVi extends TranslationsTrackersLibraryFi
 extension on TranslationsVi {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'app.title' => 'Plezy',
+			'app.title' => 'Lumi',
+			'app.tagline' => 'App coi phim dỏm nhất Việt Nam',
 			'auth.signIn' => 'Sign in',
-			'auth.signInWithPlex' => 'Sign in with Plex',
-			'auth.showQRCode' => 'Show QR Code',
+			'auth.signInWithPlex' => 'Đăng nhập tài khoản Plex',
+			'auth.showQRCode' => 'Quét mã QR',
 			'auth.authenticate' => 'Authenticate',
-			'auth.authenticationTimeout' => 'Authentication timed out. Please try again.',
-			'auth.scanQRToSignIn' => 'Scan this QR code to sign in',
-			'auth.waitingForAuth' => 'Waiting for authentication...\nPlease complete sign-in in your browser.',
+			'auth.authenticationTimeout' => 'Phiên xác thực đã quá hạn. Hãy thử lại.',
+			'auth.scanQRToSignIn' => 'Quét mã QR này để đăng nhập',
+			'auth.waitingForAuth' => 'Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.',
 			'auth.useBrowser' => 'Use browser',
 			'auth.or' => 'or',
 			'auth.connectToJellyfin' => 'Connect to Jellyfin',
@@ -1769,18 +1771,18 @@ extension on TranslationsVi {
 			'auth.quickConnectCode' => 'Quick Connect code',
 			'auth.quickConnectInstructions' => 'Open your Jellyfin server in a web browser, sign in, and choose Quick Connect from the user menu. Enter this code to approve sign-in.',
 			'auth.quickConnectWaiting' => 'Waiting for approval…',
-			'auth.quickConnectCancel' => 'Cancel',
+			'auth.quickConnectCancel' => 'Hủy',
 			'auth.quickConnectExpired' => 'Quick Connect code expired before approval. Please try again.',
-			'common.cancel' => 'Cancel',
+			'common.cancel' => 'Hủy',
 			'common.save' => 'Save',
 			'common.close' => 'Close',
-			'common.clear' => 'Clear',
+			'common.clear' => 'Thiết lập lại',
 			'common.reset' => 'Reset',
 			'common.later' => 'Later',
 			'common.submit' => 'Submit',
 			'common.confirm' => 'Confirm',
-			'common.retry' => 'Retry',
-			'common.logout' => 'Logout',
+			'common.retry' => 'Thử lại',
+			'common.logout' => 'Đăng xuất',
 			'common.unknown' => 'Unknown',
 			'common.refresh' => 'Refresh',
 			'common.yes' => 'Yes',
@@ -1795,8 +1797,8 @@ extension on TranslationsVi {
 			'common.pause' => 'Pause',
 			'common.resume' => 'Resume',
 			'common.error' => 'Error',
-			'common.search' => 'Search',
-			'common.home' => 'Home',
+			'common.search' => 'Tìm kiếm',
+			'common.home' => 'Trang chủ',
 			'common.back' => 'Back',
 			'common.settings' => 'Settings',
 			'common.mute' => 'Mute',
@@ -1804,10 +1806,10 @@ extension on TranslationsVi {
 			'common.reconnect' => 'Reconnect',
 			'common.exit' => 'Exit',
 			'common.viewAll' => 'View All',
-			'common.checkingNetwork' => 'Checking network...',
+			'common.checkingNetwork' => 'Kiểm tra tín hiệu mạng...',
 			'common.refreshingServers' => 'Refreshing servers...',
 			'common.loadingServers' => 'Loading servers...',
-			'common.connectingToServers' => 'Connecting to servers...',
+			'common.connectingToServers' => 'Kiểm tra tín hiệu máy chủ...',
 			'common.startingOfflineMode' => 'Starting offline mode...',
 			'common.loading' => 'Loading...',
 			'common.fullscreen' => 'Fullscreen',
@@ -1815,7 +1817,7 @@ extension on TranslationsVi {
 			'common.pressBackAgainToExit' => 'Press back again to exit',
 			'common.done' => 'Done',
 			'screens.licenses' => 'Licenses',
-			'screens.switchProfile' => 'Switch Profile',
+			'screens.switchProfile' => 'Đổi hồ sơ',
 			'screens.subtitleStyling' => 'Subtitle Styling',
 			'screens.mpvConfig' => 'mpv.conf',
 			'screens.logs' => 'Logs',
@@ -1827,7 +1829,7 @@ extension on TranslationsVi {
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
 			'settings.title' => 'Settings',
-			'settings.supportDeveloper' => 'Support Plezy',
+			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
 			'settings.language' => 'Language',
 			'settings.theme' => 'Theme',
@@ -1927,7 +1929,7 @@ extension on TranslationsVi {
 			'settings.importSettingsConfirm' => 'This will replace your current settings. Continue?',
 			'settings.importSettingsSuccess' => 'Settings imported',
 			'settings.importSettingsFailed' => 'Could not import settings',
-			'settings.importSettingsInvalidFile' => 'This file isn\'t a valid Plezy settings export',
+			'settings.importSettingsInvalidFile' => 'This file isn\'t a valid Lumi settings export',
 			'settings.importSettingsNoUser' => 'Sign in before importing settings',
 			'settings.shortcutsReset' => 'Shortcuts reset to defaults',
 			'settings.about' => 'About',
@@ -1998,7 +2000,7 @@ extension on TranslationsVi {
 			'settings.forceTvMode' => 'Force TV mode',
 			'settings.forceTvModeDescription' => 'Use the TV layout regardless of auto-detection. Useful on Android TV devices that don\'t report the leanback feature. Restarts the app on change.',
 			'settings.startInFullscreen' => 'Start in fullscreen',
-			'settings.startInFullscreenDescription' => 'Open Plezy in fullscreen mode at launch',
+			'settings.startInFullscreenDescription' => 'Open Lumi in fullscreen mode at launch',
 			'settings.autoHidePerformanceOverlay' => 'Auto-Hide Performance Overlay',
 			'settings.autoHidePerformanceOverlayDescription' => 'Fade the performance overlay with the playback controls',
 			'settings.showNavBarLabels' => 'Show Navigation Bar Labels',
@@ -2014,10 +2016,10 @@ extension on TranslationsVi {
 			'settings.subtitlesAndConfig' => 'Subtitles & Configuration',
 			'settings.seekAndTiming' => 'Seek & Timing',
 			'settings.behavior' => 'Behavior',
-			'search.hint' => 'Search movies, shows, music...',
-			'search.tryDifferentTerm' => 'Try a different search term',
-			'search.searchYourMedia' => 'Search your media',
-			'search.enterTitleActorOrKeyword' => 'Enter a title, actor, or keyword',
+			'search.hint' => 'Tên của phim cần tìm kiếm...',
+			'search.tryDifferentTerm' => 'Thử lại với từ khóa khác',
+			'search.searchYourMedia' => 'Tìm kiếm phim',
+			'search.enterTitleActorOrKeyword' => 'Gõ từ khóa vào khung tìm kiếm',
 			'hotkeys.setShortcutFor' => ({required Object actionName}) => 'Set Shortcut for ${actionName}',
 			'hotkeys.clearShortcut' => 'Clear shortcut',
 			'hotkeys.actions.playPause' => 'Play/Pause',
@@ -2151,7 +2153,7 @@ extension on TranslationsVi {
 			'videoControls.pipFailed' => 'Picture-in-picture failed to start',
 			'videoControls.pipErrors.androidVersion' => 'Requires Android 8.0 or newer',
 			'videoControls.pipErrors.iosVersion' => 'Requires iOS 15.0 or newer',
-			'videoControls.pipErrors.permissionDisabled' => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Plezy > Picture-in-picture',
+			'videoControls.pipErrors.permissionDisabled' => 'Picture-in-picture permission is disabled. Enable it in Settings > Apps > Lumi > Picture-in-picture',
 			'videoControls.pipErrors.notSupported' => 'Device doesn\'t support picture-in-picture mode',
 			'videoControls.pipErrors.voSwitchFailed' => 'Failed to switch video output for picture-in-picture',
 			'videoControls.pipErrors.failed' => 'Picture-in-picture failed to start',
@@ -2199,7 +2201,7 @@ extension on TranslationsVi {
 			'messages.noSeasonsFound' => 'No seasons found',
 			'messages.noEpisodesFound' => 'No episodes found in first season',
 			'messages.noEpisodesFoundGeneral' => 'No episodes found',
-			'messages.noResultsFound' => 'No results found',
+			'messages.noResultsFound' => 'Không tìm thấy kết quả',
 			'messages.sleepTimerSet' => ({required Object label}) => 'Sleep timer set for ${label}',
 			'messages.noItemsAvailable' => 'No items available',
 			'messages.failedToCreatePlayQueueNoItems' => 'Failed to create play queue - no items',
@@ -2238,8 +2240,8 @@ extension on TranslationsVi {
 			'mpvConfig.confirmDeletePreset' => 'Are you sure you want to delete this preset?',
 			'mpvConfig.configPlaceholder' => 'gpu-api=vulkan\nhwdec=auto\n# comment',
 			'dialog.confirmAction' => 'Confirm Action',
-			'profiles.addPlezyProfile' => 'Add Plezy profile',
-			'profiles.switchingProfile' => 'Switching profile…',
+			'profiles.addLumiProfile' => 'Thêm hồ sơ',
+			'profiles.switchingProfile' => 'Tải hồ sơ…',
 			'profiles.deleteThisProfileTitle' => 'Delete this profile?',
 			'profiles.deleteThisProfileMessage' => ({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.',
 			'profiles.active' => 'Active',
@@ -2265,9 +2267,9 @@ extension on TranslationsVi {
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
 			'profiles.add' => 'Add',
-			'profiles.deleteProfileButton' => 'Delete profile',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.deleteProfileButton' => 'Delete profile',
 			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
 			'profiles.plexHomeAccount' => 'Plex Home account',
 			'profiles.connectionDefault' => 'Default',
@@ -2294,7 +2296,7 @@ extension on TranslationsVi {
 			'discover.switchProfile' => 'Switch Profile',
 			'discover.noContentAvailable' => 'No content available',
 			'discover.addMediaToLibraries' => 'Add some media to your libraries',
-			'discover.continueWatching' => 'Continue Watching',
+			'discover.continueWatching' => 'Phim đang xem',
 			'discover.continueWatchingIn' => ({required Object library}) => 'Continue Watching in ${library}',
 			'discover.nextUp' => 'Next Up',
 			'discover.nextUpIn' => ({required Object library}) => 'Next Up in ${library}',
@@ -2319,7 +2321,7 @@ extension on TranslationsVi {
 			'errors.pleaseEnterToken' => 'Please enter a token',
 			'errors.invalidToken' => 'Invalid token',
 			'errors.failedToVerifyToken' => ({required Object error}) => 'Failed to verify token: ${error}',
-			'errors.failedToSwitchProfile' => ({required Object displayName}) => 'Failed to switch to ${displayName}',
+			'errors.failedToSwitchProfile' => ({required Object displayName}) => '${displayName} đăng nhập thất bại',
 			'errors.failedToDeleteProfile' => ({required Object displayName}) => 'Failed to delete ${displayName}',
 			'errors.failedToRate' => 'Couldn\'t update rating',
 			'libraries.title' => 'Libraries',
@@ -2347,8 +2349,8 @@ extension on TranslationsVi {
 			'libraries.emptyTrashConfirm' => ({required Object title}) => 'Are you sure you want to empty trash for "${title}"?',
 			'libraries.manageLibraries' => 'Manage Libraries',
 			'libraries.sort' => 'Sort',
-			'libraries.sortBy' => 'Sort By',
-			'libraries.filters' => 'Filters',
+			'libraries.sortBy' => 'Sắp xếp',
+			'libraries.filters' => 'Lọc phim',
 			'libraries.confirmActionMessage' => 'Are you sure you want to perform this action?',
 			'libraries.showLibrary' => 'Show library',
 			'libraries.hideLibrary' => 'Hide library',
@@ -2361,9 +2363,9 @@ extension on TranslationsVi {
 			'libraries.noFoldersFound' => 'No folders found',
 			'libraries.folders' => 'folders',
 			'libraries.tabs.recommended' => 'Recommended',
-			'libraries.tabs.browse' => 'Browse',
-			'libraries.tabs.collections' => 'Collections',
-			'libraries.tabs.playlists' => 'Playlists',
+			'libraries.tabs.browse' => 'Tất cả',
+			'libraries.tabs.collections' => 'Bộ sưu tập',
+			'libraries.tabs.playlists' => 'Danh sách',
 			'libraries.groupings.title' => 'Grouping',
 			'libraries.groupings.all' => 'All',
 			'libraries.groupings.movies' => 'Movies',
@@ -2371,13 +2373,13 @@ extension on TranslationsVi {
 			'libraries.groupings.seasons' => 'Seasons',
 			'libraries.groupings.episodes' => 'Episodes',
 			'libraries.groupings.folders' => 'Folders',
-			'libraries.filterCategories.genre' => 'Genre',
-			'libraries.filterCategories.year' => 'Year',
-			'libraries.filterCategories.contentRating' => 'Content Rating',
+			'libraries.filterCategories.genre' => 'Thể loại',
+			'libraries.filterCategories.year' => 'Năm',
+			'libraries.filterCategories.contentRating' => 'Phân loại nội dung',
 			'libraries.filterCategories.tag' => 'Tag',
-			'libraries.sortLabels.title' => 'Title',
-			'libraries.sortLabels.dateAdded' => 'Date Added',
-			'libraries.sortLabels.releaseDate' => 'Release Date',
+			'libraries.sortLabels.title' => 'Tên phim',
+			'libraries.sortLabels.dateAdded' => 'Ngày cập nhật',
+			'libraries.sortLabels.releaseDate' => 'Ngày phát hành',
 			'libraries.sortLabels.rating' => 'Rating',
 			'libraries.sortLabels.lastPlayed' => 'Last Played',
 			'libraries.sortLabels.playCount' => 'Play Count',
@@ -2392,11 +2394,11 @@ extension on TranslationsVi {
 			'serverSelection.allServerConnectionsFailed' => 'Failed to connect to any servers. Please check your network and try again.',
 			'serverSelection.noServersFoundForAccount' => ({required Object username, required Object email}) => 'No servers found for ${username} (${email})',
 			'serverSelection.failedToLoadServers' => ({required Object error}) => 'Failed to load servers: ${error}',
-			'serverSelection.selectServer' => 'Select Server',
-			'serverSelection.selectServerDescription' => 'Choose which server you\'d like to use',
+			'serverSelection.selectServer' => 'Chọn máy chủ',
+			'serverSelection.selectServerDescription' => 'Chọn máy chủ kho phim mặc định',
 			'serverSelection.noServersAvailable' => 'No servers available',
-			'serverSelection.online' => 'Online',
-			'serverSelection.offline' => 'Offline',
+			'serverSelection.online' => 'Đang hoạt động',
+			'serverSelection.offline' => 'Mất tín hiệu',
 			'hubDetail.title' => 'Title',
 			'hubDetail.releaseYear' => 'Release Year',
 			'hubDetail.dateAdded' => 'Date Added',
@@ -2661,19 +2663,19 @@ extension on TranslationsVi {
 			'companionRemote.session.startServer' => 'Start Server',
 			'companionRemote.session.stopServer' => 'Stop Server',
 			'companionRemote.session.minimize' => 'Minimize',
-			'companionRemote.pairing.discoveryDescription' => 'Devices on your network running Plezy with the same Plex account will appear automatically',
+			'companionRemote.pairing.discoveryDescription' => 'Devices on your network running Lumi with the same Plex account will appear automatically',
 			'companionRemote.pairing.hostAddressHint' => '192.168.1.100:48632',
 			'companionRemote.pairing.connecting' => 'Connecting...',
 			'companionRemote.pairing.searchingForDevices' => 'Looking for devices...',
 			'companionRemote.pairing.noDevicesFound' => 'No devices found on your network',
-			'companionRemote.pairing.noDevicesHint' => 'Make sure Plezy is open on your desktop and both devices are on the same WiFi network',
+			'companionRemote.pairing.noDevicesHint' => 'Make sure Lumi is open on your desktop and both devices are on the same WiFi network',
 			'companionRemote.pairing.availableDevices' => 'Available Devices',
 			'companionRemote.pairing.manualConnection' => 'Manual Connection',
 			'companionRemote.pairing.cryptoInitFailed' => 'Could not initialize secure connection. Make sure you are signed in to a Plex account.',
 			'companionRemote.pairing.validationHostRequired' => 'Please enter host address',
 			'companionRemote.pairing.validationHostFormat' => 'Format must be IP:port (e.g., 192.168.1.100:48632)',
 			'companionRemote.pairing.connectionTimedOut' => 'Connection timed out. Make sure both devices are on the same network.',
-			'companionRemote.pairing.sessionNotFound' => 'Could not find the device. Make sure Plezy is running on the host.',
+			'companionRemote.pairing.sessionNotFound' => 'Could not find the device. Make sure Lumi is running on the host.',
 			'companionRemote.pairing.authFailed' => 'Authentication failed. Make sure both devices are on the same Plex account.',
 			'companionRemote.pairing.failedToConnect' => ({required Object error}) => 'Failed to connect: ${error}',
 			'companionRemote.remote.disconnectConfirm' => 'Do you want to disconnect from the remote session?',
@@ -2689,7 +2691,7 @@ extension on TranslationsVi {
 			'companionRemote.remote.tabLibraries' => 'Libraries',
 			'companionRemote.remote.tabSearch' => 'Search',
 			'companionRemote.remote.tabDownloads' => 'Downloads',
-			'companionRemote.remote.tabSettings' => 'Settings',
+			'companionRemote.remote.tabSettings' => 'Cài đặt',
 			'companionRemote.remote.previous' => 'Previous',
 			'companionRemote.remote.playPause' => 'Play/Pause',
 			'companionRemote.remote.next' => 'Next',
@@ -2779,9 +2781,9 @@ extension on TranslationsVi {
 			'metadataEdit.seasons' => 'Seasons',
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',
-			'metadataEdit.episodeOrdering' => 'Episode Ordering',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.episodeOrdering' => 'Episode Ordering',
 			'metadataEdit.tmdbAiring' => 'The Movie Database (Aired)',
 			'metadataEdit.tvdbAiring' => 'TheTVDB (Aired)',
 			'metadataEdit.tvdbAbsolute' => 'TheTVDB (Absolute)',
@@ -2823,11 +2825,11 @@ extension on TranslationsVi {
 			'trakt.connected' => 'Connected',
 			'trakt.connectedAs' => ({required Object username}) => 'Connected as @${username}',
 			'trakt.disconnectConfirm' => 'Disconnect Trakt account?',
-			'trakt.disconnectConfirmBody' => 'Plezy will stop sending playback events to Trakt. You can reconnect at any time.',
+			'trakt.disconnectConfirmBody' => 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.',
 			'trakt.scrobble' => 'Real-time scrobbling',
 			'trakt.scrobbleDescription' => 'Send play, pause, and stop events to Trakt during playback.',
 			'trakt.watchedSync' => 'Sync watched status',
-			'trakt.watchedSyncDescription' => 'When you mark items watched in Plezy, mark them on Trakt.',
+			'trakt.watchedSyncDescription' => 'When you mark items watched in Lumi, mark them on Trakt.',
 			'trackers.title' => 'Trackers',
 			'trackers.hubSubtitle' => 'Keep your watch progress in sync with Trakt and other services.',
 			'trackers.notConnected' => 'Not connected',
@@ -2835,12 +2837,12 @@ extension on TranslationsVi {
 			'trackers.scrobble' => 'Track progress automatically',
 			'trackers.scrobbleDescription' => 'Update your list when you finish an episode or movie.',
 			'trackers.disconnectConfirm' => ({required Object service}) => 'Disconnect ${service}?',
-			'trackers.disconnectConfirmBody' => ({required Object service}) => 'Plezy will stop updating your ${service} list. You can reconnect at any time.',
+			'trackers.disconnectConfirmBody' => ({required Object service}) => 'Lumi will stop updating your ${service} list. You can reconnect at any time.',
 			'trackers.connectFailed' => ({required Object service}) => 'Couldn\'t connect to ${service}. Try again.',
 			'trackers.services.mal' => 'MyAnimeList',
 			'trackers.services.anilist' => 'AniList',
 			'trackers.services.simkl' => 'Simkl',
-			'trackers.deviceCode.title' => ({required Object service}) => 'Activate Plezy on ${service}',
+			'trackers.deviceCode.title' => ({required Object service}) => 'Activate Lumi on ${service}',
 			'trackers.deviceCode.body' => ({required Object url}) => 'Visit ${url} and enter this code:',
 			'trackers.deviceCode.openToActivate' => ({required Object service}) => 'Open ${service} to activate',
 			'trackers.deviceCode.waitingForAuthorization' => 'Waiting for authorization…',

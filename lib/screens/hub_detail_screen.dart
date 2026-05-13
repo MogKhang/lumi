@@ -36,10 +36,10 @@ class _HubDetailScreenState extends State<HubDetailScreen>
     with Refreshable, GridFocusNodeMixin, FocusableDetailScreenMixin {
   List<MediaItem> _items = [];
   List<MediaItem> _filteredItems = [];
-  List<MediaSort> _sortOptions = [];
+
 
   MediaSort? _selectedSort;
-  bool _isSortDescending = false;
+  final bool _isSortDescending = false;
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -96,9 +96,6 @@ class _HubDetailScreenState extends State<HubDetailScreen>
       if (serverId == null) {
         appLogger.w('Hub has no serverId; using default sort options');
         if (!mounted) return;
-        setState(() {
-          _sortOptions = _getDefaultSortOptions();
-        });
         return;
       }
 
@@ -124,32 +121,25 @@ class _HubDetailScreenState extends State<HubDetailScreen>
 
         if (!mounted) return;
         setState(() {
-          _sortOptions = sorts.isNotEmpty ? sorts : _getDefaultSortOptions();
+          // _sortOptions = sorts.isNotEmpty ? sorts : _getDefaultSortOptions();
         });
       } else {
         appLogger.w('Could not extract section ID from hub key: $hubKey');
         if (!mounted) return;
         setState(() {
-          _sortOptions = _getDefaultSortOptions();
+          // _sortOptions = _getDefaultSortOptions();
         });
       }
     } catch (e) {
       appLogger.e('Failed to load sorts', error: e);
       if (!mounted) return;
       setState(() {
-        _sortOptions = _getDefaultSortOptions();
+        // _sortOptions = _getDefaultSortOptions();
       });
     }
   }
 
-  List<MediaSort> _getDefaultSortOptions() {
-    return [
-      MediaSort(key: 'titleSort', title: t.hubDetail.title, defaultDirection: 'asc'),
-      MediaSort(key: 'year', descKey: 'year:desc', title: t.hubDetail.releaseYear, defaultDirection: 'desc'),
-      MediaSort(key: 'addedAt', descKey: 'addedAt:desc', title: t.hubDetail.dateAdded, defaultDirection: 'desc'),
-      MediaSort(key: 'rating', descKey: 'rating:desc', title: t.hubDetail.rating, defaultDirection: 'desc'),
-    ];
-  }
+
 
   void _applySort() {
     setState(() {

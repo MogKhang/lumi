@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -235,7 +236,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         );
         if (value != null) {
           await settings.SettingsService.instanceOrNull!.write(settings.SettingsService.appLocale, value);
-          unawaited(LocaleSettings.setLocale(value));
+          await LocaleSettings.setLocale(value);
+          await initializeDateFormatting(value.languageCode, null);
           if (context.mounted) _restartApp(context);
         }
       },
