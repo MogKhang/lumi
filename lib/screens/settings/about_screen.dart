@@ -31,7 +31,7 @@ class AboutScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const SizedBox(height: 24),
-                        Image.asset('assets/lumi.png', width: 80, height: 80),
+                        Image.asset('assets/lumi-text.png', width: 80, height: 80),
                         const SizedBox(height: 16),
                         Text(
                           appName,

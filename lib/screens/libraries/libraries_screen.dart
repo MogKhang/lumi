@@ -777,7 +777,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
     final titleWidget = useLogo
         ? Image.asset(
-            'assets/lumi.png',
+            'assets/lumi-text.png',
             width: 100,
             filterQuality: FilterQuality.medium,
           )

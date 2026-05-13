@@ -1,12 +1,12 @@
 <h1>
-  <img src="assets/plezy.png" alt="Plezy Logo" height="24" style="vertical-align: middle;" />
-  Plezy
+  <img src="assets/lumi-text.png" alt="Lumi Logo" height="24" style="vertical-align: middle;" />
+  Lumi
 </h1>
 
 A modern Plex client for desktop and mobile. Built with Flutter for native performance and a clean interface.
 
 <p align="center">
-  <img src="assets/screenshots/macos-home.png" alt="Plezy macOS Home Screen" width="800" />
+  <img src="assets/screenshots/macos-home.png" alt="Lumi macOS Home Screen" width="800" />
 </p>
 
 *More screenshots in the [screenshots folder](assets/screenshots/#readme)*
@@ -78,7 +78,7 @@ A modern Plex client for desktop and mobile. Built with Flutter for native perfo
 ### <img src="assets/readme_icons/integrations.svg" height="20" alt="" align="center" /> Integrations
 - Discord Rich Presence
 - Trakt scrobbling
-- Plezy Remote — control desktop and TV from mobile
+- Lumi Remote — control desktop and TV from mobile
 - Android TV Watch Next row
 
 ### <img src="assets/readme_icons/customization.svg" height="20" alt="" align="center" /> Platform & Customization

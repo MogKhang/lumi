@@ -838,7 +838,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/lumi.png',
+            'assets/lumi-text.png',
             width: 100,
             filterQuality: FilterQuality.medium,
           ),

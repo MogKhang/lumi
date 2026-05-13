@@ -246,10 +246,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset('assets/lumi.png', width: 200),
+                            Image.asset('assets/lumi-text.png', width: 200),
                             const SizedBox(height: 16),
                             const Text(
-                              'App coi phim dở nhất Việt Nam',
+                              'App coi phim dỏm nhất Việt Nam',
                               style: TextStyle(
                                 fontFamily: 'Lexend',
                                 fontWeight: FontWeight.w500,
@@ -280,10 +280,10 @@ class _AuthScreenState extends State<AuthScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Center(child: Image.asset('assets/lumi.png', width: 150)),
+                        Center(child: Image.asset('assets/lumi-text.png', width: 150)),
                         const SizedBox(height: 16),
                         const Text(
-                          'App coi phim dở nhất Việt Nam',
+                          'App coi phim dỏm nhất Việt Nam',
                           style: TextStyle(
                             fontFamily: 'Lexend',
                             fontWeight: FontWeight.w500,

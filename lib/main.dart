@@ -1291,10 +1291,10 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/lumi.png', width: 150),
+                Image.asset('assets/lumi-text.png', width: 150),
                 const SizedBox(height: 16),
                 const Text(
-                  'App coi phim dở nhất Việt Nam',
+                  'App coi phim dỏm nhất Việt Nam',
                   style: TextStyle(
                     fontFamily: 'Lexend',
                     fontWeight: FontWeight.w500,

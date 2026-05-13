@@ -430,10 +430,10 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         return Center(
           child: Column(
             children: [
-              Image.asset('assets/lumi.png', width: 150),
+              Image.asset('assets/lumi-text.png', width: 150),
               const SizedBox(height: 8),
               const Text(
-                'App coi phim dở nhất Việt Nam',
+                'App coi phim dỏm nhất Việt Nam',
                 style: TextStyle(
                   fontFamily: 'Lexend',
                   fontWeight: FontWeight.w500,

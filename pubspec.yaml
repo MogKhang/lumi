@@ -119,8 +119,8 @@ dependency_overrides:
 flutter:
   uses-material-design: true
   assets:
-    - assets/lumi.png
-    - assets/lumi.svg
+    - assets/lumi-text.png
+    - assets/lumi-text.svg
     - assets/plex_chevron.svg
     - assets/jellyfin_icon.svg
     - assets/trakt_circlemark.svg
