@@ -210,6 +210,44 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
     return key;
   }
 
+  String _getFilterTitle(MediaFilter filter) {
+    final key = filter.filter;
+    switch (key) {
+      case 'unwatched':
+        return t.libraries.filterCategories.unwatched;
+      case 'inProgress':
+        return t.libraries.filterCategories.inProgress;
+      case 'audioLanguage':
+        return t.libraries.filterCategories.audioLanguage;
+      case 'subtitleLanguage':
+        return t.libraries.filterCategories.subtitleLanguage;
+      case 'genre':
+        return t.libraries.filterCategories.genre;
+      case 'year':
+        return t.libraries.filterCategories.year;
+      case 'contentRating':
+        return t.libraries.filterCategories.contentRating;
+      case 'tag':
+        return t.libraries.filterCategories.tag;
+      case 'decade':
+        return t.libraries.filterCategories.decade;
+      case 'actor':
+        return t.libraries.filterCategories.actor;
+      case 'director':
+        return t.libraries.filterCategories.director;
+      case 'writer':
+        return t.libraries.filterCategories.writer;
+      case 'producer':
+        return t.libraries.filterCategories.producer;
+      case 'country':
+        return t.libraries.filterCategories.country;
+      case 'network':
+        return t.libraries.filterCategories.network;
+      default:
+        return filter.title;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_currentFilter != null) {
@@ -219,7 +257,7 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
         children: [
           // Header with back button
           BottomSheetHeader(
-            title: _currentFilter!.title,
+            title: _getFilterTitle(_currentFilter!),
             leading: AppBarBackButton(style: BackButtonStyle.plain, onPressed: _goBack),
           ),
 
@@ -333,7 +371,7 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
                     });
                     _applyFilters();
                   },
-                  title: Text(filter.title),
+                  title: Text(_getFilterTitle(filter)),
                 );
               }
 
@@ -347,7 +385,7 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
 
               return FocusableListTile(
                 focusNode: index == 0 ? _initialFocusNode : null,
-                title: Text(filter.title),
+                title: Text(_getFilterTitle(filter)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

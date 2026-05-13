@@ -3690,6 +3690,39 @@ class TranslationsLibrariesFilterCategoriesEn {
 
 	/// en: 'Tag'
 	String get tag => 'Tag';
+
+	/// en: 'Unwatched'
+	String get unwatched => 'Unwatched';
+
+	/// en: 'In Progress'
+	String get inProgress => 'In Progress';
+
+	/// en: 'Audio Language'
+	String get audioLanguage => 'Audio Language';
+
+	/// en: 'Subtitle Language'
+	String get subtitleLanguage => 'Subtitle Language';
+
+	/// en: 'Decade'
+	String get decade => 'Decade';
+
+	/// en: 'Actor'
+	String get actor => 'Actor';
+
+	/// en: 'Director'
+	String get director => 'Director';
+
+	/// en: 'Writer'
+	String get writer => 'Writer';
+
+	/// en: 'Producer'
+	String get producer => 'Producer';
+
+	/// en: 'Country'
+	String get country => 'Country';
+
+	/// en: 'Network'
+	String get network => 'Network';
 }
 
 // Path: libraries.sortLabels
@@ -4655,6 +4688,17 @@ extension on Translations {
 			'libraries.filterCategories.year' => 'Year',
 			'libraries.filterCategories.contentRating' => 'Content Rating',
 			'libraries.filterCategories.tag' => 'Tag',
+			'libraries.filterCategories.unwatched' => 'Unwatched',
+			'libraries.filterCategories.inProgress' => 'In Progress',
+			'libraries.filterCategories.audioLanguage' => 'Audio Language',
+			'libraries.filterCategories.subtitleLanguage' => 'Subtitle Language',
+			'libraries.filterCategories.decade' => 'Decade',
+			'libraries.filterCategories.actor' => 'Actor',
+			'libraries.filterCategories.director' => 'Director',
+			'libraries.filterCategories.writer' => 'Writer',
+			'libraries.filterCategories.producer' => 'Producer',
+			'libraries.filterCategories.country' => 'Country',
+			'libraries.filterCategories.network' => 'Network',
 			'libraries.sortLabels.title' => 'Title',
 			'libraries.sortLabels.dateAdded' => 'Date Added',
 			'libraries.sortLabels.releaseDate' => 'Release Date',
@@ -5048,6 +5092,8 @@ extension on Translations {
 			'metadataEdit.keep' => 'Keep',
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.latestEpisode' => 'Latest episode',
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',
@@ -5059,8 +5105,6 @@ extension on Translations {
 			'metadataEdit.seasons' => 'Seasons',
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.episodeOrdering' => 'Episode Ordering',
 			'metadataEdit.tmdbAiring' => 'The Movie Database (Aired)',
 			'metadataEdit.tvdbAiring' => 'TheTVDB (Aired)',

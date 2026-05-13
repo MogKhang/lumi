@@ -672,7 +672,18 @@
       "genre": "Genre",
       "year": "Year",
       "contentRating": "Content Rating",
-      "tag": "Tag"
+      "tag": "Tag",
+      "unwatched": "Unwatched",
+      "inProgress": "In Progress",
+      "audioLanguage": "Audio Language",
+      "subtitleLanguage": "Subtitle Language",
+      "decade": "Decade",
+      "actor": "Actor",
+      "director": "Director",
+      "writer": "Writer",
+      "producer": "Producer",
+      "country": "Country",
+      "network": "Network"
     },
     "sortLabels": {
       "title": "Title",

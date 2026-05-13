@@ -673,7 +673,18 @@
       "genre": "Thể loại",
       "year": "Năm",
       "contentRating": "Phân loại nội dung",
-      "tag": "Tag"
+      "tag": "Thẻ",
+      "unwatched": "Chưa xem",
+      "inProgress": "Đang xem",
+      "audioLanguage": "Ngôn ngữ âm thanh",
+      "subtitleLanguage": "Ngôn ngữ phụ đề",
+      "decade": "Thập niên",
+      "actor": "Diễn viên",
+      "director": "Đạo diễn",
+      "writer": "Biên kịch",
+      "producer": "Nhà sản xuất",
+      "country": "Quốc gia",
+      "network": "Nhà đài"
     },
     "sortLabels": {
       "title": "Tên phim",

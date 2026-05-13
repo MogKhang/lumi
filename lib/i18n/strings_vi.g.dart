@@ -156,7 +156,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get search => 'Tìm kiếm';
 	@override String get home => 'Trang chủ';
 	@override String get back => 'Back';
-	@override String get settings => 'Settings';
+	@override String get settings => 'Cài đặt';
 	@override String get mute => 'Mute';
 	@override String get reconnect => 'Reconnect';
 	@override String get exit => 'Exit';
@@ -210,7 +210,7 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Settings';
+	@override String get title => 'Cài đặt';
 	@override String get supportDeveloper => 'Support Lumi';
 	@override String get supportDeveloperDescription => 'Donate via Liberapay to fund development';
 	@override String get language => 'Language';
@@ -1587,7 +1587,18 @@ class _TranslationsLibrariesFilterCategoriesVi extends TranslationsLibrariesFilt
 	@override String get genre => 'Thể loại';
 	@override String get year => 'Năm';
 	@override String get contentRating => 'Phân loại nội dung';
-	@override String get tag => 'Tag';
+	@override String get tag => 'Thẻ';
+	@override String get unwatched => 'Chưa xem';
+	@override String get inProgress => 'Đang xem';
+	@override String get audioLanguage => 'Ngôn ngữ âm thanh';
+	@override String get subtitleLanguage => 'Ngôn ngữ phụ đề';
+	@override String get decade => 'Thập kỷ';
+	@override String get actor => 'Diễn viên';
+	@override String get director => 'Đạo diễn';
+	@override String get writer => 'Biên kịch';
+	@override String get producer => 'Nhà sản xuất';
+	@override String get country => 'Quốc gia';
+	@override String get network => 'Nhà đài';
 }
 
 // Path: libraries.sortLabels
@@ -1803,7 +1814,7 @@ extension on TranslationsVi {
 			'common.search' => 'Tìm kiếm',
 			'common.home' => 'Trang chủ',
 			'common.back' => 'Back',
-			'common.settings' => 'Settings',
+			'common.settings' => 'Cài đặt',
 			'common.mute' => 'Mute',
 			'common.reconnect' => 'Reconnect',
 			'common.exit' => 'Exit',
@@ -1830,7 +1841,7 @@ extension on TranslationsVi {
 			'update.viewRelease' => 'View Release',
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
-			'settings.title' => 'Settings',
+			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
 			'settings.language' => 'Language',
@@ -2378,7 +2389,18 @@ extension on TranslationsVi {
 			'libraries.filterCategories.genre' => 'Thể loại',
 			'libraries.filterCategories.year' => 'Năm',
 			'libraries.filterCategories.contentRating' => 'Phân loại nội dung',
-			'libraries.filterCategories.tag' => 'Tag',
+			'libraries.filterCategories.tag' => 'Thẻ',
+			'libraries.filterCategories.unwatched' => 'Chưa xem',
+			'libraries.filterCategories.inProgress' => 'Đang xem',
+			'libraries.filterCategories.audioLanguage' => 'Ngôn ngữ âm thanh',
+			'libraries.filterCategories.subtitleLanguage' => 'Ngôn ngữ phụ đề',
+			'libraries.filterCategories.decade' => 'Thập kỷ',
+			'libraries.filterCategories.actor' => 'Diễn viên',
+			'libraries.filterCategories.director' => 'Đạo diễn',
+			'libraries.filterCategories.writer' => 'Biên kịch',
+			'libraries.filterCategories.producer' => 'Nhà sản xuất',
+			'libraries.filterCategories.country' => 'Quốc gia',
+			'libraries.filterCategories.network' => 'Nhà đài',
 			'libraries.sortLabels.title' => 'Tên phim',
 			'libraries.sortLabels.dateAdded' => 'Ngày cập nhật',
 			'libraries.sortLabels.releaseDate' => 'Ngày phát hành',
@@ -2772,6 +2794,8 @@ extension on TranslationsVi {
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
 			'metadataEdit.latestEpisode' => 'Latest episode',
@@ -2783,8 +2807,6 @@ extension on TranslationsVi {
 			'metadataEdit.afterAMonth' => 'After a month',
 			'metadataEdit.onNextRefresh' => 'On next refresh',
 			'metadataEdit.seasons' => 'Seasons',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',
 			'metadataEdit.episodeOrdering' => 'Episode Ordering',
