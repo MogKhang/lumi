@@ -469,7 +469,7 @@ class _TranslationsFileInfoVi extends TranslationsFileInfoEn {
 	@override String get colorPrimaries => 'Color Primaries';
 	@override String get chromaSubsampling => 'Chroma Subsampling';
 	@override String get channels => 'Channels';
-	@override String get subtitles => 'Subtitles';
+	@override String get subtitles => 'Phụ đề';
 	@override String get overallBitrate => 'Overall Bitrate';
 	@override String get path => 'Path';
 	@override String get size => 'Size';
@@ -540,8 +540,8 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get audioLabel => 'Audio';
-	@override String get subtitlesLabel => 'Subtitles';
+	@override String get audioLabel => 'Âm thanh';
+	@override String get subtitlesLabel => 'Phụ đề';
 	@override String get resetToZero => 'Reset to 0ms';
 	@override String addTime({required Object amount, required Object unit}) => '+${amount}${unit}';
 	@override String minusTime({required Object amount, required Object unit}) => '-${amount}${unit}';
@@ -558,7 +558,7 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String get stillWatching => 'Still watching?';
 	@override String pausingIn({required Object seconds}) => 'Pausing in ${seconds}s';
 	@override String get continueWatching => 'Continue';
-	@override String get autoPlayNext => 'Auto-Play Next';
+	@override String get autoPlayNext => 'Tự động chuyển phim tiếp theo';
 	@override String get playNext => 'Play Next';
 	@override String get playButton => 'Play';
 	@override String get pauseButton => 'Pause';
@@ -576,7 +576,7 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String get versionsButton => 'Video versions';
 	@override String get versionQualityButton => 'Version & Quality';
 	@override String get versionColumnHeader => 'Version';
-	@override String get qualityColumnHeader => 'Quality';
+	@override String get qualityColumnHeader => 'Chất lượng hình ảnh';
 	@override String get qualityOriginal => 'Cao nhất';
 	@override String qualityPresetLabel({required Object resolution, required Object bitrate}) => '${resolution}p ${bitrate} Mbps';
 	@override String qualityBandwidthEstimate({required Object bitrate}) => '~${bitrate} Mbps';
@@ -1289,9 +1289,9 @@ class _TranslationsVideoSettingsVi extends TranslationsVideoSettingsEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get playbackSettings => 'Playback Settings';
+	@override String get playbackSettings => 'Cấu hình';
 	@override String get playbackSpeed => 'Playback Speed';
-	@override String get sleepTimer => 'Sleep Timer';
+	@override String get sleepTimer => 'Hẹn giờ tắt màn hình';
 	@override String get audioSync => 'Audio Sync';
 	@override String get subtitleSync => 'Subtitle Sync';
 	@override String get hdr => 'HDR';
@@ -1319,7 +1319,7 @@ class _TranslationsExternalPlayerVi extends TranslationsExternalPlayerEn {
 	@override String get playerCommand => 'Command';
 	@override String get playerPackage => 'Package Name';
 	@override String get playerUrlScheme => 'URL Scheme';
-	@override String get off => 'Off';
+	@override String get off => 'Tắt';
 	@override String get launchFailed => 'Failed to open external player';
 	@override String appNotInstalled({required Object name}) => '${name} is not installed';
 	@override String get playInExternalPlayer => 'Play in External Player';
@@ -2114,7 +2114,7 @@ extension on TranslationsVi {
 			'fileInfo.colorPrimaries' => 'Color Primaries',
 			'fileInfo.chromaSubsampling' => 'Chroma Subsampling',
 			'fileInfo.channels' => 'Channels',
-			'fileInfo.subtitles' => 'Subtitles',
+			'fileInfo.subtitles' => 'Phụ đề',
 			'fileInfo.overallBitrate' => 'Overall Bitrate',
 			'fileInfo.path' => 'Path',
 			'fileInfo.size' => 'Size',
@@ -2149,8 +2149,8 @@ extension on TranslationsVi {
 			'tooltips.playTrailer' => 'Play trailer',
 			'tooltips.markAsWatched' => 'Mark as watched',
 			'tooltips.markAsUnwatched' => 'Mark as unwatched',
-			'videoControls.audioLabel' => 'Audio',
-			'videoControls.subtitlesLabel' => 'Subtitles',
+			'videoControls.audioLabel' => 'Âm thanh',
+			'videoControls.subtitlesLabel' => 'Phụ đề',
 			'videoControls.resetToZero' => 'Reset to 0ms',
 			'videoControls.addTime' => ({required Object amount, required Object unit}) => '+${amount}${unit}',
 			'videoControls.minusTime' => ({required Object amount, required Object unit}) => '-${amount}${unit}',
@@ -2167,7 +2167,7 @@ extension on TranslationsVi {
 			'videoControls.stillWatching' => 'Still watching?',
 			'videoControls.pausingIn' => ({required Object seconds}) => 'Pausing in ${seconds}s',
 			'videoControls.continueWatching' => 'Continue',
-			'videoControls.autoPlayNext' => 'Auto-Play Next',
+			'videoControls.autoPlayNext' => 'Tự động chuyển phim tiếp theo',
 			'videoControls.playNext' => 'Play Next',
 			'videoControls.playButton' => 'Play',
 			'videoControls.pauseButton' => 'Pause',
@@ -2185,7 +2185,7 @@ extension on TranslationsVi {
 			'videoControls.versionsButton' => 'Video versions',
 			'videoControls.versionQualityButton' => 'Version & Quality',
 			'videoControls.versionColumnHeader' => 'Version',
-			'videoControls.qualityColumnHeader' => 'Quality',
+			'videoControls.qualityColumnHeader' => 'Chất lượng hình ảnh',
 			'videoControls.qualityOriginal' => 'Cao nhất',
 			'videoControls.qualityPresetLabel' => ({required Object resolution, required Object bitrate}) => '${resolution}p ${bitrate} Mbps',
 			'videoControls.qualityBandwidthEstimate' => ({required Object bitrate}) => '~${bitrate} Mbps',
@@ -2783,9 +2783,9 @@ extension on TranslationsVi {
 			'companionRemote.remote.subtitles' => 'Subtitles',
 			'companionRemote.remote.audio' => 'Audio',
 			'companionRemote.remote.searchHint' => 'Search on desktop...',
-			'videoSettings.playbackSettings' => 'Playback Settings',
+			'videoSettings.playbackSettings' => 'Cấu hình',
 			'videoSettings.playbackSpeed' => 'Playback Speed',
-			'videoSettings.sleepTimer' => 'Sleep Timer',
+			'videoSettings.sleepTimer' => 'Hẹn giờ tắt màn hình',
 			'videoSettings.audioSync' => 'Audio Sync',
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
 			'videoSettings.hdr' => 'HDR',
@@ -2804,7 +2804,7 @@ extension on TranslationsVi {
 			'externalPlayer.playerCommand' => 'Command',
 			'externalPlayer.playerPackage' => 'Package Name',
 			'externalPlayer.playerUrlScheme' => 'URL Scheme',
-			'externalPlayer.off' => 'Off',
+			'externalPlayer.off' => 'Tắt',
 			'externalPlayer.launchFailed' => 'Failed to open external player',
 			'externalPlayer.appNotInstalled' => ({required Object name}) => '${name} is not installed',
 			'externalPlayer.playInExternalPlayer' => 'Play in External Player',

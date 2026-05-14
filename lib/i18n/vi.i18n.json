@@ -336,7 +336,7 @@
     "colorPrimaries": "Color Primaries",
     "chromaSubsampling": "Chroma Subsampling",
     "channels": "Channels",
-    "subtitles": "Subtitles",
+    "subtitles": "Phụ đề",
     "overallBitrate": "Overall Bitrate",
     "path": "Path",
     "size": "Size",
@@ -379,8 +379,8 @@
     "markAsUnwatched": "Mark as unwatched"
   },
   "videoControls": {
-    "audioLabel": "Audio",
-    "subtitlesLabel": "Subtitles",
+    "audioLabel": "Âm thanh",
+    "subtitlesLabel": "Phụ đề",
     "resetToZero": "Reset to 0ms",
     "addTime": "+${amount}${unit}",
     "minusTime": "-${amount}${unit}",
@@ -397,7 +397,7 @@
     "stillWatching": "Still watching?",
     "pausingIn": "Pausing in ${seconds}s",
     "continueWatching": "Continue",
-    "autoPlayNext": "Auto-Play Next",
+    "autoPlayNext": "Tự động chuyển phim tiếp theo",
     "playNext": "Play Next",
     "playButton": "Play",
     "pauseButton": "Pause",
@@ -415,7 +415,7 @@
     "versionsButton": "Video versions",
     "versionQualityButton": "Version & Quality",
     "versionColumnHeader": "Version",
-    "qualityColumnHeader": "Quality",
+    "qualityColumnHeader": "Chất lượng hình ảnh",
     "qualityOriginal": "Cao nhất",
     "qualityPresetLabel": "${resolution}p ${bitrate} Mbps",
     "qualityBandwidthEstimate": "~${bitrate} Mbps",
@@ -1076,9 +1076,9 @@
     }
   },
   "videoSettings": {
-    "playbackSettings": "Playback Settings",
+    "playbackSettings": "Cấu hình",
     "playbackSpeed": "Playback Speed",
-    "sleepTimer": "Sleep Timer",
+    "sleepTimer": "Hẹn giờ tắt màn hình",
     "audioSync": "Audio Sync",
     "subtitleSync": "Subtitle Sync",
     "hdr": "HDR",
@@ -1099,7 +1099,7 @@
     "playerCommand": "Command",
     "playerPackage": "Package Name",
     "playerUrlScheme": "URL Scheme",
-    "off": "Off",
+    "off": "Tắt",
     "launchFailed": "Failed to open external player",
     "appNotInstalled": "${name} is not installed",
     "playInExternalPlayer": "Play in External Player"

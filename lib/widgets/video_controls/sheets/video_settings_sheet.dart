@@ -437,12 +437,6 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
             },
           ),
 
-        // Performance Overlay Toggle
-        _SettingsToggleItem(
-          pref: SettingsService.showPerformanceOverlay,
-          icon: Symbols.analytics_rounded,
-          title: t.videoSettings.performanceOverlay,
-        ),
 
         if (kDebugMode && Platform.isAndroid && widget.player.playerType == 'exoplayer')
           _SettingsMenuItem(
