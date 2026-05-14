@@ -97,8 +97,8 @@ class TranslationsAppEn {
 	/// en: 'Lumi'
 	String get title => 'Lumi';
 
-	/// en: 'The best movie app in Vietnam'
-	String get tagline => 'The best movie app in Vietnam';
+	/// en: 'App coi phim dỏm nhất Việt Nam'
+	String get tagline => 'App coi phim dỏm nhất Việt Nam';
 }
 
 // Path: auth
@@ -499,6 +499,12 @@ class TranslationsSettingsEn {
 	/// en: 'Player Backend'
 	String get playerBackend => 'Player Backend';
 
+	/// en: 'Audio Language'
+	String get audioLanguage => 'Audio Language';
+
+	/// en: 'None'
+	String get none => 'None';
+
 	/// en: 'ExoPlayer (Recommended)'
 	String get exoPlayer => 'ExoPlayer (Recommended)';
 
@@ -528,6 +534,9 @@ class TranslationsSettingsEn {
 
 	/// en: 'Used when starting playback. Lower values reduce bandwidth.'
 	String get defaultQualityDescription => 'Used when starting playback. Lower values reduce bandwidth.';
+
+	/// en: 'Switch Server'
+	String get switchServer => 'Switch Server';
 
 	/// en: 'Subtitle Styling'
 	String get subtitleStyling => 'Subtitle Styling';
@@ -4103,7 +4112,7 @@ extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.title' => 'Lumi',
-			'app.tagline' => 'The best movie app in Vietnam',
+			'app.tagline' => 'App coi phim dỏm nhất Việt Nam',
 			'auth.signIn' => 'Sign in',
 			'auth.signInWithPlex' => 'Sign in with Plex',
 			'auth.showQRCode' => 'Show QR Code',
@@ -4222,6 +4231,8 @@ extension on Translations {
 			'settings.hideSpoilers' => 'Hide Spoilers for Unwatched Episodes',
 			'settings.hideSpoilersDescription' => 'Blur thumbnails and hide descriptions for episodes you haven\'t watched yet',
 			'settings.playerBackend' => 'Player Backend',
+			'settings.audioLanguage' => 'Audio Language',
+			'settings.none' => 'None',
 			'settings.exoPlayer' => 'ExoPlayer (Recommended)',
 			'settings.mpv' => 'mpv',
 			'settings.hardwareDecoding' => 'Hardware Decoding',
@@ -4232,6 +4243,7 @@ extension on Translations {
 			'settings.bufferSizeWarning' => ({required Object heap, required Object size}) => 'Your device has ${heap}MB of memory. A ${size}MB buffer may cause playback issues.',
 			'settings.defaultQualityTitle' => 'Default Quality',
 			'settings.defaultQualityDescription' => 'Used when starting playback. Lower values reduce bandwidth.',
+			'settings.switchServer' => 'Switch Server',
 			'settings.subtitleStyling' => 'Subtitle Styling',
 			'settings.subtitleStylingDescription' => 'Customize subtitle appearance',
 			'settings.smallSkipDuration' => 'Small Skip Duration',
@@ -4611,11 +4623,11 @@ extension on Translations {
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.add' => 'Add',
 			'profiles.deleteProfileButton' => 'Delete profile',
 			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
@@ -5125,11 +5137,11 @@ extension on Translations {
 			'metadataEdit.uploadFile' => 'Upload File',
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',

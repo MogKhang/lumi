@@ -358,14 +358,14 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
         final String subtitle;
         if (effectiveSelection != null) {
-          subtitle = provider.serverManager.getClient(effectiveSelection)?.serverName ?? 'Unknown Server';
+          subtitle = provider.serverManager.getClient(effectiveSelection)?.serverName ?? t.common.unknown;
         } else {
-          subtitle = 'No Servers Available';
+          subtitle = t.serverSelection.noServersAvailable;
         }
 
         return ListTile(
           leading: const AppIcon(Symbols.dns_rounded, fill: 1),
-          title: const Text('Switch Server'),
+          title: Text(t.settings.switchServer),
           subtitle: Text(subtitle),
           trailing: const AppIcon(Symbols.chevron_right_rounded, fill: 1),
           onTap: () async {

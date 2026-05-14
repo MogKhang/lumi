@@ -170,7 +170,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get fullscreen => 'Fullscreen';
 	@override String get exitFullscreen => 'Exit fullscreen';
 	@override String get pressBackAgainToExit => 'Press back again to exit';
-	@override String get done => 'Done';
+	@override String get done => 'Hoàn tất';
 }
 
 // Path: screens
@@ -181,7 +181,7 @@ class _TranslationsScreensVi extends TranslationsScreensEn {
 
 	// Translations
 	@override String get licenses => 'Licenses';
-	@override String get switchProfile => 'Đổi hồ sơ';
+	@override String get switchProfile => 'Chọn hồ sơ';
 	@override String get subtitleStyling => 'Subtitle Styling';
 	@override String get mpvConfig => 'mpv.conf';
 	@override String get logs => 'Logs';
@@ -213,8 +213,8 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get title => 'Cài đặt';
 	@override String get supportDeveloper => 'Support Lumi';
 	@override String get supportDeveloperDescription => 'Donate via Liberapay to fund development';
-	@override String get language => 'Language';
-	@override String get theme => 'Theme';
+	@override String get language => 'Ngôn ngữ';
+	@override String get theme => 'Giao diện';
 	@override String get appearance => 'Appearance';
 	@override String get videoPlayback => 'Video Playback';
 	@override String get videoPlaybackDescription => 'Configure playback behavior';
@@ -229,10 +229,10 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get secondsShort => 's';
 	@override String get minutesShort => 'm';
 	@override String durationHint({required Object min, required Object max}) => 'Enter duration (${min}-${max})';
-	@override String get systemTheme => 'System';
-	@override String get lightTheme => 'Light';
-	@override String get darkTheme => 'Dark';
-	@override String get oledTheme => 'OLED';
+	@override String get systemTheme => 'Mặc định hệ thống';
+	@override String get lightTheme => 'Sáng';
+	@override String get darkTheme => 'Tối';
+	@override String get oledTheme => 'Siêu tối';
 	@override String get libraryDensity => 'Library Density';
 	@override String get compact => 'Compact';
 	@override String get comfortable => 'Comfortable';
@@ -256,8 +256,10 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get showSeasonPostersOnTabsDescription => 'Display the season\'s poster above each season tab on a show\'s detail page';
 	@override String get hideSpoilers => 'Hide Spoilers for Unwatched Episodes';
 	@override String get hideSpoilersDescription => 'Blur thumbnails and hide descriptions for episodes you haven\'t watched yet';
-	@override String get playerBackend => 'Player Backend';
-	@override String get exoPlayer => 'ExoPlayer (Recommended)';
+	@override String get playerBackend => 'Chương trình xem phim';
+	@override String get audioLanguage => 'Ngôn ngữ âm thanh';
+	@override String get none => 'Không có';
+	@override String get exoPlayer => 'ExoPlayer (Khuyên dùng)';
 	@override String get mpv => 'mpv';
 	@override String get hardwareDecoding => 'Hardware Decoding';
 	@override String get hardwareDecodingDescription => 'Use hardware acceleration when available';
@@ -265,8 +267,9 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String bufferSizeMB({required Object size}) => '${size}MB';
 	@override String get bufferSizeAuto => 'Auto (Recommended)';
 	@override String bufferSizeWarning({required Object heap, required Object size}) => 'Your device has ${heap}MB of memory. A ${size}MB buffer may cause playback issues.';
-	@override String get defaultQualityTitle => 'Default Quality';
+	@override String get defaultQualityTitle => 'Chất lượng hình ảnh';
 	@override String get defaultQualityDescription => 'Used when starting playback. Lower values reduce bandwidth.';
+	@override String get switchServer => 'Chọn máy chủ';
 	@override String get subtitleStyling => 'Subtitle Styling';
 	@override String get subtitleStylingDescription => 'Customize subtitle appearance';
 	@override String get smallSkipDuration => 'Small Skip Duration';
@@ -558,7 +561,7 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String get versionQualityButton => 'Version & Quality';
 	@override String get versionColumnHeader => 'Version';
 	@override String get qualityColumnHeader => 'Quality';
-	@override String get qualityOriginal => 'Original';
+	@override String get qualityOriginal => 'Cao nhất';
 	@override String qualityPresetLabel({required Object resolution, required Object bitrate}) => '${resolution}p ${bitrate} Mbps';
 	@override String qualityBandwidthEstimate({required Object bitrate}) => '~${bitrate} Mbps';
 	@override String get transcodeUnavailableFallback => 'Transcoding unavailable — playing original quality';
@@ -726,8 +729,8 @@ class _TranslationsProfilesVi extends TranslationsProfilesEn {
 	@override String signOutPlexMessage({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.';
 	@override String get signedOutPlex => 'Signed out of Plex.';
 	@override String get signOutFailed => 'Sign out failed.';
-	@override String get sectionTitle => 'Switch User';
-	@override String get summarySingle => 'Add profiles to mix managed users and local identities';
+	@override String get sectionTitle => 'Chọn hồ sơ';
+	@override String get summarySingle => 'Lựa chọn hồ sơ xem phim mặc định';
 	@override String summaryMultipleWithActive({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}';
 	@override String summaryMultiple({required Object count}) => '${count} profiles';
 	@override String get removeConnectionTitle => 'Remove connection?';
@@ -849,7 +852,7 @@ class _TranslationsLibrariesVi extends TranslationsLibrariesEn {
 	@override String get allLibrariesHidden => 'All libraries are hidden';
 	@override String hiddenLibrariesCount({required Object count}) => 'Hidden libraries (${count})';
 	@override String get thisLibraryIsEmpty => 'This library is empty';
-	@override String get all => 'All';
+	@override String get all => 'Tất cả';
 	@override String get clearAll => 'Clear All';
 	@override String scanLibraryConfirm({required Object title}) => 'Are you sure you want to scan "${title}"?';
 	@override String analyzeLibraryConfirm({required Object title}) => 'Are you sure you want to analyze "${title}"?';
@@ -1067,7 +1070,7 @@ class _TranslationsPlaylistsVi extends TranslationsPlaylistsEn {
 	// Translations
 	@override String get title => 'Playlists';
 	@override String get playlist => 'Playlist';
-	@override String get noPlaylists => 'No playlists found';
+	@override String get noPlaylists => 'Chưa có danh sách';
 	@override String get create => 'Create Playlist';
 	@override String get playlistName => 'Playlist Name';
 	@override String get enterPlaylistName => 'Enter playlist name';
@@ -1586,7 +1589,7 @@ class _TranslationsLibrariesFilterCategoriesVi extends TranslationsLibrariesFilt
 
 	// Translations
 	@override String get genre => 'Thể loại';
-	@override String get year => 'Năm';
+	@override String get year => 'Năm phát hành';
 	@override String get contentRating => 'Phân loại nội dung';
 	@override String get tag => 'Thẻ';
 	@override String get unwatched => 'Chưa xem';
@@ -1840,9 +1843,9 @@ extension on TranslationsVi {
 			'common.fullscreen' => 'Fullscreen',
 			'common.exitFullscreen' => 'Exit fullscreen',
 			'common.pressBackAgainToExit' => 'Press back again to exit',
-			'common.done' => 'Done',
+			'common.done' => 'Hoàn tất',
 			'screens.licenses' => 'Licenses',
-			'screens.switchProfile' => 'Đổi hồ sơ',
+			'screens.switchProfile' => 'Chọn hồ sơ',
 			'screens.subtitleStyling' => 'Subtitle Styling',
 			'screens.mpvConfig' => 'mpv.conf',
 			'screens.logs' => 'Logs',
@@ -1856,8 +1859,8 @@ extension on TranslationsVi {
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
-			'settings.language' => 'Language',
-			'settings.theme' => 'Theme',
+			'settings.language' => 'Ngôn ngữ',
+			'settings.theme' => 'Giao diện',
 			'settings.appearance' => 'Appearance',
 			'settings.videoPlayback' => 'Video Playback',
 			'settings.videoPlaybackDescription' => 'Configure playback behavior',
@@ -1872,10 +1875,10 @@ extension on TranslationsVi {
 			'settings.secondsShort' => 's',
 			'settings.minutesShort' => 'm',
 			'settings.durationHint' => ({required Object min, required Object max}) => 'Enter duration (${min}-${max})',
-			'settings.systemTheme' => 'System',
-			'settings.lightTheme' => 'Light',
-			'settings.darkTheme' => 'Dark',
-			'settings.oledTheme' => 'OLED',
+			'settings.systemTheme' => 'Mặc định hệ thống',
+			'settings.lightTheme' => 'Sáng',
+			'settings.darkTheme' => 'Tối',
+			'settings.oledTheme' => 'Siêu tối',
 			'settings.libraryDensity' => 'Library Density',
 			'settings.compact' => 'Compact',
 			'settings.comfortable' => 'Comfortable',
@@ -1899,8 +1902,10 @@ extension on TranslationsVi {
 			'settings.showSeasonPostersOnTabsDescription' => 'Display the season\'s poster above each season tab on a show\'s detail page',
 			'settings.hideSpoilers' => 'Hide Spoilers for Unwatched Episodes',
 			'settings.hideSpoilersDescription' => 'Blur thumbnails and hide descriptions for episodes you haven\'t watched yet',
-			'settings.playerBackend' => 'Player Backend',
-			'settings.exoPlayer' => 'ExoPlayer (Recommended)',
+			'settings.playerBackend' => 'Chương trình xem phim',
+			'settings.audioLanguage' => 'Ngôn ngữ âm thanh',
+			'settings.none' => 'Không có',
+			'settings.exoPlayer' => 'ExoPlayer (Khuyên dùng)',
 			'settings.mpv' => 'mpv',
 			'settings.hardwareDecoding' => 'Hardware Decoding',
 			'settings.hardwareDecodingDescription' => 'Use hardware acceleration when available',
@@ -1908,8 +1913,9 @@ extension on TranslationsVi {
 			'settings.bufferSizeMB' => ({required Object size}) => '${size}MB',
 			'settings.bufferSizeAuto' => 'Auto (Recommended)',
 			'settings.bufferSizeWarning' => ({required Object heap, required Object size}) => 'Your device has ${heap}MB of memory. A ${size}MB buffer may cause playback issues.',
-			'settings.defaultQualityTitle' => 'Default Quality',
+			'settings.defaultQualityTitle' => 'Chất lượng hình ảnh',
 			'settings.defaultQualityDescription' => 'Used when starting playback. Lower values reduce bandwidth.',
+			'settings.switchServer' => 'Chọn máy chủ',
 			'settings.subtitleStyling' => 'Subtitle Styling',
 			'settings.subtitleStylingDescription' => 'Customize subtitle appearance',
 			'settings.smallSkipDuration' => 'Small Skip Duration',
@@ -2158,7 +2164,7 @@ extension on TranslationsVi {
 			'videoControls.versionQualityButton' => 'Version & Quality',
 			'videoControls.versionColumnHeader' => 'Version',
 			'videoControls.qualityColumnHeader' => 'Quality',
-			'videoControls.qualityOriginal' => 'Original',
+			'videoControls.qualityOriginal' => 'Cao nhất',
 			'videoControls.qualityPresetLabel' => ({required Object resolution, required Object bitrate}) => '${resolution}p ${bitrate} Mbps',
 			'videoControls.qualityBandwidthEstimate' => ({required Object bitrate}) => '~${bitrate} Mbps',
 			'videoControls.transcodeUnavailableFallback' => 'Transcoding unavailable — playing original quality',
@@ -2278,8 +2284,8 @@ extension on TranslationsVi {
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
-			'profiles.sectionTitle' => 'Switch User',
-			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
+			'profiles.sectionTitle' => 'Chọn hồ sơ',
+			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
 			'profiles.removeConnectionTitle' => 'Remove connection?',
@@ -2289,11 +2295,11 @@ extension on TranslationsVi {
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.add' => 'Add',
 			'profiles.deleteProfileButton' => 'Delete profile',
 			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
@@ -2367,7 +2373,7 @@ extension on TranslationsVi {
 			'libraries.allLibrariesHidden' => 'All libraries are hidden',
 			'libraries.hiddenLibrariesCount' => ({required Object count}) => 'Hidden libraries (${count})',
 			'libraries.thisLibraryIsEmpty' => 'This library is empty',
-			'libraries.all' => 'All',
+			'libraries.all' => 'Tất cả',
 			'libraries.clearAll' => 'Clear All',
 			'libraries.scanLibraryConfirm' => ({required Object title}) => 'Are you sure you want to scan "${title}"?',
 			'libraries.analyzeLibraryConfirm' => ({required Object title}) => 'Are you sure you want to analyze "${title}"?',
@@ -2400,7 +2406,7 @@ extension on TranslationsVi {
 			'libraries.groupings.episodes' => 'Episodes',
 			'libraries.groupings.folders' => 'Folders',
 			'libraries.filterCategories.genre' => 'Thể loại',
-			'libraries.filterCategories.year' => 'Năm',
+			'libraries.filterCategories.year' => 'Năm phát hành',
 			'libraries.filterCategories.contentRating' => 'Phân loại nội dung',
 			'libraries.filterCategories.tag' => 'Thẻ',
 			'libraries.filterCategories.unwatched' => 'Chưa xem',
@@ -2546,7 +2552,7 @@ extension on TranslationsVi {
 			'collections.searchCollections' => 'Search collections...',
 			'playlists.title' => 'Playlists',
 			'playlists.playlist' => 'Playlist',
-			'playlists.noPlaylists' => 'No playlists found',
+			'playlists.noPlaylists' => 'Chưa có danh sách',
 			'playlists.create' => 'Create Playlist',
 			'playlists.playlistName' => 'Playlist Name',
 			'playlists.enterPlaylistName' => 'Enter playlist name',
@@ -2803,11 +2809,11 @@ extension on TranslationsVi {
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',
 			'metadataEdit.uploadFile' => 'Upload File',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
