@@ -239,6 +239,9 @@ class _SearchScreenState extends State<SearchScreen>
               onListRefresh: () => updateItem(item.id),
               onNavigateUp: isFirstOverall ? focusSearchInput : null,
               showServerName: showServerName,
+              hideContentRating: true,
+              hideRating: true,
+              hideStudio: true,
             );
           }, childCount: items.length),
         ),

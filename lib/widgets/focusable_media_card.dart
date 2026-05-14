@@ -36,6 +36,15 @@ class FocusableMediaCard extends StatefulWidget {
   /// Whether to disable the scale animation on focus (e.g. in list view).
   final bool disableScale;
 
+  /// Whether to hide the content rating in list view.
+  final bool hideContentRating;
+
+  /// Whether to hide the star rating in list view.
+  final bool hideRating;
+
+  /// Whether to hide the studio in list view.
+  final bool hideStudio;
+
   /// Optional external focus node for programmatic focus control.
   /// If not provided, an internal focus node is created.
   final FocusNode? focusNode;
@@ -81,6 +90,9 @@ class FocusableMediaCard extends StatefulWidget {
     this.mixedHubContext = false,
     this.showServerName = false,
     this.disableScale = false,
+    this.hideContentRating = false,
+    this.hideRating = false,
+    this.hideStudio = false,
     this.focusNode,
     this.onNavigateUp,
     this.onNavigateDown,
@@ -128,6 +140,9 @@ class _FocusableMediaCardState extends State<FocusableMediaCard> {
         isOffline: widget.isOffline,
         mixedHubContext: widget.mixedHubContext,
         showServerName: widget.showServerName,
+        hideContentRating: widget.hideContentRating,
+        hideRating: widget.hideRating,
+        hideStudio: widget.hideStudio,
       ),
     );
   }

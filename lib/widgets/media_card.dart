@@ -42,6 +42,9 @@ class MediaCard extends StatefulWidget {
   final bool isOffline; // True for downloaded content without server access
   final bool mixedHubContext; // True when in a hub with mixed content (movies + episodes)
   final bool showServerName; // Show server name in list view (multi-server)
+  final bool hideContentRating;
+  final bool hideRating;
+  final bool hideStudio;
 
   const MediaCard({
     super.key,
@@ -58,6 +61,9 @@ class MediaCard extends StatefulWidget {
     this.isOffline = false,
     this.mixedHubContext = false,
     this.showServerName = false,
+    this.hideContentRating = false,
+    this.hideRating = false,
+    this.hideStudio = false,
   });
 
   @override
@@ -204,6 +210,9 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
             localPosterPath: localPosterPath,
             showServerName: widget.showServerName,
             isInContinueWatching: widget.isInContinueWatching,
+            hideContentRating: widget.hideContentRating,
+            hideRating: widget.hideRating,
+            hideStudio: widget.hideStudio,
           );
 
     // MediaContextMenu as a non-widget helper — only wrap with its key for
@@ -331,6 +340,9 @@ class _MediaCardList extends StatelessWidget {
   final String? localPosterPath;
   final bool showServerName;
   final bool isInContinueWatching;
+  final bool hideContentRating;
+  final bool hideRating;
+  final bool hideStudio;
 
   const _MediaCardList({
     required this.item,
@@ -345,6 +357,9 @@ class _MediaCardList extends StatelessWidget {
     this.localPosterPath,
     this.showServerName = false,
     this.isInContinueWatching = false,
+    this.hideContentRating = false,
+    this.hideRating = false,
+    this.hideStudio = false,
   });
 
   double _basePosterWidth() {
@@ -414,7 +429,7 @@ class _MediaCardList extends StatelessWidget {
           parts.add(t.playlists.itemCount(count: count));
         }
       } else {
-        if (mi.contentRating != null && mi.contentRating!.isNotEmpty) {
+        if (!hideContentRating && mi.contentRating != null && mi.contentRating!.isNotEmpty) {
           final rating = formatContentRating(mi.contentRating);
           if (rating.isNotEmpty) {
             parts.add(rating);
@@ -433,11 +448,11 @@ class _MediaCardList extends StatelessWidget {
           parts.add(formatDurationTextual(mi.durationMs!));
         }
 
-        if (mi.rating != null) {
+        if (!hideRating && mi.rating != null) {
           parts.add('${formatRating(mi.rating!)}★');
         }
 
-        if (mi.studio != null && mi.studio!.isNotEmpty) {
+        if (!hideStudio && mi.studio != null && mi.studio!.isNotEmpty) {
           parts.add(mi.studio!);
         }
       }
