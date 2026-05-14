@@ -78,6 +78,7 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       'studio',
       'resolution',
       'edition',
+      'producer',
     };
 
     // 2. Filter the incoming list
@@ -107,7 +108,6 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
       'actor': 60,
       'director': 70,
       'writer': 80,
-      'producer': 90,
       'country': 100,
       'network': 105,
       'contentRating': 110,
