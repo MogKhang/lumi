@@ -321,10 +321,10 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
   }
 
   String _formatSleepTimer(SleepTimerService sleepTimer) {
-    if (!sleepTimer.isActive) return 'Off';
+    if (!sleepTimer.isActive) return t.videoSettings.off;
     final remaining = sleepTimer.remainingTime;
-    if (remaining == null) return 'Off';
-    return 'Active (${formatDurationWithSeconds(remaining)})';
+    if (remaining == null) return t.videoSettings.off;
+    return t.videoSettings.active(time: formatDurationWithSeconds(remaining));
   }
 
   Widget _buildMenuView() {

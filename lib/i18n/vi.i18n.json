@@ -1077,15 +1077,18 @@
   },
   "videoSettings": {
     "playbackSettings": "Cấu hình",
-    "playbackSpeed": "Playback Speed",
+    "playbackSpeed": "Tốc độ phát",
     "sleepTimer": "Hẹn giờ tắt màn hình",
-    "audioSync": "Audio Sync",
-    "subtitleSync": "Subtitle Sync",
+    "audioSync": "Độ trễ âm thanh",
+    "subtitleSync": "Độ trễ phụ đề",
     "hdr": "HDR",
-    "audioOutput": "Audio Output",
+    "audioOutput": "Thiết bị âm thanh",
     "performanceOverlay": "Performance Overlay",
-    "audioPassthrough": "Audio Passthrough",
-    "audioNormalization": "Normalize Loudness"
+    "audioPassthrough": "Truyền thẳng âm thanh (Passthrough)",
+    "audioNormalization": "Normalize Loudness",
+    "off": "Tắt",
+    "active": "Đang bật (${time})",
+    "normalSpeed": "Bình thường"
   },
   "externalPlayer": {
     "title": "External Player",

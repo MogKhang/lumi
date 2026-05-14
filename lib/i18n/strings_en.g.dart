@@ -3026,6 +3026,15 @@ class TranslationsVideoSettingsEn {
 
 	/// en: 'Normalize Loudness'
 	String get audioNormalization => 'Normalize Loudness';
+
+	/// en: 'Off'
+	String get off => 'Off';
+
+	/// en: 'Active (${time})'
+	String active({required Object time}) => 'Active (${time})';
+
+	/// en: 'Normal'
+	String get normalSpeed => 'Normal';
 }
 
 // Path: externalPlayer
@@ -5131,6 +5140,9 @@ extension on Translations {
 			'videoSettings.performanceOverlay' => 'Performance Overlay',
 			'videoSettings.audioPassthrough' => 'Audio Passthrough',
 			'videoSettings.audioNormalization' => 'Normalize Loudness',
+			'videoSettings.off' => 'Off',
+			'videoSettings.active' => ({required Object time}) => 'Active (${time})',
+			'videoSettings.normalSpeed' => 'Normal',
 			'externalPlayer.title' => 'External Player',
 			'externalPlayer.useExternalPlayer' => 'Use External Player',
 			'externalPlayer.useExternalPlayerDescription' => 'Open videos in an external app instead of the built-in player',
@@ -5162,11 +5174,11 @@ extension on Translations {
 			'metadataEdit.poster' => 'Poster',
 			'metadataEdit.background' => 'Background',
 			'metadataEdit.logo' => 'Logo',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.squareArt' => 'Square Art',
 			'metadataEdit.selectPoster' => 'Select Poster',
 			'metadataEdit.selectBackground' => 'Select Background',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.selectLogo' => 'Select Logo',
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',

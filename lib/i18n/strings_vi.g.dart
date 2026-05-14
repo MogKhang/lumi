@@ -1290,15 +1290,18 @@ class _TranslationsVideoSettingsVi extends TranslationsVideoSettingsEn {
 
 	// Translations
 	@override String get playbackSettings => 'Cấu hình';
-	@override String get playbackSpeed => 'Playback Speed';
+	@override String get playbackSpeed => 'Tốc độ phát';
 	@override String get sleepTimer => 'Hẹn giờ tắt màn hình';
-	@override String get audioSync => 'Audio Sync';
-	@override String get subtitleSync => 'Subtitle Sync';
+	@override String get audioSync => 'Độ trễ âm thanh';
+	@override String get subtitleSync => 'Độ trễ phụ đề';
 	@override String get hdr => 'HDR';
-	@override String get audioOutput => 'Audio Output';
+	@override String get audioOutput => 'Thiết bị âm thanh';
 	@override String get performanceOverlay => 'Performance Overlay';
-	@override String get audioPassthrough => 'Audio Passthrough';
+	@override String get audioPassthrough => 'Truyền thẳng âm thanh (Passthrough)';
 	@override String get audioNormalization => 'Normalize Loudness';
+	@override String get off => 'Tắt';
+	@override String active({required Object time}) => 'Đang bật (${time})';
+	@override String get normalSpeed => 'Bình thường';
 }
 
 // Path: externalPlayer
@@ -2784,15 +2787,18 @@ extension on TranslationsVi {
 			'companionRemote.remote.audio' => 'Audio',
 			'companionRemote.remote.searchHint' => 'Search on desktop...',
 			'videoSettings.playbackSettings' => 'Cấu hình',
-			'videoSettings.playbackSpeed' => 'Playback Speed',
+			'videoSettings.playbackSpeed' => 'Tốc độ phát',
 			'videoSettings.sleepTimer' => 'Hẹn giờ tắt màn hình',
-			'videoSettings.audioSync' => 'Audio Sync',
-			'videoSettings.subtitleSync' => 'Subtitle Sync',
+			'videoSettings.audioSync' => 'Độ trễ âm thanh',
+			'videoSettings.subtitleSync' => 'Độ trễ phụ đề',
 			'videoSettings.hdr' => 'HDR',
-			'videoSettings.audioOutput' => 'Audio Output',
+			'videoSettings.audioOutput' => 'Thiết bị âm thanh',
 			'videoSettings.performanceOverlay' => 'Performance Overlay',
-			'videoSettings.audioPassthrough' => 'Audio Passthrough',
+			'videoSettings.audioPassthrough' => 'Truyền thẳng âm thanh (Passthrough)',
 			'videoSettings.audioNormalization' => 'Normalize Loudness',
+			'videoSettings.off' => 'Tắt',
+			'videoSettings.active' => ({required Object time}) => 'Đang bật (${time})',
+			'videoSettings.normalSpeed' => 'Bình thường',
 			'externalPlayer.title' => 'External Player',
 			'externalPlayer.useExternalPlayer' => 'Use External Player',
 			'externalPlayer.useExternalPlayerDescription' => 'Open videos in an external app instead of the built-in player',
@@ -2822,11 +2828,11 @@ extension on TranslationsVi {
 			'metadataEdit.tagline' => 'Tagline',
 			'metadataEdit.summary' => 'Summary',
 			'metadataEdit.poster' => 'Poster',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.background' => 'Background',
 			'metadataEdit.logo' => 'Logo',
 			'metadataEdit.squareArt' => 'Square Art',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.selectPoster' => 'Select Poster',
 			'metadataEdit.selectBackground' => 'Select Background',
 			'metadataEdit.selectLogo' => 'Select Logo',

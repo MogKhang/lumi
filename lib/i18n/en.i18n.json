@@ -1081,7 +1081,10 @@
     "audioOutput": "Audio Output",
     "performanceOverlay": "Performance Overlay",
     "audioPassthrough": "Audio Passthrough",
-    "audioNormalization": "Normalize Loudness"
+    "audioNormalization": "Normalize Loudness",
+    "off": "Off",
+    "active": "Active (${time})",
+    "normalSpeed": "Normal"
   },
   "externalPlayer": {
     "title": "External Player",

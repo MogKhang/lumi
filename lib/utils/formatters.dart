@@ -60,8 +60,8 @@ String formatDurationTextual(int milliseconds, {bool abbreviated = true}) {
     duration,
     abbreviated: abbreviated,
     locale: durationLocale,
-    delimiter: abbreviated ? ' ' : ', ',
-    spacer: (abbreviated && LocaleSettings.currentLocale.languageCode != 'vi') ? '' : ' ',
+    delimiter: ' ',
+    spacer: ' ',
     tersity: DurationTersity.minute,
   );
 }
@@ -182,7 +182,7 @@ final RegExp _trailingZeroPattern = RegExp(r'\.?0+$');
 /// When [normalAtOne] is true, 1.0 renders as "Normal" for menu labels;
 /// the in-player pill passes false to keep a numeric indicator.
 String formatPlaybackRate(double rate, {bool normalAtOne = false}) {
-  if (normalAtOne && (rate - 1.0).abs() < 0.005) return 'Normal';
+  if (normalAtOne && (rate - 1.0).abs() < 0.005) return t.videoSettings.normalSpeed;
   return '${rate.toStringAsFixed(2).replaceFirst(_trailingZeroPattern, '')}x';
 }
 
