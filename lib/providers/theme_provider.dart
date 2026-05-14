@@ -5,6 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../mixins/disposable_change_notifier_mixin.dart';
 import '../services/settings_service.dart' as settings;
 import '../theme/mono_theme.dart';
+import '../i18n/strings.g.dart';
 
 class ThemeProvider extends ChangeNotifier with DisposableChangeNotifierMixin {
   settings.SettingsService? _settingsService;
@@ -126,13 +127,13 @@ class ThemeProvider extends ChangeNotifier with DisposableChangeNotifierMixin {
   String get themeModeDisplayName {
     switch (_themeMode) {
       case settings.ThemeMode.light:
-        return 'Light';
+        return t.settings.lightTheme;
       case settings.ThemeMode.dark:
-        return 'Dark';
+        return t.settings.darkTheme;
       case settings.ThemeMode.oled:
-        return 'OLED';
+        return t.settings.oledTheme;
       case settings.ThemeMode.system:
-        return 'System';
+        return t.settings.systemTheme;
     }
   }
 
