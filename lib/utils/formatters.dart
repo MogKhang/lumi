@@ -61,7 +61,7 @@ String formatDurationTextual(int milliseconds, {bool abbreviated = true}) {
     abbreviated: abbreviated,
     locale: durationLocale,
     delimiter: abbreviated ? ' ' : ', ',
-    spacer: '',
+    spacer: (abbreviated && LocaleSettings.currentLocale.languageCode != 'vi') ? '' : ' ',
     tersity: DurationTersity.minute,
   );
 }
@@ -80,7 +80,7 @@ String formatDurationWithSeconds(Duration duration) {
     abbreviated: true,
     locale: durationLocale,
     delimiter: ' ',
-    spacer: '',
+    spacer: LocaleSettings.currentLocale.languageCode == 'vi' ? ' ' : '',
     tersity: DurationTersity.second,
   );
 }

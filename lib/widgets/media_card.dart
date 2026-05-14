@@ -444,7 +444,7 @@ class _MediaCardList extends StatelessWidget {
           parts.add(editionTitle);
         }
 
-        if (mi.durationMs != null) {
+        if (mi.durationMs != null && (mi.kind == MediaKind.movie || mi.kind == MediaKind.episode)) {
           parts.add(formatDurationTextual(mi.durationMs!));
         }
 

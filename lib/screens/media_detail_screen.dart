@@ -2454,6 +2454,18 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                     '${metadata.year}',
                     style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                   ),
+                if (metadata.durationMs != null && (metadata.kind == MediaKind.movie || metadata.kind == MediaKind.episode)) ...[
+                  if (metadata.year != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text('•',
+                          style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+                    ),
+                  Text(
+                    formatDurationTextual(metadata.durationMs!),
+                    style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 12),
@@ -2633,10 +2645,11 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                     runSpacing: 8,
                     children: [
                       if (metadata.year != null) _buildMetadataChip('${metadata.year}'),
+                      if (metadata.durationMs != null && (metadata.kind == MediaKind.movie || metadata.kind == MediaKind.episode))
+                        _buildMetadataChip(formatDurationTextual(metadata.durationMs!)),
                       if (metadata case PlexMediaItem(:final editionTitle?)) _buildMetadataChip(editionTitle),
                       if (metadata.contentRating != null)
                         _buildMetadataChip(formatContentRating(metadata.contentRating!)),
-                      if (metadata.durationMs != null) _buildMetadataChip(formatDurationTextual(metadata.durationMs!)),
                       ..._buildRatingChips(metadata),
                     ],
                   ),
