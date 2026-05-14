@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:plezy/utils/formatters.dart';
 
 import '../../../media/media_item.dart';
+import '../../../media/media_item_types.dart';
 import '../../../i18n/strings.g.dart';
 import '../../../watch_together/widgets/watch_together_overlay.dart';
 import '../../../watch_together/providers/watch_together_provider.dart';
@@ -62,14 +63,26 @@ class VideoControlsHeader extends StatelessWidget {
     );
   }
 
+  String? get _displayYear {
+    if (metadata.isEpisode) {
+      return metadata.grandparentYear?.toString();
+    }
+    if (metadata.year != null) return metadata.year.toString();
+    if (metadata.originallyAvailableAt != null && metadata.originallyAvailableAt!.length >= 4) {
+      return metadata.originallyAvailableAt!.substring(0, 4);
+    }
+    return null;
+  }
+
   Widget _buildSingleLineTitle() {
     final seriesName = metadata.grandparentTitle ?? metadata.title!;
     final hasEpisodeInfo = metadata.parentIndex != null && metadata.index != null;
 
     final List<String> parts = [seriesName];
 
-    if (metadata.year != null) {
-      parts.add(metadata.year.toString());
+    final year = _displayYear;
+    if (year != null) {
+      parts.add(year);
     }
 
     if (hasEpisodeInfo) {
@@ -88,8 +101,9 @@ class VideoControlsHeader extends StatelessWidget {
   Widget _buildMultiLineTitle() {
     final List<String> secondLineParts = [];
 
-    if (metadata.year != null) {
-      secondLineParts.add(metadata.year.toString());
+    final year = _displayYear;
+    if (year != null) {
+      secondLineParts.add(year);
     }
 
     if (metadata.parentIndex != null && metadata.index != null) {

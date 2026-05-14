@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../media/media_item.dart';
+import '../media/media_kind.dart';
 import '../mpv/mpv.dart';
 import '../models/transcode_quality_preset.dart';
 import '../providers/download_provider.dart';
@@ -62,6 +63,26 @@ Future<bool?> navigateToVideoPlayer(
   final manager = context.read<MultiServerProvider>().serverManager;
   final mediaClient = isOffline ? null : manager.getClient(metadata.serverId ?? '');
 
+  // Enrich metadata with grandparentYear if it's an episode and missing it
+  // (e.g. played from Hubs or direct navigation where enrichment hasn't happened).
+  MediaItem enrichedMetadata = metadata;
+  if (!isOffline &&
+      mediaClient != null &&
+      metadata.kind == MediaKind.episode &&
+      metadata.grandparentYear == null &&
+      metadata.grandparentId != null) {
+    try {
+      final show = await mediaClient.fetchItem(metadata.grandparentId!);
+      if (show != null && (show.year != null || show.grandparentYear != null)) {
+        enrichedMetadata = metadata.copyWith(
+          grandparentYear: show.year ?? show.grandparentYear,
+        );
+      }
+    } catch (_) {
+      // Best effort enrichment
+    }
+  }
+
   int mediaIndex = selectedMediaIndex ?? 0;
   if (selectedMediaIndex == null) {
     try {
@@ -90,7 +111,7 @@ Future<bool?> navigateToVideoPlayer(
       } else if (context.mounted) {
         launched = await ExternalPlayerService.launch(
           context: context,
-          metadata: metadata,
+          metadata: enrichedMetadata,
           client: mediaClient,
           mediaIndex: mediaIndex,
         );
@@ -104,10 +125,10 @@ Future<bool?> navigateToVideoPlayer(
 
   // Prevent stacking an identical video player when already active
   if (!usePushReplacement &&
-      VideoPlayerScreenState.activeId == metadata.id &&
+      VideoPlayerScreenState.activeId == enrichedMetadata.id &&
       VideoPlayerScreenState.activeMediaIndex == mediaIndex) {
     appLogger.d(
-      'Video player already active for ${metadata.id} (mediaIndex=$mediaIndex), skipping duplicate navigation',
+      'Video player already active for ${enrichedMetadata.id} (mediaIndex=$mediaIndex), skipping duplicate navigation',
     );
     return null;
   }
@@ -115,7 +136,7 @@ Future<bool?> navigateToVideoPlayer(
   final route = PageRouteBuilder<bool>(
     settings: const RouteSettings(name: kVideoPlayerRouteName),
     pageBuilder: (context, animation, secondaryAnimation) => VideoPlayerScreen(
-      metadata: metadata,
+      metadata: enrichedMetadata,
       preferredAudioTrack: preferredAudioTrack,
       preferredSubtitleTrack: preferredSubtitleTrack,
       preferredSecondarySubtitleTrack: preferredSecondarySubtitleTrack,

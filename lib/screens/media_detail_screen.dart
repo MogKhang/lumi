@@ -380,7 +380,11 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
         setStateIfMounted(() {
           _fullMetadata = _applyLocalProgress(metadata.copyWith(serverId: serverId, serverName: serverName));
           if (onDeckEpisode != null) {
-            _onDeckEpisode = _applyLocalProgress(onDeckEpisode.copyWith(serverId: serverId, serverName: serverName));
+            _onDeckEpisode = _applyLocalProgress(onDeckEpisode.copyWith(
+              serverId: serverId,
+              serverName: serverName,
+              grandparentYear: metadata.isSeason ? metadata.grandparentYear : metadata.year,
+            ));
           }
         });
       }
@@ -999,7 +1003,12 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
       final base = _applyLocalProgress((metadata ?? _metadata).copyWith(serverId: serverId, serverName: serverName));
       final onDeckWithServerId = onDeckEpisode == null
           ? null
-          : _applyLocalProgress(onDeckEpisode.copyWith(serverId: serverId, serverName: serverName));
+          : _applyLocalProgress(onDeckEpisode.copyWith(
+              serverId: serverId,
+              serverName: serverName,
+              grandparentYear:
+                  (metadata ?? _metadata).isSeason ? (metadata ?? _metadata).grandparentYear : (metadata ?? _metadata).year,
+            ));
 
       setState(() {
         _fullMetadata = base;
@@ -1058,7 +1067,9 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
       // Plex as an int but lands in [MediaItem.libraryId] as the string
       // form (or null on Jellyfin items).
       final sectionId = (_fullMetadata ?? _metadata).libraryId;
-      final seasonsFuture = client.fetchChildren(_metadata.id);
+      final seasonsFuture = client.fetchChildren(_metadata.id).then((seasons) => seasons.map((s) => s.copyWith(
+        grandparentYear: _metadata.year,
+      )).toList());
       final prefsFuture = (client is PlexClient && sectionId != null)
           ? client.getLibrarySectionPrefs(sectionId)
           : Future.value(<String, dynamic>{});
@@ -1284,6 +1295,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                 serverName: _metadata.serverName,
                 grandparentId: _metadata.id,
                 grandparentTitle: _metadata.title,
+                grandparentYear: _metadata.isSeason ? _metadata.grandparentYear : _metadata.year,
               ),
             )
             .map(_applyLocalProgress)
@@ -2015,6 +2027,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
               serverName: _metadata.serverName,
               grandparentId: e.grandparentId ?? fallbackGrandparentId,
               grandparentTitle: e.grandparentTitle ?? fallbackGrandparentTitle,
+              grandparentYear: _metadata.isSeason ? _metadata.grandparentYear : _metadata.year,
             ),
           )
           .map(_applyLocalProgress)

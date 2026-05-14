@@ -172,6 +172,7 @@ class JellyfinMappers {
       grandparentTitle: item['SeriesName'] as String?,
       grandparentThumbPath: _seriesPrimaryImage(item),
       grandparentArtPath: _parentBackdropImage(item) ?? _seriesBackdropImage(item),
+      grandparentYear: item['SeriesProductionYear'] as int?,
       thumbPath: _selfImagePath(id, item, 'Primary'),
       artPath: _selfImagePath(id, item, 'Backdrop'),
       // Episodes/seasons don't carry their own logo — Jellyfin exposes the

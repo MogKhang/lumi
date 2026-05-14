@@ -406,6 +406,10 @@ class PlexMetadataDto {
   final int? parentIndex;
   @JsonKey(fromJson: flexibleInt)
   final int? index;
+  @JsonKey(fromJson: flexibleInt)
+  final int? parentYear;
+  @JsonKey(fromJson: flexibleInt)
+  final int? grandparentYear;
   final String? grandparentTheme;
   @JsonKey(fromJson: flexibleInt)
   final int? viewOffset;
@@ -496,6 +500,8 @@ class PlexMetadataDto {
     this.parentRatingKey,
     this.parentIndex,
     this.index,
+    this.parentYear,
+    this.grandparentYear,
     this.grandparentTheme,
     this.viewOffset,
     this.viewCount,
@@ -576,7 +582,7 @@ class PlexMetadataDto {
 
   static Map<String, dynamic> _obfuscateJson(Map<String, dynamic> json) {
     final copy = Map<String, dynamic>.from(json);
-    for (final key in const ['title', 'summary', 'tagline', 'grandparentTitle', 'parentTitle', 'studio']) {
+    for (final key in const ['title', 'summary', 'tagline', 'grandparentTitle', 'parentTitle', 'studio', 'grandparentYear']) {
       if (copy[key] is String) copy[key] = obfuscateText(copy[key] as String);
     }
     return copy;
@@ -786,6 +792,7 @@ class PlexMappers {
       grandparentTitle: dto.grandparentTitle,
       grandparentThumbPath: dto.grandparentThumb,
       grandparentArtPath: dto.grandparentArt,
+      grandparentYear: dto.grandparentYear ?? dto.parentYear,
       thumbPath: dto.thumb,
       artPath: dto.art,
       clearLogoPath: dto.clearLogo,
