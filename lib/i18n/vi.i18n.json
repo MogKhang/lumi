@@ -277,7 +277,8 @@
     "hint": "Tên của phim cần tìm kiếm...",
     "tryDifferentTerm": "Thử lại với từ khóa khác",
     "searchYourMedia": "Tìm kiếm phim",
-    "enterTitleActorOrKeyword": "Gõ từ khóa vào khung tìm kiếm"
+    "enterTitleActorOrKeyword": "Gõ từ khóa vào khung tìm kiếm",
+    "otherResults": "Kết quả khác"
   },
   "hotkeys": {
     "setShortcutFor": "Set Shortcut for ${actionName}",

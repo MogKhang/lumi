@@ -411,6 +411,7 @@ class _TranslationsSearchVi extends TranslationsSearchEn {
 	@override String get tryDifferentTerm => 'Thử lại với từ khóa khác';
 	@override String get searchYourMedia => 'Tìm kiếm phim';
 	@override String get enterTitleActorOrKeyword => 'Gõ từ khóa vào khung tìm kiếm';
+	@override String get otherResults => 'Kết quả khác';
 }
 
 // Path: hotkeys
@@ -2044,6 +2045,7 @@ extension on TranslationsVi {
 			'search.tryDifferentTerm' => 'Thử lại với từ khóa khác',
 			'search.searchYourMedia' => 'Tìm kiếm phim',
 			'search.enterTitleActorOrKeyword' => 'Gõ từ khóa vào khung tìm kiếm',
+			'search.otherResults' => 'Kết quả khác',
 			'hotkeys.setShortcutFor' => ({required Object actionName}) => 'Set Shortcut for ${actionName}',
 			'hotkeys.clearShortcut' => 'Clear shortcut',
 			'hotkeys.actions.playPause' => 'Play/Pause',
@@ -2290,9 +2292,9 @@ extension on TranslationsVi {
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
-			'profiles.add' => 'Add',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.add' => 'Add',
 			'profiles.deleteProfileButton' => 'Delete profile',
 			'profiles.noConnectionsHint' => 'No connections — add one to use this profile.',
 			'profiles.plexHomeAccount' => 'Plex Home account',
@@ -2804,9 +2806,9 @@ extension on TranslationsVi {
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
-			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',

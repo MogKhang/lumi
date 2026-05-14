@@ -7,6 +7,7 @@ import 'package:rate_limiter/rate_limiter.dart';
 import '../focus/focusable_text_field.dart';
 import '../i18n/strings.g.dart';
 import '../media/media_item.dart';
+import '../media/media_kind.dart';
 import '../mixins/controller_disposer_mixin.dart';
 import '../mixins/refreshable.dart';
 import '../providers/multi_server_provider.dart';
@@ -171,29 +172,78 @@ class _SearchScreenState extends State<SearchScreen>
 
 
 
-  Widget _buildResultsList(BuildContext context) {
+  List<Widget> _buildResultsList(BuildContext context) {
     final svc = SettingsService.instanceOrNull!;
     final showServerNameSetting = svc.read(SettingsService.showServerNameOnHubs);
     final multiServer = context.watch<MultiServerProvider>();
     final showServerName = showServerNameSetting && multiServer.totalServerCount > 1;
-    return SliverPadding(
-      padding: const EdgeInsets.all(16),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          final item = _searchResults[index];
-          return FocusableMediaCard(
-            key: Key(item.globalKey),
-            item: item,
-            forceListMode: true,
-            disableScale: true,
-            focusNode: index == 0 ? _firstResultFocusNode : null,
-            onListRefresh: () => updateItem(item.id),
-            onNavigateUp: index == 0 ? focusSearchInput : null,
-            showServerName: showServerName,
-          );
-        }, childCount: _searchResults.length),
+
+    final movies = _searchResults.where((i) => i.kind == MediaKind.movie).toList();
+    final shows = _searchResults.where((i) => i.kind.isShowRelated).toList();
+    final others = _searchResults
+        .where((i) => i.kind != MediaKind.movie && !i.kind.isShowRelated)
+        .toList();
+
+    final slivers = <Widget>[];
+    bool isFirstFound = false;
+
+    if (movies.isNotEmpty) {
+      slivers.addAll(_buildCategory(context, t.navigation.movies, movies, showServerName, isFirst: !isFirstFound));
+      isFirstFound = true;
+    }
+
+    if (shows.isNotEmpty) {
+      slivers.addAll(_buildCategory(context, t.navigation.shows, shows, showServerName, isFirst: !isFirstFound));
+      isFirstFound = true;
+    }
+
+    if (others.isNotEmpty) {
+      slivers.addAll(_buildCategory(context, t.search.otherResults, others, showServerName, isFirst: !isFirstFound));
+      isFirstFound = true;
+    }
+
+    return slivers;
+  }
+
+  List<Widget> _buildCategory(
+    BuildContext context,
+    String title,
+    List<MediaItem> items,
+    bool showServerName, {
+    bool isFirst = false,
+  }) {
+    return [
+      SliverPadding(
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+        sliver: SliverToBoxAdapter(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
       ),
-    );
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final item = items[index];
+            final isFirstOverall = isFirst && index == 0;
+            return FocusableMediaCard(
+              key: Key(item.globalKey),
+              item: item,
+              forceListMode: true,
+              disableScale: true,
+              focusNode: isFirstOverall ? _firstResultFocusNode : null,
+              onListRefresh: () => updateItem(item.id),
+              onNavigateUp: isFirstOverall ? focusSearchInput : null,
+              showServerName: showServerName,
+            );
+          }, childCount: items.length),
+        ),
+      ),
+    ];
   }
 
   @override
@@ -261,7 +311,7 @@ class _SearchScreenState extends State<SearchScreen>
                 ),
               )
             else
-              _buildResultsList(context),
+              ..._buildResultsList(context),
           ],
         ),
       ),
