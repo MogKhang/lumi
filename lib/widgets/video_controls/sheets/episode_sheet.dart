@@ -142,6 +142,19 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
     }
   }
 
+  String _getLocalizedSeasonTitle(String? title) {
+    if (title == null || title.isEmpty) return '';
+
+    // Check for "Season X" pattern
+    final seasonMatch = RegExp(r'^Season\s+(\d+)$', caseSensitive: false).firstMatch(title);
+    if (seasonMatch != null) {
+      final seasonNumber = seasonMatch.group(1);
+      return '${t.mediaDetail.season} $seasonNumber';
+    }
+
+    return title;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseVideoControlSheet(
@@ -171,7 +184,7 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
                                 return ListTile(
                                   dense: true,
                                   title: Text(
-                                    season.title ?? '${t.mediaDetail.season} ${season.index}',
+                                    _getLocalizedSeasonTitle(season.title ?? '${t.mediaDetail.season} ${season.index}'),
                                     style: TextStyle(
                                       color: isSelected ? Theme.of(context).colorScheme.primary : (isCurrent ? Colors.white : Colors.white70),
                                       fontWeight: isSelected || isCurrent ? FontWeight.bold : FontWeight.normal,
