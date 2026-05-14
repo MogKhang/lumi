@@ -82,6 +82,11 @@
     "latestVersion": "You are on the latest version",
     "checkFailed": "Failed to check for updates"
   },
+  "mediaDetail": {
+    "watchNow": "Watch Now",
+    "addToPlaylist": "Add to Playlist",
+    "plot": "Plot"
+  },
   "settings": {
     "title": "Settings",
     "supportDeveloper": "Support Lumi",

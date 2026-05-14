@@ -108,7 +108,7 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
                   playButtonIcon,
                   const SizedBox(width: 8),
                   Text(
-                    (metadata.isMovie || metadata.isShow) ? 'Watch Now' : playButtonLabel,
+                    (metadata.isMovie || metadata.isShow) ? t.mediaDetail.watchNow : playButtonLabel,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -120,12 +120,12 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
             FilledButton.tonal(
               onPressed: () => _showAddToPlaylistDialog(context, metadata),
               style: actionButtonStyle(padding: const EdgeInsets.symmetric(horizontal: 16)),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AppIcon(Symbols.playlist_add_rounded, fill: 1, size: 20),
                   SizedBox(width: 8),
-                  Text('Add to Playlist'),
+                  Text(t.mediaDetail.addToPlaylist),
                 ],
               ),
             ),
@@ -610,7 +610,7 @@ class _PlaylistSelectionSheet extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              'Add to Playlist',
+              t.mediaDetail.addToPlaylist,
               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),

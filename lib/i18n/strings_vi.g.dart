@@ -44,6 +44,7 @@ class TranslationsVi extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsCommonVi common = _TranslationsCommonVi._(_root);
 	@override late final _TranslationsScreensVi screens = _TranslationsScreensVi._(_root);
 	@override late final _TranslationsUpdateVi update = _TranslationsUpdateVi._(_root);
+	@override late final _TranslationsMediaDetailVi mediaDetail = _TranslationsMediaDetailVi._(_root);
 	@override late final _TranslationsSettingsVi settings = _TranslationsSettingsVi._(_root);
 	@override late final _TranslationsSearchVi search = _TranslationsSearchVi._(_root);
 	@override late final _TranslationsHotkeysVi hotkeys = _TranslationsHotkeysVi._(_root);
@@ -201,6 +202,18 @@ class _TranslationsUpdateVi extends TranslationsUpdateEn {
 	@override String get viewRelease => 'View Release';
 	@override String get latestVersion => 'You are on the latest version';
 	@override String get checkFailed => 'Failed to check for updates';
+}
+
+// Path: mediaDetail
+class _TranslationsMediaDetailVi extends TranslationsMediaDetailEn {
+	_TranslationsMediaDetailVi._(TranslationsVi root) : this._root = root, super.internal(root);
+
+	final TranslationsVi _root; // ignore: unused_field
+
+	// Translations
+	@override String get watchNow => 'Xem phim';
+	@override String get addToPlaylist => 'Thêm danh sách';
+	@override String get plot => 'Nội dung';
 }
 
 // Path: settings
@@ -797,7 +810,7 @@ class _TranslationsDiscoverVi extends TranslationsDiscoverEn {
 	@override String recentlyAddedIn({required Object library}) => 'Recently Added in ${library}';
 	@override String playEpisode({required Object season, required Object episode}) => 'S${season}E${episode}';
 	@override String get overview => 'Overview';
-	@override String get cast => 'Cast';
+	@override String get cast => 'Diễn viên';
 	@override String get extras => 'Trailers & Extras';
 	@override String get studio => 'Studio';
 	@override String get rating => 'Rating';
@@ -1856,6 +1869,9 @@ extension on TranslationsVi {
 			'update.viewRelease' => 'View Release',
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
+			'mediaDetail.watchNow' => 'Xem phim',
+			'mediaDetail.addToPlaylist' => 'Thêm danh sách',
+			'mediaDetail.plot' => 'Nội dung',
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -2292,11 +2308,11 @@ extension on TranslationsVi {
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
@@ -2336,7 +2352,7 @@ extension on TranslationsVi {
 			'discover.recentlyAddedIn' => ({required Object library}) => 'Recently Added in ${library}',
 			'discover.playEpisode' => ({required Object season, required Object episode}) => 'S${season}E${episode}',
 			'discover.overview' => 'Overview',
-			'discover.cast' => 'Cast',
+			'discover.cast' => 'Diễn viên',
 			'discover.extras' => 'Trailers & Extras',
 			'discover.studio' => 'Studio',
 			'discover.rating' => 'Rating',
@@ -2806,11 +2822,11 @@ extension on TranslationsVi {
 			'metadataEdit.selectPoster' => 'Select Poster',
 			'metadataEdit.selectBackground' => 'Select Background',
 			'metadataEdit.selectLogo' => 'Select Logo',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',
 			'metadataEdit.uploadFile' => 'Upload File',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',

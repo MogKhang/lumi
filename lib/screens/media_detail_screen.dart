@@ -2192,7 +2192,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                           if (metadata.summary != null && metadata.summary!.isNotEmpty) ...[
                             Text(
                               key: _overviewSectionKey,
-                              (metadata.isMovie || metadata.isShow) ? 'Plot' : t.discover.overview,
+                              (metadata.isMovie || metadata.isShow) ? t.mediaDetail.plot : t.discover.overview,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),

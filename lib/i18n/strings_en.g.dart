@@ -45,6 +45,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsCommonEn common = TranslationsCommonEn.internal(_root);
 	late final TranslationsScreensEn screens = TranslationsScreensEn.internal(_root);
 	late final TranslationsUpdateEn update = TranslationsUpdateEn.internal(_root);
+	late final TranslationsMediaDetailEn mediaDetail = TranslationsMediaDetailEn.internal(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
 	late final TranslationsSearchEn search = TranslationsSearchEn.internal(_root);
 	late final TranslationsHotkeysEn hotkeys = TranslationsHotkeysEn.internal(_root);
@@ -348,6 +349,24 @@ class TranslationsUpdateEn {
 
 	/// en: 'Failed to check for updates'
 	String get checkFailed => 'Failed to check for updates';
+}
+
+// Path: mediaDetail
+class TranslationsMediaDetailEn {
+	TranslationsMediaDetailEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Watch Now'
+	String get watchNow => 'Watch Now';
+
+	/// en: 'Add to Playlist'
+	String get addToPlaylist => 'Add to Playlist';
+
+	/// en: 'Plot'
+	String get plot => 'Plot';
 }
 
 // Path: settings
@@ -4184,6 +4203,9 @@ extension on Translations {
 			'update.viewRelease' => 'View Release',
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
+			'mediaDetail.watchNow' => 'Watch Now',
+			'mediaDetail.addToPlaylist' => 'Add to Playlist',
+			'mediaDetail.plot' => 'Plot',
 			'settings.title' => 'Settings',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -4620,11 +4642,11 @@ extension on Translations {
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
@@ -5134,11 +5156,11 @@ extension on Translations {
 			'metadataEdit.selectLogo' => 'Select Logo',
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.uploadFile' => 'Upload File',
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',

@@ -83,6 +83,11 @@
     "latestVersion": "You are on the latest version",
     "checkFailed": "Failed to check for updates"
   },
+  "mediaDetail": {
+    "watchNow": "Xem phim",
+    "addToPlaylist": "Thêm danh sách",
+    "plot": "Nội dung"
+  },
   "settings": {
     "title": "Cài đặt",
     "supportDeveloper": "Support Lumi",
@@ -596,7 +601,7 @@
     "recentlyAddedIn": "Recently Added in ${library}",
     "playEpisode": "S${season}E${episode}",
     "overview": "Overview",
-    "cast": "Cast",
+    "cast": "Diễn viên",
     "extras": "Trailers & Extras",
     "studio": "Studio",
     "rating": "Rating",
