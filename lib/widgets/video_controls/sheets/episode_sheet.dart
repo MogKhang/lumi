@@ -275,40 +275,16 @@ class _EpisodeTile extends StatelessWidget {
             ),
         ],
       ),
-      title: Row(
-        children: [
-          if (episode.index != null) ...[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                '${t.mediaDetail.episode} ${episode.index}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-          ],
-          Expanded(
-            child: Text(
-              episode.title ?? '',
+      title: episode.index != null
+          ? Text(
+              '${t.mediaDetail.episode} ${episode.index}',
               style: TextStyle(
                 color: isPlaying ? highlightColor : Colors.white,
                 fontWeight: isPlaying ? FontWeight.bold : FontWeight.normal,
                 fontSize: 14,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
+            )
+          : null,
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 4),
         child: Text(
