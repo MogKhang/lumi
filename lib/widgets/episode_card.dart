@@ -265,33 +265,11 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
                             return Row(
                               children: [
                                 if (widget.episode.index != null)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withValues(alpha: 0.4),
-                                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                                    ),
-                                    child: Text(
-                                      '${t.mediaDetail.episode} ${widget.episode.index}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                                  Text(
+                                    '${t.mediaDetail.episode} ${widget.episode.index}',
+                                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                 if (downloadStatusIcon != null) ...[const SizedBox(width: 6), downloadStatusIcon],
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    widget.episode.title!,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
                               ],
                             );
                           },
