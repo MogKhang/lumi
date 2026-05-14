@@ -112,8 +112,8 @@ class _AppLocalePref extends Pref<AppLocale> {
   @override
   AppLocale readFrom(BaseSharedPreferencesService svc) {
     final code = svc.prefs.getString(key);
-    if (code == null || code.isEmpty) return AppLocaleUtils.findDeviceLocale();
-    return AppLocale.values.asNameMap()[code] ?? AppLocale.en;
+    if (code == null || code.isEmpty) return AppLocale.vi;
+    return AppLocale.values.asNameMap()[code] ?? AppLocale.vi;
   }
 
   @override
