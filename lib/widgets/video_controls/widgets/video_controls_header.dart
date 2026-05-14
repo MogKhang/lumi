@@ -68,15 +68,17 @@ class VideoControlsHeader extends StatelessWidget {
 
     final List<String> parts = [seriesName];
 
-    if (hasEpisodeInfo) {
-      parts.add('Season ${metadata.parentIndex.toString().padLeft(2, '0')}');
-      parts.add('Episode ${metadata.index.toString().padLeft(2, '0')}');
-    } else if (metadata.year != null) {
+    if (metadata.year != null) {
       parts.add(metadata.year.toString());
     }
 
+    if (hasEpisodeInfo) {
+      parts.add('${t.mediaDetail.season} ${metadata.parentIndex}');
+      parts.add('${t.mediaDetail.episode} ${metadata.index}');
+    }
+
     return Text(
-      hasEpisodeInfo ? parts.join(' | ') : toBulletedString(parts),
+      toBulletedString(parts),
       style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -86,11 +88,13 @@ class VideoControlsHeader extends StatelessWidget {
   Widget _buildMultiLineTitle() {
     final List<String> secondLineParts = [];
 
-    if (metadata.parentIndex != null && metadata.index != null) {
-      secondLineParts.add('Season ${metadata.parentIndex.toString().padLeft(2, '0')}');
-      secondLineParts.add('Episode ${metadata.index.toString().padLeft(2, '0')}');
-    } else if (metadata.year != null) {
+    if (metadata.year != null) {
       secondLineParts.add(metadata.year.toString());
+    }
+
+    if (metadata.parentIndex != null && metadata.index != null) {
+      secondLineParts.add('${t.mediaDetail.season} ${metadata.parentIndex}');
+      secondLineParts.add('${t.mediaDetail.episode} ${metadata.index}');
     }
 
     return Column(
@@ -104,7 +108,7 @@ class VideoControlsHeader extends StatelessWidget {
         ),
         if (secondLineParts.isNotEmpty)
           Text(
-            secondLineParts.join(' | '),
+            toBulletedString(secondLineParts),
             style: const TextStyle(color: Colors.white70, fontSize: 14),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
