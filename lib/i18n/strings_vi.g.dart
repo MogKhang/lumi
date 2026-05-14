@@ -214,6 +214,9 @@ class _TranslationsMediaDetailVi extends TranslationsMediaDetailEn {
 	@override String get watchNow => 'Xem phim';
 	@override String get addToPlaylist => 'Thêm danh sách';
 	@override String get plot => 'Nội dung';
+	@override String get season => 'Phần';
+	@override String get episodes => 'Các tập phim';
+	@override String get episode => 'Tập';
 }
 
 // Path: settings
@@ -653,8 +656,8 @@ class _TranslationsMessagesVi extends TranslationsMessagesEn {
 	@override String metadataRefreshFailed({required Object error}) => 'Failed to refresh metadata: ${error}';
 	@override String get logoutConfirm => 'Are you sure you want to logout?';
 	@override String get noSeasonsFound => 'No seasons found';
-	@override String get noEpisodesFound => 'No episodes found in first season';
-	@override String get noEpisodesFoundGeneral => 'No episodes found';
+	@override String get noEpisodesFound => 'Không tìm thấy tập nào trong phần đầu tiên';
+	@override String get noEpisodesFoundGeneral => 'Không tìm thấy tập nào';
 	@override String get noResultsFound => 'Không tìm thấy kết quả';
 	@override String sleepTimerSet({required Object label}) => 'Sleep timer set for ${label}';
 	@override String get noItemsAvailable => 'No items available';
@@ -808,7 +811,7 @@ class _TranslationsDiscoverVi extends TranslationsDiscoverEn {
 	@override String nextUpIn({required Object library}) => 'Next Up in ${library}';
 	@override String get recentlyAdded => 'Recently Added';
 	@override String recentlyAddedIn({required Object library}) => 'Recently Added in ${library}';
-	@override String playEpisode({required Object season, required Object episode}) => 'S${season}E${episode}';
+	@override String playEpisode({required Object season, required Object episode}) => 'Phần ${season} Tập ${episode}';
 	@override String get overview => 'Overview';
 	@override String get cast => 'Diễn viên';
 	@override String get extras => 'Trailers & Extras';
@@ -1587,10 +1590,10 @@ class _TranslationsLibrariesGroupingsVi extends TranslationsLibrariesGroupingsEn
 	// Translations
 	@override String get title => 'Grouping';
 	@override String get all => 'All';
-	@override String get movies => 'Movies';
-	@override String get shows => 'TV Shows';
-	@override String get seasons => 'Seasons';
-	@override String get episodes => 'Episodes';
+	@override String get movies => 'Phim';
+	@override String get shows => 'Phim bộ';
+	@override String get seasons => 'Phần';
+	@override String get episodes => 'Các tập phim';
 	@override String get folders => 'Folders';
 }
 
@@ -1872,6 +1875,9 @@ extension on TranslationsVi {
 			'mediaDetail.watchNow' => 'Xem phim',
 			'mediaDetail.addToPlaylist' => 'Thêm danh sách',
 			'mediaDetail.plot' => 'Nội dung',
+			'mediaDetail.season' => 'Phần',
+			'mediaDetail.episodes' => 'Các tập phim',
+			'mediaDetail.episode' => 'Tập',
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -2247,8 +2253,8 @@ extension on TranslationsVi {
 			'messages.metadataRefreshFailed' => ({required Object error}) => 'Failed to refresh metadata: ${error}',
 			'messages.logoutConfirm' => 'Are you sure you want to logout?',
 			'messages.noSeasonsFound' => 'No seasons found',
-			'messages.noEpisodesFound' => 'No episodes found in first season',
-			'messages.noEpisodesFoundGeneral' => 'No episodes found',
+			'messages.noEpisodesFound' => 'Không tìm thấy tập nào trong phần đầu tiên',
+			'messages.noEpisodesFoundGeneral' => 'Không tìm thấy tập nào',
 			'messages.noResultsFound' => 'Không tìm thấy kết quả',
 			'messages.sleepTimerSet' => ({required Object label}) => 'Sleep timer set for ${label}',
 			'messages.noItemsAvailable' => 'No items available',
@@ -2305,11 +2311,11 @@ extension on TranslationsVi {
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
 			'profiles.removeConnectionTitle' => 'Remove connection?',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
@@ -2350,7 +2356,7 @@ extension on TranslationsVi {
 			'discover.nextUpIn' => ({required Object library}) => 'Next Up in ${library}',
 			'discover.recentlyAdded' => 'Recently Added',
 			'discover.recentlyAddedIn' => ({required Object library}) => 'Recently Added in ${library}',
-			'discover.playEpisode' => ({required Object season, required Object episode}) => 'S${season}E${episode}',
+			'discover.playEpisode' => ({required Object season, required Object episode}) => 'Phần ${season} Tập ${episode}',
 			'discover.overview' => 'Overview',
 			'discover.cast' => 'Diễn viên',
 			'discover.extras' => 'Trailers & Extras',
@@ -2416,10 +2422,10 @@ extension on TranslationsVi {
 			'libraries.tabs.playlists' => 'Danh sách',
 			'libraries.groupings.title' => 'Grouping',
 			'libraries.groupings.all' => 'All',
-			'libraries.groupings.movies' => 'Movies',
-			'libraries.groupings.shows' => 'TV Shows',
-			'libraries.groupings.seasons' => 'Seasons',
-			'libraries.groupings.episodes' => 'Episodes',
+			'libraries.groupings.movies' => 'Phim',
+			'libraries.groupings.shows' => 'Phim bộ',
+			'libraries.groupings.seasons' => 'Phần',
+			'libraries.groupings.episodes' => 'Các tập phim',
 			'libraries.groupings.folders' => 'Folders',
 			'libraries.filterCategories.genre' => 'Thể loại',
 			'libraries.filterCategories.year' => 'Năm phát hành',
@@ -2819,11 +2825,11 @@ extension on TranslationsVi {
 			'metadataEdit.background' => 'Background',
 			'metadataEdit.logo' => 'Logo',
 			'metadataEdit.squareArt' => 'Square Art',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.selectPoster' => 'Select Poster',
 			'metadataEdit.selectBackground' => 'Select Background',
 			'metadataEdit.selectLogo' => 'Select Logo',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',
 			'metadataEdit.uploadFile' => 'Upload File',

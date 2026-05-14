@@ -1067,10 +1067,15 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
       final seasons = results[0] as List<MediaItem>;
       final prefs = results[1] as Map<String, dynamic>;
 
-      // Preserve serverId for each season.
-      final seasonsWithServerId = seasons
-          .map((season) => season.copyWith(serverId: serverId, serverName: _metadata.serverName))
-          .toList();
+      // Preserve serverId for each season and localize title if it's a default "Season X" string
+      final seasonsWithServerId = seasons.map((season) {
+        var updated = season.copyWith(serverId: serverId, serverName: _metadata.serverName);
+        final localizedTitle = _getLocalizedSeasonTitle(updated.title);
+        if (localizedTitle != updated.title) {
+          updated = updated.copyWith(title: localizedTitle);
+        }
+        return updated;
+      }).toList();
 
       // Plex's flattenSeasons modes: 1 = always, 2 = single-season only.
       // Jellyfin falls through to "flatten when there's a single season".
@@ -1138,11 +1143,12 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     // Create synthetic season MediaItems from the grouped episodes.
     final seasons = seasonMap.entries.map((entry) {
       final firstEp = entry.value.first;
+      final rawTitle = firstEp.parentTitle ?? 'Season ${entry.key}';
       return MediaItem(
         id: firstEp.parentId ?? '',
         backend: _metadata.backend,
         kind: MediaKind.season,
-        title: firstEp.parentTitle ?? 'Season ${entry.key}',
+        title: _getLocalizedSeasonTitle(rawTitle),
         index: entry.key,
         leafCount: entry.value.length,
         thumbPath: firstEp.parentThumbPath,
@@ -1188,6 +1194,19 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
       _episodes = seasonEpisodes.map(_applyLocalProgress).toList();
       _isLoadingEpisodes = false;
     });
+  }
+
+  String _getLocalizedSeasonTitle(String? title) {
+    if (title == null || title.isEmpty) return '';
+
+    // Check for "Season X" pattern
+    final seasonMatch = RegExp(r'^Season\s+(\d+)$', caseSensitive: false).firstMatch(title);
+    if (seasonMatch != null) {
+      final seasonNumber = seasonMatch.group(1);
+      return '${t.mediaDetail.season} $seasonNumber';
+    }
+
+    return title;
   }
 
   /// Create or update focus nodes for season tab chips
@@ -2246,7 +2265,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                               _buildSeasonTabs(key: _seasonsSectionKey),
                               const SizedBox(height: 16),
                               Text(
-                                t.libraries.groupings.episodes,
+                                t.mediaDetail.episodes,
                                 style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
@@ -2262,7 +2281,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                             // Server says flatten — existing behavior unchanged
                             Text(
                               key: _seasonsSectionKey,
-                              t.libraries.groupings.episodes,
+                              t.mediaDetail.episodes,
                               style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8),

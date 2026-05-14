@@ -85,7 +85,10 @@
   "mediaDetail": {
     "watchNow": "Watch Now",
     "addToPlaylist": "Add to Playlist",
-    "plot": "Plot"
+    "plot": "Plot",
+    "season": "Season",
+    "episodes": "Episodes",
+    "episode": "Episode"
   },
   "settings": {
     "title": "Settings",

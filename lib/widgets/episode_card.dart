@@ -23,6 +23,7 @@ import '../widgets/media_context_menu.dart';
 import '../widgets/placeholder_container.dart';
 import '../theme/mono_tokens.dart';
 import '../media/media_server_client.dart';
+import '../i18n/strings.g.dart';
 
 /// Episode card widget with D-pad long-press support
 class EpisodeCard extends StatefulWidget {
@@ -271,7 +272,7 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
                                       borderRadius: const BorderRadius.all(Radius.circular(4)),
                                     ),
                                     child: Text(
-                                      'E${widget.episode.index}',
+                                      '${t.mediaDetail.episode} ${widget.episode.index}',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,
