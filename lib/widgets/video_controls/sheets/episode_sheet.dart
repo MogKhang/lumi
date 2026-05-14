@@ -12,6 +12,7 @@ import '../../../widgets/optimized_media_image.dart';
 import '../../../widgets/overlay_sheet.dart';
 import 'base_video_control_sheet.dart';
 import 'sheet_column_header.dart';
+import '../../../i18n/strings.g.dart';
 
 /// Sheet for selecting seasons and episodes of a TV show.
 class EpisodeSheet extends StatefulWidget {
@@ -144,7 +145,7 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
   @override
   Widget build(BuildContext context) {
     return BaseVideoControlSheet(
-      title: 'Episodes',
+      title: t.mediaDetail.episodesListHeader,
       icon: Symbols.video_library_rounded,
       child: _error != null
           ? Center(child: Text(_error!))
@@ -157,7 +158,7 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
                       width: 160,
                       child: Column(
                         children: [
-                          const SheetColumnHeader(label: 'Seasons'),
+                          SheetColumnHeader(label: t.mediaDetail.seasonsColumn),
                           Expanded(
                             child: ListView.builder(
                               controller: _seasonScroll.controller,
@@ -170,7 +171,7 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
                                 return ListTile(
                                   dense: true,
                                   title: Text(
-                                    season.title ?? 'Season ${season.index}',
+                                    season.title ?? '${t.mediaDetail.season} ${season.index}',
                                     style: TextStyle(
                                       color: isSelected ? Theme.of(context).colorScheme.primary : (isCurrent ? Colors.white : Colors.white70),
                                       fontWeight: isSelected || isCurrent ? FontWeight.bold : FontWeight.normal,
@@ -189,7 +190,7 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
                     Expanded(
                       child: Column(
                         children: [
-                          const SheetColumnHeader(label: 'Episodes'),
+                          SheetColumnHeader(label: t.mediaDetail.episodes),
                           Expanded(
                             child: _isLoadingEpisodes
                                 ? const Center(child: CircularProgressIndicator())
@@ -271,7 +272,7 @@ class _EpisodeTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                'E${episode.index}',
+                '${t.mediaDetail.episode} ${episode.index}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,

@@ -217,6 +217,8 @@ class _TranslationsMediaDetailVi extends TranslationsMediaDetailEn {
 	@override String get season => 'Phần';
 	@override String get episodes => 'Các tập phim';
 	@override String get episode => 'Tập';
+	@override String get episodesListHeader => 'Danh sách tập phim';
+	@override String get seasonsColumn => 'Các phần phim';
 }
 
 // Path: settings
@@ -1881,6 +1883,8 @@ extension on TranslationsVi {
 			'mediaDetail.season' => 'Phần',
 			'mediaDetail.episodes' => 'Các tập phim',
 			'mediaDetail.episode' => 'Tập',
+			'mediaDetail.episodesListHeader' => 'Danh sách tập phim',
+			'mediaDetail.seasonsColumn' => 'Các phần phim',
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -2312,10 +2316,10 @@ extension on TranslationsVi {
 			'profiles.sectionTitle' => 'Chọn hồ sơ',
 			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
-			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
-			'profiles.removeConnectionTitle' => 'Remove connection?',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
+			'profiles.removeConnectionTitle' => 'Remove connection?',
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
@@ -2826,10 +2830,10 @@ extension on TranslationsVi {
 			'metadataEdit.contentRating' => 'Content Rating',
 			'metadataEdit.studio' => 'Studio',
 			'metadataEdit.tagline' => 'Tagline',
-			'metadataEdit.summary' => 'Summary',
-			'metadataEdit.poster' => 'Poster',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.summary' => 'Summary',
+			'metadataEdit.poster' => 'Poster',
 			'metadataEdit.background' => 'Background',
 			'metadataEdit.logo' => 'Logo',
 			'metadataEdit.squareArt' => 'Square Art',

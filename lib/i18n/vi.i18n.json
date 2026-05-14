@@ -89,7 +89,9 @@
     "plot": "Nội dung",
     "season": "Phần",
     "episodes": "Các tập phim",
-    "episode": "Tập"
+    "episode": "Tập",
+    "episodesListHeader": "Danh sách tập phim",
+    "seasonsColumn": "Các phần phim"
   },
   "settings": {
     "title": "Cài đặt",
