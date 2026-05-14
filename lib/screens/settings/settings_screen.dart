@@ -28,7 +28,6 @@ import '../../profiles/active_profile_provider.dart';
 import '../../profiles/profile.dart';
 import '../../utils/platform_detector.dart';
 import '../../profiles/profile_registry.dart';
-import 'about_screen.dart';
 import 'keyboard_shortcuts_screen.dart';
 import '../profile/profile_switch_screen.dart';
 import '../../widgets/settings_builder.dart';
@@ -60,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
   // Focus tracking keys
   static const _kDonate = 'donate';
-  static const _kAbout = 'about';
+  static const _kLogout = 'logout';
 
   KeyboardShortcutsService? _keyboardService;
   late final bool _keyboardShortcutsSupported = KeyboardShortcutsService.isPlatformSupported();
@@ -91,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   @override
   void focusActiveTabIfReady() {
     if (InputModeTracker.isKeyboardMode(context)) {
-      _focusTracker.restoreFocus(fallbackKey: DonationService.isEnabled ? _kDonate : _kAbout);
+      _focusTracker.restoreFocus(fallbackKey: DonationService.isEnabled ? _kDonate : _kLogout);
     }
   }
 
@@ -141,13 +140,6 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
                 _buildSwitchServerTile(),
 
-                SettingNavigationTile(
-                  focusNode: _focusTracker.get(_kAbout),
-                  icon: Symbols.info_rounded,
-                  title: t.settings.about,
-                  subtitle: t.settings.aboutDescription,
-                  destinationBuilder: (context) => const AboutScreen(),
-                ),
 
                 _buildLogoutTile(),
                 const SizedBox(height: 8),
@@ -394,6 +386,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
   Widget _buildLogoutTile() {
     return ListTile(
+      focusNode: _focusTracker.get(_kLogout),
       leading: const AppIcon(Symbols.logout_rounded, fill: 1, color: Colors.red),
       title: Text(t.common.logout, style: const TextStyle(color: Colors.red)),
       onTap: () => _handleLogout(context),
@@ -442,7 +435,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         return Center(
           child: Column(
             children: [
-              Image.asset('assets/lumi-text.png', width: 150),
+              Image.asset('assets/lumi-text.png', width: 120),
               const SizedBox(height: 8),
               const Text(
                 'App coi phim dỏm nhất Việt Nam',
