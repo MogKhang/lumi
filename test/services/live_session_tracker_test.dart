@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/services/jellyfin_client.dart';
-import 'package:plezy/services/live_session_tracker.dart';
+import 'package:lumi/services/jellyfin_client.dart';
+import 'package:lumi/services/live_session_tracker.dart';
 
 class _FakeJellyfinClient implements JellyfinClient {
   final calls = <String>[];

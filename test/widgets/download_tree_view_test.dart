@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/media/media_backend.dart';
-import 'package:plezy/media/media_item.dart';
-import 'package:plezy/media/media_kind.dart';
-import 'package:plezy/models/download_models.dart';
-import 'package:plezy/widgets/download_tree_view.dart';
+import 'package:lumi/media/media_backend.dart';
+import 'package:lumi/media/media_item.dart';
+import 'package:lumi/media/media_kind.dart';
+import 'package:lumi/models/download_models.dart';
+import 'package:lumi/widgets/download_tree_view.dart';
 
 DownloadTreeNode _episodeNode(String globalKey) => DownloadTreeNode(
   key: globalKey,

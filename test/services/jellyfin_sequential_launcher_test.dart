@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/media/media_backend.dart';
-import 'package:plezy/media/media_item.dart';
-import 'package:plezy/media/media_kind.dart';
-import 'package:plezy/media/media_playlist.dart';
-import 'package:plezy/providers/playback_state_provider.dart';
-import 'package:plezy/services/jellyfin_client.dart';
-import 'package:plezy/services/jellyfin_sequential_launcher.dart';
-import 'package:plezy/services/media_list_playback_launcher.dart';
+import 'package:lumi/media/media_backend.dart';
+import 'package:lumi/media/media_item.dart';
+import 'package:lumi/media/media_kind.dart';
+import 'package:lumi/media/media_playlist.dart';
+import 'package:lumi/providers/playback_state_provider.dart';
+import 'package:lumi/services/jellyfin_client.dart';
+import 'package:lumi/services/jellyfin_sequential_launcher.dart';
+import 'package:lumi/services/media_list_playback_launcher.dart';
 
 /// Recording fake that satisfies [JellyfinClient] via `implements` +
 /// `noSuchMethod`. The launcher only needs the

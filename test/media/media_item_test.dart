@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/media/media_backend.dart';
-import 'package:plezy/media/media_item.dart';
-import 'package:plezy/media/media_kind.dart';
+import 'package:lumi/media/media_backend.dart';
+import 'package:lumi/media/media_item.dart';
+import 'package:lumi/media/media_kind.dart';
 
 /// Backend-agnostic [MediaItem] tests. Existing coverage is split between
 /// `plex_mappers_test` and `jellyfin_mappers_test` — those exercise the

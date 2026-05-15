@@ -1,13 +1,13 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/database/app_database.dart';
-import 'package:plezy/providers/download_provider.dart';
-import 'package:plezy/providers/offline_watch_provider.dart';
-import 'package:plezy/services/download_manager_service.dart';
-import 'package:plezy/services/download_storage_service.dart';
-import 'package:plezy/services/multi_server_manager.dart';
-import 'package:plezy/services/offline_watch_sync_service.dart';
-import 'package:plezy/services/plex_api_cache.dart';
+import 'package:lumi/database/app_database.dart';
+import 'package:lumi/providers/download_provider.dart';
+import 'package:lumi/providers/offline_watch_provider.dart';
+import 'package:lumi/services/download_manager_service.dart';
+import 'package:lumi/services/download_storage_service.dart';
+import 'package:lumi/services/multi_server_manager.dart';
+import 'package:lumi/services/offline_watch_sync_service.dart';
+import 'package:lumi/services/plex_api_cache.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

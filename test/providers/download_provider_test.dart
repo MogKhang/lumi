@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/database/app_database.dart';
-import 'package:plezy/database/download_operations.dart';
-import 'package:plezy/media/media_backend.dart';
-import 'package:plezy/media/media_item.dart';
-import 'package:plezy/media/media_kind.dart';
-import 'package:plezy/media/media_server_client.dart';
-import 'package:plezy/models/download_models.dart';
-import 'package:plezy/providers/download_provider.dart';
-import 'package:plezy/services/download_manager_service.dart';
-import 'package:plezy/services/download_storage_service.dart';
-import 'package:plezy/services/jellyfin_api_cache.dart';
-import 'package:plezy/services/plex_api_cache.dart';
-import 'package:plezy/utils/watch_state_notifier.dart';
+import 'package:lumi/database/app_database.dart';
+import 'package:lumi/database/download_operations.dart';
+import 'package:lumi/media/media_backend.dart';
+import 'package:lumi/media/media_item.dart';
+import 'package:lumi/media/media_kind.dart';
+import 'package:lumi/media/media_server_client.dart';
+import 'package:lumi/models/download_models.dart';
+import 'package:lumi/providers/download_provider.dart';
+import 'package:lumi/services/download_manager_service.dart';
+import 'package:lumi/services/download_storage_service.dart';
+import 'package:lumi/services/jellyfin_api_cache.dart';
+import 'package:lumi/services/plex_api_cache.dart';
+import 'package:lumi/utils/watch_state_notifier.dart';
 
 /// Implements only [fetchPlayableDescendants] (the surface queueDownload
 /// reaches via [collectEpisodesForShow] / [collectEpisodesForSeason]);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/focus/input_mode_tracker.dart';
-import 'package:plezy/profiles/profile.dart';
-import 'package:plezy/screens/settings/add_jellyfin_screen.dart';
-import 'package:plezy/utils/platform_detector.dart';
+import 'package:lumi/focus/input_mode_tracker.dart';
+import 'package:lumi/profiles/profile.dart';
+import 'package:lumi/screens/settings/add_jellyfin_screen.dart';
+import 'package:lumi/utils/platform_detector.dart';
 
 Profile _profile(String id) => Profile(
   id: id,

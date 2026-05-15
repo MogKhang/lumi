@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/media/media_backend.dart';
-import 'package:plezy/media/media_kind.dart';
-import 'package:plezy/media/media_library.dart';
-import 'package:plezy/providers/libraries_provider.dart';
-import 'package:plezy/services/storage_service.dart';
+import 'package:lumi/media/media_backend.dart';
+import 'package:lumi/media/media_kind.dart';
+import 'package:lumi/media/media_library.dart';
+import 'package:lumi/providers/libraries_provider.dart';
+import 'package:lumi/services/storage_service.dart';
 
 import '../test_helpers/prefs.dart';
 

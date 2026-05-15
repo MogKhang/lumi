@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/providers/offline_mode_provider.dart';
-import 'package:plezy/services/multi_server_manager.dart';
+import 'package:lumi/providers/offline_mode_provider.dart';
+import 'package:lumi/services/multi_server_manager.dart';
 
 import '../test_helpers/prefs.dart';
 

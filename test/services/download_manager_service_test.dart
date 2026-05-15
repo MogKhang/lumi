@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/database/app_database.dart';
-import 'package:plezy/media/media_backend.dart';
-import 'package:plezy/media/media_item.dart';
-import 'package:plezy/media/media_kind.dart';
-import 'package:plezy/media/media_server_client.dart';
-import 'package:plezy/models/download_models.dart';
-import 'package:plezy/services/download_artwork_helpers.dart';
-import 'package:plezy/services/download_manager_service.dart';
-import 'package:plezy/services/download_storage_service.dart';
-import 'package:plezy/services/jellyfin_api_cache.dart';
-import 'package:plezy/services/plex_api_cache.dart';
+import 'package:lumi/database/app_database.dart';
+import 'package:lumi/media/media_backend.dart';
+import 'package:lumi/media/media_item.dart';
+import 'package:lumi/media/media_kind.dart';
+import 'package:lumi/media/media_server_client.dart';
+import 'package:lumi/models/download_models.dart';
+import 'package:lumi/services/download_artwork_helpers.dart';
+import 'package:lumi/services/download_manager_service.dart';
+import 'package:lumi/services/download_storage_service.dart';
+import 'package:lumi/services/jellyfin_api_cache.dart';
+import 'package:lumi/services/plex_api_cache.dart';
 
 void main() {
   group('downloadExtensionFromUrl', () {

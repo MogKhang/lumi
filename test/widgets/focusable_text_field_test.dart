@@ -3,8 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/focus/focusable_text_field.dart';
-import 'package:plezy/utils/platform_detector.dart';
+import 'package:lumi/focus/focusable_text_field.dart';
+import 'package:lumi/utils/platform_detector.dart';
 
 void main() {
   tearDown(() {

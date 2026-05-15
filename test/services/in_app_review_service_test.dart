@@ -1,8 +1,8 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/services/base_shared_preferences_service.dart';
-import 'package:plezy/services/in_app_review_service.dart';
+import 'package:lumi/services/base_shared_preferences_service.dart';
+import 'package:lumi/services/in_app_review_service.dart';
 
 import '../test_helpers/prefs.dart';
 

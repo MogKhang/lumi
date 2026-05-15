@@ -1,8 +1,8 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/database/app_database.dart';
-import 'package:plezy/services/data_aggregation_service.dart';
-import 'package:plezy/services/multi_server_manager.dart';
+import 'package:lumi/database/app_database.dart';
+import 'package:lumi/services/data_aggregation_service.dart';
+import 'package:lumi/services/multi_server_manager.dart';
 
 /// Smoke tests for the surviving cross-server aggregation surface on
 /// [DataAggregationService]. Single-server passthroughs were removed in

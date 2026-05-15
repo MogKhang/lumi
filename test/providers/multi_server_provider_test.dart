@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/providers/multi_server_provider.dart';
-import 'package:plezy/services/data_aggregation_service.dart';
-import 'package:plezy/services/multi_server_manager.dart';
+import 'package:lumi/providers/multi_server_provider.dart';
+import 'package:lumi/services/data_aggregation_service.dart';
+import 'package:lumi/services/multi_server_manager.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

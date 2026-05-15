@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plezy/services/settings_service.dart';
-import 'package:plezy/services/trackers/tracker_constants.dart';
+import 'package:lumi/services/settings_service.dart';
+import 'package:lumi/services/trackers/tracker_constants.dart';
 
 import '../test_helpers/prefs.dart';
 
