@@ -137,7 +137,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get clear => 'Thiết lập lại';
 	@override String get reset => 'Reset';
 	@override String get later => 'Later';
-	@override String get submit => 'Submit';
+	@override String get submit => 'Xác nhận';
 	@override String get confirm => 'Confirm';
 	@override String get retry => 'Thử lại';
 	@override String get logout => 'Đăng xuất';
@@ -2024,7 +2024,7 @@ extension on TranslationsVi {
 			'common.clear' => 'Thiết lập lại',
 			'common.reset' => 'Reset',
 			'common.later' => 'Later',
-			'common.submit' => 'Submit',
+			'common.submit' => 'Xác nhận',
 			'common.confirm' => 'Confirm',
 			'common.retry' => 'Thử lại',
 			'common.logout' => 'Đăng xuất',

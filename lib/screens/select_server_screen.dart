@@ -145,7 +145,7 @@ class _SelectServerScreenState extends State<SelectServerScreen> {
   }
 }
 
-class _ServerTile extends StatelessWidget {
+class _ServerTile extends StatefulWidget {
   final String serverName;
   final bool isSelected;
   final bool isOnline;
@@ -159,15 +159,29 @@ class _ServerTile extends StatelessWidget {
   });
 
   @override
+  State<_ServerTile> createState() => _ServerTileState();
+}
+
+class _ServerTileState extends State<_ServerTile> {
+  bool _isFocused = false;
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    final isSelected = widget.isSelected;
+    final isOnline = widget.isOnline;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
+        onFocusChange: (value) => setState(() => _isFocused = value),
         borderRadius: BorderRadius.circular(12),
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: colorScheme.primary.withValues(alpha: 0.1),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
@@ -175,14 +189,14 @@ class _ServerTile extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected
+              color: _isFocused
                   ? colorScheme.primary
-                  : colorScheme.outlineVariant,
-              width: isSelected ? 2 : 1,
+                  : (isSelected ? colorScheme.primary.withValues(alpha: 0.5) : colorScheme.outlineVariant),
+              width: _isFocused || isSelected ? 2 : 1,
             ),
-            color: isSelected
-                ? colorScheme.primary.withValues(alpha: 0.08)
-                : colorScheme.surfaceContainerLow,
+            color: _isFocused
+                ? colorScheme.primary.withValues(alpha: 0.12)
+                : (isSelected ? colorScheme.primary.withValues(alpha: 0.08) : colorScheme.surfaceContainerLow),
           ),
           child: Row(
             children: [
@@ -190,7 +204,7 @@ class _ServerTile extends StatelessWidget {
               Icon(
                 Symbols.dns_rounded,
                 size: 24,
-                color: isSelected
+                color: _isFocused || isSelected
                     ? colorScheme.primary
                     : colorScheme.onSurface.withValues(alpha: 0.6),
               ),
@@ -201,12 +215,10 @@ class _ServerTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      serverName,
+                      widget.serverName,
                       style: textTheme.titleMedium?.copyWith(
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                        color: isSelected
-                            ? colorScheme.primary
-                            : colorScheme.onSurface,
+                        fontWeight: _isFocused || isSelected ? FontWeight.w600 : FontWeight.w500,
+                        color: _isFocused || isSelected ? colorScheme.primary : colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -217,20 +229,14 @@ class _ServerTile extends StatelessWidget {
                           height: 8,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isOnline
-                                ? const Color(0xFF4CAF50)
-                                : colorScheme.onSurface.withValues(alpha: 0.3),
+                            color: isOnline ? const Color(0xFF4CAF50) : colorScheme.onSurface.withValues(alpha: 0.3),
                           ),
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          isOnline
-                              ? t.serverSelection.online
-                              : t.serverSelection.offline,
+                          isOnline ? t.serverSelection.online : t.serverSelection.offline,
                           style: textTheme.bodySmall?.copyWith(
-                            color: isOnline
-                                ? const Color(0xFF4CAF50)
-                                : colorScheme.onSurface.withValues(alpha: 0.5),
+                            color: isOnline ? const Color(0xFF4CAF50) : colorScheme.onSurface.withValues(alpha: 0.5),
                           ),
                         ),
                       ],
@@ -238,7 +244,7 @@ class _ServerTile extends StatelessWidget {
                   ],
                 ),
               ),
-              // Check icon when selected
+              // Check icon only when selected
               AnimatedOpacity(
                 duration: const Duration(milliseconds: 200),
                 opacity: isSelected ? 1.0 : 0.0,
