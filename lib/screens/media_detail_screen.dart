@@ -480,9 +480,11 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
       child: Text(
         title,
         style: Theme.of(context).textTheme.displaySmall?.copyWith(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onSurface,
           fontWeight: FontWeight.bold,
-          shadows: [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 8)],
+          shadows: Theme.of(context).brightness == Brightness.dark
+              ? [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 8)]
+              : null,
         ),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
@@ -2470,7 +2472,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
               metadata.displayTitle,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: theme.colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
               maxLines: 3,
@@ -2662,9 +2664,11 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                     Text(
                       metadata.displayTitle,
                       style: theme.textTheme.displaySmall?.copyWith(
-                        color: Colors.white,
+                        color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
-                        shadows: [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 8)],
+                        shadows: theme.brightness == Brightness.dark
+                            ? [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 8)]
+                            : null,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
