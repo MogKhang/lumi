@@ -147,6 +147,15 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     super.focusTabBar();
   }
 
+  void focusActionBar() {
+    _resetOuterScroll();
+    if (_actionBarKey.currentState != null && _actionBarKey.currentState!.widget.actions.isNotEmpty) {
+      _actionBarKey.currentState?.requestFocusOnFirst();
+    } else {
+      focusTabBar();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -290,6 +299,14 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
 
+      // If we're on the Browse tab and there are actions, focus the action bar first
+      if (_visibleTabs[tabController.index] == LibraryTabType.browse &&
+          _actionBarKey.currentState != null &&
+          _actionBarKey.currentState!.widget.actions.isNotEmpty) {
+        _actionBarKey.currentState?.requestFocusOnFirst();
+        return;
+      }
+
       final tabState = _getTabState(tabController.index);
       if (tabState != null) {
         (tabState as dynamic).focusFirstItem();
@@ -396,7 +413,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
         isActive: isActive,
         suppressAutoFocus: suppressAutoFocus,
         onDataLoaded: () => _handleTabDataLoaded(tabIndex),
-        onBack: focusTabBar,
+        onBack: focusActionBar,
         onResetScroll: _resetOuterScroll,
         onFiltersChanged: () => setState(() {}),
       ),
@@ -894,6 +911,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
           key: _actionBarKey,
           onNavigateLeft: () => getTabChipFocusNode(_visibleTabs.length - 1).requestFocus(),
           onNavigateDown: _focusCurrentTab,
+          onNavigateUp: focusTabBar,
           actions: [
             if (_visibleTabs[tabController.index] == LibraryTabType.browse) ...[
               FocusableAction(

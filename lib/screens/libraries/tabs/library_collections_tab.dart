@@ -57,6 +57,7 @@ class _LibraryCollectionsTabState extends LibraryGridTabState<MediaItem, Library
       disableScale: gridContext?.isListMode ?? false,
       onListRefresh: loadItems,
       onBack: widget.onBack,
+      onNavigateUp: gridContext?.isFirstRow == true ? widget.onBack : null,
       onNavigateLeft: gridContext?.isFirstColumn == true ? gridContext?.navigateToSidebar : null,
     );
   }

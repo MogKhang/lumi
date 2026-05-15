@@ -390,6 +390,14 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
     }
 
     if (key == LogicalKeyboardKey.arrowDown) {
+      // Navigate to TrackChapterControls row
+      if (_trackControlFocusNodes.isNotEmpty && _trackControlFocusNodes.every((n) => !n.hasFocus)) {
+        _trackControlFocusNodes.first.requestFocus();
+        widget.onFocusActivity?.call();
+        return KeyEventResult.handled;
+      }
+      
+      // Fallback if already in settings row or no settings row
       if (widget.useDpadNavigation && _hasStripContent) {
         _showContentStrip();
         return KeyEventResult.handled;
@@ -713,32 +721,13 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
               showKeyRepeatThumbnail: _showKeyRepeatThumbnail,
             ),
           ],
-          // Row 2: Playback controls and options
+          // Row 2: Playback controls (Centered on TV/Mobile-style)
           Focus(
             onFocusChange: _onButtonRowFocusChange,
             skipTraversal: true,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TrackChapterControls(
-                  player: widget.player,
-                  metadata: widget.metadata,
-                  chapters: widget.chapters,
-                  chaptersLoaded: widget.chaptersLoaded,
-                  trackControlsState: _trackControlsState,
-                  onSeekCompleted: widget.onSeekCompleted,
-                  focusNodes: _trackControlFocusNodes,
-                  onFocusChange: _onFocusChange,
-                  onNavigateLeft: () {},
-                  onNavigateUp: () {
-                    _timelineFocusNode.requestFocus();
-                    widget.onFocusActivity?.call();
-                  },
-                  onNavigateDown: () {
-                    // No lower row
-                  },
-                  hideChaptersAndQueue: widget.useDpadNavigation && _hasStripContent,
-                ),
-                const SizedBox(width: 8),
                 if (!_isLive) ...[
                   if (widget.metadata.kind == MediaKind.episode) ...[
                     // Previous item
@@ -873,6 +862,37 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                     tooltip: t.liveTv.goToLive,
                   ),
                 ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Row 3: Playback settings and tracks
+          Focus(
+            onFocusChange: _onButtonRowFocusChange,
+            skipTraversal: true,
+            child: Row(
+              children: [
+                TrackChapterControls(
+                  player: widget.player,
+                  metadata: widget.metadata,
+                  chapters: widget.chapters,
+                  chaptersLoaded: widget.chaptersLoaded,
+                  trackControlsState: _trackControlsState,
+                  onSeekCompleted: widget.onSeekCompleted,
+                  focusNodes: _trackControlFocusNodes,
+                  onFocusChange: _onFocusChange,
+                  onNavigateLeft: () {},
+                  onNavigateUp: () {
+                    _playPauseFocusNode.requestFocus();
+                    widget.onFocusActivity?.call();
+                  },
+                  onNavigateDown: () {
+                    if (widget.useDpadNavigation && _hasStripContent) {
+                      _showContentStrip();
+                    }
+                  },
+                  hideChaptersAndQueue: widget.useDpadNavigation && _hasStripContent,
+                ),
                 const Spacer(),
                 // Volume control (hidden on TV — hardware handles volume)
                 if (!PlatformDetector.isTV()) ...[
