@@ -111,42 +111,41 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     return Scaffold(
       body: Focus(
         onKeyEvent: _handleKeyEvent,
-        child: CustomScrollView(
-          primary: false,
-          slivers: [
-            ExcludeFocus(
-              child: CustomAppBar(
-                title: Text(
-                  t.settings.title,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                pinned: true,
-                automaticallyImplyLeading: false,
+        child: Column(
+          children: [
+            Expanded(
+              child: CustomScrollView(
+                primary: false,
+                slivers: [
+                  ExcludeFocus(
+                    child: CustomAppBar(
+                      title: Text(
+                        t.settings.title,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      pinned: true,
+                      automaticallyImplyLeading: false,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      if (DonationService.isEnabled) _buildDonateTile(),
+                      _buildThemeTile(),
+                      _buildLanguageTile(context),
+                      if (PlatformDetector.isAndroid(context)) _buildPlayerBackendTile(),
+                      _buildDefaultQualityTile(),
+                      _buildProfileSwitcherTile(),
+                      if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
+                      _buildSwitchServerTile(),
+                      _buildLogoutTile(),
+                    ]),
+                  ),
+                ],
               ),
             ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                if (DonationService.isEnabled) _buildDonateTile(),
-
-                _buildThemeTile(),
-                _buildLanguageTile(context),
-
-                if (PlatformDetector.isAndroid(context)) _buildPlayerBackendTile(),
-                _buildDefaultQualityTile(),
-
-                _buildProfileSwitcherTile(),
-
-                if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
-
-                _buildSwitchServerTile(),
-
-
-                _buildLogoutTile(),
-                const SizedBox(height: 8),
-                _buildAppInfoSection(),
-                const SizedBox(height: 12),
-              ]),
-            ),
+            const SizedBox(height: 16),
+            _buildAppInfoSection(),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -435,8 +434,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         return Center(
           child: Column(
             children: [
-              Image.asset('assets/lumi-text.png', width: 120),
-              const SizedBox(height: 8),
+              Image.asset('assets/lumi-text.png', width: 100),
+              const SizedBox(height: 6),
               const Text(
                 'App coi phim dỏm nhất Việt Nam',
                 style: TextStyle(
@@ -447,7 +446,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Text(
                 t.about.versionLabel(version: appVersion),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
