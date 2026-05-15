@@ -186,7 +186,11 @@ class _EpisodeSheetState extends State<EpisodeSheet> {
                                   title: Text(
                                     _getLocalizedSeasonTitle(season.title ?? '${t.mediaDetail.season} ${season.index}'),
                                     style: TextStyle(
-                                      color: isSelected ? Theme.of(context).colorScheme.primary : (isCurrent ? Colors.white : Colors.white70),
+                                      color: isSelected
+                                          ? Theme.of(context).colorScheme.primary
+                                          : (isCurrent
+                                              ? Theme.of(context).colorScheme.onSurface
+                                              : Theme.of(context).colorScheme.onSurfaceVariant),
                                       fontWeight: isSelected || isCurrent ? FontWeight.bold : FontWeight.normal,
                                     ),
                                   ),
@@ -279,7 +283,7 @@ class _EpisodeTile extends StatelessWidget {
           ? Text(
               '${t.mediaDetail.episode} ${episode.index}',
               style: TextStyle(
-                color: isPlaying ? highlightColor : Colors.white,
+                color: isPlaying ? highlightColor : theme.colorScheme.onSurface,
                 fontWeight: isPlaying ? FontWeight.bold : FontWeight.normal,
                 fontSize: 14,
               ),
