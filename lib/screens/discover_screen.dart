@@ -206,7 +206,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     _scrollController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
   }
 
-  void _focusTopBoundary() {
+  void _focusLandingContent() {
     if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
 
     if (_isLoading) {
@@ -229,16 +229,19 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     _scrollToTop();
   }
 
-  void _focusContentFromAppBar() {
+  void _focusTopBoundary() {
+    if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
+
     if (_isHeroSectionVisible) {
       _heroFocusNode.requestFocus();
-      return;
+    } else {
+      _actionBarKey.currentState?.requestFocusOnFirst();
     }
+    _scrollToTop();
+  }
 
-    final keys = _allHubKeys;
-    if (keys.isNotEmpty) {
-      keys.first.currentState?.requestFocusFromMemory();
-    }
+  void _focusContentFromAppBar() {
+    _focusLandingContent();
   }
 
   /// Handle vertical navigation between hubs
@@ -461,7 +464,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   @override
   void focusActiveTabIfReady() {
-    _focusTopBoundary();
+    _focusLandingContent();
   }
 
   // Helper method to calculate visible dot range (max 5 dots)
@@ -582,7 +585,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
           }
         });
       } else if (_focusPending) {
-        _focusTopBoundary();
+        _focusLandingContent();
       }
 
       // Wait for global hubs
@@ -630,7 +633,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       });
 
       if (_focusPending) {
-        _focusTopBoundary();
+        _focusLandingContent();
       }
 
       appLogger.d('Discover content loaded successfully');
@@ -930,6 +933,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                 SliverOverlapInjector(
                   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 ),
+                // Add vertical spacing between app bar/logo and first content section
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
                 // Hero Section (Continue Watching) - at top of screen
                 Builder(
                   builder: (context) {
@@ -949,7 +954,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   if (_onDeck.isNotEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.only(bottom: 32),
                         child: HubSection(
                           key: _continueWatchingHubKey,
                           hub: MediaHub(
@@ -976,7 +981,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                   for (int i = 0; i < _hubs.length; i++)
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.only(bottom: 32),
                         child: HubSection(
                           key: i < _hubKeys.length ? _hubKeys[i] : null,
                           hub: _hubs[i],
@@ -1047,7 +1052,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                       ),
                     ),
 
-                  SliverToBoxAdapter(child: SizedBox(height: 24 + bottomPadding)),
+                  SliverToBoxAdapter(child: SizedBox(height: 32 + bottomPadding)),
                 ],
               ],
             );
