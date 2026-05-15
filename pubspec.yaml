@@ -1,4 +1,4 @@
-name: plezy
+name: lumi
 description: "A beautiful Plex client for Flutter"
 publish_to: "none"
 version: 2.0.0+82
@@ -84,6 +84,7 @@ dev_dependencies:
   shared_preferences_platform_interface: ^2.4.0
   path_provider_platform_interface: ^2.1.0
   plugin_platform_interface: ^2.1.0
+  flutter_launcher_icons: ^0.14.4
 
 dependency_overrides:
   auto_updater_platform_interface:

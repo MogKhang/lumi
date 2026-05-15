@@ -33,7 +33,7 @@
     <uses-feature android:name="android.hardware.type.automotive" android:required="false" />
 
     <application
-        android:label="Plezy"
+        android:label="Lumi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:banner="@drawable/tv_banner"
@@ -69,13 +69,13 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="plezy" android:host="play"/>
+                <data android:scheme="lumi" android:host="play"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="plezy" android:host="auth"/>
+                <data android:scheme="lumi" android:host="auth"/>
             </intent-filter>
         </activity>
         <!-- FileProvider for sharing downloaded files with external players -->

@@ -11,7 +11,7 @@ import '../utils/snackbar_helper.dart';
 import '../i18n/strings.g.dart';
 import 'settings_service.dart';
 
-const _externalPlayerChannel = MethodChannel('com.plezy/external_player');
+const _externalPlayerChannel = MethodChannel('com.lumi/external_player');
 
 class ExternalPlayerService {
   /// Launch an external player with either a pre-resolved [videoUrl] (e.g.

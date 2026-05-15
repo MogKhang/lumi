@@ -98,7 +98,7 @@ class ThemeProvider extends ChangeNotifier with DisposableChangeNotifierMixin {
     }
   }
 
-  static const _themeChannel = MethodChannel('com.plezy/theme');
+  static const _themeChannel = MethodChannel('com.lumi/theme');
 
   Future<void> setThemeMode(settings.ThemeMode mode) async {
     if (_themeMode == mode) return;

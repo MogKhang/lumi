@@ -11,7 +11,7 @@ import 'settings_service.dart' show EpisodePosterMode;
 
 /// Service for syncing On Deck / Continue Watching content to Android TV's Watch Next row.
 class WatchNextService {
-  static const MethodChannel _channel = MethodChannel('com.plezy/watch_next');
+  static const MethodChannel _channel = MethodChannel('com.lumi/watch_next');
 
   static final WatchNextService _instance = WatchNextService._internal();
   factory WatchNextService() => _instance;

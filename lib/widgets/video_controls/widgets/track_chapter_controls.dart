@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:plezy/widgets/video_controls/sheets/episode_sheet.dart';
+import 'package:lumi/widgets/video_controls/sheets/episode_sheet.dart';
 import 'package:flutter/services.dart';
 import '../../../utils/formatters.dart';
 import '../../../services/settings_service.dart';

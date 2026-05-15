@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:plezy/utils/formatters.dart';
+import 'package:lumi/utils/formatters.dart';
 
 import '../../../media/media_item.dart';
 import '../../../media/media_item_types.dart';

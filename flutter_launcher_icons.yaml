@@ -1,0 +1,15 @@
+flutter_launcher_icons:
+  android: true
+  ios: "lumi"
+  image_path: "assets/lumi.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/lumi.png"
+  monochrome_icon_foreground: "assets/lumi.png"
+  web:
+    generate: true
+    image_path: "assets/lumi.png"
+  windows:
+    generate: true
+    image_path: "assets/lumi.png"
+    icon_size: 256

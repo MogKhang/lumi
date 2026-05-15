@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:plezy/widgets/app_icon.dart';
+import 'package:lumi/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:path/path.dart' as path;
 
@@ -453,7 +453,7 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
             leading: AppIcon(Symbols.swap_horiz_rounded, fill: 1, color: tokens(context).textMuted),
             title: const Text('Trigger MPV Fallback'),
             onTap: () {
-              const MethodChannel('com.plezy/exo_player').invokeMethod('triggerFallback');
+              const MethodChannel('com.lumi/exo_player').invokeMethod('triggerFallback');
               OverlaySheetController.of(context).close();
             },
           ),
