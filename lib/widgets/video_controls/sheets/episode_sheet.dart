@@ -273,7 +273,7 @@ class _EpisodeTile extends StatelessWidget {
               child: Container(
                 color: Colors.black45,
                 child: Center(
-                  child: Icon(Symbols.play_arrow_rounded, color: highlightColor, size: 32, fill: 1),
+                  child: Icon(Symbols.play_arrow_rounded, color: Colors.white, size: 32, fill: 1),
                 ),
               ),
             ),
