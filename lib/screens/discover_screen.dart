@@ -156,6 +156,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   // Track initial load so we can focus hero when content first appears
   bool _initialLoadComplete = false;
+  bool _focusPending = false;
 
   // Hub navigation keys
   GlobalKey<HubSectionState>? _continueWatchingHubKey;
@@ -207,10 +208,23 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   void _focusTopBoundary() {
     if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
+
+    if (_isLoading) {
+      _focusPending = true;
+      return;
+    }
+
     if (_isHeroSectionVisible) {
       _heroFocusNode.requestFocus();
+      _focusPending = false;
     } else {
-      _actionBarKey.currentState?.requestFocusOnFirst();
+      final keys = _allHubKeys;
+      if (keys.isNotEmpty) {
+        keys.first.currentState?.requestFocusFromMemory();
+        _focusPending = false;
+      } else {
+        _actionBarKey.currentState?.requestFocusOnFirst();
+      }
     }
     _scrollToTop();
   }
@@ -561,11 +575,14 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       // On initial load, focus the hero so the user starts on content (not the toolbar)
       if (!_initialLoadComplete && onDeck.isNotEmpty) {
         _initialLoadComplete = true;
+        _focusPending = false; // Initial load handles focus via post-frame below
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted && _heroFocusNode.canRequestFocus && (ModalRoute.of(context)?.isCurrent ?? false)) {
             _heroFocusNode.requestFocus();
           }
         });
+      } else if (_focusPending) {
+        _focusTopBoundary();
       }
 
       // Wait for global hubs
@@ -611,6 +628,10 @@ class _DiscoverScreenState extends State<DiscoverScreen>
         _areHubsLoading = false;
         _updateHubKeys();
       });
+
+      if (_focusPending) {
+        _focusTopBoundary();
+      }
 
       appLogger.d('Discover content loaded successfully');
     } catch (e) {
