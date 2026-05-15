@@ -306,6 +306,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     required bool hasHiddenMovies,
     required bool hasHiddenShows,
     required bool hasLiveTv,
+    required bool showMoviesDropdown,
+    required bool showShowsDropdown,
   }) {
     return {
       _kHome,
@@ -316,11 +318,11 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       if (hasHiddenMovies || hasHiddenShows) _kHiddenLibraries,
       if (_showFullscreenToggle) _kFullscreen,
       if (hasLiveTv) 'liveTv',
-      ..._focusKeysForLibraryRows(visibleMovieRows),
-      ..._focusKeysForLibraryRows(visibleShowRows),
+      if (showMoviesDropdown) ..._focusKeysForLibraryRows(visibleMovieRows),
+      if (showShowsDropdown) ..._focusKeysForLibraryRows(visibleShowRows),
       if (_hiddenLibrariesExpanded) ...[
-        ..._focusKeysForLibraryRows(hiddenMovieRows),
-        ..._focusKeysForLibraryRows(hiddenShowRows),
+        if (showMoviesDropdown) ..._focusKeysForLibraryRows(hiddenMovieRows),
+        if (showShowsDropdown) ..._focusKeysForLibraryRows(hiddenShowRows),
       ],
     };
   }
@@ -388,24 +390,26 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     required bool hasHiddenMovies,
     required bool hasHiddenShows,
     required bool hasLiveTv,
+    required bool showMoviesDropdown,
+    required bool showShowsDropdown,
   }) {
     return [
       if (widget.isOfflineMode && widget.onReconnect != null) _kReconnect,
       if (!widget.isOfflineMode) ...[
         _kHome,
         _kMovies,
-        if (_moviesExpanded) ...[
+        if (_moviesExpanded && showMoviesDropdown) ...[
           ..._focusKeysForLibraryRows(visibleMovieRows),
         ],
         _kShows,
-        if (_showsExpanded) ...[
+        if (_showsExpanded && showShowsDropdown) ...[
           ..._focusKeysForLibraryRows(visibleShowRows),
         ],
         if (hasHiddenMovies || hasHiddenShows) ...[
           _kHiddenLibraries,
           if (_hiddenLibrariesExpanded) ...[
-            ..._focusKeysForLibraryRows(hiddenMovieRows),
-            ..._focusKeysForLibraryRows(hiddenShowRows),
+            if (showMoviesDropdown) ..._focusKeysForLibraryRows(hiddenMovieRows),
+            if (showShowsDropdown) ..._focusKeysForLibraryRows(hiddenShowRows),
           ],
         ],
         if (hasLiveTv) 'liveTv',
@@ -568,6 +572,9 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         final hiddenShowRows =
             _buildLibraryRows(hiddenShowLibraries, section: _LibraryNavSection.hidden, showServerHeaders: showServerHeaders);
 
+        final showMoviesDropdown = (visibleMovieLibraries.length + hiddenMovieLibraries.length) > 1;
+        final showShowsDropdown = (visibleShowLibraries.length + hiddenShowLibraries.length) > 1;
+
         _focusTracker.pruneExcept(
           _buildValidFocusKeys(
             visibleMovieRows: visibleMovieRows,
@@ -577,6 +584,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
             hasHiddenMovies: hiddenMovieLibraries.isNotEmpty,
             hasHiddenShows: hiddenShowLibraries.isNotEmpty,
             hasLiveTv: hasLiveTv,
+            showMoviesDropdown: showMoviesDropdown,
+            showShowsDropdown: showShowsDropdown,
           ),
         );
         final focusOrder = _buildFocusOrder(
@@ -587,6 +596,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
           hasHiddenMovies: hiddenMovieLibraries.isNotEmpty,
           hasHiddenShows: hiddenShowLibraries.isNotEmpty,
           hasLiveTv: hasLiveTv,
+          showMoviesDropdown: showMoviesDropdown,
+          showShowsDropdown: showShowsDropdown,
         );
         _debugAssertUniqueFocusOrder(focusOrder);
         return TapRegion(
@@ -814,6 +825,9 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     final isFocused = _focusTracker.isFocused(focusKey);
     final allEmpty = visibleRows.isEmpty && hiddenLibraryCount == 0;
 
+    // A dropdown is only needed if there are multiple libraries total (visible + hidden)
+    final showDropdown = (visibleRows.whereType<_LibraryItemRow>().length + hiddenLibraryCount) > 1;
+
     final label = tabId == NavigationTabId.movies
         ? Translations.of(context).navigation.movies
         : Translations.of(context).navigation.shows;
@@ -843,7 +857,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
             child: InkWell(
               canRequestFocus: false,
               onTap: () {
-                if (isCollapsed) {
+                if (isCollapsed || !showDropdown) {
                   widget.onDestinationSelected(tabId);
                 } else {
                   onToggleExpansion();
@@ -891,16 +905,17 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                               ),
                             ),
                           ),
-                          AnimatedOpacity(
-                            opacity: isCollapsed ? 0.0 : 1.0,
-                            duration: tokens(context).fast,
-                            child: AppIcon(
-                              isExpanded ? Symbols.expand_less_rounded : Symbols.expand_more_rounded,
-                              fill: 1,
-                              size: 20,
-                              color: t.textMuted,
+                          if (showDropdown)
+                            AnimatedOpacity(
+                              opacity: isCollapsed ? 0.0 : 1.0,
+                              duration: tokens(context).fast,
+                              child: AppIcon(
+                                isExpanded ? Symbols.expand_less_rounded : Symbols.expand_more_rounded,
+                                fill: 1,
+                                size: 20,
+                                color: t.textMuted,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -912,7 +927,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         ),
 
         TweenAnimationBuilder<double>(
-          tween: Tween(end: (isExpanded && !isCollapsed) ? 1.0 : 0.0),
+          tween: Tween(end: (isExpanded && !isCollapsed && showDropdown) ? 1.0 : 0.0),
           duration: tokens(context).normal,
           curve: Curves.easeOutCubic,
           builder: (context, value, child) {
@@ -921,7 +936,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
             );
           },
           child: ExcludeFocus(
-            excluding: !isExpanded || isCollapsed,
+            excluding: !isExpanded || isCollapsed || !showDropdown,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
