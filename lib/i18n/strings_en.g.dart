@@ -3582,41 +3582,557 @@ class TranslationsLanguagesEn {
 
 	// Translations
 
-	/// en: 'English'
-	String get en => 'English';
+	/// en: 'Afar'
+	String get aa => 'Afar';
 
-	/// en: 'Vietnamese'
-	String get vi => 'Vietnamese';
+	/// en: 'Abkhaz'
+	String get ab => 'Abkhaz';
 
-	/// en: 'Korean'
-	String get ko => 'Korean';
+	/// en: 'Avestan'
+	String get ae => 'Avestan';
 
-	/// en: 'Japanese'
-	String get ja => 'Japanese';
+	/// en: 'Afrikaans'
+	String get af => 'Afrikaans';
 
-	/// en: 'Chinese'
-	String get zh => 'Chinese';
+	/// en: 'Akan'
+	String get ak => 'Akan';
 
-	/// en: 'French'
-	String get fr => 'French';
+	/// en: 'Amharic'
+	String get am => 'Amharic';
+
+	/// en: 'Aragonese'
+	String get an => 'Aragonese';
+
+	/// en: 'Arabic'
+	String get ar => 'Arabic';
+
+	/// en: 'Assamese'
+	String get as => 'Assamese';
+
+	/// en: 'Avaric'
+	String get av => 'Avaric';
+
+	/// en: 'Aymara'
+	String get ay => 'Aymara';
+
+	/// en: 'Azerbaijani'
+	String get az => 'Azerbaijani';
+
+	/// en: 'Bashkir'
+	String get ba => 'Bashkir';
+
+	/// en: 'Belarusian'
+	String get be => 'Belarusian';
+
+	/// en: 'Bulgarian'
+	String get bg => 'Bulgarian';
+
+	/// en: 'Bihari'
+	String get bh => 'Bihari';
+
+	/// en: 'Bislama'
+	String get bi => 'Bislama';
+
+	/// en: 'Bambara'
+	String get bm => 'Bambara';
+
+	/// en: 'Bengali, Bangla'
+	String get bn => 'Bengali, Bangla';
+
+	/// en: 'Tibetan Standard, Tibetan, Central'
+	String get bo => 'Tibetan Standard, Tibetan, Central';
+
+	/// en: 'Breton'
+	String get br => 'Breton';
+
+	/// en: 'Bosnian'
+	String get bs => 'Bosnian';
+
+	/// en: 'Catalan'
+	String get ca => 'Catalan';
+
+	/// en: 'Chechen'
+	String get ce => 'Chechen';
+
+	/// en: 'Chamorro'
+	String get ch => 'Chamorro';
+
+	/// en: 'Corsican'
+	String get co => 'Corsican';
+
+	/// en: 'Cree'
+	String get cr => 'Cree';
+
+	/// en: 'Czech'
+	String get cs => 'Czech';
+
+	/// en: 'Old Church Slavonic, Church Slavonic, Old Bulgarian'
+	String get cu => 'Old Church Slavonic, Church Slavonic, Old Bulgarian';
+
+	/// en: 'Chuvash'
+	String get cv => 'Chuvash';
+
+	/// en: 'Welsh'
+	String get cy => 'Welsh';
+
+	/// en: 'Danish'
+	String get da => 'Danish';
 
 	/// en: 'German'
 	String get de => 'German';
 
+	/// en: 'Divehi, Dhivehi, Maldivian'
+	String get dv => 'Divehi, Dhivehi, Maldivian';
+
+	/// en: 'Dzongkha'
+	String get dz => 'Dzongkha';
+
+	/// en: 'Ewe'
+	String get ee => 'Ewe';
+
+	/// en: 'Greek (modern)'
+	String get el => 'Greek (modern)';
+
+	/// en: 'English'
+	String get en => 'English';
+
+	/// en: 'Esperanto'
+	String get eo => 'Esperanto';
+
 	/// en: 'Spanish'
 	String get es => 'Spanish';
 
-	/// en: 'Russian'
-	String get ru => 'Russian';
+	/// en: 'Estonian'
+	String get et => 'Estonian';
+
+	/// en: 'Basque'
+	String get eu => 'Basque';
+
+	/// en: 'Persian (Farsi)'
+	String get fa => 'Persian (Farsi)';
+
+	/// en: 'Fula, Fulah, Pulaar, Pular'
+	String get ff => 'Fula, Fulah, Pulaar, Pular';
+
+	/// en: 'Finnish'
+	String get fi => 'Finnish';
+
+	/// en: 'Fijian'
+	String get fj => 'Fijian';
+
+	/// en: 'Faroese'
+	String get fo => 'Faroese';
+
+	/// en: 'French'
+	String get fr => 'French';
+
+	/// en: 'Western Frisian'
+	String get fy => 'Western Frisian';
+
+	/// en: 'Irish'
+	String get ga => 'Irish';
+
+	/// en: 'Scottish Gaelic, Gaelic'
+	String get gd => 'Scottish Gaelic, Gaelic';
+
+	/// en: 'Galician'
+	String get gl => 'Galician';
+
+	/// en: 'Guaraní'
+	String get gn => 'Guaraní';
+
+	/// en: 'Gujarati'
+	String get gu => 'Gujarati';
+
+	/// en: 'Manx'
+	String get gv => 'Manx';
+
+	/// en: 'Hausa'
+	String get ha => 'Hausa';
+
+	/// en: 'Hebrew (modern)'
+	String get he => 'Hebrew (modern)';
+
+	/// en: 'Hindi'
+	String get hi => 'Hindi';
+
+	/// en: 'Hiri Motu'
+	String get ho => 'Hiri Motu';
+
+	/// en: 'Croatian'
+	String get hr => 'Croatian';
+
+	/// en: 'Haitian, Haitian Creole'
+	String get ht => 'Haitian, Haitian Creole';
+
+	/// en: 'Hungarian'
+	String get hu => 'Hungarian';
+
+	/// en: 'Armenian'
+	String get hy => 'Armenian';
+
+	/// en: 'Herero'
+	String get hz => 'Herero';
+
+	/// en: 'Interlingua'
+	String get ia => 'Interlingua';
+
+	/// en: 'Indonesian'
+	String get id => 'Indonesian';
+
+	/// en: 'Interlingue'
+	String get ie => 'Interlingue';
+
+	/// en: 'Igbo'
+	String get ig => 'Igbo';
+
+	/// en: 'Nuosu'
+	String get ii => 'Nuosu';
+
+	/// en: 'Inupiaq'
+	String get ik => 'Inupiaq';
+
+	/// en: 'Ido'
+	String get io => 'Ido';
+
+	/// en: 'Icelandic'
+	String get kIs => 'Icelandic';
 
 	/// en: 'Italian'
 	String get it => 'Italian';
 
+	/// en: 'Inuktitut'
+	String get iu => 'Inuktitut';
+
+	/// en: 'Japanese'
+	String get ja => 'Japanese';
+
+	/// en: 'Javanese'
+	String get jv => 'Javanese';
+
+	/// en: 'Georgian'
+	String get ka => 'Georgian';
+
+	/// en: 'Kongo'
+	String get kg => 'Kongo';
+
+	/// en: 'Kikuyu, Gikuyu'
+	String get ki => 'Kikuyu, Gikuyu';
+
+	/// en: 'Kwanyama, Kuanyama'
+	String get kj => 'Kwanyama, Kuanyama';
+
+	/// en: 'Kazakh'
+	String get kk => 'Kazakh';
+
+	/// en: 'Kalaallisut, Greenlandic'
+	String get kl => 'Kalaallisut, Greenlandic';
+
+	/// en: 'Khmer'
+	String get km => 'Khmer';
+
+	/// en: 'Kannada'
+	String get kn => 'Kannada';
+
+	/// en: 'Korean'
+	String get ko => 'Korean';
+
+	/// en: 'Kanuri'
+	String get kr => 'Kanuri';
+
+	/// en: 'Kashmiri'
+	String get ks => 'Kashmiri';
+
+	/// en: 'Kurdish'
+	String get ku => 'Kurdish';
+
+	/// en: 'Komi'
+	String get kv => 'Komi';
+
+	/// en: 'Cornish'
+	String get kw => 'Cornish';
+
+	/// en: 'Kyrgyz'
+	String get ky => 'Kyrgyz';
+
+	/// en: 'Latin'
+	String get la => 'Latin';
+
+	/// en: 'Luxembourgish, Letzeburgesch'
+	String get lb => 'Luxembourgish, Letzeburgesch';
+
+	/// en: 'Ganda'
+	String get lg => 'Ganda';
+
+	/// en: 'Limburgish, Limburgan, Limburger'
+	String get li => 'Limburgish, Limburgan, Limburger';
+
+	/// en: 'Lingala'
+	String get ln => 'Lingala';
+
+	/// en: 'Lao'
+	String get lo => 'Lao';
+
+	/// en: 'Lithuanian'
+	String get lt => 'Lithuanian';
+
+	/// en: 'Luba-Katanga'
+	String get lu => 'Luba-Katanga';
+
+	/// en: 'Latvian'
+	String get lv => 'Latvian';
+
+	/// en: 'Malagasy'
+	String get mg => 'Malagasy';
+
+	/// en: 'Marshallese'
+	String get mh => 'Marshallese';
+
+	/// en: 'Māori'
+	String get mi => 'Māori';
+
+	/// en: 'Macedonian'
+	String get mk => 'Macedonian';
+
+	/// en: 'Malayalam'
+	String get ml => 'Malayalam';
+
+	/// en: 'Mongolian'
+	String get mn => 'Mongolian';
+
+	/// en: 'Marathi (Marāṭhī)'
+	String get mr => 'Marathi (Marāṭhī)';
+
+	/// en: 'Malay'
+	String get ms => 'Malay';
+
+	/// en: 'Maltese'
+	String get mt => 'Maltese';
+
+	/// en: 'Burmese'
+	String get my => 'Burmese';
+
+	/// en: 'Nauruan'
+	String get na => 'Nauruan';
+
+	/// en: 'Norwegian Bokmål'
+	String get nb => 'Norwegian Bokmål';
+
+	/// en: 'Northern Ndebele'
+	String get nd => 'Northern Ndebele';
+
+	/// en: 'Nepali'
+	String get ne => 'Nepali';
+
+	/// en: 'Ndonga'
+	String get ng => 'Ndonga';
+
+	/// en: 'Dutch'
+	String get nl => 'Dutch';
+
+	/// en: 'Norwegian Nynorsk'
+	String get nn => 'Norwegian Nynorsk';
+
+	/// en: 'Norwegian'
+	String get no => 'Norwegian';
+
+	/// en: 'Southern Ndebele'
+	String get nr => 'Southern Ndebele';
+
+	/// en: 'Navajo, Navaho'
+	String get nv => 'Navajo, Navaho';
+
+	/// en: 'Chichewa, Chewa, Nyanja'
+	String get ny => 'Chichewa, Chewa, Nyanja';
+
+	/// en: 'Occitan'
+	String get oc => 'Occitan';
+
+	/// en: 'Ojibwe, Ojibwa'
+	String get oj => 'Ojibwe, Ojibwa';
+
+	/// en: 'Oromo'
+	String get om => 'Oromo';
+
+	/// en: 'Oriya'
+	String get or => 'Oriya';
+
+	/// en: 'Ossetian, Ossetic'
+	String get os => 'Ossetian, Ossetic';
+
+	/// en: '(Eastern) Punjabi'
+	String get pa => '(Eastern) Punjabi';
+
+	/// en: 'Pāli'
+	String get pi => 'Pāli';
+
+	/// en: 'Polish'
+	String get pl => 'Polish';
+
+	/// en: 'Pashto, Pushto'
+	String get ps => 'Pashto, Pushto';
+
 	/// en: 'Portuguese'
 	String get pt => 'Portuguese';
 
+	/// en: 'Quechua'
+	String get qu => 'Quechua';
+
+	/// en: 'Romansh'
+	String get rm => 'Romansh';
+
+	/// en: 'Kirundi'
+	String get rn => 'Kirundi';
+
+	/// en: 'Romanian'
+	String get ro => 'Romanian';
+
+	/// en: 'Russian'
+	String get ru => 'Russian';
+
+	/// en: 'Kinyarwanda'
+	String get rw => 'Kinyarwanda';
+
+	/// en: 'Sanskrit (Saṁskṛta)'
+	String get sa => 'Sanskrit (Saṁskṛta)';
+
+	/// en: 'Sardinian'
+	String get sc => 'Sardinian';
+
+	/// en: 'Sindhi'
+	String get sd => 'Sindhi';
+
+	/// en: 'Northern Sami'
+	String get se => 'Northern Sami';
+
+	/// en: 'Sango'
+	String get sg => 'Sango';
+
+	/// en: 'Sinhalese, Sinhala'
+	String get si => 'Sinhalese, Sinhala';
+
+	/// en: 'Slovak'
+	String get sk => 'Slovak';
+
+	/// en: 'Slovene'
+	String get sl => 'Slovene';
+
+	/// en: 'Samoan'
+	String get sm => 'Samoan';
+
+	/// en: 'Shona'
+	String get sn => 'Shona';
+
+	/// en: 'Somali'
+	String get so => 'Somali';
+
+	/// en: 'Albanian'
+	String get sq => 'Albanian';
+
+	/// en: 'Serbian'
+	String get sr => 'Serbian';
+
+	/// en: 'Swati'
+	String get ss => 'Swati';
+
+	/// en: 'Southern Sotho'
+	String get st => 'Southern Sotho';
+
+	/// en: 'Sundanese'
+	String get su => 'Sundanese';
+
+	/// en: 'Swedish'
+	String get sv => 'Swedish';
+
+	/// en: 'Swahili'
+	String get sw => 'Swahili';
+
+	/// en: 'Tamil'
+	String get ta => 'Tamil';
+
+	/// en: 'Telugu'
+	String get te => 'Telugu';
+
+	/// en: 'Tajik'
+	String get tg => 'Tajik';
+
 	/// en: 'Thai'
 	String get th => 'Thai';
+
+	/// en: 'Tigrinya'
+	String get ti => 'Tigrinya';
+
+	/// en: 'Turkmen'
+	String get tk => 'Turkmen';
+
+	/// en: 'Tagalog'
+	String get tl => 'Tagalog';
+
+	/// en: 'Tswana'
+	String get tn => 'Tswana';
+
+	/// en: 'Tonga (Tonga Islands)'
+	String get to => 'Tonga (Tonga Islands)';
+
+	/// en: 'Turkish'
+	String get tr => 'Turkish';
+
+	/// en: 'Tsonga'
+	String get ts => 'Tsonga';
+
+	/// en: 'Tatar'
+	String get tt => 'Tatar';
+
+	/// en: 'Twi'
+	String get tw => 'Twi';
+
+	/// en: 'Tahitian'
+	String get ty => 'Tahitian';
+
+	/// en: 'Uyghur'
+	String get ug => 'Uyghur';
+
+	/// en: 'Ukrainian'
+	String get uk => 'Ukrainian';
+
+	/// en: 'Urdu'
+	String get ur => 'Urdu';
+
+	/// en: 'Uzbek'
+	String get uz => 'Uzbek';
+
+	/// en: 'Venda'
+	String get ve => 'Venda';
+
+	/// en: 'Vietnamese'
+	String get vi => 'Vietnamese';
+
+	/// en: 'Volapük'
+	String get vo => 'Volapük';
+
+	/// en: 'Walloon'
+	String get wa => 'Walloon';
+
+	/// en: 'Wolof'
+	String get wo => 'Wolof';
+
+	/// en: 'Xhosa'
+	String get xh => 'Xhosa';
+
+	/// en: 'Yiddish'
+	String get yi => 'Yiddish';
+
+	/// en: 'Yoruba'
+	String get yo => 'Yoruba';
+
+	/// en: 'Zhuang, Chuang'
+	String get za => 'Zhuang, Chuang';
+
+	/// en: 'Chinese'
+	String get zh => 'Chinese';
+
+	/// en: 'Zulu'
+	String get zu => 'Zulu';
 
 	/// en: 'Unknown'
 	String get unknown => 'Unknown';
@@ -5380,18 +5896,190 @@ extension on Translations {
 			'addServer.connectToJellyfinCardSubtitleScoped' => ({required Object name}) => 'Sign in to a Jellyfin server. Binds to ${name}.',
 			'addServer.borrowFromAnotherProfile' => 'Borrow from another profile',
 			'addServer.borrowFromAnotherProfileSubtitle' => 'Reuse a connection that\'s already attached to a different profile. PIN-protected source profiles ask for the PIN.',
-			'languages.en' => 'English',
-			'languages.vi' => 'Vietnamese',
-			'languages.ko' => 'Korean',
-			'languages.ja' => 'Japanese',
-			'languages.zh' => 'Chinese',
-			'languages.fr' => 'French',
+			'languages.aa' => 'Afar',
+			'languages.ab' => 'Abkhaz',
+			'languages.ae' => 'Avestan',
+			'languages.af' => 'Afrikaans',
+			'languages.ak' => 'Akan',
+			'languages.am' => 'Amharic',
+			'languages.an' => 'Aragonese',
+			'languages.ar' => 'Arabic',
+			'languages.as' => 'Assamese',
+			'languages.av' => 'Avaric',
+			'languages.ay' => 'Aymara',
+			'languages.az' => 'Azerbaijani',
+			'languages.ba' => 'Bashkir',
+			'languages.be' => 'Belarusian',
+			'languages.bg' => 'Bulgarian',
+			'languages.bh' => 'Bihari',
+			'languages.bi' => 'Bislama',
+			'languages.bm' => 'Bambara',
+			'languages.bn' => 'Bengali, Bangla',
+			'languages.bo' => 'Tibetan Standard, Tibetan, Central',
+			'languages.br' => 'Breton',
+			'languages.bs' => 'Bosnian',
+			'languages.ca' => 'Catalan',
+			'languages.ce' => 'Chechen',
+			'languages.ch' => 'Chamorro',
+			'languages.co' => 'Corsican',
+			'languages.cr' => 'Cree',
+			'languages.cs' => 'Czech',
+			'languages.cu' => 'Old Church Slavonic, Church Slavonic, Old Bulgarian',
+			'languages.cv' => 'Chuvash',
+			'languages.cy' => 'Welsh',
+			'languages.da' => 'Danish',
 			'languages.de' => 'German',
+			'languages.dv' => 'Divehi, Dhivehi, Maldivian',
+			'languages.dz' => 'Dzongkha',
+			'languages.ee' => 'Ewe',
+			'languages.el' => 'Greek (modern)',
+			'languages.en' => 'English',
+			'languages.eo' => 'Esperanto',
 			'languages.es' => 'Spanish',
-			'languages.ru' => 'Russian',
+			'languages.et' => 'Estonian',
+			'languages.eu' => 'Basque',
+			'languages.fa' => 'Persian (Farsi)',
+			'languages.ff' => 'Fula, Fulah, Pulaar, Pular',
+			'languages.fi' => 'Finnish',
+			'languages.fj' => 'Fijian',
+			'languages.fo' => 'Faroese',
+			'languages.fr' => 'French',
+			'languages.fy' => 'Western Frisian',
+			'languages.ga' => 'Irish',
+			'languages.gd' => 'Scottish Gaelic, Gaelic',
+			'languages.gl' => 'Galician',
+			'languages.gn' => 'Guaraní',
+			'languages.gu' => 'Gujarati',
+			'languages.gv' => 'Manx',
+			'languages.ha' => 'Hausa',
+			'languages.he' => 'Hebrew (modern)',
+			'languages.hi' => 'Hindi',
+			'languages.ho' => 'Hiri Motu',
+			'languages.hr' => 'Croatian',
+			'languages.ht' => 'Haitian, Haitian Creole',
+			'languages.hu' => 'Hungarian',
+			'languages.hy' => 'Armenian',
+			'languages.hz' => 'Herero',
+			'languages.ia' => 'Interlingua',
+			'languages.id' => 'Indonesian',
+			'languages.ie' => 'Interlingue',
+			'languages.ig' => 'Igbo',
+			'languages.ii' => 'Nuosu',
+			'languages.ik' => 'Inupiaq',
+			'languages.io' => 'Ido',
+			'languages.kIs' => 'Icelandic',
 			'languages.it' => 'Italian',
+			'languages.iu' => 'Inuktitut',
+			'languages.ja' => 'Japanese',
+			'languages.jv' => 'Javanese',
+			'languages.ka' => 'Georgian',
+			'languages.kg' => 'Kongo',
+			'languages.ki' => 'Kikuyu, Gikuyu',
+			'languages.kj' => 'Kwanyama, Kuanyama',
+			'languages.kk' => 'Kazakh',
+			'languages.kl' => 'Kalaallisut, Greenlandic',
+			'languages.km' => 'Khmer',
+			'languages.kn' => 'Kannada',
+			'languages.ko' => 'Korean',
+			'languages.kr' => 'Kanuri',
+			'languages.ks' => 'Kashmiri',
+			'languages.ku' => 'Kurdish',
+			'languages.kv' => 'Komi',
+			'languages.kw' => 'Cornish',
+			'languages.ky' => 'Kyrgyz',
+			'languages.la' => 'Latin',
+			'languages.lb' => 'Luxembourgish, Letzeburgesch',
+			'languages.lg' => 'Ganda',
+			'languages.li' => 'Limburgish, Limburgan, Limburger',
+			'languages.ln' => 'Lingala',
+			'languages.lo' => 'Lao',
+			'languages.lt' => 'Lithuanian',
+			'languages.lu' => 'Luba-Katanga',
+			'languages.lv' => 'Latvian',
+			'languages.mg' => 'Malagasy',
+			'languages.mh' => 'Marshallese',
+			'languages.mi' => 'Māori',
+			'languages.mk' => 'Macedonian',
+			'languages.ml' => 'Malayalam',
+			'languages.mn' => 'Mongolian',
+			'languages.mr' => 'Marathi (Marāṭhī)',
+			'languages.ms' => 'Malay',
+			'languages.mt' => 'Maltese',
+			'languages.my' => 'Burmese',
+			'languages.na' => 'Nauruan',
+			'languages.nb' => 'Norwegian Bokmål',
+			'languages.nd' => 'Northern Ndebele',
+			'languages.ne' => 'Nepali',
+			'languages.ng' => 'Ndonga',
+			'languages.nl' => 'Dutch',
+			'languages.nn' => 'Norwegian Nynorsk',
+			'languages.no' => 'Norwegian',
+			'languages.nr' => 'Southern Ndebele',
+			'languages.nv' => 'Navajo, Navaho',
+			'languages.ny' => 'Chichewa, Chewa, Nyanja',
+			'languages.oc' => 'Occitan',
+			'languages.oj' => 'Ojibwe, Ojibwa',
+			'languages.om' => 'Oromo',
+			'languages.or' => 'Oriya',
+			'languages.os' => 'Ossetian, Ossetic',
+			'languages.pa' => '(Eastern) Punjabi',
+			'languages.pi' => 'Pāli',
+			'languages.pl' => 'Polish',
+			'languages.ps' => 'Pashto, Pushto',
 			'languages.pt' => 'Portuguese',
+			'languages.qu' => 'Quechua',
+			'languages.rm' => 'Romansh',
+			'languages.rn' => 'Kirundi',
+			'languages.ro' => 'Romanian',
+			'languages.ru' => 'Russian',
+			'languages.rw' => 'Kinyarwanda',
+			'languages.sa' => 'Sanskrit (Saṁskṛta)',
+			'languages.sc' => 'Sardinian',
+			'languages.sd' => 'Sindhi',
+			'languages.se' => 'Northern Sami',
+			'languages.sg' => 'Sango',
+			'languages.si' => 'Sinhalese, Sinhala',
+			'languages.sk' => 'Slovak',
+			'languages.sl' => 'Slovene',
+			'languages.sm' => 'Samoan',
+			'languages.sn' => 'Shona',
+			'languages.so' => 'Somali',
+			'languages.sq' => 'Albanian',
+			'languages.sr' => 'Serbian',
+			'languages.ss' => 'Swati',
+			'languages.st' => 'Southern Sotho',
+			'languages.su' => 'Sundanese',
+			'languages.sv' => 'Swedish',
+			'languages.sw' => 'Swahili',
+			'languages.ta' => 'Tamil',
+			'languages.te' => 'Telugu',
+			'languages.tg' => 'Tajik',
 			'languages.th' => 'Thai',
+			'languages.ti' => 'Tigrinya',
+			'languages.tk' => 'Turkmen',
+			'languages.tl' => 'Tagalog',
+			'languages.tn' => 'Tswana',
+			'languages.to' => 'Tonga (Tonga Islands)',
+			'languages.tr' => 'Turkish',
+			'languages.ts' => 'Tsonga',
+			'languages.tt' => 'Tatar',
+			'languages.tw' => 'Twi',
+			'languages.ty' => 'Tahitian',
+			'languages.ug' => 'Uyghur',
+			'languages.uk' => 'Ukrainian',
+			'languages.ur' => 'Urdu',
+			'languages.uz' => 'Uzbek',
+			'languages.ve' => 'Venda',
+			'languages.vi' => 'Vietnamese',
+			'languages.vo' => 'Volapük',
+			'languages.wa' => 'Walloon',
+			'languages.wo' => 'Wolof',
+			'languages.xh' => 'Xhosa',
+			'languages.yi' => 'Yiddish',
+			'languages.yo' => 'Yoruba',
+			'languages.za' => 'Zhuang, Chuang',
+			'languages.zh' => 'Chinese',
+			'languages.zu' => 'Zulu',
 			'languages.unknown' => 'Unknown',
 			_ => null,
 		};
