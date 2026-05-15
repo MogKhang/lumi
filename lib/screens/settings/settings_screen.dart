@@ -59,6 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
   // Focus tracking keys
   static const _kDonate = 'donate';
+  static const _kTheme = 'theme';
   static const _kLogout = 'logout';
 
   KeyboardShortcutsService? _keyboardService;
@@ -90,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   @override
   void focusActiveTabIfReady() {
     if (InputModeTracker.isKeyboardMode(context)) {
-      _focusTracker.restoreFocus(fallbackKey: DonationService.isEnabled ? _kDonate : _kLogout);
+      _focusTracker.restoreFocus(fallbackKey: _kTheme);
     }
   }
 
@@ -185,6 +186,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
         return ListTile(
+          focusNode: _focusTracker.get(_kTheme),
           leading: AppIcon(themeProvider.themeModeIcon, fill: 1),
           title: Text(t.settings.theme),
           subtitle: Text(themeProvider.themeModeDisplayName),
