@@ -1,3 +1,4 @@
+import '../i18n/strings.g.dart';
 import '../data/iso_639_data.dart';
 
 /// Helper class for converting between ISO 639-1 (2-letter) and ISO 639-2 (3-letter) language codes
@@ -63,6 +64,15 @@ class LanguageCodes {
   }
 
   static String? getLanguageName(String languageCode) {
-    return _resolve(languageCode)?.name;
+    final entry = _resolve(languageCode);
+    if (entry == null) return null;
+
+    // Check if we have a translation for this language code
+    final translated = t['languages.${entry.code1}'];
+    if (translated != null && translated != 'languages.${entry.code1}') {
+      return translated;
+    }
+
+    return entry.name;
   }
 }

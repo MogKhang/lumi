@@ -85,6 +85,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsTraktEn trakt = TranslationsTraktEn.internal(_root);
 	late final TranslationsTrackersEn trackers = TranslationsTrackersEn.internal(_root);
 	late final TranslationsAddServerEn addServer = TranslationsAddServerEn.internal(_root);
+	late final TranslationsLanguagesEn languages = TranslationsLanguagesEn.internal(_root);
 }
 
 // Path: app
@@ -3573,6 +3574,54 @@ class TranslationsAddServerEn {
 	String get borrowFromAnotherProfileSubtitle => 'Reuse a connection that\'s already attached to a different profile. PIN-protected source profiles ask for the PIN.';
 }
 
+// Path: languages
+class TranslationsLanguagesEn {
+	TranslationsLanguagesEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'English'
+	String get en => 'English';
+
+	/// en: 'Vietnamese'
+	String get vi => 'Vietnamese';
+
+	/// en: 'Korean'
+	String get ko => 'Korean';
+
+	/// en: 'Japanese'
+	String get ja => 'Japanese';
+
+	/// en: 'Chinese'
+	String get zh => 'Chinese';
+
+	/// en: 'French'
+	String get fr => 'French';
+
+	/// en: 'German'
+	String get de => 'German';
+
+	/// en: 'Spanish'
+	String get es => 'Spanish';
+
+	/// en: 'Russian'
+	String get ru => 'Russian';
+
+	/// en: 'Italian'
+	String get it => 'Italian';
+
+	/// en: 'Portuguese'
+	String get pt => 'Portuguese';
+
+	/// en: 'Thai'
+	String get th => 'Thai';
+
+	/// en: 'Unknown'
+	String get unknown => 'Unknown';
+}
+
 // Path: hotkeys.actions
 class TranslationsHotkeysActionsEn {
 	TranslationsHotkeysActionsEn.internal(this._root);
@@ -5331,6 +5380,19 @@ extension on Translations {
 			'addServer.connectToJellyfinCardSubtitleScoped' => ({required Object name}) => 'Sign in to a Jellyfin server. Binds to ${name}.',
 			'addServer.borrowFromAnotherProfile' => 'Borrow from another profile',
 			'addServer.borrowFromAnotherProfileSubtitle' => 'Reuse a connection that\'s already attached to a different profile. PIN-protected source profiles ask for the PIN.',
+			'languages.en' => 'English',
+			'languages.vi' => 'Vietnamese',
+			'languages.ko' => 'Korean',
+			'languages.ja' => 'Japanese',
+			'languages.zh' => 'Chinese',
+			'languages.fr' => 'French',
+			'languages.de' => 'German',
+			'languages.es' => 'Spanish',
+			'languages.ru' => 'Russian',
+			'languages.it' => 'Italian',
+			'languages.pt' => 'Portuguese',
+			'languages.th' => 'Thai',
+			'languages.unknown' => 'Unknown',
 			_ => null,
 		};
 	}

@@ -84,6 +84,7 @@ class TranslationsVi extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsTraktVi trakt = _TranslationsTraktVi._(_root);
 	@override late final _TranslationsTrackersVi trackers = _TranslationsTrackersVi._(_root);
 	@override late final _TranslationsAddServerVi addServer = _TranslationsAddServerVi._(_root);
+	@override late final _TranslationsLanguagesVi languages = _TranslationsLanguagesVi._(_root);
 }
 
 // Path: app
@@ -1525,6 +1526,28 @@ class _TranslationsAddServerVi extends TranslationsAddServerEn {
 	@override String connectToJellyfinCardSubtitleScoped({required Object name}) => 'Sign in to a Jellyfin server. Binds to ${name}.';
 	@override String get borrowFromAnotherProfile => 'Borrow from another profile';
 	@override String get borrowFromAnotherProfileSubtitle => 'Reuse a connection that\'s already attached to a different profile. PIN-protected source profiles ask for the PIN.';
+}
+
+// Path: languages
+class _TranslationsLanguagesVi extends TranslationsLanguagesEn {
+	_TranslationsLanguagesVi._(TranslationsVi root) : this._root = root, super.internal(root);
+
+	final TranslationsVi _root; // ignore: unused_field
+
+	// Translations
+	@override String get en => 'Tiếng Anh';
+	@override String get vi => 'Tiếng Việt';
+	@override String get ko => 'Tiếng Hàn';
+	@override String get ja => 'Tiếng Nhật';
+	@override String get zh => 'Tiếng Trung';
+	@override String get fr => 'Tiếng Pháp';
+	@override String get de => 'Tiếng Đức';
+	@override String get es => 'Tiếng Tây Ban Nha';
+	@override String get ru => 'Tiếng Nga';
+	@override String get it => 'Tiếng Ý';
+	@override String get pt => 'Tiếng Bồ Đào Nha';
+	@override String get th => 'Tiếng Thái';
+	@override String get unknown => 'Không xác định';
 }
 
 // Path: hotkeys.actions
@@ -2983,6 +3006,19 @@ extension on TranslationsVi {
 			'addServer.connectToJellyfinCardSubtitleScoped' => ({required Object name}) => 'Sign in to a Jellyfin server. Binds to ${name}.',
 			'addServer.borrowFromAnotherProfile' => 'Borrow from another profile',
 			'addServer.borrowFromAnotherProfileSubtitle' => 'Reuse a connection that\'s already attached to a different profile. PIN-protected source profiles ask for the PIN.',
+			'languages.en' => 'Tiếng Anh',
+			'languages.vi' => 'Tiếng Việt',
+			'languages.ko' => 'Tiếng Hàn',
+			'languages.ja' => 'Tiếng Nhật',
+			'languages.zh' => 'Tiếng Trung',
+			'languages.fr' => 'Tiếng Pháp',
+			'languages.de' => 'Tiếng Đức',
+			'languages.es' => 'Tiếng Tây Ban Nha',
+			'languages.ru' => 'Tiếng Nga',
+			'languages.it' => 'Tiếng Ý',
+			'languages.pt' => 'Tiếng Bồ Đào Nha',
+			'languages.th' => 'Tiếng Thái',
+			'languages.unknown' => 'Không xác định',
 			_ => null,
 		};
 	}

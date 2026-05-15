@@ -1291,5 +1291,20 @@
     "connectToJellyfinCardSubtitleScoped": "Sign in to a Jellyfin server. Binds to ${name}.",
     "borrowFromAnotherProfile": "Borrow from another profile",
     "borrowFromAnotherProfileSubtitle": "Reuse a connection that's already attached to a different profile. PIN-protected source profiles ask for the PIN."
+  },
+  "languages": {
+    "en": "Tiếng Anh",
+    "vi": "Tiếng Việt",
+    "ko": "Tiếng Hàn",
+    "ja": "Tiếng Nhật",
+    "zh": "Tiếng Trung",
+    "fr": "Tiếng Pháp",
+    "de": "Tiếng Đức",
+    "es": "Tiếng Tây Ban Nha",
+    "ru": "Tiếng Nga",
+    "it": "Tiếng Ý",
+    "pt": "Tiếng Bồ Đào Nha",
+    "th": "Tiếng Thái",
+    "unknown": "Không xác định"
   }
 }

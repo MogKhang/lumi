@@ -1,3 +1,4 @@
+import '../i18n/strings.g.dart';
 import 'codec_utils.dart';
 import 'language_codes.dart';
 
@@ -90,7 +91,7 @@ class TrackLabelBuilder {
     int? channelsCount,
     required int index,
   }) {
-    final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : 'Unknown';
+    final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : t.languages.unknown;
     final codecStr = codec != null ? CodecUtils.formatAudioCodec(codec) : '';
     final channelsStr = CodecUtils.formatChannels(channelsCount);
     
@@ -102,7 +103,7 @@ class TrackLabelBuilder {
     } else if (channelsStr.isNotEmpty) {
       codecAndChannels = channelsStr;
     } else {
-      codecAndChannels = 'Unknown';
+      codecAndChannels = t.languages.unknown;
     }
     
     final label = '$lang ($codecAndChannels)';
@@ -120,7 +121,7 @@ class TrackLabelBuilder {
     bool isExternal = false,
     required int index,
   }) {
-    final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : 'Unknown';
+    final lang = language != null && language.isNotEmpty ? LanguageCodes.getDisplayName(language) : t.languages.unknown;
     final displayCodec = codec != null ? CodecUtils.formatSubtitleCodec(codec) : 'SRT';
     final externalStr = isExternal ? ' External' : '';
     final forcedStr = forced ? ' (Forced)' : '';
