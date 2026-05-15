@@ -817,7 +817,8 @@ class _LibrariesScreenState extends State<LibrariesScreen>
               i,
               onSelectWhenActive: _focusCurrentTab,
               onNavigateDown: _focusCurrentTabFromTabBar,
-              onNavigateRightFromLast: () => _actionBarKey.currentState?.requestFocusOnFirst(),
+              onNavigateRightFromLast:
+                  () => PlatformDetector.isTV() ? null : _actionBarKey.currentState?.requestFocusOnFirst(),
             ),
           ],
         ],
@@ -859,6 +860,72 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     );
   }
 
+  PreferredSizeWidget? _buildTVActionBar() {
+    if (!PlatformDetector.isTV() || _selectedLibraryGlobalKey == null) {
+      return null;
+    }
+
+    // Only show for Browse tab currently
+    if (_visibleTabs.isEmpty || tabController.index >= _visibleTabs.length) return null;
+    if (_visibleTabs[tabController.index] != LibraryTabType.browse) return null;
+
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(48),
+      child: Container(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: _buildFocusableActionBar(),
+      ),
+    );
+  }
+
+  Widget _buildFocusableActionBar() {
+    return FocusableActionBar(
+      key: _actionBarKey,
+      onNavigateLeft: () => getTabChipFocusNode(_visibleTabs.length - 1).requestFocus(),
+      onNavigateDown: () {
+        if (suppressAutoFocus) {
+          setState(() {
+            suppressAutoFocus = false;
+          });
+        }
+        _resetOuterScroll();
+        _focusCurrentTabImmediate();
+      },
+      onNavigateUp: focusTabBar,
+      actions: [
+        if (_visibleTabs.isNotEmpty &&
+            tabController.index < _visibleTabs.length &&
+            _visibleTabs[tabController.index] == LibraryTabType.browse) ...[
+          FocusableAction(
+            tooltip: t.libraries.filters,
+            onPressed: () => _browseTabKey.currentState?.showFiltersBottomSheet(),
+            child: IconButton(
+              onPressed: () => _browseTabKey.currentState?.showFiltersBottomSheet(),
+              icon: Badge(
+                label: Text(_browseTabKey.currentState?.selectedFiltersCount.toString() ?? '0'),
+                isLabelVisible: (_browseTabKey.currentState?.selectedFiltersCount ?? 0) > 0,
+                child: const AppIcon(Symbols.filter_alt_rounded),
+              ),
+            ),
+          ),
+          FocusableAction(
+            tooltip: _browseTabKey.currentState?.selectedSortLabel ?? t.libraries.sort,
+            onPressed: () => _browseTabKey.currentState?.showSortBottomSheet(),
+            child: IconButton(
+              onPressed: () => _browseTabKey.currentState?.showSortBottomSheet(),
+              icon: Badge(
+                isLabelVisible: _browseTabKey.currentState?.isSortDescending ?? false,
+                label: const AppIcon(Symbols.arrow_downward_rounded, size: 10, color: Colors.white),
+                child: const AppIcon(Symbols.sort_rounded),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return _buildContent(context);
@@ -896,53 +963,23 @@ class _LibrariesScreenState extends State<LibrariesScreen>
       });
     }
 
-    Widget appBar({required bool pinned, bool? isFloating}) => DesktopSliverAppBar(
-      title: _buildAppBarTitle(selectedLibrary),
-      pinned: pinned,
-      floating: isFloating ?? false,
-      snap: isFloating ?? false,
-      bottom: _buildMobileTabBar(),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
-      shadowColor: Colors.transparent,
-      scrolledUnderElevation: 0,
-      actions: [
-        FocusableActionBar(
-          key: _actionBarKey,
-          onNavigateLeft: () => getTabChipFocusNode(_visibleTabs.length - 1).requestFocus(),
-          onNavigateDown: _focusCurrentTab,
-          onNavigateUp: focusTabBar,
-          actions: [
-            if (_visibleTabs[tabController.index] == LibraryTabType.browse) ...[
-              FocusableAction(
-                tooltip: t.libraries.filters,
-                onPressed: () => _browseTabKey.currentState?.showFiltersBottomSheet(),
-                child: IconButton(
-                  onPressed: () => _browseTabKey.currentState?.showFiltersBottomSheet(),
-                  icon: Badge(
-                    label: Text(_browseTabKey.currentState?.selectedFiltersCount.toString() ?? '0'),
-                    isLabelVisible: (_browseTabKey.currentState?.selectedFiltersCount ?? 0) > 0,
-                    child: const AppIcon(Symbols.filter_alt_rounded),
-                  ),
-                ),
-              ),
-              FocusableAction(
-                tooltip: _browseTabKey.currentState?.selectedSortLabel ?? t.libraries.sort,
-                onPressed: () => _browseTabKey.currentState?.showSortBottomSheet(),
-                child: IconButton(
-                  onPressed: () => _browseTabKey.currentState?.showSortBottomSheet(),
-                  icon: Badge(
-                    isLabelVisible: _browseTabKey.currentState?.isSortDescending ?? false,
-                    label: const AppIcon(Symbols.arrow_downward_rounded, size: 10, color: Colors.white),
-                    child: const AppIcon(Symbols.sort_rounded),
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-      ],
-    );
+    Widget appBar({required bool pinned, bool? isFloating}) {
+      final isTV = PlatformDetector.isTV();
+      return DesktopSliverAppBar(
+        title: _buildAppBarTitle(selectedLibrary),
+        pinned: pinned,
+        floating: isFloating ?? false,
+        snap: isFloating ?? false,
+        bottom: isTV ? _buildTVActionBar() : _buildMobileTabBar(),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        shadowColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        actions: [
+          if (!isTV) _buildFocusableActionBar(),
+        ],
+      );
+    }
 
     Widget buildSimpleScroll({required Widget body}) {
       return CustomScrollView(
