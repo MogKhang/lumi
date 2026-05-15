@@ -858,16 +858,18 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     final hiddenKeys = hiddenLibrariesProvider.hiddenLibraryKeys;
 
     // Compute visible libraries (filtered from all libraries)
-    final visibleLibraries = allLibraries.where((lib) => !hiddenKeys.contains(lib.globalKey)).toList();
+    var visibleLibraries = allLibraries.where((lib) => !hiddenKeys.contains(lib.globalKey)).toList();
+    if (widget.filterKind != null) {
+      visibleLibraries = visibleLibraries.where((lib) => lib.kind == widget.filterKind).toList();
+    }
 
     // Resolve selected library defensively — may be null if server temporarily dropped during refresh
     final selectedLibrary = _selectedLibraryGlobalKey != null
         ? allLibraries.where((lib) => lib.globalKey == _selectedLibraryGlobalKey).firstOrNull
         : null;
 
-    // Auto-select first library if current selection is invalid (e.g. after server switch)
-    if (_selectedLibraryGlobalKey != null &&
-        selectedLibrary == null &&
+    // Auto-select first library if current selection is missing or invalid
+    if (selectedLibrary == null &&
         visibleLibraries.isNotEmpty &&
         !isLoadingLibraries) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

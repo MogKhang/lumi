@@ -821,12 +821,11 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   }) {
     final librariesProvider = context.watch<LibrariesProvider>();
     final isLoading = librariesProvider.isLoading;
-    final isTabSelected = widget.selectedTab == tabId && widget.selectedLibraryKey == null;
-    final isFocused = _focusTracker.isFocused(focusKey);
-    final allEmpty = visibleRows.isEmpty && hiddenLibraryCount == 0;
-
     // A dropdown is only needed if there are multiple libraries total (visible + hidden)
     final showDropdown = (visibleRows.whereType<_LibraryItemRow>().length + hiddenLibraryCount) > 1;
+    final isTabSelected = widget.selectedTab == tabId && (showDropdown ? widget.selectedLibraryKey == null : true);
+    final isFocused = _focusTracker.isFocused(focusKey);
+    final allEmpty = visibleRows.isEmpty && hiddenLibraryCount == 0;
 
     final label = tabId == NavigationTabId.movies
         ? Translations.of(context).navigation.movies
@@ -842,7 +841,16 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
           onKeyEvent: (node, event) {
             if (event is! KeyDownEvent) return KeyEventResult.ignored;
             if (event.logicalKey.isSelectKey) {
-              onToggleExpansion();
+              if (isCollapsed || !showDropdown) {
+                final visibleItems = visibleRows.whereType<_LibraryItemRow>();
+                if (visibleItems.length == 1) {
+                  widget.onLibrarySelected(visibleItems.first.library.globalKey);
+                } else {
+                  widget.onDestinationSelected(tabId);
+                }
+              } else {
+                onToggleExpansion();
+              }
               return KeyEventResult.handled;
             }
             // RIGHT arrow navigates to content area
@@ -858,7 +866,12 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
               canRequestFocus: false,
               onTap: () {
                 if (isCollapsed || !showDropdown) {
-                  widget.onDestinationSelected(tabId);
+                  final visibleItems = visibleRows.whereType<_LibraryItemRow>();
+                  if (visibleItems.length == 1) {
+                    widget.onLibrarySelected(visibleItems.first.library.globalKey);
+                  } else {
+                    widget.onDestinationSelected(tabId);
+                  }
                 } else {
                   onToggleExpansion();
                 }
