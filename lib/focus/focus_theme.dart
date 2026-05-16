@@ -37,8 +37,7 @@ class FocusTheme {
     required bool isFocused,
     double borderRadius = defaultBorderRadius,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final color = isDark ? Colors.white : Colors.black;
+    final color = Theme.of(context).colorScheme.onSurface;
 
     return BoxDecoration(
       borderRadius: BorderRadius.circular(borderRadius),
