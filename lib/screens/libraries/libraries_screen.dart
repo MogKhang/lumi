@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lumi/widgets/app_icon.dart';
+import '../../widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ import '../../focus/dpad_navigator.dart';
 import '../../focus/input_mode_tracker.dart';
 import '../../focus/key_event_utils.dart';
 import '../../mixins/tab_navigation_mixin.dart';
-import '../../../services/plex_client.dart';
+import '../../services/plex_client.dart';
 import '../../media/media_backend.dart';
 import '../../media/media_item.dart';
 import '../../media/media_kind.dart';
@@ -1518,6 +1518,7 @@ class _LibraryManagementSheetState extends State<_LibraryManagementSheet> {
             children: [
               Container(
                 decoration: FocusTheme.focusBackgroundDecoration(
+                  context,
                   isFocused: isVisibilityButtonFocused,
                   borderRadius: 20,
                 ),
@@ -1528,7 +1529,7 @@ class _LibraryManagementSheetState extends State<_LibraryManagementSheet> {
                 ),
               ),
               Container(
-                decoration: FocusTheme.focusBackgroundDecoration(isFocused: isOptionsButtonFocused, borderRadius: 20),
+                decoration: FocusTheme.focusBackgroundDecoration(context, isFocused: isOptionsButtonFocused, borderRadius: 20),
                 child: IconButton(
                   icon: const AppIcon(Symbols.more_vert_rounded, fill: 1),
                   tooltip: t.libraries.libraryOptions,

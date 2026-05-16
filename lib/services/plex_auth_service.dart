@@ -41,7 +41,7 @@ String _redactHost(String host) {
 }
 
 class PlexAuthService {
-  static const String _appName = 'Plezy';
+  static const String _appName = 'Lumi';
   static const String _plexApiBase = 'https://plex.tv/api/v2';
   static const String _clientsApi = 'https://clients.plex.tv/api/v2';
 
@@ -69,7 +69,8 @@ class PlexAuthService {
   Map<String, String> _getCommonHeaders({String? authToken}) {
     final headers = {
       'Accept': 'application/json',
-      'X-Plex-Product': _appName,
+      'X-Plex-Product': 'Lumi',
+      'X-Plex-Device-Name': 'Lumi',
       'X-Plex-Client-Identifier': _clientIdentifier,
     };
 

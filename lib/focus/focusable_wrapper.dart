@@ -427,7 +427,7 @@ class _FocusableWrapperState extends State<FocusableWrapper> with SingleTickerPr
 
     // Choose decoration based on useBackgroundFocus
     final decoration = widget.useBackgroundFocus
-        ? FocusTheme.focusBackgroundDecoration(isFocused: showFocus, borderRadius: widget.borderRadius)
+        ? FocusTheme.focusBackgroundDecoration(context, isFocused: showFocus, borderRadius: widget.borderRadius)
         : FocusTheme.focusDecoration(
             context,
             isFocused: showFocus,

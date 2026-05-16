@@ -562,7 +562,13 @@ LazyDatabase _openConnection() {
         ? await getApplicationDocumentsDirectory()
         : await getApplicationSupportDirectory();
 
-    final file = File(p.join(dbFolder.path, 'plezy_downloads.db'));
+    final file = File(p.join(dbFolder.path, 'lumi_downloads.db'));
+
+    // Migrate from old name 'plezy_downloads.db' if it exists
+    final oldNamedFile = File(p.join(dbFolder.path, 'plezy_downloads.db'));
+    if (!await file.exists() && await oldNamedFile.exists()) {
+      await oldNamedFile.rename(file.path);
+    }
 
     if (!await file.parent.exists()) {
       await file.parent.create(recursive: true);
@@ -571,7 +577,14 @@ LazyDatabase _openConnection() {
     // Migrate from old location on desktop (was in Documents subfolder)
     if (!Platform.isAndroid && !Platform.isIOS && !await file.exists()) {
       final oldFolder = await getApplicationDocumentsDirectory();
-      final oldFile = File(p.join(oldFolder.path, 'plezy_downloads.db'));
+      final oldFile = File(p.join(oldFolder.path, 'lumi_downloads.db'));
+      if (!await oldFile.exists()) {
+          // Check for even older name on desktop
+          final veryOldFile = File(p.join(oldFolder.path, 'plezy_downloads.db'));
+          if (await veryOldFile.exists()) {
+              await veryOldFile.rename(oldFile.path);
+          }
+      }
       if (await oldFile.exists()) {
         await oldFile.rename(file.path);
       }

@@ -99,15 +99,15 @@ class WatchNextService {
     }
   }
 
-  /// Build a content ID. Format: plezy_{serverId}_{ratingKey}
+  /// Build a content ID. Format: lumi_{serverId}_{ratingKey}
   static String _buildContentId(String? serverId, String ratingKey) {
-    return 'plezy_${serverId ?? 'unknown'}_$ratingKey';
+    return 'lumi_${serverId ?? 'unknown'}_$ratingKey';
   }
 
   /// Parse a content ID back to (serverId, ratingKey), or null if invalid.
   static (String serverId, String ratingKey)? parseContentId(String contentId) {
-    if (!contentId.startsWith('plezy_')) return null;
-    final parts = contentId.substring(6).split('_');
+    if (!contentId.startsWith('lumi_')) return null;
+    final parts = contentId.substring(5).split('_');
     if (parts.length < 2) return null;
     return (parts.first, parts.sublist(1).join('_'));
   }

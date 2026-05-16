@@ -86,7 +86,7 @@ class MainActivity : FlutterActivity() {
     // Apply persisted theme color to the window background before anything
     // else renders.  This prevents a white flash between the native splash
     // screen and Flutter's first frame for non-default themes (e.g. OLED).
-    val prefs = getSharedPreferences("plezy_prefs", Context.MODE_PRIVATE)
+    val prefs = getSharedPreferences("lumi_prefs", Context.MODE_PRIVATE)
     val savedTheme = prefs.getString("splash_theme", null)
     ThemeHelper.themeColor(savedTheme)?.let { window.decorView.setBackgroundColor(it) }
 
@@ -277,7 +277,7 @@ class MainActivity : FlutterActivity() {
           val mode = call.argument<String>("mode")
 
           // Persist for next cold start & update window background now
-          getSharedPreferences("plezy_prefs", Context.MODE_PRIVATE)
+          getSharedPreferences("lumi_prefs", Context.MODE_PRIVATE)
             .edit().putString("splash_theme", mode).apply()
           ThemeHelper.themeColor(mode)?.let { window.decorView.setBackgroundColor(it) }
 

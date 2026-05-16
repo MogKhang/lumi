@@ -9,7 +9,7 @@ plugins {
 }
 
 val mpvVersion = "v1.0.7"
-val mpvDir = layout.buildDirectory.dir("libmpv").get().asFile
+val mpvDir = projectDir.resolve("libs/libmpv")
 val mpvAar = "libmpv-release.aar"
 
 val downloadLibmpv by tasks.registering {
@@ -24,7 +24,7 @@ val downloadLibmpv by tasks.registering {
 }
 
 val assVersion = "fp-3"
-val assDir = layout.buildDirectory.dir("libass").get().asFile
+val assDir = projectDir.resolve("libs/libass")
 val assAars = listOf("lib_ass-release.aar", "lib_ass_kt-release.aar", "lib_ass_media-release.aar")
 
 val downloadLibass by tasks.registering {
@@ -34,15 +34,19 @@ val downloadLibass by tasks.registering {
     assDir.mkdirs()
     val baseUrl = "https://github.com/edde746/libass-android/releases/download/$assVersion"
     assAars.forEach { name ->
-      val dest = File(assDir, name)
+      val destName = name.replace("lib_ass", "lumi_ass")
+      val dest = File(assDir, destName)
       exec { commandLine("curl", "-sfL", "$baseUrl/$name", "-o", dest.absolutePath) }
     }
     stamp.writeText(assVersion)
   }
 }
 
+// In dependencies, use the new names
+// (Need to find where dependencies use assAars)
+
 val doviVersion = "2.3.1"
-val doviDir = layout.buildDirectory.dir("libdovi").get().asFile
+val doviDir = projectDir.resolve("libs/libdovi")
 val doviAbis = mapOf(
   "arm64-v8a" to "aarch64-linux-android",
   "armeabi-v7a" to "armv7-linux-androideabi",
@@ -187,5 +191,8 @@ dependencies {
   implementation("org.jellyfin.media3:media3-ffmpeg-decoder:1.9.0+1")
 
   // libass-android for ASS/SSA subtitle rendering
-  assAars.forEach { implementation(files(File(assDir, it))) }
+  assAars.forEach { name ->
+    val destName = name.replace("lib_ass", "lumi_ass")
+    implementation(files(File(assDir, destName)))
+  }
 }
