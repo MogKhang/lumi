@@ -73,7 +73,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.edde746.lumi</string>
+			<string>com.mogkhang.lumi</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>lumi</string>

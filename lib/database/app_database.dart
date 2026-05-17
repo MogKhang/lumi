@@ -564,8 +564,8 @@ LazyDatabase _openConnection() {
 
     final file = File(p.join(dbFolder.path, 'lumi_downloads.db'));
 
-    // Migrate from old name 'plezy_downloads.db' if it exists
-    final oldNamedFile = File(p.join(dbFolder.path, 'plezy_downloads.db'));
+    // Migrate from old name 'lumi_downloads.db' if it exists
+    final oldNamedFile = File(p.join(dbFolder.path, 'lumi_downloads.db'));
     if (!await file.exists() && await oldNamedFile.exists()) {
       await oldNamedFile.rename(file.path);
     }
@@ -580,7 +580,7 @@ LazyDatabase _openConnection() {
       final oldFile = File(p.join(oldFolder.path, 'lumi_downloads.db'));
       if (!await oldFile.exists()) {
           // Check for even older name on desktop
-          final veryOldFile = File(p.join(oldFolder.path, 'plezy_downloads.db'));
+          final veryOldFile = File(p.join(oldFolder.path, 'lumi_downloads.db'));
           if (await veryOldFile.exists()) {
               await veryOldFile.rename(oldFile.path);
           }

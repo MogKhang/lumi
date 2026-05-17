@@ -1,4 +1,4 @@
-package com.edde746.lumi.watchnext
+package com.mogkhang.lumi.watchnext
 
 import android.content.ContentProviderOperation
 import android.content.ContentUris
@@ -153,7 +153,7 @@ class WatchNextProvider(private val context: Context) {
     }
 
     val intentUri = Uri.Builder()
-      .scheme("plezy")
+      .scheme("lumi")
       .authority("play")
       .appendQueryParameter("content_id", item.contentId)
       .build()

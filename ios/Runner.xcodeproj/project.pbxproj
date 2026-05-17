@@ -11,7 +11,7 @@
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		69E1B4BB161DC9D84D1DFC62 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB346A1D0705AB171F80B11B /* Pods_Runner.framework */; };
-		6A48DFB02EA70C7100C1F7CD /* plezy.icon in Resources */ = {isa = PBXBuildFile; fileRef = 6A48DFAF2EA70C7100C1F7CD /* plezy.icon */; };
+		6A48DFB02EA70C7100C1F7CD /* lumi.icon in Resources */ = {isa = PBXBuildFile; fileRef = 6A48DFAF2EA70C7100C1F7CD /* lumi.icon */; };
 		6A8A46212EDB320D0057B88C /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6A8A46202EDB320D0057B88C /* MPVKit */; };
 		6A8A46252EDB370C0057B88C /* MpvPlayerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A46232EDB370C0057B88C /* MpvPlayerPlugin.swift */; };
 		6A8A46262EDB370C0057B88C /* MpvPlayerCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A46222EDB370C0057B88C /* MpvPlayerCore.swift */; };
@@ -56,7 +56,7 @@
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A9EF9720208222F20B1495D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		6A48DFAF2EA70C7100C1F7CD /* plezy.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = plezy.icon; sourceTree = "<group>"; };
+		6A48DFAF2EA70C7100C1F7CD /* lumi.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = lumi.icon; sourceTree = "<group>"; };
 		6A8A46222EDB370C0057B88C /* MpvPlayerCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MpvPlayerCore.swift; sourceTree = "<group>"; };
 		6A8A46232EDB370C0057B88C /* MpvPlayerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MpvPlayerPlugin.swift; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				875C8AEFBBA3759A1849D674 /* Pods */,
-				6A48DFAF2EA70C7100C1F7CD /* plezy.icon */,
+				6A48DFAF2EA70C7100C1F7CD /* lumi.icon */,
 				3DBA2EB0C0219E797C60DE48 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -291,7 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
-				6A48DFB02EA70C7100C1F7CD /* plezy.icon in Resources */,
+				6A48DFB02EA70C7100C1F7CD /* lumi.icon in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
@@ -510,7 +510,7 @@
 				DEVELOPMENT_TEAM = G88U5B5783;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Plezy;
+				INFOPLIST_KEY_CFBundleDisplayName = Lumi;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -518,7 +518,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.edde746.plezy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -697,7 +697,7 @@
 				DEVELOPMENT_TEAM = G88U5B5783;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Plezy;
+				INFOPLIST_KEY_CFBundleDisplayName = Lumi;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -705,7 +705,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.edde746.plezy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -724,7 +724,7 @@
 				DEVELOPMENT_TEAM = G88U5B5783;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Plezy;
+				INFOPLIST_KEY_CFBundleDisplayName = Lumi;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -732,7 +732,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.edde746.plezy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

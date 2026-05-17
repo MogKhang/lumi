@@ -111,8 +111,8 @@ class _AppDatabaseTestSuite {
 
       test('retried v14 migration tolerates existing indices', () async {
         await db.close();
-        final tempDir = await Directory.systemTemp.createTemp('plezy_db_migration_test_');
-        final file = File('${tempDir.path}/plezy_downloads.db');
+        final tempDir = await Directory.systemTemp.createTemp('lumi_db_migration_test_');
+        final file = File('${tempDir.path}/lumi_downloads.db');
         AppDatabase? seeded;
         AppDatabase? reopened;
 

@@ -1,4 +1,4 @@
-package com.edde746.lumi.shared
+package com.mogkhang.lumi.shared
 
 import android.app.Activity
 import android.content.Context

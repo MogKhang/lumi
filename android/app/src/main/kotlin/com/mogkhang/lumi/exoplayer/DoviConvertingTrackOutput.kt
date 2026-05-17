@@ -1,4 +1,4 @@
-package com.edde746.lumi.exoplayer
+package com.mogkhang.lumi.exoplayer
 
 import android.util.Log
 import androidx.media3.common.DataReader

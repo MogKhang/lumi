@@ -1,4 +1,4 @@
-package com.edde746.lumi.exoplayer
+package com.mogkhang.lumi.exoplayer
 
 import android.app.Activity
 import android.app.ActivityManager
@@ -49,9 +49,9 @@ import androidx.media3.extractor.mp4.Mp4Extractor
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.CaptionStyleCompat
 import androidx.media3.ui.SubtitleView
-import com.edde746.lumi.shared.AudioFocusManager
-import com.edde746.lumi.shared.FlutterOverlayHelper
-import com.edde746.lumi.shared.FrameRateManager
+import com.mogkhang.lumi.shared.AudioFocusManager
+import com.mogkhang.lumi.shared.FlutterOverlayHelper
+import com.mogkhang.lumi.shared.FrameRateManager
 import io.github.peerless2012.ass.media.AssHandler
 import io.github.peerless2012.ass.media.parser.AssSubtitleParserFactory
 import io.github.peerless2012.ass.media.type.AssRenderType
@@ -61,7 +61,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicLong
 import org.chromium.net.CronetEngine
 
-interface ExoPlayerDelegate : com.edde746.lumi.shared.PlayerDelegate {
+interface ExoPlayerDelegate : com.mogkhang.lumi.shared.PlayerDelegate {
 
   /**
    * Called when ExoPlayer encounters a format it cannot play.
@@ -112,7 +112,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
   private var overlayLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
   private var lastVideoSize: VideoSize? = null
   private var exoPlayer: ExoPlayer? = null
-  private var renderersFactory: PlezyRenderersFactory? = null
+  private var renderersFactory: LumiRenderersFactory? = null
   private val subtitleDelayUs = AtomicLong(0L)
   private var httpDataSourceFactory: HttpDataSource.Factory? = null
   private var dataSourceFactory: DefaultDataSource.Factory? = null
@@ -391,7 +391,7 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         .build()
 
       // Use DefaultRenderersFactory with FFmpeg fallback for unsupported audio codecs
-      val renderersFactory = PlezyRenderersFactory(activity).apply {
+      val renderersFactory = LumiRenderersFactory(activity).apply {
         setEnableDecoderFallback(true)
         setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
         // Force FFmpeg for FLAC — hardware FLAC decoders (e.g. Samsung c2.sec.flac.decoder)

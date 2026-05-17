@@ -33,7 +33,7 @@ else {
     $SearchRoot = Join-Path $Root $SourceRoot
 }
 
-$Release = "plezy@$(git rev-parse --short HEAD)"
+$Release = "lumi@$(git rev-parse --short HEAD)"
 $Stage = New-Item -ItemType Directory -Path ([System.IO.Path]::GetTempPath()) -Name ([System.IO.Path]::GetRandomFileName()) -Force
 $Zip = $null
 
@@ -80,7 +80,7 @@ try {
         release = $Release
     }
 
-    Invoke-RestMethod -Method Post -Uri "$Url/api/0/projects/plezy/plezy/files/dsyms/" `
+    Invoke-RestMethod -Method Post -Uri "$Url/api/0/projects/lumi/lumi/files/dsyms/" `
         -Headers $Headers -Form $Form
 }
 finally {

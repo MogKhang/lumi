@@ -1,4 +1,4 @@
-package com.edde746.lumi.shared
+package com.mogkhang.lumi.shared
 
 import android.graphics.Color
 

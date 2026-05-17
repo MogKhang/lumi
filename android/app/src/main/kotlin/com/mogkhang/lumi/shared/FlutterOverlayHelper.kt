@@ -1,4 +1,4 @@
-package com.edde746.lumi.shared
+package com.mogkhang.lumi.shared
 
 import android.graphics.PixelFormat
 import android.os.Build

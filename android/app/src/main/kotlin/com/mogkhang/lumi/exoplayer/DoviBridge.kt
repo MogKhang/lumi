@@ -1,4 +1,4 @@
-package com.edde746.lumi.exoplayer
+package com.mogkhang.lumi.exoplayer
 
 import android.media.MediaCodecInfo
 import android.media.MediaCodecList

@@ -217,7 +217,7 @@ class OfflineWatchProgress extends Table {
   /// Auto-incrementing primary key
   IntColumn get id => integer().autoIncrement()();
 
-  /// Active Plezy profile that owns this queued action.
+  /// Active Lumi profile that owns this queued action.
   TextColumn get profileId => text().nullable()();
 
   /// Server ID this media belongs to

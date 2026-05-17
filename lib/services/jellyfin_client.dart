@@ -103,9 +103,9 @@ class JellyfinClient with MediaServerCacheMixin implements MediaServerClient, Sc
       // Tests / non-platform contexts — keep the fallback version.
     }
     final authHeader = buildJellyfinAuthHeader(
-      clientName: 'Plezy',
+      clientName: 'Lumi',
       clientVersion: version,
-      deviceName: 'Plezy',
+      deviceName: 'Lumi',
       deviceId: connection.deviceId,
       accessToken: connection.accessToken,
     );
@@ -1739,7 +1739,7 @@ class JellyfinClient with MediaServerCacheMixin implements MediaServerClient, Sc
           'UserId': connection.userId,
           'MaxStreamingBitrate': maxStreamingBitrate,
           'DeviceProfile': <String, Object?>{
-            'Name': 'Plezy',
+            'Name': 'Lumi',
             'MaxStreamingBitrate': maxStreamingBitrate,
             'CodecProfiles': const <Map<String, Object?>>[],
             // Comma-separated codec lists are order-sensitive — first entry

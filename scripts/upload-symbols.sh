@@ -24,8 +24,8 @@ if [[ "$SOURCE_ROOT" != /* ]]; then
   SOURCE_ROOT="$ROOT/$SOURCE_ROOT"
 fi
 
-RELEASE="plezy@$(git rev-parse --short HEAD)"
-ENDPOINT="${URL}/api/0/projects/plezy/plezy/files/dsyms/"
+RELEASE="lumi@$(git rev-parse --short HEAD)"
+ENDPOINT="${URL}/api/0/projects/lumi/lumi/files/dsyms/"
 FILES=()
 
 add_matches() {
@@ -123,7 +123,7 @@ case "$PLATFORM" in
     add_matches "${SOURCE_ROOT}/build/ios" -path '*.dSYM/Contents/Resources/DWARF/*' -type f
     ;;
   linux-x64|linux-arm64)
-    add_matches "${SOURCE_ROOT}/build/linux" -path '*/release/bundle/plezy' -type f
+    add_matches "${SOURCE_ROOT}/build/linux" -path '*/release/bundle/lumi' -type f
     ;;
   android-apk|android-aab)
     add_matches "${SOURCE_ROOT}/build/app/intermediates/merged_native_libs" -name '*.so' -type f

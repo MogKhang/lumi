@@ -1,4 +1,4 @@
-package com.edde746.lumi.exoplayer
+package com.mogkhang.lumi.exoplayer
 
 import androidx.media3.common.C
 import androidx.media3.extractor.Extractor

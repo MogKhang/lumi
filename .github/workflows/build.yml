@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  SENTRY_DART_DEFINE: ${{ github.repository == 'edde746/plezy' && '--dart-define=ENABLE_SENTRY=true' || '' }}
+  SENTRY_DART_DEFINE: ${{ github.repository == 'mogkhang/lumi' && '--dart-define=ENABLE_SENTRY=true' || '' }}
   GIT_COMMIT_DART_DEFINE: --dart-define=GIT_COMMIT=${{ github.sha }}
   SENTRY_ENV_DART_DEFINE: --dart-define=SENTRY_ENVIRONMENT=github
   DONATIONS_DART_DEFINE: --dart-define=ENABLE_DONATIONS=true
@@ -66,7 +66,7 @@ jobs:
         run: flutter build apk --release --split-per-abi --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --obfuscate --split-debug-info=debug-info/android-apk
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         run: |
           SYMBOL_ROOT="symbol-inputs/android-apk"
@@ -88,7 +88,7 @@ jobs:
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -165,7 +165,7 @@ jobs:
         run: flutter build ios --release --no-codesign --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/ios
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         run: |
           SYMBOL_ROOT="symbol-inputs/ios"
@@ -187,7 +187,7 @@ jobs:
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -254,7 +254,7 @@ jobs:
         run: flutter build macos --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/macos
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         run: |
           SYMBOL_ROOT="symbol-inputs/macos"
@@ -276,7 +276,7 @@ jobs:
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -314,7 +314,7 @@ jobs:
           IDENTITY=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | grep -o '".*"' | tr -d '"')
           echo "Signing with identity: $IDENTITY"
 
-          APP_PATH="build/macos/Build/Products/Release/Plezy.app"
+          APP_PATH="build/macos/Build/Products/Release/Lumi.app"
 
           # Deep sign everything inside-out: executables, dylibs, XPC services, app bundles, frameworks
           find "$APP_PATH/Contents/Frameworks" \( -name "*.xpc" -o -name "*.app" -o -name "*.framework" -o -name "*.dylib" \) -print0 \
@@ -336,7 +336,7 @@ jobs:
 
       - name: Verify Signature
         run: |
-          APP_PATH="build/macos/Build/Products/Release/Plezy.app"
+          APP_PATH="build/macos/Build/Products/Release/Lumi.app"
           echo "Verifying signature..."
           codesign -dvvv "$APP_PATH"
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
@@ -347,7 +347,7 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          APP_PATH="build/macos/Build/Products/Release/Plezy.app"
+          APP_PATH="build/macos/Build/Products/Release/Lumi.app"
 
           # Create a temporary ZIP for notarization submission
           echo "Creating ZIP for notarization..."
@@ -372,9 +372,9 @@ jobs:
       - name: Create DMG
         run: |
           mkdir -p dmg-staging
-          cp -R build/macos/Build/Products/Release/Plezy.app dmg-staging/
+          cp -R build/macos/Build/Products/Release/Lumi.app dmg-staging/
           ln -s /Applications dmg-staging/Applications
-          hdiutil create -format ULMO -srcfolder dmg-staging -volname "Plezy" plezy-macos.dmg
+          hdiutil create -format ULMO -srcfolder dmg-staging -volname "Lumi" plezy-macos.dmg
 
       - name: Sign DMG for Sparkle (EdDSA)
         if: env.SPARKLE_PRIVATE_KEY != ''
@@ -442,7 +442,7 @@ jobs:
         run: flutter build windows --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/windows-x64
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         shell: pwsh
         continue-on-error: true
         run: |
@@ -472,7 +472,7 @@ jobs:
           }
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -528,7 +528,7 @@ jobs:
         run: flutter build windows --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/windows-arm64
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         shell: pwsh
         continue-on-error: true
         run: |
@@ -558,7 +558,7 @@ jobs:
           }
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -620,39 +620,39 @@ jobs:
           Push-Location _signer
           dart pub get
           Set-Content -Path ed25519_key.pem -Value $env:SPARKLE_PRIVATE_KEY -Encoding ascii -NoNewline
-          $output = dart run sign.dart ../plezy-windows-installer.exe ed25519_key.pem
+          $output = dart run sign.dart ../lumi-windows-installer.exe ed25519_key.pem
           Pop-Location
           Remove-Item _signer -Recurse -Force
           $sig = [regex]::Match($output, 'edSignature="([^"]*)"').Groups[1].Value
           Set-Content -Path win-ed-signature.txt -Value $sig -Encoding ascii -NoNewline
-          Set-Content -Path win-installer-size.txt -Value (Get-Item plezy-windows-installer.exe).Length.ToString() -Encoding ascii -NoNewline
+          Set-Content -Path win-installer-size.txt -Value (Get-Item lumi-windows-installer.exe).Length.ToString() -Encoding ascii -NoNewline
 
       - name: Attest Windows artifacts
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            plezy-windows-x64-portable.7z
-            plezy-windows-arm64-portable.7z
-            plezy-windows-installer.exe
+            lumi-windows-x64-portable.7z
+            lumi-windows-arm64-portable.7z
+            lumi-windows-installer.exe
 
       - name: Upload x64 portable
         uses: actions/upload-artifact@v4
         with:
           name: windows-x64-portable
-          path: plezy-windows-x64-portable.7z
+          path: lumi-windows-x64-portable.7z
 
       - name: Upload arm64 portable
         uses: actions/upload-artifact@v4
         with:
           name: windows-arm64-portable
-          path: plezy-windows-arm64-portable.7z
+          path: lumi-windows-arm64-portable.7z
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
           name: windows-installer
           path: |
-            plezy-windows-installer.exe
+            lumi-windows-installer.exe
             win-ed-signature.txt
             win-installer-size.txt
 
@@ -713,7 +713,7 @@ jobs:
           PKG_CONFIG_PATH: ${{ github.workspace }}/libmpv-prefix/lib/pkgconfig:${{ github.workspace }}/libmpv-prefix/lib/x86_64-linux-gnu/pkgconfig
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         run: |
           SYMBOL_ROOT="symbol-inputs/linux-x64"
@@ -735,7 +735,7 @@ jobs:
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -852,7 +852,7 @@ jobs:
           PKG_CONFIG_PATH: ${{ github.workspace }}/libmpv-prefix/lib/pkgconfig:${{ github.workspace }}/libmpv-prefix/lib/aarch64-linux-gnu/pkgconfig
 
       - name: Stage symbols for upload
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         run: |
           SYMBOL_ROOT="symbol-inputs/linux-arm64"
@@ -874,7 +874,7 @@ jobs:
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
 
       - name: Upload symbols artifact
-        if: github.repository == 'edde746/plezy'
+        if: github.repository == 'mogkhang/lumi'
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
@@ -945,7 +945,7 @@ jobs:
             plezy-linux-arm64.pkg.tar.zst
 
   upload-symbols:
-    if: github.repository == 'edde746/plezy'
+    if: github.repository == 'mogkhang/lumi'
     needs: [build-android, build-ios, build-macos, build-windows-x64, build-windows-arm64, build-linux-x64, build-linux-arm64]
     runs-on: ${{ matrix.os }}
     permissions:
@@ -1088,18 +1088,18 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?>
           <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
             <channel>
-              <title>Plezy Updates</title>
+              <title>Lumi Updates</title>
               <item>
                 <title>Version ${VERSION}</title>
                 <sparkle:version>${BUILD_NUMBER}</sparkle:version>
                 <sparkle:shortVersionString>${VERSION}</sparkle:shortVersionString>
-                <sparkle:releaseNotesLink>https://gh-html.edde746.dev/edde746/plezy/${VERSION}</sparkle:releaseNotesLink>
+                <sparkle:releaseNotesLink>https://gh-html.edde746.dev/mogkhang/lumi/${VERSION}</sparkle:releaseNotesLink>
           XMLEOF
 
           # macOS enclosure
           if [ -n "$MACOS_ED_SIG" ]; then
             cat >> appcast.xml << XMLEOF
-                <enclosure url="https://github.com/edde746/plezy/releases/download/${VERSION}/plezy-macos.dmg"
+                <enclosure url="https://github.com/mogkhang/lumi/releases/download/${VERSION}/plezy-macos.dmg"
                            length="${MACOS_DMG_SIZE}" type="application/octet-stream"
                            sparkle:edSignature="${MACOS_ED_SIG}"
                            sparkle:os="macos" />
@@ -1109,7 +1109,7 @@ jobs:
           # Windows enclosure
           if [ -n "$WIN_ED_SIG" ]; then
             cat >> appcast.xml << XMLEOF
-                <enclosure url="https://github.com/edde746/plezy/releases/download/${VERSION}/plezy-windows-installer.exe"
+                <enclosure url="https://github.com/mogkhang/lumi/releases/download/${VERSION}/lumi-windows-installer.exe"
                            length="${WIN_INSTALLER_SIZE}" type="application/octet-stream"
                            sparkle:edSignature="${WIN_ED_SIG}"
                            sparkle:installerArguments="/SILENT /SP-"
@@ -1138,9 +1138,9 @@ jobs:
             artifacts/android-apk/plezy-android-x86_64.tar.gz
             artifacts/ios-ipa/plezy-ios.ipa
             artifacts/macos-dmg/plezy-macos.dmg
-            artifacts/windows-x64-portable/plezy-windows-x64-portable.7z
-            artifacts/windows-arm64-portable/plezy-windows-arm64-portable.7z
-            artifacts/windows-installer/plezy-windows-installer.exe
+            artifacts/windows-x64-portable/lumi-windows-x64-portable.7z
+            artifacts/windows-arm64-portable/lumi-windows-arm64-portable.7z
+            artifacts/windows-installer/lumi-windows-installer.exe
             artifacts/linux-x64/*
             artifacts/linux-arm64/*
             appcast.xml

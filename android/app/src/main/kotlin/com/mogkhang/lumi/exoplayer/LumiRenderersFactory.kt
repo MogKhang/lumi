@@ -1,4 +1,4 @@
-package com.edde746.lumi.exoplayer
+package com.mogkhang.lumi.exoplayer
 
 import android.content.Context
 import android.media.AudioDeviceInfo
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.abs
 
 @OptIn(UnstableApi::class)
-class PlezyRenderersFactory(context: Context) : DefaultRenderersFactory(context) {
+class LumiRenderersFactory(context: Context) : DefaultRenderersFactory(context) {
 
   /** Audio delay in microseconds. Shared with PositionFixAudioSink for live updates. */
   val audioDelayUs = AtomicLong(0L)

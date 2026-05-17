@@ -1,4 +1,4 @@
-package com.edde746.lumi.mpv
+package com.mogkhang.lumi.mpv
 
 import android.app.Activity
 import android.graphics.Color
@@ -13,10 +13,10 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import com.edde746.lumi.shared.AudioFocusManager
-import com.edde746.lumi.shared.FlutterOverlayHelper
-import com.edde746.lumi.shared.FrameRateManager
-import com.edde746.lumi.shared.PlayerDelegate
+import com.mogkhang.lumi.shared.AudioFocusManager
+import com.mogkhang.lumi.shared.FlutterOverlayHelper
+import com.mogkhang.lumi.shared.FrameRateManager
+import com.mogkhang.lumi.shared.PlayerDelegate
 import dev.jdtech.mpv.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex

@@ -1,4 +1,4 @@
-package com.edde746.lumi.watchnext
+package com.mogkhang.lumi.watchnext
 
 import android.content.Context
 import android.content.Intent
@@ -32,7 +32,7 @@ class WatchNextPlugin :
      */
     fun handleIntent(intent: Intent?): String? {
       val data = intent?.data ?: return null
-      if (data.scheme == "plezy" && data.authority == "play") {
+      if (data.scheme == "lumi" && data.authority == "play") {
         return data.getQueryParameter("content_id")
       }
       return null

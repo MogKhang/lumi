@@ -14,25 +14,25 @@ A modern Plex client for desktop and mobile. Built with Flutter for native perfo
 ## Download
 
 <a href='https://apps.apple.com/us/app/id6754315964'><img height='60' alt='Download on the App Store' src='./assets/app-store-badge.png'/></a>
-<a href='https://play.google.com/store/apps/details?id=com.edde746.plezy'><img height='60' alt='Get it on Google Play' src='./assets/play-store-badge.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=com.mogkhang.lumi'><img height='60' alt='Get it on Google Play' src='./assets/play-store-badge.png'/></a>
 <a href='https://www.amazon.com/gp/product/B0GK65CVS1'><img height='60' alt='Available at the Amazon App Store' src='./assets/amazon-badge.png'/></a>
 
-- [Windows (x64, arm64)](https://github.com/edde746/plezy/releases/latest/download/plezy-windows-installer.exe)
-- [macOS (x64, arm64)](https://github.com/edde746/plezy/releases/latest/download/plezy-macos.dmg)
-- [Linux (x64, arm64)](https://github.com/edde746/plezy/releases/latest) - .deb, .rpm, .pkg.tar.zst, and portable tar.gz available
-- [Nix](https://search.nixos.org/packages?channel=unstable&query=plezy) - Community package by [@mio-19](https://github.com/mio-19) and [@MiniHarinn](https://github.com/MiniHarinn)
+- [Windows (x64, arm64)](https://github.com/mogkhang/lumi/releases/latest/download/lumi-windows-installer.exe)
+- [macOS (x64, arm64)](https://github.com/mogkhang/lumi/releases/latest/download/lumi-macos.dmg)
+- [Linux (x64, arm64)](https://github.com/mogkhang/lumi/releases/latest) - .deb, .rpm, .pkg.tar.zst, and portable tar.gz available
+- [Nix](https://search.nixos.org/packages?channel=unstable&query=lumi) - Community package by [@mio-19](https://github.com/mio-19) and [@MiniHarinn](https://github.com/MiniHarinn)
 - **Homebrew** (macOS):
   ```bash
-  brew tap edde746/plezy https://github.com/edde746/plezy
-  brew install --cask plezy
+  brew tap mogkhang/lumi https://github.com/mogkhang/lumi
+  brew install --cask lumi
   ```
-- [AUR](https://aur.archlinux.org/packages/plezy-bin) (Arch Linux) - Community maintained by [@jianglai](https://github.com/jianglai):
+- [AUR](https://aur.archlinux.org/packages/lumi-bin) (Arch Linux) - Community maintained by [@jianglai](https://github.com/jianglai):
   ```bash
-  yay -S plezy-bin
+  yay -S lumi-bin
   ```
 - **WinGet** (Windows):
   ```bash
-  winget install edde746.plezy
+  winget install mogkhang.lumi
   ```
 
 ## Features
@@ -96,8 +96,8 @@ A modern Plex client for desktop and mobile. Built with Flutter for native perfo
 ### Setup
 
 ```bash
-git clone https://github.com/edde746/plezy.git
-cd plezy
+git clone https://github.com/mogkhang/lumi.git
+cd lumi
 flutter pub get
 dart run build_runner build
 flutter run

@@ -1,4 +1,4 @@
-package com.edde746.lumi.mpv
+package com.mogkhang.lumi.mpv
 
 import android.app.Activity
 import android.net.Uri
@@ -15,7 +15,7 @@ class MpvPlayerPlugin :
   MethodChannel.MethodCallHandler,
   EventChannel.StreamHandler,
   ActivityAware,
-  com.edde746.lumi.shared.PlayerDelegate {
+  com.mogkhang.lumi.shared.PlayerDelegate {
 
   companion object {
     private const val TAG = "MpvPlayerPlugin"

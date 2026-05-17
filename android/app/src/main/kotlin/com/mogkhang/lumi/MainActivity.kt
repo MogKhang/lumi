@@ -1,4 +1,4 @@
-package com.edde746.lumi
+package com.mogkhang.lumi
 
 import android.app.AppOpsManager
 import android.app.PictureInPictureParams
@@ -16,10 +16,10 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import androidx.core.content.FileProvider
-import com.edde746.lumi.exoplayer.ExoPlayerPlugin
-import com.edde746.lumi.mpv.MpvPlayerPlugin
-import com.edde746.lumi.shared.ThemeHelper
-import com.edde746.lumi.watchnext.WatchNextPlugin
+import com.mogkhang.lumi.exoplayer.ExoPlayerPlugin
+import com.mogkhang.lumi.mpv.MpvPlayerPlugin
+import com.mogkhang.lumi.shared.ThemeHelper
+import com.mogkhang.lumi.watchnext.WatchNextPlugin
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
@@ -243,7 +243,7 @@ class MainActivity : FlutterActivity() {
               grantRead = true
             } else {
               val path = if (filePath.startsWith("file://")) filePath.removePrefix("file://") else filePath
-              uri = FileProvider.getUriForFile(this, "com.edde746.lumi.fileprovider", File(path))
+              uri = FileProvider.getUriForFile(this, "com.mogkhang.lumi.fileprovider", File(path))
               grantRead = true
             }
 
