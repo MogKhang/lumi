@@ -340,7 +340,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const selectedServerId = NullableStringPref('selected_server_id');
 
   static final maxVolume = IntPref('max_volume', defaultValue: 100, transform: (v) => v.clamp(100, 300));
-  static final subtitlePosition = IntPref('subtitle_position', defaultValue: 120, transform: (v) => v.clamp(0, 150));
+  static final subtitlePosition = IntPref('subtitle_position', defaultValue: 100, transform: (v) => v.clamp(0, 100));
   static final defaultPlaybackSpeed = DoublePref(
     'default_playback_speed',
     defaultValue: 1.0,

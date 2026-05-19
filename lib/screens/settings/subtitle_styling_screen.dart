@@ -65,7 +65,7 @@ class SubtitleStylingScreen extends StatelessWidget {
           labelText: t.subtitlingStyling.position,
           suffixText: '%',
           min: 0,
-          max: 120,
+          max: 100,
         ),
         SettingSwitchTile(
           pref: SettingsService.subtitleBold,
