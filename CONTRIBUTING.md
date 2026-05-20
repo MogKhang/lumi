@@ -59,16 +59,13 @@ Run these steps each time you want to run on tvOS:
 xcrun simctl boot <UDID>
 open -a Simulator
 
-# 2. Build (ANDROID_HOME stub is required to bypass a Flutter native-assets check)
-mkdir -p /tmp/fake-android-sdk/platforms
-ANDROID_HOME=/tmp/fake-android-sdk ANDROID_SDK_ROOT=/tmp/fake-android-sdk \
-xcodebuild \
-  -workspace tvos/Runner.xcworkspace \
+# 2. Build (run from repo root)
+cd tvos && xcodebuild \
+  -workspace Runner.xcworkspace \
   -scheme Runner \
-  -sdk appletvsimulator26.5 \
   -configuration Debug \
   -destination "id=<UDID>" \
-  build
+  build && cd ..
 
 # 3. Install and launch
 xcrun simctl install <UDID> \
