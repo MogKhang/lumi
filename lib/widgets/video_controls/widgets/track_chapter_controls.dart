@@ -372,28 +372,7 @@ class TrackChapterControls extends StatelessWidget {
           buttonIndex++;
         }
 
-        // Queue button (hidden on mobile when content strip is available)
-        if (showQueueButton && onQueueItemSelected != null && !hideChaptersAndQueue) {
-          final currentIndex = buttonIndex;
-          buttons.add(
-            _buildTrackButton(
-              buttonIndex: currentIndex,
-              icon: Symbols.queue_rounded,
-              tooltip: t.videoControls.queue,
-              semanticLabel: t.videoControls.queue,
-              tracks: tracks,
-              isMobile: isMobile,
-              isDesktop: isDesktop,
-              onPressed: () {
-                onCancelAutoHide?.call();
-                OverlaySheetController.of(context)
-                    .show(builder: (_) => QueueSheet(onItemSelected: onQueueItemSelected!))
-                    .whenComplete(() => onStartAutoHide?.call());
-              },
-            ),
-          );
-          buttonIndex++;
-        }
+        // Queue button hidden
 
         // Version & Quality button
         final showVersionQuality =
@@ -518,7 +497,7 @@ class TrackChapterControls extends StatelessWidget {
     count++; // Audio & subtitles button always shown
     if (canControl && !isLive) count++; // Playback speed
     if (chapters.isNotEmpty && !hideChaptersAndQueue) count++;
-    if (showQueueButton && onQueueItemSelected != null && !hideChaptersAndQueue) count++;
+    // Queue button hidden
     if ((availableVersions.length > 1 || serverSupportsTranscoding) &&
         (onSwitchVersion != null || onSwitchQualityPreset != null)) {
       count++;

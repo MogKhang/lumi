@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "iPhone 16 Pro",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "37748106-D0CD-45DC-957E-A955664C9246",
+      "program": "lib/main.dart",
+      "environmentVariables": {
+        "MVK_CONFIG_LOG_LEVEL": "1"
+      }
+    },
+    {
+      "name": "macOS",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "macos",
+      "program": "lib/main.dart",
+      "environmentVariables": {
+        "MVK_CONFIG_LOG_LEVEL": "1"
+      }
+    }
+  ]
+}

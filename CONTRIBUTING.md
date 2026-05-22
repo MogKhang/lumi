@@ -7,6 +7,74 @@
 3. Run `dart run build_runner build` to generate code
 4. Start developing!
 
+## Running on iOS Simulator
+
+Simulators must be **booted** before Flutter can connect to them. They default to `Shutdown` state.
+
+1. List available simulators and find the UDID:
+   ```bash
+   xcrun simctl list devices available
+   ```
+
+2. Boot and run:
+   ```bash
+   xcrun simctl boot <UDID> && open -a Simulator && flutter run -d <UDID>
+   ```
+
+## Running on tvOS (Apple TV Simulator)
+
+tvOS uses a **custom Flutter engine** and cannot be run with `flutter run` directly. Follow these steps:
+
+### One-time setup
+
+1. **Download the tvOS simulator runtime** (requires Xcode):
+   ```bash
+   xcodebuild -downloadPlatform tvOS
+   ```
+
+2. **Create an Apple TV simulator**:
+   ```bash
+   xcrun simctl create "Apple TV 4K" \
+     com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-3rd-generation-4K \
+     com.apple.CoreSimulator.SimRuntime.tvOS-26-5
+   ```
+   Note the UDID printed — you'll use it below.
+
+3. **Fetch the custom Flutter tvOS engine** (cached after first run):
+   ```bash
+   bash tvos/scripts/fetch_engine.sh
+   ```
+
+4. **Install CocoaPods dependencies**:
+   ```bash
+   bash tvos/scripts/pod_install.sh
+   ```
+
+### Building and running
+
+Run these steps each time you want to run on tvOS:
+
+```bash
+# 1. Boot the simulator and open it
+xcrun simctl boot <UDID>
+open -a Simulator
+
+# 2. Build (run from repo root)
+cd tvos && xcodebuild \
+  -workspace Runner.xcworkspace \
+  -scheme Runner \
+  -configuration Debug \
+  -destination "id=<UDID>" \
+  build && cd ..
+
+# 3. Install and launch
+xcrun simctl install <UDID> \
+  "$(find ~/Library/Developer/Xcode/DerivedData -path '*/Debug-appletvsimulator/Runner.app' | head -1)"
+xcrun simctl launch <UDID> com.mogkhang.lumi
+```
+
+> **Note:** After `fetch_engine.sh` runs, it writes `tvos/Flutter/Generated.xcconfig` pointing to the cached engine. Re-run `fetch_engine.sh` whenever `tvos/engine.version` changes.
+
 ## Development
 
 - Follow Dart/Flutter conventions

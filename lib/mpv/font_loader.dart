@@ -23,7 +23,11 @@ class SubtitleFontLoader {
 
   static Future<String?> _loadSubtitleFontOnce() async {
     try {
-      final cacheDir = await getTemporaryDirectory();
+      // Use the application support directory rather than the temp directory.
+      // iOS can purge the temp directory when the app is backgrounded; the
+      // app support directory persists, so the font survives across sessions
+      // without needing to re-extract it every time.
+      final cacheDir = await getApplicationSupportDirectory();
       final fontDir = Directory(path.join(cacheDir.path, 'subtitle_fonts'));
 
       if (!await fontDir.exists()) {

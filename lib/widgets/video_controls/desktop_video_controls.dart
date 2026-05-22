@@ -743,26 +743,7 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                       ),
                     ),
                   ],
-                  // Previous chapter
-                  StreamBuilder<Duration>(
-                    stream: widget.player.streams.position,
-                    initialData: widget.player.state.position,
-                    builder: (context, posSnapshot) {
-                      final prevLabel = _getPreviousChapterLabel(posSnapshot.data ?? Duration.zero);
-                      return Opacity(
-                        opacity: _canControl ? 1.0 : 0.5,
-                        child: _buildFocusableButton(
-                          focusNode: _prevChapterFocusNode,
-                          index: 1,
-                          icon: Symbols.fast_rewind_rounded,
-                          color: widget.chapters.isNotEmpty && _canControl ? Colors.white : Colors.white54,
-                          onPressed: _canControl && widget.chapters.isNotEmpty ? widget.onSeekToPreviousChapter : null,
-                          semanticLabel: t.videoControls.previousChapterButton,
-                          tooltip: prevLabel,
-                        ),
-                      );
-                    },
-                  ),
+
                 ],
                 if (!_isLive || widget.captureBuffer != null) ...[
                   // Skip backward
@@ -816,26 +797,6 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                   ),
                 ],
                 if (!_isLive) ...[
-                  // Next chapter
-                  StreamBuilder<Duration>(
-                    stream: widget.player.streams.position,
-                    initialData: widget.player.state.position,
-                    builder: (context, posSnapshot) {
-                      final nextLabel = _getNextChapterLabel(posSnapshot.data ?? Duration.zero);
-                      return Opacity(
-                        opacity: _canControl ? 1.0 : 0.5,
-                        child: _buildFocusableButton(
-                          focusNode: _nextChapterFocusNode,
-                          index: 5,
-                          icon: Symbols.fast_forward_rounded,
-                          color: widget.chapters.isNotEmpty && _canControl ? Colors.white : Colors.white54,
-                          onPressed: _canControl && widget.chapters.isNotEmpty ? widget.onSeekToNextChapter : null,
-                          semanticLabel: t.videoControls.nextChapterButton,
-                          tooltip: nextLabel,
-                        ),
-                      );
-                    },
-                  ),
                   // Next item
                   if (widget.metadata.kind == MediaKind.episode) ...[
                     Opacity(

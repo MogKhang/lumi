@@ -367,77 +367,6 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
           title: t.videoControls.autoPlayNext,
         ),
 
-        // Audio Output Device (Desktop only)
-        if (isDesktop)
-          StreamBuilder<AudioDevice>(
-            stream: widget.player.streams.audioDevice,
-            initialData: widget.player.state.audioDevice,
-            builder: (context, snapshot) {
-              final currentDevice = snapshot.data ?? widget.player.state.audioDevice;
-              final deviceLabel = currentDevice.description.isEmpty ? currentDevice.name : currentDevice.description;
-
-              return _SettingsMenuItem(
-                icon: Symbols.speaker_rounded,
-                title: t.videoSettings.audioOutput,
-                valueText: deviceLabel,
-                allowValueOverflow: true,
-                onTap: () => _navigateTo(_SettingsView.audioDevice),
-              );
-            },
-          ),
-
-        // Audio Passthrough (Desktop only)
-        if (isDesktop)
-          _SettingsToggleItem(
-            pref: SettingsService.audioPassthrough,
-            icon: Symbols.surround_sound_rounded,
-            title: t.videoSettings.audioPassthrough,
-            onAfterWrite: widget.player.setAudioPassthrough,
-          ),
-
-        // Audio Normalization (MPV only)
-        if (widget.player.playerType == 'mpv')
-          _SettingsToggleItem(
-            pref: SettingsService.audioNormalization,
-            icon: Symbols.graphic_eq_rounded,
-            title: t.videoSettings.audioNormalization,
-            onAfterWrite: (value) => widget.player.setProperty('af', value ? 'loudnorm=I=-14:TP=-3:LRA=4' : ''),
-          ),
-
-        // Shader Preset (MPV only)
-        if (widget.shaderService != null && widget.shaderService!.isSupported)
-          _SettingsMenuItem(
-            icon: Symbols.auto_fix_high_rounded,
-            title: t.shaders.title,
-            valueText: widget.shaderService!.currentPreset.name,
-            isHighlighted: widget.shaderService!.currentPreset.isEnabled,
-            onTap: () => _navigateTo(_SettingsView.shader),
-          ),
-
-        // Ambient Lighting (MPV only)
-        if (widget.onToggleAmbientLighting != null)
-          FocusableListTile(
-            leading: AppIcon(
-              Symbols.blur_on,
-              fill: 1,
-              color: widget.isAmbientLightingEnabled ? Colors.amber : tokens(context).textMuted,
-            ),
-            title: Text(t.videoControls.ambientLighting),
-            trailing: Switch(
-              value: widget.isAmbientLightingEnabled,
-              onChanged: (_) {
-                widget.onToggleAmbientLighting?.call();
-                OverlaySheetController.of(context).close();
-              },
-              activeThumbColor: Colors.amber,
-            ),
-            onTap: () {
-              widget.onToggleAmbientLighting?.call();
-              OverlaySheetController.of(context).close();
-            },
-          ),
-
-
         if (kDebugMode && Platform.isAndroid && widget.player.playerType == 'exoplayer')
           _SettingsMenuItem(
             icon: Symbols.hdr_strong_rounded,
@@ -455,19 +384,6 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
             onTap: () {
               const MethodChannel('com.lumi/exo_player').invokeMethod('triggerFallback');
               OverlaySheetController.of(context).close();
-            },
-          ),
-
-        if (kDebugMode)
-          FocusableListTile(
-            leading: AppIcon(Symbols.bug_report_rounded, fill: 1, color: tokens(context).textMuted),
-            title: const Text('Simulate HTTP 500 from server'),
-            onTap: () {
-              final player = widget.player;
-              OverlaySheetController.of(context).close();
-              if (player is PlayerBase) {
-                player.debugSimulateServer500();
-              }
             },
           ),
       ],

@@ -663,9 +663,14 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
         await player!.setProperty('sub-border-style', 'background-box');
       }
       await player!.setProperty('sub-ass-override', settingsService.read(SettingsService.subAssOverride).name);
-      await player!.setProperty('sub-ass-video-aspect-override', '1');
       await player!.setProperty('sub-pos', settingsService.read(SettingsService.subtitlePosition).toString());
-      await player!.setProperty('sub-margin-y', '30');
+      // On iOS the MPV Metal layer covers the full window including the home-indicator
+      // safe area (~34 logical px on Face ID iPhones). Add that inset on top of the
+      // base 30 px margin so subtitles are never hidden behind the indicator.
+      final subMarginY = Platform.isIOS
+          ? (30 + MediaQuery.of(context).viewPadding.bottom).round()
+          : 30;
+      await player!.setProperty('sub-margin-y', subMarginY.toString());
       await player!.setProperty('sub-bold', 'yes');
 
       if (Platform.isIOS) {

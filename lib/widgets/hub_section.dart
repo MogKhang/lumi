@@ -414,13 +414,27 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
                             (9 / 16) // 16:9 for wide layout
                       : posterWidth * 1.5; // 2:3 for poster layout
 
-                  final containerHeight = posterHeight + 33;
+                  final textScaler = MediaQuery.textScalerOf(context);
+                  // containerHeight = full visible card height:
+                  //   4px card outer vertical padding (fromLTRB(3,3,3,1))
+                  //   posterHeight
+                  //   4px SizedBox spacers (2 × SizedBox(height: 2))
+                  //   title line height  (fontSize 13 × height 1.3)
+                  //   subtitle line height (fontSize 11 × height 1.1)
+                  // All text heights are scaled by the device text scaler so the
+                  // container stays big enough when the user has a larger system
+                  // font size (e.g. tvOS accessibility settings).
+                  final containerHeight = posterHeight +
+                      4.0 + // card outer vertical padding
+                      4.0 + // spacer SizedBoxes between poster/title/subtitle
+                      textScaler.scale(13.0 * 1.3) + // title line height
+                      textScaler.scale(11.0 * 1.1); // subtitle line height
                   final focusBorderWidth = FocusTheme.focusBorderWidth;
                   final focusExtra = focusBorderWidth * 2; // border on both sides
                   _itemExtent = cardWidth + focusExtra + 12;
 
                   return SizedBox(
-                    height: containerHeight + focusExtra + 4, // extra for scale + border top/bottom
+                    height: containerHeight + focusExtra, // focusExtra for focus border visual
                     child: HorizontalScrollWithArrows(
                       controller: _scrollController,
                       builder: (scrollController) => ListView.builder(
