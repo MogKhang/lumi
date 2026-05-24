@@ -55,11 +55,7 @@ tvOS uses a **custom Flutter engine** and cannot be run with `flutter run` direc
 Run these steps each time you want to run on tvOS:
 
 ```bash
-# 1. Boot the simulator and open it
-xcrun simctl boot <UDID>
-open -a Simulator
-
-# 2. Build (run from repo root)
+# 1. Build (run from repo root)
 cd tvos && xcodebuild \
   -workspace Runner.xcworkspace \
   -scheme Runner \
@@ -67,11 +63,16 @@ cd tvos && xcodebuild \
   -destination "id=<UDID>" \
   build && cd ..
 
-# 3. Install and launch
-xcrun simctl install <UDID> \
-  "$(find ~/Library/Developer/Xcode/DerivedData -path '*/Debug-appletvsimulator/Runner.app' | head -1)"
+# 2. Boot, install, and launch in one pipeline
+xcrun simctl boot <UDID> && \
+open -a Simulator && \
+sleep 3 && \
+APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -path '*/Debug-appletvsimulator/Runner.app' -maxdepth 6 | head -1) && \
+xcrun simctl install <UDID> "$APP_PATH" && \
 xcrun simctl launch <UDID> com.mogkhang.lumi
 ```
+
+> **Tip:** If the simulator is already booted, skip `xcrun simctl boot` and `sleep 3` — go straight to `xcrun simctl install ...`.
 
 > **Note:** After `fetch_engine.sh` runs, it writes `tvos/Flutter/Generated.xcconfig` pointing to the cached engine. Re-run `fetch_engine.sh` whenever `tvos/engine.version` changes.
 

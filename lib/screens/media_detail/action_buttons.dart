@@ -624,7 +624,7 @@ class _PlaylistSelectionSheet extends StatelessWidget {
                   onTap: () => Navigator.pop(context, '_create_new'),
                 ),
                 const Divider(),
-                ...playlists.map((p) => ListTile(
+                ...playlists.map((MediaPlaylist p) => ListTile(
                       leading: const Icon(Symbols.playlist_play_rounded),
                       title: Text(p.title),
                       onTap: () => Navigator.pop(context, p.id),
