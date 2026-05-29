@@ -32,7 +32,6 @@ import '../libraries/state_messages.dart';
 import '../auth_screen.dart';
 import 'add_local_profile_screen.dart';
 import 'profile_delete_flow.dart';
-import 'profile_detail_screen.dart';
 
 /// Flat picker showing every [Profile] in the system — Plex Home users
 /// auto-surfaced from connected accounts, plus user-created locals.
@@ -226,12 +225,12 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
         final profileFocusNode = _profileFocusNode(profile);
         final menuFocusNode = _profileMenuFocusNode(profile);
         final menuKey = _profileMenuKey(profile);
-        final onManage = !widget.requireSelection ? () => _manageProfile(profile) : null;
+        const VoidCallback? onManage = null;
         final onDelete = profile.isLocal && !widget.requireSelection ? () => _deleteProfile(profile) : null;
         final onSignOut = profile.isPlexHome && profile.parentConnectionId != null && !widget.requireSelection
             ? () => _signOutPlexAccount(profile)
             : null;
-        final hasMenu = onManage != null || onDelete != null || onSignOut != null;
+        final hasMenu = onDelete != null || onSignOut != null;
 
         if (isFirstSelectable && !_focusRequested) {
           _focusRequested = true;
@@ -271,10 +270,6 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
         );
       }, childCount: profiles.length),
     );
-  }
-
-  Future<void> _manageProfile(Profile profile) async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfileDetailScreen(profile: profile)));
   }
 
   /// Drop the parent Plex account [profile] hangs off — same effect as
