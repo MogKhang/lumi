@@ -667,7 +667,7 @@ class _TranslationsMessagesVi extends TranslationsMessagesEn {
 	@override String get noItemsAvailable => 'No items available';
 	@override String get failedToCreatePlayQueueNoItems => 'Failed to create play queue - no items';
 	@override String failedPlayback({required Object action, required Object error}) => 'Failed to ${action}: ${error}';
-	@override String get switchingToCompatiblePlayer => 'Switching to compatible player...';
+	@override String get switchingToCompatiblePlayer => 'Đang đổi sang trình phát tương thích...';
 	@override String get serverLimitTitle => 'Playback failed';
 	@override String get serverLimitBody => 'The server returned an error (HTTP 500). This usually means the server owner has set a bandwidth or transcoding limit that\'s rejecting your session. There\'s nothing to do from the client — the server owner needs to adjust their settings.';
 	@override String get logsUploaded => 'Logs uploaded';
@@ -2508,7 +2508,7 @@ extension on TranslationsVi {
 			'messages.noItemsAvailable' => 'No items available',
 			'messages.failedToCreatePlayQueueNoItems' => 'Failed to create play queue - no items',
 			'messages.failedPlayback' => ({required Object action, required Object error}) => 'Failed to ${action}: ${error}',
-			'messages.switchingToCompatiblePlayer' => 'Switching to compatible player...',
+			'messages.switchingToCompatiblePlayer' => 'Đang đổi sang trình phát tương thích...',
 			'messages.serverLimitTitle' => 'Playback failed',
 			'messages.serverLimitBody' => 'The server returned an error (HTTP 500). This usually means the server owner has set a bandwidth or transcoding limit that\'s rejecting your session. There\'s nothing to do from the client — the server owner needs to adjust their settings.',
 			'messages.logsUploaded' => 'Logs uploaded',
