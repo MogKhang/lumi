@@ -867,7 +867,7 @@ class _MediaCardHelpers {
             right: 0,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
-              child: MediaProgressBar(viewOffset: mi.viewOffsetMs!, duration: mi.durationMs!),
+              child: MediaProgressBar(viewOffset: mi.viewOffsetMs!, duration: mi.durationMs!, valueColor: const Color(0xFFec609b)),
             ),
           ),
         // Progress bar for seasons (viewedLeafCount / leafCount)
