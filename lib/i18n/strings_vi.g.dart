@@ -740,10 +740,10 @@ class _TranslationsProfilesVi extends TranslationsProfilesEn {
 	@override String get switchingProfile => 'Tải hồ sơ…';
 	@override String get deleteThisProfileTitle => 'Delete this profile?';
 	@override String deleteThisProfileMessage({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.';
-	@override String get active => 'Active';
+	@override String get active => 'Đang sử dụng';
 	@override String get manage => 'Manage';
 	@override String get delete => 'Delete';
-	@override String get signOut => 'Sign out';
+	@override String get signOut => 'Đăng xuất';
 	@override String get signOutPlexTitle => 'Sign out of Plex?';
 	@override String signOutPlexMessage({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.';
 	@override String get signedOutPlex => 'Signed out of Plex.';
@@ -2500,10 +2500,10 @@ extension on TranslationsVi {
 			'profiles.switchingProfile' => 'Tải hồ sơ…',
 			'profiles.deleteThisProfileTitle' => 'Delete this profile?',
 			'profiles.deleteThisProfileMessage' => ({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.',
-			'profiles.active' => 'Active',
+			'profiles.active' => 'Đang sử dụng',
 			'profiles.manage' => 'Manage',
 			'profiles.delete' => 'Delete',
-			'profiles.signOut' => 'Sign out',
+			'profiles.signOut' => 'Đăng xuất',
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
