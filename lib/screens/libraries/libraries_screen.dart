@@ -37,13 +37,19 @@ import 'state_messages.dart';
 import 'tabs/library_browse_tab.dart';
 
 import 'tabs/library_collections_tab.dart';
+import 'tabs/library_genres_tab.dart';
 import 'tabs/library_playlists_tab.dart';
 
 
-enum LibraryTabType { browse, collections, playlists }
+enum LibraryTabType { browse, collections, genres, playlists }
 
 List<LibraryTabType> _getVisibleTabs(MediaLibrary library) {
   if (library.isShared) return [LibraryTabType.browse, LibraryTabType.playlists];
+  // Genres are sourced from Plex's per-section genre filter; only Plex
+  // libraries expose the tab.
+  if (library.backend == MediaBackend.plex) {
+    return [LibraryTabType.browse, LibraryTabType.collections, LibraryTabType.genres, LibraryTabType.playlists];
+  }
   return [LibraryTabType.browse, LibraryTabType.collections, LibraryTabType.playlists];
 }
 
@@ -91,6 +97,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
   final _browseTabKey = GlobalKey<LibraryBrowseTabState>();
   final _collectionsTabKey = GlobalKey();
+  final _genresTabKey = GlobalKey();
   final _playlistsTabKey = GlobalKey();
 
   String? _errorMessage;
@@ -320,6 +327,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     return switch (_visibleTabs[index]) {
       LibraryTabType.browse => _browseTabKey.currentState,
       LibraryTabType.collections => _collectionsTabKey.currentState,
+      LibraryTabType.genres => _genresTabKey.currentState,
       LibraryTabType.playlists => _playlistsTabKey.currentState,
     };
   }
@@ -396,6 +404,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
   String _getTabLabel(LibraryTabType type) => switch (type) {
     LibraryTabType.browse => t.libraries.tabs.browse,
     LibraryTabType.collections => t.libraries.tabs.collections,
+    LibraryTabType.genres => t.libraries.tabs.genres,
     LibraryTabType.playlists => t.libraries.tabs.playlists,
   };
 
@@ -419,6 +428,14 @@ class _LibrariesScreenState extends State<LibrariesScreen>
       ),
       LibraryTabType.collections => LibraryCollectionsTab(
         key: _collectionsTabKey,
+        library: library,
+        isActive: isActive,
+        suppressAutoFocus: suppressAutoFocus,
+        onDataLoaded: () => _handleTabDataLoaded(tabIndex),
+        onBack: focusTabBar,
+      ),
+      LibraryTabType.genres => LibraryGenresTab(
+        key: _genresTabKey,
         library: library,
         isActive: isActive,
         suppressAutoFocus: suppressAutoFocus,

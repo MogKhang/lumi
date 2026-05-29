@@ -671,6 +671,7 @@
       "recommended": "Recommended",
       "browse": "Browse",
       "collections": "Collections",
+      "genres": "Genres",
       "playlists": "Playlists"
     },
     "groupings": {
@@ -821,6 +822,43 @@
     "guideReloadRequested": "Guide refresh requested",
     "rulesProcessRequested": "Rule re-evaluation requested",
     "recordShow": "Record show"
+  },
+  "genres": {
+    "title": "Genres",
+    "empty": "No genres found",
+    "names(map)": {
+      "18+": "18+",
+      "90s": "90s",
+      "Action": "Action",
+      "Adventure": "Adventure",
+      "Animation": "Animation",
+      "Anime": "Anime",
+      "Comedy": "Comedy",
+      "Crime": "Crime",
+      "Documentary": "Documentary",
+      "Drama": "Drama",
+      "Dub": "Dub",
+      "Family": "Family",
+      "Fantasy": "Fantasy",
+      "History": "History",
+      "Horror": "Horror",
+      "Kids": "Kids",
+      "Martial Arts": "Martial Arts",
+      "Music": "Music",
+      "Musical": "Musical",
+      "Mystery": "Mystery",
+      "Reality TV": "Reality TV",
+      "Romance": "Romance",
+      "Science Fiction": "Science Fiction",
+      "Short": "Short",
+      "Sport": "Sport",
+      "Talk Show": "Talk Show",
+      "Thriller": "Thriller",
+      "Travel": "Travel",
+      "Vie": "Vie",
+      "War": "War",
+      "Western": "Western"
+    }
   },
   "collections": {
     "title": "Collections",

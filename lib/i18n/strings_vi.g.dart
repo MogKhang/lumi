@@ -70,6 +70,7 @@ class TranslationsVi extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsLicensesVi licenses = _TranslationsLicensesVi._(_root);
 	@override late final _TranslationsNavigationVi navigation = _TranslationsNavigationVi._(_root);
 	@override late final _TranslationsLiveTvVi liveTv = _TranslationsLiveTvVi._(_root);
+	@override late final _TranslationsGenresVi genres = _TranslationsGenresVi._(_root);
 	@override late final _TranslationsCollectionsVi collections = _TranslationsCollectionsVi._(_root);
 	@override late final _TranslationsPlaylistsVi playlists = _TranslationsPlaylistsVi._(_root);
 	@override late final _TranslationsWatchTogetherVi watchTogether = _TranslationsWatchTogetherVi._(_root);
@@ -1049,6 +1050,50 @@ class _TranslationsLiveTvVi extends TranslationsLiveTvEn {
 	@override String get recordShow => 'Record show';
 }
 
+// Path: genres
+class _TranslationsGenresVi extends TranslationsGenresEn {
+	_TranslationsGenresVi._(TranslationsVi root) : this._root = root, super.internal(root);
+
+	final TranslationsVi _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Thể loại';
+	@override String get empty => 'Không tìm thấy thể loại nào';
+	@override Map<String, String> get names => {
+		'18+': '18+',
+		'90s': 'Tuổi thơ',
+		'Action': 'Hành động',
+		'Adventure': 'Phiêu lưu',
+		'Animation': 'Hoạt hình',
+		'Anime': 'Anime',
+		'Comedy': 'Hài',
+		'Crime': 'Tội phạm',
+		'Documentary': 'Tài liệu',
+		'Drama': 'Chính kịch',
+		'Dub': 'Lồng tiếng',
+		'Family': 'Gia đình',
+		'Fantasy': 'Giả tưởng',
+		'History': 'Lịch sử',
+		'Horror': 'Kinh dị',
+		'Kids': 'Thiếu nhi',
+		'Martial Arts': 'Võ thuật',
+		'Music': 'Âm nhạc',
+		'Musical': 'Nhạc kịch',
+		'Mystery': 'Bí ẩn',
+		'Reality TV': 'Truyền hình thực tế',
+		'Romance': 'Tình cảm',
+		'Science Fiction': 'Khoa học viễn tưởng',
+		'Short': 'Phim ngắn',
+		'Sport': 'Thể thao',
+		'Talk Show': 'Trò chuyện',
+		'Thriller': 'Giật gân',
+		'Travel': 'Du lịch',
+		'Vie': 'Thuyết minh',
+		'War': 'Chiến tranh',
+		'Western': 'Cao bồi',
+	};
+}
+
 // Path: collections
 class _TranslationsCollectionsVi extends TranslationsCollectionsEn {
 	_TranslationsCollectionsVi._(TranslationsVi root) : this._root = root, super.internal(root);
@@ -1778,6 +1823,7 @@ class _TranslationsLibrariesTabsVi extends TranslationsLibrariesTabsEn {
 	@override String get recommended => 'Recommended';
 	@override String get browse => 'Tất cả';
 	@override String get collections => 'Bộ sưu tập';
+	@override String get genres => 'Thể loại';
 	@override String get playlists => 'Danh sách';
 }
 
@@ -2621,6 +2667,7 @@ extension on TranslationsVi {
 			'libraries.tabs.recommended' => 'Recommended',
 			'libraries.tabs.browse' => 'Tất cả',
 			'libraries.tabs.collections' => 'Bộ sưu tập',
+			'libraries.tabs.genres' => 'Thể loại',
 			'libraries.tabs.playlists' => 'Danh sách',
 			'libraries.groupings.title' => 'Grouping',
 			'libraries.groupings.all' => 'All',
@@ -2752,6 +2799,39 @@ extension on TranslationsVi {
 			'liveTv.guideReloadRequested' => 'Guide refresh requested',
 			'liveTv.rulesProcessRequested' => 'Rule re-evaluation requested',
 			'liveTv.recordShow' => 'Record show',
+			'genres.title' => 'Thể loại',
+			'genres.empty' => 'Không tìm thấy thể loại nào',
+			'genres.names.18+' => '18+',
+			'genres.names.90s' => 'Tuổi thơ',
+			'genres.names.Action' => 'Hành động',
+			'genres.names.Adventure' => 'Phiêu lưu',
+			'genres.names.Animation' => 'Hoạt hình',
+			'genres.names.Anime' => 'Anime',
+			'genres.names.Comedy' => 'Hài',
+			'genres.names.Crime' => 'Tội phạm',
+			'genres.names.Documentary' => 'Tài liệu',
+			'genres.names.Drama' => 'Chính kịch',
+			'genres.names.Dub' => 'Lồng tiếng',
+			'genres.names.Family' => 'Gia đình',
+			'genres.names.Fantasy' => 'Giả tưởng',
+			'genres.names.History' => 'Lịch sử',
+			'genres.names.Horror' => 'Kinh dị',
+			'genres.names.Kids' => 'Thiếu nhi',
+			'genres.names.Martial Arts' => 'Võ thuật',
+			'genres.names.Music' => 'Âm nhạc',
+			'genres.names.Musical' => 'Nhạc kịch',
+			'genres.names.Mystery' => 'Bí ẩn',
+			'genres.names.Reality TV' => 'Truyền hình thực tế',
+			'genres.names.Romance' => 'Tình cảm',
+			'genres.names.Science Fiction' => 'Khoa học viễn tưởng',
+			'genres.names.Short' => 'Phim ngắn',
+			'genres.names.Sport' => 'Thể thao',
+			'genres.names.Talk Show' => 'Trò chuyện',
+			'genres.names.Thriller' => 'Giật gân',
+			'genres.names.Travel' => 'Du lịch',
+			'genres.names.Vie' => 'Thuyết minh',
+			'genres.names.War' => 'Chiến tranh',
+			'genres.names.Western' => 'Cao bồi',
 			'collections.title' => 'Collections',
 			'collections.collection' => 'Collection',
 			'collections.empty' => 'Collection is empty',
@@ -2991,6 +3071,8 @@ extension on TranslationsVi {
 			'videoSettings.audioSync' => 'Độ trễ âm thanh',
 			'videoSettings.subtitleSync' => 'Độ trễ phụ đề',
 			'videoSettings.hdr' => 'HDR',
+			_ => null,
+		} ?? switch (path) {
 			'videoSettings.audioOutput' => 'Thiết bị âm thanh',
 			'videoSettings.performanceOverlay' => 'Performance Overlay',
 			'videoSettings.audioPassthrough' => 'Truyền thẳng âm thanh (Passthrough)',
@@ -3025,8 +3107,6 @@ extension on TranslationsVi {
 			'metadataEdit.contentRating' => 'Content Rating',
 			'metadataEdit.studio' => 'Studio',
 			'metadataEdit.tagline' => 'Tagline',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.summary' => 'Summary',
 			'metadataEdit.poster' => 'Poster',
 			'metadataEdit.background' => 'Background',

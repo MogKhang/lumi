@@ -10,6 +10,7 @@ import '../media/library_first_character.dart';
 import '../media/library_query.dart';
 import '../media/live_tv_support.dart';
 import '../media/media_backend.dart';
+import '../media/media_genre.dart';
 import '../media/media_hub.dart';
 import '../media/media_item.dart';
 import '../media/media_kind.dart';
@@ -1455,6 +1456,53 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
   Future<List<MediaFilterValue>> getFilterValues(String filterKey) async {
     final response = await _getWithFailover(filterKey);
     return _extractDirectoryList(response, MediaFilterValue.fromJson);
+  }
+
+  /// Extract the genre id usable in a `genre=<id>` filter from a filter
+  /// value's key. Mirrors the FiltersBottomSheet extraction so a directly
+  /// fetched genre value filters identically to one chosen from the sheet.
+  String _genreIdFromKey(String key) {
+    if (key.contains('?')) {
+      final params = Uri.splitQueryString(key.substring(key.indexOf('?') + 1));
+      return params['genre'] ?? key;
+    }
+    if (key.startsWith('/')) return key.split('/').last;
+    return key;
+  }
+
+  /// Plex-specific: the list of genres defined for a library section. Titles
+  /// are returned verbatim (English on most servers); the UI maps them to
+  /// localized names and poster assets.
+  Future<List<MediaGenre>> fetchGenres(String sectionId) async {
+    final values = await getFilterValues('/library/sections/$sectionId/genre');
+    return values
+        .where((v) => v.title.isNotEmpty)
+        .map((v) => MediaGenre(id: _genreIdFromKey(v.key), title: v.title))
+        .toList();
+  }
+
+  /// Plex-specific: all items in [sectionId] tagged with [genreId], paged
+  /// internally up to [maxItems] so callers get a single flat list.
+  Future<List<MediaItem>> fetchLibraryItemsByGenre(
+    String sectionId,
+    String genreId, {
+    int maxItems = 2000,
+  }) async {
+    final all = <MediaItem>[];
+    const pageSize = 200;
+    var start = 0;
+    while (all.length < maxItems) {
+      final page = await fetchLibraryPage(
+        sectionId,
+        start: start,
+        size: pageSize,
+        filters: {'genre': genreId},
+      );
+      all.addAll(page.items);
+      if (page.items.isEmpty || all.length >= page.totalSize) break;
+      start += pageSize;
+    }
+    return all;
   }
 
   /// Get available sort options for a library section

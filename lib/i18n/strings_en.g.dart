@@ -71,6 +71,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsLicensesEn licenses = TranslationsLicensesEn.internal(_root);
 	late final TranslationsNavigationEn navigation = TranslationsNavigationEn.internal(_root);
 	late final TranslationsLiveTvEn liveTv = TranslationsLiveTvEn.internal(_root);
+	late final TranslationsGenresEn genres = TranslationsGenresEn.internal(_root);
 	late final TranslationsCollectionsEn collections = TranslationsCollectionsEn.internal(_root);
 	late final TranslationsPlaylistsEn playlists = TranslationsPlaylistsEn.internal(_root);
 	late final TranslationsWatchTogetherEn watchTogether = TranslationsWatchTogetherEn.internal(_root);
@@ -2401,6 +2402,55 @@ class TranslationsLiveTvEn {
 	String get recordShow => 'Record show';
 }
 
+// Path: genres
+class TranslationsGenresEn {
+	TranslationsGenresEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Genres'
+	String get title => 'Genres';
+
+	/// en: 'No genres found'
+	String get empty => 'No genres found';
+
+	Map<String, String> get names => {
+		'18+': '18+',
+		'90s': '90s',
+		'Action': 'Action',
+		'Adventure': 'Adventure',
+		'Animation': 'Animation',
+		'Anime': 'Anime',
+		'Comedy': 'Comedy',
+		'Crime': 'Crime',
+		'Documentary': 'Documentary',
+		'Drama': 'Drama',
+		'Dub': 'Dub',
+		'Family': 'Family',
+		'Fantasy': 'Fantasy',
+		'History': 'History',
+		'Horror': 'Horror',
+		'Kids': 'Kids',
+		'Martial Arts': 'Martial Arts',
+		'Music': 'Music',
+		'Musical': 'Musical',
+		'Mystery': 'Mystery',
+		'Reality TV': 'Reality TV',
+		'Romance': 'Romance',
+		'Science Fiction': 'Science Fiction',
+		'Short': 'Short',
+		'Sport': 'Sport',
+		'Talk Show': 'Talk Show',
+		'Thriller': 'Thriller',
+		'Travel': 'Travel',
+		'Vie': 'Vie',
+		'War': 'War',
+		'Western': 'Western',
+	};
+}
+
 // Path: collections
 class TranslationsCollectionsEn {
 	TranslationsCollectionsEn.internal(this._root);
@@ -4257,6 +4307,9 @@ class TranslationsLibrariesTabsEn {
 	/// en: 'Collections'
 	String get collections => 'Collections';
 
+	/// en: 'Genres'
+	String get genres => 'Genres';
+
 	/// en: 'Playlists'
 	String get playlists => 'Playlists';
 }
@@ -5341,6 +5394,7 @@ extension on Translations {
 			'libraries.tabs.recommended' => 'Recommended',
 			'libraries.tabs.browse' => 'Browse',
 			'libraries.tabs.collections' => 'Collections',
+			'libraries.tabs.genres' => 'Genres',
 			'libraries.tabs.playlists' => 'Playlists',
 			'libraries.groupings.title' => 'Grouping',
 			'libraries.groupings.all' => 'All',
@@ -5470,6 +5524,39 @@ extension on Translations {
 			'liveTv.guideReloadRequested' => 'Guide refresh requested',
 			'liveTv.rulesProcessRequested' => 'Rule re-evaluation requested',
 			'liveTv.recordShow' => 'Record show',
+			'genres.title' => 'Genres',
+			'genres.empty' => 'No genres found',
+			'genres.names.18+' => '18+',
+			'genres.names.90s' => '90s',
+			'genres.names.Action' => 'Action',
+			'genres.names.Adventure' => 'Adventure',
+			'genres.names.Animation' => 'Animation',
+			'genres.names.Anime' => 'Anime',
+			'genres.names.Comedy' => 'Comedy',
+			'genres.names.Crime' => 'Crime',
+			'genres.names.Documentary' => 'Documentary',
+			'genres.names.Drama' => 'Drama',
+			'genres.names.Dub' => 'Dub',
+			'genres.names.Family' => 'Family',
+			'genres.names.Fantasy' => 'Fantasy',
+			'genres.names.History' => 'History',
+			'genres.names.Horror' => 'Horror',
+			'genres.names.Kids' => 'Kids',
+			'genres.names.Martial Arts' => 'Martial Arts',
+			'genres.names.Music' => 'Music',
+			'genres.names.Musical' => 'Musical',
+			'genres.names.Mystery' => 'Mystery',
+			'genres.names.Reality TV' => 'Reality TV',
+			'genres.names.Romance' => 'Romance',
+			'genres.names.Science Fiction' => 'Science Fiction',
+			'genres.names.Short' => 'Short',
+			'genres.names.Sport' => 'Sport',
+			'genres.names.Talk Show' => 'Talk Show',
+			'genres.names.Thriller' => 'Thriller',
+			'genres.names.Travel' => 'Travel',
+			'genres.names.Vie' => 'Vie',
+			'genres.names.War' => 'War',
+			'genres.names.Western' => 'Western',
 			'collections.title' => 'Collections',
 			'collections.collection' => 'Collection',
 			'collections.empty' => 'Collection is empty',
@@ -5711,6 +5798,8 @@ extension on Translations {
 			'videoSettings.hdr' => 'HDR',
 			'videoSettings.audioOutput' => 'Audio Output',
 			'videoSettings.performanceOverlay' => 'Performance Overlay',
+			_ => null,
+		} ?? switch (path) {
 			'videoSettings.audioPassthrough' => 'Audio Passthrough',
 			'videoSettings.audioNormalization' => 'Normalize Loudness',
 			'videoSettings.off' => 'Off',
@@ -5745,8 +5834,6 @@ extension on Translations {
 			'metadataEdit.tagline' => 'Tagline',
 			'metadataEdit.summary' => 'Summary',
 			'metadataEdit.poster' => 'Poster',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.background' => 'Background',
 			'metadataEdit.logo' => 'Logo',
 			'metadataEdit.squareArt' => 'Square Art',

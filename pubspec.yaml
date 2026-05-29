@@ -134,6 +134,7 @@ flutter:
     - assets/shaders/anime4k/
     - assets/player_icons/
     - assets/rating_icons/
+    - assets/genres/
 
   fonts:
     - family: Lexend

@@ -672,6 +672,7 @@
       "recommended": "Recommended",
       "browse": "Tất cả",
       "collections": "Bộ sưu tập",
+      "genres": "Thể loại",
       "playlists": "Danh sách"
     },
     "groupings": {
@@ -825,6 +826,43 @@
     "guideReloadRequested": "Guide refresh requested",
     "rulesProcessRequested": "Rule re-evaluation requested",
     "recordShow": "Record show"
+  },
+  "genres": {
+    "title": "Thể loại",
+    "empty": "Không tìm thấy thể loại nào",
+    "names(map)": {
+      "18+": "18+",
+      "90s": "Tuổi thơ",
+      "Action": "Hành động",
+      "Adventure": "Phiêu lưu",
+      "Animation": "Hoạt hình",
+      "Anime": "Anime",
+      "Comedy": "Hài",
+      "Crime": "Tội phạm",
+      "Documentary": "Tài liệu",
+      "Drama": "Chính kịch",
+      "Dub": "Lồng tiếng",
+      "Family": "Gia đình",
+      "Fantasy": "Giả tưởng",
+      "History": "Lịch sử",
+      "Horror": "Kinh dị",
+      "Kids": "Thiếu nhi",
+      "Martial Arts": "Võ thuật",
+      "Music": "Âm nhạc",
+      "Musical": "Nhạc kịch",
+      "Mystery": "Bí ẩn",
+      "Reality TV": "Truyền hình thực tế",
+      "Romance": "Tình cảm",
+      "Science Fiction": "Khoa học viễn tưởng",
+      "Short": "Phim ngắn",
+      "Sport": "Thể thao",
+      "Talk Show": "Trò chuyện",
+      "Thriller": "Giật gân",
+      "Travel": "Du lịch",
+      "Vie": "Thuyết minh",
+      "War": "Chiến tranh",
+      "Western": "Cao bồi"
+    }
   },
   "collections": {
     "title": "Collections",
