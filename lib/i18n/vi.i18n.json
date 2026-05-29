@@ -383,6 +383,7 @@
   "videoControls": {
     "audioLabel": "Âm thanh",
     "subtitlesLabel": "Phụ đề",
+    "opaque": "Nền đen",
     "resetToZero": "Reset to 0ms",
     "addTime": "+${amount}${unit}",
     "minusTime": "-${amount}${unit}",

@@ -275,7 +275,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const rotationLocked = BoolPref('rotation_locked', defaultValue: true);
   static const subtitleFontSize = IntPref('subtitle_font_size', defaultValue: 42);
   static const subtitleTextColor = StringPref('subtitle_text_color', defaultValue: '#FFFFFF');
-  static const subtitleBorderSize = IntPref('subtitle_border_size', defaultValue: 4);
+  static const subtitleBorderSize = IntPref('subtitle_border_size', defaultValue: 10);
   static const subtitleBorderColor = StringPref('subtitle_border_color', defaultValue: '#000000');
   static const subtitleBackgroundColor = StringPref('subtitle_background_color', defaultValue: '#000000');
   static const subtitleBackgroundOpacity = IntPref('subtitle_background_opacity');
@@ -286,6 +286,11 @@ class SettingsService extends BaseSharedPreferencesService {
   );
   static const subtitleBold = BoolPref('subtitle_bold');
   static const subtitleItalic = BoolPref('subtitle_italic');
+
+  /// Draw a fully-opaque black box behind subtitles (and thicken the border so
+  /// the box reads a bit larger). Toggled live from the Audio & Subtitles
+  /// sheet; overrides the configurable background opacity while on.
+  static const subtitleOpaqueBox = BoolPref('subtitle_opaque_box');
   static const rememberTrackSelections = BoolPref('remember_track_selections', defaultValue: true);
   static const showChapterMarkersOnTimeline = BoolPref('show_chapter_markers_on_timeline', defaultValue: true);
   static const clickVideoTogglesPlayback = BoolPref('click_video_toggles_playback');
@@ -340,7 +345,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const selectedServerId = NullableStringPref('selected_server_id');
 
   static final maxVolume = IntPref('max_volume', defaultValue: 100, transform: (v) => v.clamp(100, 300));
-  static final subtitlePosition = IntPref('subtitle_position', defaultValue: 100, transform: (v) => v.clamp(0, 100));
+  static final subtitlePosition = IntPref('subtitle_position', defaultValue: 95, transform: (v) => v.clamp(0, 100));
   static final defaultPlaybackSpeed = DoublePref(
     'default_playback_speed',
     defaultValue: 1.0,
@@ -664,6 +669,7 @@ class SettingsService extends BaseSharedPreferencesService {
     subtitleBorderColor,
     subtitleBackgroundColor,
     subtitleBackgroundOpacity,
+    subtitleOpaqueBox,
     subtitlePosition,
     rememberTrackSelections,
     customDownloadPathType,

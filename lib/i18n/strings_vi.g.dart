@@ -546,6 +546,7 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	// Translations
 	@override String get audioLabel => 'Âm thanh';
 	@override String get subtitlesLabel => 'Phụ đề';
+	@override String get opaque => 'Nền đen';
 	@override String get resetToZero => 'Reset to 0ms';
 	@override String addTime({required Object amount, required Object unit}) => '+${amount}${unit}';
 	@override String minusTime({required Object amount, required Object unit}) => '-${amount}${unit}';
@@ -2399,6 +2400,7 @@ extension on TranslationsVi {
 			'tooltips.markAsUnwatched' => 'Mark as unwatched',
 			'videoControls.audioLabel' => 'Âm thanh',
 			'videoControls.subtitlesLabel' => 'Phụ đề',
+			'videoControls.opaque' => 'Nền đen',
 			'videoControls.resetToZero' => 'Reset to 0ms',
 			'videoControls.addTime' => ({required Object amount, required Object unit}) => '+${amount}${unit}',
 			'videoControls.minusTime' => ({required Object amount, required Object unit}) => '-${amount}${unit}',
@@ -2556,9 +2558,9 @@ extension on TranslationsVi {
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Chọn hồ sơ',
 			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
-			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
 			'profiles.removeConnectionTitle' => 'Remove connection?',
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
@@ -3070,9 +3072,9 @@ extension on TranslationsVi {
 			'videoSettings.sleepTimer' => 'Hẹn giờ tắt màn hình',
 			'videoSettings.audioSync' => 'Độ trễ âm thanh',
 			'videoSettings.subtitleSync' => 'Độ trễ phụ đề',
-			'videoSettings.hdr' => 'HDR',
 			_ => null,
 		} ?? switch (path) {
+			'videoSettings.hdr' => 'HDR',
 			'videoSettings.audioOutput' => 'Thiết bị âm thanh',
 			'videoSettings.performanceOverlay' => 'Performance Overlay',
 			'videoSettings.audioPassthrough' => 'Truyền thẳng âm thanh (Passthrough)',

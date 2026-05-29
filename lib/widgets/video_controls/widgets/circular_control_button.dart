@@ -3,7 +3,7 @@ import 'package:lumi/widgets/app_icon.dart';
 
 /// A circular semi-transparent button used in the mobile video controls.
 ///
-/// Renders an [AppIcon] inside an [IconButton] on a black circle with 50%
+/// Renders an [AppIcon] inside an [IconButton] on a black circle with 70%
 /// opacity. Disabled buttons grey out the icon.
 class CircularControlButton extends StatelessWidget {
   final String semanticLabel;
@@ -23,7 +23,7 @@ class CircularControlButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isEnabled = onPressed != null;
     return Container(
-      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), shape: BoxShape.circle),
+      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.7), shape: BoxShape.circle),
       child: Semantics(
         label: semanticLabel,
         button: true,

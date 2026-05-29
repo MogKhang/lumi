@@ -4,11 +4,13 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../media/media_source_info.dart';
 import '../../../mpv/mpv.dart';
 import '../../../i18n/strings.g.dart';
+import '../../../services/settings_service.dart';
 import '../../../utils/scroll_utils.dart';
 import '../../../utils/track_label_builder.dart';
 import '../../../widgets/overlay_sheet.dart';
 import 'base_video_control_sheet.dart';
 import 'sheet_column_header.dart';
+import '../helpers/subtitle_style_helper.dart';
 import '../helpers/track_filter_helper.dart';
 import '../helpers/track_selection_helper.dart';
 import '../widgets/sync_offset_control.dart';
@@ -83,7 +85,9 @@ class TrackSheet extends StatelessWidget {
           });
 
         final useSourceAudio = isTranscoding && sourceAudioTracks.length > 1 && onSwitchAudioStreamId != null;
-        final showAudio = useSourceAudio || playerAudioTracks.length > 1;
+        // Show each list whenever it has at least one track; hide a column only
+        // when its track list is empty.
+        final showAudio = useSourceAudio || playerAudioTracks.isNotEmpty;
         final showSubtitles = subtitleTracks.isNotEmpty;
 
         final String title;
@@ -410,7 +414,12 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
 
     return Column(
       children: [
-        if (widget.showHeader) SheetColumnHeader(label: t.videoControls.subtitlesLabel),
+        // The Opaque toggle lives on the Subtitles header row. Shown whenever
+        // the subtitle column is rendered (label only when a header is wanted).
+        SheetColumnHeader(
+          label: widget.showHeader ? t.videoControls.subtitlesLabel : '',
+          trailing: _SubtitleOpaqueToggle(player: widget.player),
+        ),
         SyncOffsetControl(
           player: widget.player,
           propertyName: 'sub-delay',
@@ -521,6 +530,38 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Compact toggle on the Subtitles header that draws an opaque black box
+/// behind subtitles. Persists to settings and applies to the player live.
+class _SubtitleOpaqueToggle extends StatefulWidget {
+  final Player player;
+
+  const _SubtitleOpaqueToggle({required this.player});
+
+  @override
+  State<_SubtitleOpaqueToggle> createState() => _SubtitleOpaqueToggleState();
+}
+
+class _SubtitleOpaqueToggleState extends State<_SubtitleOpaqueToggle> {
+  late bool _on = SettingsService.instanceOrNull?.read(SettingsService.subtitleOpaqueBox) ?? false;
+
+  Future<void> _toggle(bool value) async {
+    setState(() => _on = value);
+    await SettingsService.instanceOrNull?.write(SettingsService.subtitleOpaqueBox, value);
+    await applySubtitleOpaqueBox(widget.player, value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FilterChip(
+      label: Text(t.videoControls.opaque),
+      selected: _on,
+      onSelected: _toggle,
+      visualDensity: VisualDensity.compact,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
 }

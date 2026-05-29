@@ -68,6 +68,7 @@ import '../utils/snackbar_helper.dart';
 import '../utils/video_player_navigation.dart';
 import 'video_player/widgets/player_prompt_overlays.dart';
 import '../widgets/overlay_sheet.dart';
+import '../widgets/video_controls/helpers/subtitle_style_helper.dart';
 import '../widgets/video_controls/video_controls.dart';
 import '../widgets/video_controls/widgets/player_toast_indicator.dart';
 import '../focus/focusable_button.dart';
@@ -661,6 +662,10 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       );
       if (settingsService.read(SettingsService.subtitleBackgroundOpacity) > 0) {
         await player!.setProperty('sub-border-style', 'background-box');
+      }
+      // Opaque box overrides the configurable background opacity/border above.
+      if (settingsService.read(SettingsService.subtitleOpaqueBox)) {
+        await applySubtitleOpaqueBox(player!, true);
       }
       await player!.setProperty('sub-ass-override', settingsService.read(SettingsService.subAssOverride).name);
       await player!.setProperty('sub-pos', settingsService.read(SettingsService.subtitlePosition).toString());
