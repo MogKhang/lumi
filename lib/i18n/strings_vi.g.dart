@@ -278,8 +278,8 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get playerBackend => 'Chương trình xem phim';
 	@override String get audioLanguage => 'Ngôn ngữ âm thanh';
 	@override String get none => 'Không có';
-	@override String get exoPlayer => 'ExoPlayer (Khuyên dùng)';
-	@override String get mpv => 'mpv';
+	@override String get exoPlayer => 'Nâng cao (Khuyên dùng)';
+	@override String get mpv => 'Tiêu chuẩn';
 	@override String get hardwareDecoding => 'Hardware Decoding';
 	@override String get hardwareDecodingDescription => 'Use hardware acceleration when available';
 	@override String get bufferSize => 'Buffer Size';
@@ -2129,8 +2129,8 @@ extension on TranslationsVi {
 			'settings.playerBackend' => 'Chương trình xem phim',
 			'settings.audioLanguage' => 'Ngôn ngữ âm thanh',
 			'settings.none' => 'Không có',
-			'settings.exoPlayer' => 'ExoPlayer (Khuyên dùng)',
-			'settings.mpv' => 'mpv',
+			'settings.exoPlayer' => 'Nâng cao (Khuyên dùng)',
+			'settings.mpv' => 'Tiêu chuẩn',
 			'settings.hardwareDecoding' => 'Hardware Decoding',
 			'settings.hardwareDecodingDescription' => 'Use hardware acceleration when available',
 			'settings.bufferSize' => 'Buffer Size',

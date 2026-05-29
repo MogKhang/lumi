@@ -540,11 +540,11 @@ class TranslationsSettingsEn {
 	/// en: 'None'
 	String get none => 'None';
 
-	/// en: 'ExoPlayer (Recommended)'
-	String get exoPlayer => 'ExoPlayer (Recommended)';
+	/// en: 'Advanced (Recommended)'
+	String get exoPlayer => 'Advanced (Recommended)';
 
-	/// en: 'mpv'
-	String get mpv => 'mpv';
+	/// en: 'Standard'
+	String get mpv => 'Standard';
 
 	/// en: 'Hardware Decoding'
 	String get hardwareDecoding => 'Hardware Decoding';
@@ -4849,8 +4849,8 @@ extension on Translations {
 			'settings.playerBackend' => 'Player Backend',
 			'settings.audioLanguage' => 'Audio Language',
 			'settings.none' => 'None',
-			'settings.exoPlayer' => 'ExoPlayer (Recommended)',
-			'settings.mpv' => 'mpv',
+			'settings.exoPlayer' => 'Advanced (Recommended)',
+			'settings.mpv' => 'Standard',
 			'settings.hardwareDecoding' => 'Hardware Decoding',
 			'settings.hardwareDecodingDescription' => 'Use hardware acceleration when available',
 			'settings.bufferSize' => 'Buffer Size',
