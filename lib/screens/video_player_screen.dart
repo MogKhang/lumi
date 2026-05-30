@@ -648,9 +648,18 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       await player!.setLogLevel(debugLoggingEnabled ? 'v' : 'warn');
       await player!.setProperty('hwdec', _getHwdecValue(enableHardwareDecoding));
 
-      await player!.setProperty('sub-font-size', settingsService.read(SettingsService.subtitleFontSize).toString());
+      // ExoPlayer renders the font size as fontSize/720 of the full view height,
+      // which comes out larger than mpv's window-normalized sub-font-size at the
+      // same number. Scale up so both engines look the same size.
+      final mpvFontSize = (settingsService.read(SettingsService.subtitleFontSize) * 1.5).round();
+      await player!.setProperty('sub-font-size', mpvFontSize.toString());
       await player!.setProperty('sub-color', settingsService.read(SettingsService.subtitleTextColor));
-      await player!.setProperty('sub-border-size', settingsService.read(SettingsService.subtitleBorderSize).toString());
+      // Match ExoPlayer's outline, which ignores the configured border size and
+      // auto-derives it: media3 strokes 0.1×fontSize with FILL_AND_STROKE, so
+      // the visible halo is ~0.05×fontSize. libass sub-border-size is the full
+      // outside width, so 0.05×fontSize gives the same thickness.
+      final mpvBorderSize = settingsService.read(SettingsService.subtitleFontSize) * 0.05;
+      await player!.setProperty('sub-border-size', mpvBorderSize.toString());
       await player!.setProperty('sub-border-color', settingsService.read(SettingsService.subtitleBorderColor));
       await player!.setProperty('sub-bold', settingsService.read(SettingsService.subtitleBold) ? 'yes' : 'no');
       await player!.setProperty('sub-italic', settingsService.read(SettingsService.subtitleItalic) ? 'yes' : 'no');
@@ -676,7 +685,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
           ? (30 + MediaQuery.of(context).viewPadding.bottom).round()
           : 30;
       await player!.setProperty('sub-margin-y', subMarginY.toString());
-      await player!.setProperty('sub-bold', 'yes');
 
       if (Platform.isIOS) {
         await player!.setProperty('audio-exclusive', 'yes');
