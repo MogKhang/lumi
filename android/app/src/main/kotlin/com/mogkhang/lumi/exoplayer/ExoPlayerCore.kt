@@ -3,9 +3,15 @@ package com.mogkhang.lumi.exoplayer
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.PixelFormat
+import android.graphics.RectF
 import android.graphics.Typeface
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.LineBackgroundSpan
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -688,7 +694,80 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
           if (outgoing !== incoming) " — stacked" else ""
       )
     }
-    subtitleView?.setCues(outgoing)
+    lastRawCues = outgoing
+    subtitleView?.setCues(applyOpaqueBox(outgoing))
+  }
+
+  // --- Opaque subtitle box --------------------------------------------------
+  // media3's SubtitlePainter sizes the per-line background tightly (≈0.125×font)
+  // and ignores any border-size we pass, so to draw a *larger* padded box we
+  // inject a LineBackgroundSpan that draws the box ourselves with real padding.
+  private var opaqueBoxEnabled = false
+  private var opaqueBoxColor = Color.BLACK
+  private var opaqueBoxPaddingPx = 0f
+  private var opaqueBoxRadiusPx = 0f
+  private var lastRawCues: List<Cue> = emptyList()
+
+  // Enable/disable the padded opaque box. paddingDp > 0 turns it on.
+  fun setOpaqueBox(enabled: Boolean, color: String, paddingDp: Int) {
+    val density = activity.resources.displayMetrics.density
+    opaqueBoxEnabled = enabled
+    opaqueBoxColor = try { Color.parseColor(color) } catch (e: Exception) { Color.BLACK }
+    opaqueBoxPaddingPx = paddingDp * density
+    opaqueBoxRadiusPx = 6f * density
+    // Re-render the currently shown cues so the change applies immediately.
+    activity.runOnUiThread {
+      subtitleView?.setCues(applyOpaqueBox(lastRawCues))
+    }
+  }
+
+  private fun applyOpaqueBox(cues: List<Cue>): List<Cue> {
+    if (!opaqueBoxEnabled) return cues
+    val span = PaddedBoxSpan(opaqueBoxColor, opaqueBoxPaddingPx, opaqueBoxRadiusPx)
+    return cues.map { cue ->
+      val text = cue.text ?: return@map cue
+      val spannable = SpannableString(text)
+      spannable.setSpan(span, 0, spannable.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+      cue.buildUpon().setText(spannable).build()
+    }
+  }
+
+  // Draws a rounded black box behind each subtitle line, padded around the
+  // actual text extent. media3 calls this via StaticLayout.draw() before the
+  // glyphs/outline, so the box sits behind the text.
+  private class PaddedBoxSpan(
+    private val boxColor: Int,
+    private val paddingPx: Float,
+    private val radiusPx: Float
+  ) : LineBackgroundSpan {
+    private val fill = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val rect = RectF()
+
+    override fun drawBackground(
+      canvas: Canvas,
+      paint: Paint,
+      left: Int,
+      right: Int,
+      top: Int,
+      baseline: Int,
+      bottom: Int,
+      text: CharSequence,
+      start: Int,
+      end: Int,
+      lineNumber: Int
+    ) {
+      val textWidth = paint.measureText(text, start, end)
+      if (textWidth <= 0f) return
+      val center = (left + right) / 2f
+      fill.color = boxColor
+      rect.set(
+        center - textWidth / 2f - paddingPx,
+        top - paddingPx / 2f,
+        center + textWidth / 2f + paddingPx,
+        bottom + paddingPx / 2f
+      )
+      canvas.drawRoundRect(rect, radiusPx, radiusPx, fill)
+    }
   }
 
   // SRT carries no per-cue positioning, so SubripParser emits cues with
@@ -1758,14 +1837,22 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
     bold: Boolean = false,
     italic: Boolean = false,
     fontFamily: String? = null,
-    bottomPadding: Float? = null
+    bottomPadding: Float? = null,
+    boxPadding: Int = 0
   ) {
     activity.runOnUiThread {
       // 1. Non-ASS subtitles: CaptionStyleCompat on SubtitleView
+      val opaqueBoxOn = boxPadding > 0
       val fgColor = Color.parseColor(textColor)
-      val bgAlpha = (bgOpacity * 255 / 100)
-      val bgColorInt = Color.parseColor(bgColor).let {
-        Color.argb(bgAlpha, Color.red(it), Color.green(it), Color.blue(it))
+      // When our padded box is active, suppress media3's tight per-line box so
+      // the two don't double up — the LineBackgroundSpan draws the box instead.
+      val bgColorInt = if (opaqueBoxOn) {
+        Color.TRANSPARENT
+      } else {
+        val bgAlpha = (bgOpacity * 255 / 100)
+        Color.parseColor(bgColor).let {
+          Color.argb(bgAlpha, Color.red(it), Color.green(it), Color.blue(it))
+        }
       }
       val edgeColor = Color.parseColor(borderColor)
       val edgeType = if (borderSize > 0) {
@@ -1813,6 +1900,9 @@ class ExoPlayerCore(private val activity: Activity) : Player.Listener {
         typeface
       )
       subtitleView?.setStyle(style)
+      // Padded opaque box (drawn by our own LineBackgroundSpan; media3 can't
+      // size its own box). boxPadding in dp; 0 disables it.
+      setOpaqueBox(opaqueBoxOn, bgColor, boxPadding)
       // Font size: MPV sub-font-size is scaled pixels at 720p height
       // Convert to fractional size (0.0-1.0 relative to view height)
       val fraction = fontSize / 720f

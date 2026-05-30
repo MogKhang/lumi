@@ -661,7 +661,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
         '#${bgOpacity.toRadixString(16).padLeft(2, '0').toUpperCase()}$bgColor',
       );
       if (settingsService.read(SettingsService.subtitleBackgroundOpacity) > 0) {
-        await player!.setProperty('sub-border-style', 'background-box');
+        await player!.setProperty('sub-border-style', 'opaque-box');
       }
       // Opaque box overrides the configurable background opacity/border above.
       if (settingsService.read(SettingsService.subtitleOpaqueBox)) {

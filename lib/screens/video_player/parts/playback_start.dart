@@ -238,18 +238,22 @@ extension _VideoPlayerPlaybackStartMethods on VideoPlayerScreenState {
         // Apply subtitle styling to ExoPlayer native layer (CaptionStyleCompat + libass font scale)
         // Must be called after open() since that's when ExoPlayer initializes
         if (player is PlayerAndroid) {
+          // Opaque box overrides the configurable background/border so the box
+          // persists across playbacks (matches the live toggle in the sheet).
+          final opaqueBox = settingsService.read(SettingsService.subtitleOpaqueBox);
           await (player as PlayerAndroid).setSubtitleStyle(
             fontSize: settingsService.read(SettingsService.subtitleFontSize).toDouble(),
             textColor: settingsService.read(SettingsService.subtitleTextColor),
             borderSize: settingsService.read(SettingsService.subtitleBorderSize).toDouble(),
             borderColor: settingsService.read(SettingsService.subtitleBorderColor),
-            bgColor: settingsService.read(SettingsService.subtitleBackgroundColor),
-            bgOpacity: settingsService.read(SettingsService.subtitleBackgroundOpacity),
+            bgColor: opaqueBox ? '#000000' : settingsService.read(SettingsService.subtitleBackgroundColor),
+            bgOpacity: opaqueBox ? 100 : settingsService.read(SettingsService.subtitleBackgroundOpacity),
             subtitlePosition: settingsService.read(SettingsService.subtitlePosition),
             bold: true,
             italic: settingsService.read(SettingsService.subtitleItalic),
             fontFamily: 'Lexend',
             bottomPadding: 30.0,
+            boxPadding: opaqueBox ? 16 : 0,
           );
         }
 

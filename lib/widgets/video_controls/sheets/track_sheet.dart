@@ -556,12 +556,19 @@ class _SubtitleOpaqueToggleState extends State<_SubtitleOpaqueToggle> {
 
   @override
   Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(t.videoControls.opaque),
-      selected: _on,
-      onSelected: _toggle,
-      visualDensity: VisualDensity.compact,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          t.videoControls.opaque,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        Switch(
+          value: _on,
+          onChanged: _toggle,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+      ],
     );
   }
 }

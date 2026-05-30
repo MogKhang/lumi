@@ -519,6 +519,7 @@ class ExoPlayerPlugin :
     val italic = call.argument<Boolean>("italic") ?: false
     val fontFamily = call.argument<String>("fontFamily")
     val bottomPadding = call.argument<Number>("bottomPadding")?.toFloat()
+    val boxPadding = call.argument<Number>("boxPadding")?.toInt() ?: 0
 
     if (usingMpvFallback) {
       // MPV fallback handles styling via setProperty, no-op here
@@ -526,7 +527,7 @@ class ExoPlayerPlugin :
       return
     }
 
-    playerCore?.setSubtitleStyle(fontSize, textColor, borderSize, borderColor, bgColor, bgOpacity, subtitlePosition, bold, italic, fontFamily, bottomPadding)
+    playerCore?.setSubtitleStyle(fontSize, textColor, borderSize, borderColor, bgColor, bgOpacity, subtitlePosition, bold, italic, fontFamily, bottomPadding, boxPadding)
     result.success(null)
   }
 
