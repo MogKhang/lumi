@@ -576,7 +576,7 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String get muteButton => 'Mute';
 	@override String get unmuteButton => 'Unmute';
 	@override String get settingsButton => 'Video settings';
-	@override String get tracksButton => 'Audio & Subtitles';
+	@override String get tracksButton => 'Âm thanh & Phụ đề';
 	@override String get chaptersButton => 'Chapters';
 	@override String get versionsButton => 'Video versions';
 	@override String get versionQualityButton => 'Version & Quality';
@@ -602,10 +602,10 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String get pipActive => 'Playing in Picture-in-Picture';
 	@override String get pipFailed => 'Picture-in-picture failed to start';
 	@override late final _TranslationsVideoControlsPipErrorsVi pipErrors = _TranslationsVideoControlsPipErrorsVi._(_root);
-	@override String get chapters => 'Chapters';
-	@override String get noChaptersAvailable => 'No chapters available';
-	@override String get queue => 'Queue';
-	@override String get noQueueItems => 'No items in queue';
+	@override String get chapters => 'Phân đoạn';
+	@override String get noChaptersAvailable => 'Không có thông tin';
+	@override String get queue => 'Danh sách';
+	@override String get noQueueItems => 'Không có thông tin';
 	@override String get searchSubtitles => 'Search Subtitles';
 	@override String get language => 'Language';
 	@override String get noSubtitlesFound => 'No subtitles found';
@@ -2430,7 +2430,7 @@ extension on TranslationsVi {
 			'videoControls.muteButton' => 'Mute',
 			'videoControls.unmuteButton' => 'Unmute',
 			'videoControls.settingsButton' => 'Video settings',
-			'videoControls.tracksButton' => 'Audio & Subtitles',
+			'videoControls.tracksButton' => 'Âm thanh & Phụ đề',
 			'videoControls.chaptersButton' => 'Chapters',
 			'videoControls.versionsButton' => 'Video versions',
 			'videoControls.versionQualityButton' => 'Version & Quality',
@@ -2462,10 +2462,10 @@ extension on TranslationsVi {
 			'videoControls.pipErrors.voSwitchFailed' => 'Failed to switch video output for picture-in-picture',
 			'videoControls.pipErrors.failed' => 'Picture-in-picture failed to start',
 			'videoControls.pipErrors.unknown' => ({required Object error}) => 'An error occurred: ${error}',
-			'videoControls.chapters' => 'Chapters',
-			'videoControls.noChaptersAvailable' => 'No chapters available',
-			'videoControls.queue' => 'Queue',
-			'videoControls.noQueueItems' => 'No items in queue',
+			'videoControls.chapters' => 'Phân đoạn',
+			'videoControls.noChaptersAvailable' => 'Không có thông tin',
+			'videoControls.queue' => 'Danh sách',
+			'videoControls.noQueueItems' => 'Không có thông tin',
 			'videoControls.searchSubtitles' => 'Search Subtitles',
 			'videoControls.language' => 'Language',
 			'videoControls.noSubtitlesFound' => 'No subtitles found',

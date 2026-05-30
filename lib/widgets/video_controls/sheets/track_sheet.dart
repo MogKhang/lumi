@@ -563,6 +563,7 @@ class _SubtitleOpaqueToggleState extends State<_SubtitleOpaqueToggle> {
           t.videoControls.opaque,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
+        const SizedBox(width: 8),
         Switch(
           value: _on,
           onChanged: _toggle,
