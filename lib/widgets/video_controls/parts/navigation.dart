@@ -45,8 +45,6 @@ extension _PlexVideoControlsNavigationMethods on _PlexVideoControlsState {
         onJumpToLive: widget.onJumpToLive,
         useDpadNavigation: useDpad,
         serverId: widget.metadata.serverId,
-        showQueueTab: playbackState.isQueueActive,
-        onQueueItemSelected: playbackState.isQueueActive ? _onQueueItemSelected : null,
         onCancelAutoHide: () => _hideTimer?.cancel(),
         onStartAutoHide: _startHideTimer,
         onSeekCompleted: widget.onSeekCompleted,
@@ -60,11 +58,6 @@ extension _PlexVideoControlsNavigationMethods on _PlexVideoControlsState {
         },
       ),
     );
-  }
-
-  void _onQueueItemSelected(MediaItem item) {
-    final videoPlayerState = context.findAncestorStateOfType<VideoPlayerScreenState>();
-    videoPlayerState?.navigateToQueueItem(item);
   }
 
   Future<void> _onSubtitleDownloaded() async {

@@ -69,12 +69,6 @@ class MobileVideoControls extends StatefulWidget {
   /// Server ID for chapter thumbnails in the content strip
   final String? serverId;
 
-  /// Whether to show the queue tab in the content strip
-  final bool showQueueTab;
-
-  /// Callback when a queue item is selected from the content strip
-  final Function(MediaItem)? onQueueItemSelected;
-
   /// Notifier for controls visibility (used to reset strip on hide)
   final ValueNotifier<bool>? controlsVisible;
 
@@ -109,8 +103,6 @@ class MobileVideoControls extends StatefulWidget {
     this.streamStartEpoch = 0,
     this.onLiveSeek,
     this.serverId,
-    this.showQueueTab = false,
-    this.onQueueItemSelected,
     this.controlsVisible,
     this.onStripVisibilityChanged,
   });
@@ -126,8 +118,7 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
   /// Drag distance (in pixels) required to fully reveal the strip.
   static const _dragExtent = 150.0;
 
-  bool get _hasStripContent =>
-      widget.chapters.isNotEmpty || (widget.showQueueTab && widget.onQueueItemSelected != null);
+  bool get _hasStripContent => widget.chapters.isNotEmpty;
 
   @override
   void initState() {
@@ -280,8 +271,6 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
                                     chapters: widget.chapters,
                                     chaptersLoaded: widget.chaptersLoaded,
                                     serverId: widget.serverId,
-                                    showQueueTab: widget.showQueueTab,
-                                    onQueueItemSelected: widget.onQueueItemSelected,
                                   ),
                                 ],
                               ),

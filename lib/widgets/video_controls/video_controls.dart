@@ -682,9 +682,7 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
                                           },
                                           child: Builder(
                                             builder: (context) {
-                                              final playbackState = context.watch<PlaybackStateProvider>();
-                                              final hasStripContent =
-                                                  _chapters.isNotEmpty || playbackState.isQueueActive;
+                                              final hasStripContent = _chapters.isNotEmpty;
                                               return MobileVideoControls(
                                                 player: widget.player,
                                                 metadata: widget.metadata,
@@ -715,10 +713,6 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
                                                 streamStartEpoch: widget.streamStartEpoch,
                                                 onLiveSeek: widget.onLiveSeek,
                                                 serverId: widget.metadata.serverId,
-                                                showQueueTab: playbackState.isQueueActive,
-                                                onQueueItemSelected: playbackState.isQueueActive
-                                                    ? _onQueueItemSelected
-                                                    : null,
                                                 controlsVisible: widget.controlsVisible,
                                                 onStripVisibilityChanged: (visible) {
                                                   setState(() => _isContentStripVisible = visible);

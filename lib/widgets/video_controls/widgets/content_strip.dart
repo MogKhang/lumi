@@ -3,16 +3,16 @@ import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:provider/provider.dart';
+
 
 import '../../../focus/dpad_navigator.dart';
 import '../../../focus/focusable_wrapper.dart';
 import '../../../i18n/strings.g.dart';
-import '../../../media/media_item.dart';
+
 import '../../../media/media_server_client.dart';
 import '../../../mpv/mpv.dart';
 import '../../../media/media_source_info.dart';
-import '../../../providers/playback_state_provider.dart';
+
 import '../../../services/download_storage_service.dart';
 import '../../../utils/formatters.dart';
 import '../../../utils/player_utils.dart';
@@ -21,14 +21,12 @@ import '../../app_icon.dart';
 import '../../optimized_media_image.dart';
 import 'media_selector_thumbnail.dart';
 
-/// Horizontal scrollable strip of chapter/queue items shown on swipe-up.
+/// Horizontal scrollable strip of chapter items shown on swipe-up.
 class ContentStrip extends StatefulWidget {
   final Player player;
   final List<MediaChapter> chapters;
   final bool chaptersLoaded;
   final String? serverId;
-  final bool showQueueTab;
-  final Function(MediaItem)? onQueueItemSelected;
   final Function(Duration position)? onSeekCompleted;
 
   /// Whether to use dpad/focus-based navigation (TV mode).
@@ -47,8 +45,6 @@ class ContentStrip extends StatefulWidget {
     required this.chapters,
     required this.chaptersLoaded,
     this.serverId,
-    this.showQueueTab = false,
-    this.onQueueItemSelected,
     this.onSeekCompleted,
     this.useFocusNavigation = false,
     this.onNavigateUp,
@@ -59,54 +55,31 @@ class ContentStrip extends StatefulWidget {
   State<ContentStrip> createState() => ContentStripState();
 }
 
-enum _StripTab { chapters, queue }
-
 class ContentStripState extends State<ContentStrip> {
-  late _StripTab _activeTab;
   final ScrollController _chapterScrollController = ScrollController();
-  final ScrollController _queueScrollController = ScrollController();
   bool _hasAutoScrolledChapters = false;
-  bool _hasAutoScrolledQueue = false;
 
   // Focus nodes for focus navigation mode
   final List<FocusNode> _chapterFocusNodes = [];
-  final List<FocusNode> _queueFocusNodes = [];
 
-  bool get _hasChapters => widget.chapters.isNotEmpty;
-  bool get _hasQueue => widget.showQueueTab && widget.onQueueItemSelected != null;
-  bool get _hasBothTabs => _hasChapters && _hasQueue;
 
-  @override
-  void initState() {
-    super.initState();
-    _activeTab = _hasChapters ? _StripTab.chapters : _StripTab.queue;
-  }
 
   @override
   void dispose() {
     _chapterScrollController.dispose();
-    _queueScrollController.dispose();
     for (final node in _chapterFocusNodes) {
-      node.dispose();
-    }
-    for (final node in _queueFocusNodes) {
       node.dispose();
     }
     super.dispose();
   }
 
-  /// Request focus on the current chapter or queue item (called by parent when strip appears).
+  /// Request focus on the current chapter (called by parent when strip appears).
   void requestInitialFocus() {
-    if (_activeTab == _StripTab.chapters && _chapterFocusNodes.isNotEmpty) {
+    if (_chapterFocusNodes.isNotEmpty) {
       final currentIndex = _getCurrentChapterIndex();
       final idx = (currentIndex ?? 0).clamp(0, _chapterFocusNodes.length - 1);
       _chapterFocusNodes[idx].requestFocus();
       _scrollToFocusedNode(_chapterFocusNodes[idx]);
-    } else if (_activeTab == _StripTab.queue && _queueFocusNodes.isNotEmpty) {
-      final currentIndex = _getCurrentQueueIndex();
-      final idx = (currentIndex ?? 0).clamp(0, _queueFocusNodes.length - 1);
-      _queueFocusNodes[idx].requestFocus();
-      _scrollToFocusedNode(_queueFocusNodes[idx]);
     }
   }
 
@@ -133,18 +106,6 @@ class ContentStripState extends State<ContentStrip> {
     }
   }
 
-  int? _getCurrentQueueIndex() {
-    try {
-      final playbackState = context.read<PlaybackStateProvider>();
-      final items = playbackState.loadedItems;
-      final currentItemID = playbackState.currentPlayQueueItemID;
-      final idx = items.indexWhere((item) => playbackState.playQueueItemIdFor(item) == currentItemID);
-      return idx >= 0 ? idx : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
   void _ensureFocusNodes(List<FocusNode> nodes, int count, String prefix) {
     while (nodes.length < count) {
       nodes.add(FocusNode(debugLabel: '$prefix${nodes.length}'));
@@ -168,64 +129,37 @@ class ContentStripState extends State<ContentStrip> {
     });
   }
 
-  KeyEventResult _handleFocusItemKeyEvent(FocusNode node, KeyEvent event, int index, int totalItems, _StripTab page) {
+  KeyEventResult _handleFocusItemKeyEvent(FocusNode node, KeyEvent event, int index, int totalItems) {
     if (!event.isActionable) return KeyEventResult.ignored;
 
     final key = event.logicalKey;
 
     if (key == LogicalKeyboardKey.arrowLeft) {
-      final nodes = page == _StripTab.chapters ? _chapterFocusNodes : _queueFocusNodes;
       if (index > 0) {
-        nodes[index - 1].requestFocus();
-        _scrollToFocusedNode(nodes[index - 1]);
+        _chapterFocusNodes[index - 1].requestFocus();
+        _scrollToFocusedNode(_chapterFocusNodes[index - 1]);
         widget.onFocusActivity?.call();
       }
       return KeyEventResult.handled;
     }
 
     if (key == LogicalKeyboardKey.arrowRight) {
-      final nodes = page == _StripTab.chapters ? _chapterFocusNodes : _queueFocusNodes;
       if (index < totalItems - 1) {
-        nodes[index + 1].requestFocus();
-        _scrollToFocusedNode(nodes[index + 1]);
+        _chapterFocusNodes[index + 1].requestFocus();
+        _scrollToFocusedNode(_chapterFocusNodes[index + 1]);
         widget.onFocusActivity?.call();
       }
       return KeyEventResult.handled;
     }
 
     if (key == LogicalKeyboardKey.arrowUp) {
-      if (page == _StripTab.queue && _hasChapters) {
-        // Switch to chapters page and focus current chapter
-        setState(() => _activeTab = _StripTab.chapters);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && _chapterFocusNodes.isNotEmpty) {
-            final idx = (_getCurrentChapterIndex() ?? 0).clamp(0, _chapterFocusNodes.length - 1);
-            _chapterFocusNodes[idx].requestFocus();
-            _scrollToFocusedNode(_chapterFocusNodes[idx]);
-          }
-        });
-        widget.onFocusActivity?.call();
-      } else {
-        // chapters page (or queue without chapters) → go back to buttons
-        widget.onNavigateUp?.call();
-      }
+      // Go back to buttons
+      widget.onNavigateUp?.call();
       return KeyEventResult.handled;
     }
 
     if (key == LogicalKeyboardKey.arrowDown) {
-      if (page == _StripTab.chapters && _hasQueue) {
-        // Switch to queue page and focus current queue item
-        setState(() => _activeTab = _StripTab.queue);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && _queueFocusNodes.isNotEmpty) {
-            final idx = (_getCurrentQueueIndex() ?? 0).clamp(0, _queueFocusNodes.length - 1);
-            _queueFocusNodes[idx].requestFocus();
-            _scrollToFocusedNode(_queueFocusNodes[idx]);
-          }
-        });
-        widget.onFocusActivity?.call();
-      }
-      // On queue page or chapters-only, consume to prevent bubbling
+      // Consume to prevent bubbling
       return KeyEventResult.handled;
     }
 
@@ -261,57 +195,22 @@ class ContentStripState extends State<ContentStrip> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Tab bar only shown in touch mode when both tabs exist
-            if (_hasBothTabs && !widget.useFocusNavigation) _buildTabBar(),
             // In focus mode, show a small label for the current page
             if (widget.useFocusNavigation)
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
-                  _activeTab == _StripTab.chapters ? t.videoControls.chapters : t.videoControls.queue,
+                  t.videoControls.chapters,
                   style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500),
                 ),
               ),
             if (!widget.useFocusNavigation) const SizedBox(height: 8),
             SizedBox(
               height: effectiveStripHeight,
-              child: _activeTab == _StripTab.chapters ? _buildChapterStrip(isTablet) : _buildQueueStrip(isTablet),
+              child: _buildChapterStrip(isTablet),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTabBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildTabLabel(t.videoControls.chapters, _StripTab.chapters),
-        const SizedBox(width: 24),
-        _buildTabLabel(t.videoControls.queue, _StripTab.queue),
-      ],
-    );
-  }
-
-  Widget _buildTabLabel(String label, _StripTab tab) {
-    final isActive = _activeTab == tab;
-    return GestureDetector(
-      onTap: () => setState(() => _activeTab = tab),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? Colors.white : Colors.white54,
-              fontSize: 13,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Container(height: 2, width: 40, color: isActive ? Colors.white : Colors.transparent),
-        ],
       ),
     );
   }
@@ -383,7 +282,7 @@ class ContentStripState extends State<ContentStrip> {
                   focusNode: _chapterFocusNodes[index],
                   onSelect: onTap,
                   onKeyEvent: (node, event) =>
-                      _handleFocusItemKeyEvent(node, event, index, widget.chapters.length, _StripTab.chapters),
+                      _handleFocusItemKeyEvent(node, event, index, widget.chapters.length),
                   onFocusChange: (hasFocus) {
                     if (hasFocus) widget.onFocusActivity?.call();
                   },
@@ -400,99 +299,6 @@ class ContentStripState extends State<ContentStrip> {
         );
       },
     );
-  }
-
-  Widget _buildQueueStrip(bool isTablet) {
-    final thumbWidth = isTablet ? 200.0 : 120.0;
-    final thumbHeight = isTablet ? 112.0 : 68.0;
-
-    return Consumer<PlaybackStateProvider>(
-      builder: (context, playbackState, _) {
-        final items = playbackState.loadedItems;
-        final currentItemID = playbackState.currentPlayQueueItemID;
-        final currentIndex = items.indexWhere((item) => playbackState.playQueueItemIdFor(item) == currentItemID);
-
-        if (!_hasAutoScrolledQueue && currentIndex >= 0) {
-          _hasAutoScrolledQueue = true;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _autoScrollTo(_queueScrollController, currentIndex, isTablet: isTablet);
-          });
-        }
-
-        if (widget.useFocusNavigation) {
-          _ensureFocusNodes(_queueFocusNodes, items.length, 'QueueFocus');
-        }
-
-        return ListView.builder(
-          controller: _queueScrollController,
-          scrollDirection: Axis.horizontal,
-          clipBehavior: widget.useFocusNavigation ? Clip.none : Clip.hardEdge,
-          itemCount: items.length,
-          padding: EdgeInsets.symmetric(horizontal: widget.useFocusNavigation ? 12 : 4),
-          itemBuilder: (context, index) {
-            final item = items[index];
-            final isCurrent = playbackState.playQueueItemIdFor(item) == currentItemID;
-
-            final client = item.serverId != null ? context.tryGetMediaClientForServer(item.serverId) : null;
-
-            void onTap() => widget.onQueueItemSelected?.call(item);
-
-            final stripItem = _buildStripItem(
-              context: context,
-              isCurrent: isCurrent,
-              isTablet: isTablet,
-              thumbnail: item.thumbPath != null
-                  ? OptimizedMediaImage.thumb(
-                      client: client,
-                      imagePath: item.thumbPath,
-                      width: thumbWidth,
-                      height: thumbHeight,
-                      fit: BoxFit.cover,
-                      errorWidget: (_, _, _) =>
-                          const AppIcon(Symbols.image_rounded, fill: 1, color: Colors.white54, size: 34),
-                    )
-                  : null,
-              title: item.title ?? '',
-              subtitle: _buildQueueSubtitle(item),
-              onTap: onTap,
-            );
-
-            if (widget.useFocusNavigation) {
-              return Align(
-                alignment: Alignment.topCenter,
-                child: FocusableWrapper(
-                  focusNode: _queueFocusNodes[index],
-                  onSelect: onTap,
-                  onKeyEvent: (node, event) =>
-                      _handleFocusItemKeyEvent(node, event, index, items.length, _StripTab.queue),
-                  onFocusChange: (hasFocus) {
-                    if (hasFocus) widget.onFocusActivity?.call();
-                  },
-                  borderRadius: 6,
-                  autoScroll: false,
-                  useBackgroundFocus: true,
-                  child: stripItem,
-                ),
-              );
-            }
-
-            return stripItem;
-          },
-        );
-      },
-    );
-  }
-
-  String _buildQueueSubtitle(MediaItem item) {
-    if (item.grandparentTitle != null && item.parentIndex != null && item.index != null) {
-      return '${item.grandparentTitle} \u00b7 S${item.parentIndex}E${item.index}';
-    }
-    if (item.grandparentTitle != null) return item.grandparentTitle!;
-    if (item.year != null) {
-      final edition = item.editionTitle;
-      return edition != null ? '${item.year} · $edition' : '${item.year}';
-    }
-    return item.kind.name;
   }
 
   Widget _buildStripItem({

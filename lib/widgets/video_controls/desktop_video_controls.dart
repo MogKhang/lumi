@@ -82,12 +82,6 @@ class DesktopVideoControls extends StatefulWidget {
   /// Server ID for content strip images
   final String? serverId;
 
-  /// Whether to show the queue tab in the content strip
-  final bool showQueueTab;
-
-  /// Called when a queue item is selected in the content strip
-  final Function(MediaItem)? onQueueItemSelected;
-
   /// Called to cancel auto-hide timer (e.g., when content strip is shown)
   final VoidCallback? onCancelAutoHide;
 
@@ -134,8 +128,6 @@ class DesktopVideoControls extends StatefulWidget {
     this.onJumpToLive,
     this.useDpadNavigation = false,
     this.serverId,
-    this.showQueueTab = false,
-    this.onQueueItemSelected,
     this.onCancelAutoHide,
     this.onStartAutoHide,
     this.onContentStripVisibilityChanged,
@@ -189,7 +181,7 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
 
   /// Whether the content strip has any content to show
   bool get _hasStripContent {
-    return widget.chapters.isNotEmpty || (widget.showQueueTab && widget.onQueueItemSelected != null);
+    return widget.chapters.isNotEmpty;
   }
 
   @override
@@ -616,8 +608,6 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
                           chapters: widget.chapters,
                           chaptersLoaded: widget.chaptersLoaded,
                           serverId: widget.serverId,
-                          showQueueTab: widget.showQueueTab,
-                          onQueueItemSelected: widget.onQueueItemSelected,
                           onSeekCompleted: widget.onSeekCompleted,
                           useFocusNavigation: true,
                           onNavigateUp: _onContentStripNavigateUp,
@@ -873,31 +863,6 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
     );
   }
 
-  /// Returns the label of the next chapter the user would seek to, or null.
-  String? _getNextChapterLabel(Duration position) {
-    if (widget.chapters.isEmpty) return null;
-    final currentPositionMs = position.inMilliseconds;
-    for (final chapter in widget.chapters) {
-      final chapterStart = chapter.startTimeOffset ?? 0;
-      if (chapterStart > currentPositionMs) {
-        return chapter.label;
-      }
-    }
-    return null;
-  }
-
-  /// Returns the label of the previous chapter the user would seek to, or null.
-  String? _getPreviousChapterLabel(Duration position) {
-    if (widget.chapters.isEmpty) return null;
-    final currentPositionMs = position.inMilliseconds;
-    for (int i = widget.chapters.length - 1; i >= 0; i--) {
-      final chapterStart = widget.chapters[i].startTimeOffset ?? 0;
-      if (currentPositionMs > chapterStart + 3000) {
-        return widget.chapters[i].label;
-      }
-    }
-    return null;
-  }
 
   Widget _buildFocusableButton({
     required FocusNode focusNode,

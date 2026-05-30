@@ -20,7 +20,7 @@ import '../../../widgets/overlay_sheet.dart';
 import '../models/track_controls_state.dart';
 import '../../../models/transcode_quality_preset.dart';
 import '../sheets/chapter_sheet.dart';
-import '../sheets/queue_sheet.dart';
+
 import '../sheets/track_sheet.dart';
 import '../sheets/version_quality_sheet.dart';
 import '../sheets/video_settings_sheet.dart';
@@ -109,8 +109,7 @@ class TrackChapterControls extends StatelessWidget {
   bool get canControl => trackControlsState.canControl;
   bool get isLive => trackControlsState.isLive;
   bool get subtitlesVisible => trackControlsState.subtitlesVisible;
-  bool get showQueueButton => trackControlsState.showQueueButton;
-  Function(MediaItem)? get onQueueItemSelected => trackControlsState.onQueueItemSelected;
+
   String get ratingKey => trackControlsState.ratingKey;
   String? get mediaTitle => trackControlsState.mediaTitle;
   Future<void> Function()? get onSubtitleDownloaded => trackControlsState.onSubtitleDownloaded;

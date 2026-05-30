@@ -135,8 +135,6 @@ extension _PlexVideoControlsTrackMethods on _PlexVideoControlsState {
       canControl: widget.canControl,
       isLive: widget.isLive,
       subtitlesVisible: _subtitlesVisible,
-      showQueueButton: playbackState.isQueueActive,
-      onQueueItemSelected: playbackState.isQueueActive ? _onQueueItemSelected : null,
       ratingKey: widget.metadata.id,
       mediaTitle: widget.metadata.title,
       onSubtitleDownloaded: _onSubtitleDownloaded,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../media/media_item.dart';
+
 import '../../../media/media_version.dart';
 import '../../../media/media_source_info.dart';
 import '../../../models/transcode_quality_preset.dart';
@@ -51,8 +51,7 @@ class TrackControlsState {
   final bool canControl;
   final bool isLive;
   final bool subtitlesVisible;
-  final bool showQueueButton;
-  final Function(MediaItem)? onQueueItemSelected;
+
   final String ratingKey;
   final String? mediaTitle;
   final Future<void> Function()? onSubtitleDownloaded;
@@ -103,8 +102,7 @@ class TrackControlsState {
     this.canControl = true,
     this.isLive = false,
     this.subtitlesVisible = true,
-    this.showQueueButton = false,
-    this.onQueueItemSelected,
+
     this.ratingKey = '',
     this.mediaTitle,
     this.onSubtitleDownloaded,
