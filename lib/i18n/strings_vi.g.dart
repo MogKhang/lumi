@@ -136,7 +136,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get ok => 'OK';
 	@override String get close => 'Close';
 	@override String get clear => 'Thiết lập lại';
-	@override String get reset => 'Reset';
+	@override String get reset => 'Thiết lập lại';
 	@override String get later => 'Later';
 	@override String get submit => 'Xác nhận';
 	@override String get confirm => 'Confirm';
@@ -304,11 +304,11 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get showChapterMarkersOnTimelineDescription => 'Segment the seek bar at chapter boundaries';
 	@override String get clickVideoTogglesPlayback => 'Click on video to toggle play/pause';
 	@override String get clickVideoTogglesPlaybackDescription => 'If enabled, clicking on the video player will play/pause the video. Otherwise, clicking will show/hide the playback controls.';
-	@override String get videoPlayerControls => 'Video Player Controls';
+	@override String get videoPlayerControls => 'Cấu hình phím tắt';
 	@override String get keyboardShortcuts => 'Keyboard Shortcuts';
-	@override String get keyboardShortcutsDescription => 'Customize keyboard shortcuts';
-	@override String get videoPlayerNavigation => 'Video Player Navigation';
-	@override String get videoPlayerNavigationDescription => 'Use arrow keys to navigate video player controls';
+	@override String get keyboardShortcutsDescription => 'Điều khiển bằng phím tắt';
+	@override String get videoPlayerNavigation => 'Kích hoạt phím mũi tên';
+	@override String get videoPlayerNavigationDescription => 'Điều khiển bằng phím mũi tên';
 	@override String get watchTogetherRelay => 'Watch Together Relay';
 	@override String get watchTogetherRelayDescription => 'Set a custom relay server for Watch Together. All participants must use the same server.';
 	@override String get watchTogetherRelayHint => 'https://my-relay.example.com';
@@ -1775,25 +1775,25 @@ class _TranslationsHotkeysActionsVi extends TranslationsHotkeysActionsEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get playPause => 'Play/Pause';
-	@override String get volumeUp => 'Volume Up';
-	@override String get volumeDown => 'Volume Down';
-	@override String seekForward({required Object seconds}) => 'Seek Forward (${seconds}s)';
-	@override String seekBackward({required Object seconds}) => 'Seek Backward (${seconds}s)';
-	@override String get fullscreenToggle => 'Toggle Fullscreen';
-	@override String get muteToggle => 'Toggle Mute';
-	@override String get subtitleToggle => 'Toggle Subtitles';
-	@override String get audioTrackNext => 'Next Audio Track';
-	@override String get subtitleTrackNext => 'Next Subtitle Track';
-	@override String get chapterNext => 'Next Chapter';
-	@override String get chapterPrevious => 'Previous Chapter';
-	@override String get episodeNext => 'Next Episode';
-	@override String get episodePrevious => 'Previous Episode';
-	@override String get speedIncrease => 'Increase Speed';
-	@override String get speedDecrease => 'Decrease Speed';
-	@override String get speedReset => 'Reset Speed';
-	@override String get subSeekNext => 'Seek to Next Subtitle';
-	@override String get subSeekPrev => 'Seek to Previous Subtitle';
+	@override String get playPause => 'Phát phim/Tạm dừng';
+	@override String get volumeUp => 'Tăng âm lượng';
+	@override String get volumeDown => 'Giảm âm lượng';
+	@override String seekForward({required Object seconds}) => 'Tua tới (${seconds}s)';
+	@override String seekBackward({required Object seconds}) => 'Tua ngược (${seconds}s)';
+	@override String get fullscreenToggle => 'Mở toàn màn hình';
+	@override String get muteToggle => 'Tắt/Bật âm thanh';
+	@override String get subtitleToggle => 'Tắt/Bật phụ đề';
+	@override String get audioTrackNext => 'Chuyển âm thanh';
+	@override String get subtitleTrackNext => 'Chuyển phụ đề';
+	@override String get chapterNext => 'Chương kế tiếp';
+	@override String get chapterPrevious => 'Chương trước';
+	@override String get episodeNext => 'Tập tiếp theo';
+	@override String get episodePrevious => 'Tập trước';
+	@override String get speedIncrease => 'Tăng tốc độ';
+	@override String get speedDecrease => 'Giảm tốc độ';
+	@override String get speedReset => 'Tốc độ mặc định';
+	@override String get subSeekNext => 'Tìm phụ đề kế tiếp';
+	@override String get subSeekPrev => 'Tìm phụ đề trước đó';
 	@override String get shaderToggle => 'Toggle Shaders';
 	@override String get skipMarker => 'Skip Intro/Credits';
 }
@@ -2069,7 +2069,7 @@ extension on TranslationsVi {
 			'common.ok' => 'OK',
 			'common.close' => 'Close',
 			'common.clear' => 'Thiết lập lại',
-			'common.reset' => 'Reset',
+			'common.reset' => 'Thiết lập lại',
 			'common.later' => 'Later',
 			'common.submit' => 'Xác nhận',
 			'common.confirm' => 'Confirm',
@@ -2201,11 +2201,11 @@ extension on TranslationsVi {
 			'settings.showChapterMarkersOnTimelineDescription' => 'Segment the seek bar at chapter boundaries',
 			'settings.clickVideoTogglesPlayback' => 'Click on video to toggle play/pause',
 			'settings.clickVideoTogglesPlaybackDescription' => 'If enabled, clicking on the video player will play/pause the video. Otherwise, clicking will show/hide the playback controls.',
-			'settings.videoPlayerControls' => 'Video Player Controls',
+			'settings.videoPlayerControls' => 'Cấu hình phím tắt',
 			'settings.keyboardShortcuts' => 'Keyboard Shortcuts',
-			'settings.keyboardShortcutsDescription' => 'Customize keyboard shortcuts',
-			'settings.videoPlayerNavigation' => 'Video Player Navigation',
-			'settings.videoPlayerNavigationDescription' => 'Use arrow keys to navigate video player controls',
+			'settings.keyboardShortcutsDescription' => 'Điều khiển bằng phím tắt',
+			'settings.videoPlayerNavigation' => 'Kích hoạt phím mũi tên',
+			'settings.videoPlayerNavigationDescription' => 'Điều khiển bằng phím mũi tên',
 			'settings.watchTogetherRelay' => 'Watch Together Relay',
 			'settings.watchTogetherRelayDescription' => 'Set a custom relay server for Watch Together. All participants must use the same server.',
 			'settings.watchTogetherRelayHint' => 'https://my-relay.example.com',
@@ -2325,25 +2325,25 @@ extension on TranslationsVi {
 			'search.otherResults' => 'Kết quả khác',
 			'hotkeys.setShortcutFor' => ({required Object actionName}) => 'Set Shortcut for ${actionName}',
 			'hotkeys.clearShortcut' => 'Clear shortcut',
-			'hotkeys.actions.playPause' => 'Play/Pause',
-			'hotkeys.actions.volumeUp' => 'Volume Up',
-			'hotkeys.actions.volumeDown' => 'Volume Down',
-			'hotkeys.actions.seekForward' => ({required Object seconds}) => 'Seek Forward (${seconds}s)',
-			'hotkeys.actions.seekBackward' => ({required Object seconds}) => 'Seek Backward (${seconds}s)',
-			'hotkeys.actions.fullscreenToggle' => 'Toggle Fullscreen',
-			'hotkeys.actions.muteToggle' => 'Toggle Mute',
-			'hotkeys.actions.subtitleToggle' => 'Toggle Subtitles',
-			'hotkeys.actions.audioTrackNext' => 'Next Audio Track',
-			'hotkeys.actions.subtitleTrackNext' => 'Next Subtitle Track',
-			'hotkeys.actions.chapterNext' => 'Next Chapter',
-			'hotkeys.actions.chapterPrevious' => 'Previous Chapter',
-			'hotkeys.actions.episodeNext' => 'Next Episode',
-			'hotkeys.actions.episodePrevious' => 'Previous Episode',
-			'hotkeys.actions.speedIncrease' => 'Increase Speed',
-			'hotkeys.actions.speedDecrease' => 'Decrease Speed',
-			'hotkeys.actions.speedReset' => 'Reset Speed',
-			'hotkeys.actions.subSeekNext' => 'Seek to Next Subtitle',
-			'hotkeys.actions.subSeekPrev' => 'Seek to Previous Subtitle',
+			'hotkeys.actions.playPause' => 'Phát phim/Tạm dừng',
+			'hotkeys.actions.volumeUp' => 'Tăng âm lượng',
+			'hotkeys.actions.volumeDown' => 'Giảm âm lượng',
+			'hotkeys.actions.seekForward' => ({required Object seconds}) => 'Tua tới (${seconds}s)',
+			'hotkeys.actions.seekBackward' => ({required Object seconds}) => 'Tua ngược (${seconds}s)',
+			'hotkeys.actions.fullscreenToggle' => 'Mở toàn màn hình',
+			'hotkeys.actions.muteToggle' => 'Tắt/Bật âm thanh',
+			'hotkeys.actions.subtitleToggle' => 'Tắt/Bật phụ đề',
+			'hotkeys.actions.audioTrackNext' => 'Chuyển âm thanh',
+			'hotkeys.actions.subtitleTrackNext' => 'Chuyển phụ đề',
+			'hotkeys.actions.chapterNext' => 'Chương kế tiếp',
+			'hotkeys.actions.chapterPrevious' => 'Chương trước',
+			'hotkeys.actions.episodeNext' => 'Tập tiếp theo',
+			'hotkeys.actions.episodePrevious' => 'Tập trước',
+			'hotkeys.actions.speedIncrease' => 'Tăng tốc độ',
+			'hotkeys.actions.speedDecrease' => 'Giảm tốc độ',
+			'hotkeys.actions.speedReset' => 'Tốc độ mặc định',
+			'hotkeys.actions.subSeekNext' => 'Tìm phụ đề kế tiếp',
+			'hotkeys.actions.subSeekPrev' => 'Tìm phụ đề trước đó',
 			'hotkeys.actions.shaderToggle' => 'Toggle Shaders',
 			'hotkeys.actions.skipMarker' => 'Skip Intro/Credits',
 			'fileInfo.title' => 'File Info',
