@@ -54,7 +54,6 @@ Future<void> applySubtitleOpaqueBox(Player player, bool on) async {
   await player.setProperty('sub-back-color', '#${bgOpacity.toRadixString(16).padLeft(2, '0').toUpperCase()}$bgColor');
   await player.setProperty('sub-border-style', bgOpacity > 0 ? 'opaque-box' : 'outline-and-shadow');
 
-  final fontSize = s?.read(SettingsService.subtitleFontSize) ?? 42;
-  final mpvBorderSize = fontSize * 0.05;
-  await player.setProperty('sub-border-size', mpvBorderSize.toString());
+  final borderSize = s?.read(SettingsService.subtitleBorderSize) ?? 3;
+  await player.setProperty('sub-border-size', borderSize.toString());
 }

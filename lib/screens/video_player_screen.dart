@@ -654,11 +654,8 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       final mpvFontSize = (settingsService.read(SettingsService.subtitleFontSize) * 1.5).round();
       await player!.setProperty('sub-font-size', mpvFontSize.toString());
       await player!.setProperty('sub-color', settingsService.read(SettingsService.subtitleTextColor));
-      // Match ExoPlayer's outline, which ignores the configured border size and
-      // auto-derives it: media3 strokes 0.1×fontSize with FILL_AND_STROKE, so
-      // the visible halo is ~0.05×fontSize. libass sub-border-size is the full
-      // outside width, so 0.05×fontSize gives the same thickness.
-      final mpvBorderSize = settingsService.read(SettingsService.subtitleFontSize) * 0.05;
+      // Set subtitle border/outline size to the user's configured border size setting.
+      final mpvBorderSize = settingsService.read(SettingsService.subtitleBorderSize);
       await player!.setProperty('sub-border-size', mpvBorderSize.toString());
       await player!.setProperty('sub-border-color', settingsService.read(SettingsService.subtitleBorderColor));
       await player!.setProperty('sub-bold', settingsService.read(SettingsService.subtitleBold) ? 'yes' : 'no');
