@@ -492,7 +492,7 @@ class _TranslationsMediaMenuVi extends TranslationsMediaMenuEn {
 	// Translations
 	@override String get markAsWatched => 'Mark as Watched';
 	@override String get markAsUnwatched => 'Mark as Unwatched';
-	@override String get removeFromContinueWatching => 'Remove from Continue Watching';
+	@override String get removeFromContinueWatching => 'Gỡ khỏi Phim Đang Xem';
 	@override String get goToSeries => 'Go to series';
 	@override String get goToSeason => 'Go to season';
 	@override String get shufflePlay => 'Shuffle Play';
@@ -639,7 +639,7 @@ class _TranslationsMessagesVi extends TranslationsMessagesEn {
 	@override String get markedAsWatchedOffline => 'Marked as watched (will sync when online)';
 	@override String get markedAsUnwatchedOffline => 'Marked as unwatched (will sync when online)';
 	@override String autoRemovedWatchedDownload({required Object title}) => 'Auto-removed: ${title}';
-	@override String get removedFromContinueWatching => 'Removed from Continue Watching';
+	@override String get removedFromContinueWatching => 'Đã gỡ khỏi Phim Đang Xem';
 	@override String errorLoading({required Object error}) => 'Error: ${error}';
 	@override String get fileInfoNotAvailable => 'File information not available';
 	@override String errorLoadingFileInfo({required Object error}) => 'Error loading file info: ${error}';
@@ -1139,7 +1139,7 @@ class _TranslationsPlaylistsVi extends TranslationsPlaylistsEn {
 	@override String get create => 'Tạo danh sách';
 	@override String get playlistName => 'Tên danh sách';
 	@override String get enterPlaylistName => 'Đặt tên danh sách';
-	@override String get delete => 'Delete Playlist';
+	@override String get delete => 'Xóa danh sách';
 	@override String get removeItem => 'Gỡ khỏi danh sách';
 	@override String get smartPlaylist => 'Smart Playlist';
 	@override String itemCount({required Object count}) => '${count} items';
@@ -1151,7 +1151,7 @@ class _TranslationsPlaylistsVi extends TranslationsPlaylistsEn {
 	@override String get deleted => 'Đã xóa danh sách';
 	@override String get itemAdded => 'Added to playlist';
 	@override String get itemRemoved => 'Đã gỡ khỏi danh sách';
-	@override String get selectPlaylist => 'Select Playlist';
+	@override String get selectPlaylist => 'Chọn danh sách';
 	@override String get errorCreating => 'Lỗi không thể tạo danh sách';
 	@override String get errorDeleting => 'Lỗi không thể xóa danh sách';
 	@override String get errorLoading => 'Lỗi không thể tải danh sách';
@@ -2373,7 +2373,7 @@ extension on TranslationsVi {
 			'fileInfo.has64bitOffsets' => '64-bit Offsets',
 			'mediaMenu.markAsWatched' => 'Mark as Watched',
 			'mediaMenu.markAsUnwatched' => 'Mark as Unwatched',
-			'mediaMenu.removeFromContinueWatching' => 'Remove from Continue Watching',
+			'mediaMenu.removeFromContinueWatching' => 'Gỡ khỏi Phim Đang Xem',
 			'mediaMenu.goToSeries' => 'Go to series',
 			'mediaMenu.goToSeason' => 'Go to season',
 			'mediaMenu.shufflePlay' => 'Shuffle Play',
@@ -2481,7 +2481,7 @@ extension on TranslationsVi {
 			'messages.markedAsWatchedOffline' => 'Marked as watched (will sync when online)',
 			'messages.markedAsUnwatchedOffline' => 'Marked as unwatched (will sync when online)',
 			'messages.autoRemovedWatchedDownload' => ({required Object title}) => 'Auto-removed: ${title}',
-			'messages.removedFromContinueWatching' => 'Removed from Continue Watching',
+			'messages.removedFromContinueWatching' => 'Đã gỡ khỏi Phim Đang Xem',
 			'messages.errorLoading' => ({required Object error}) => 'Error: ${error}',
 			'messages.fileInfoNotAvailable' => 'File information not available',
 			'messages.errorLoadingFileInfo' => ({required Object error}) => 'Error loading file info: ${error}',
@@ -2862,7 +2862,7 @@ extension on TranslationsVi {
 			'playlists.create' => 'Tạo danh sách',
 			'playlists.playlistName' => 'Tên danh sách',
 			'playlists.enterPlaylistName' => 'Đặt tên danh sách',
-			'playlists.delete' => 'Delete Playlist',
+			'playlists.delete' => 'Xóa danh sách',
 			'playlists.removeItem' => 'Gỡ khỏi danh sách',
 			'playlists.smartPlaylist' => 'Smart Playlist',
 			'playlists.itemCount' => ({required Object count}) => '${count} items',
@@ -2874,7 +2874,7 @@ extension on TranslationsVi {
 			'playlists.deleted' => 'Đã xóa danh sách',
 			'playlists.itemAdded' => 'Added to playlist',
 			'playlists.itemRemoved' => 'Đã gỡ khỏi danh sách',
-			'playlists.selectPlaylist' => 'Select Playlist',
+			'playlists.selectPlaylist' => 'Chọn danh sách',
 			'playlists.errorCreating' => 'Lỗi không thể tạo danh sách',
 			'playlists.errorDeleting' => 'Lỗi không thể xóa danh sách',
 			'playlists.errorLoading' => 'Lỗi không thể tải danh sách',
