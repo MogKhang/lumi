@@ -634,6 +634,7 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
             onTap: () => _playFromItem(index),
             onRefresh: updateItem,
             canReorder: !_isReadOnly,
+            playlistId: widget.playlist.id,
             isFocused: isFocused,
             focusedColumn: isFocused ? _focusedColumn : null,
             isMoving: isMoving,

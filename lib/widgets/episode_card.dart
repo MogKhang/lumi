@@ -132,7 +132,7 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
             onTap: widget.onTap,
             canRequestFocus: false,
             onTapDown: storeTapPosition,
-            onLongPress: null,
+            onLongPress: showContextMenuFromTap,
             onSecondaryTapDown: storeTapPosition,
             onSecondaryTap: showContextMenuFromTap,
             hoverColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.05),

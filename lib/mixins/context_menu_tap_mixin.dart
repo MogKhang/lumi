@@ -17,8 +17,7 @@ mixin ContextMenuTapMixin<T extends StatefulWidget> on State<T> {
 
   /// Show at the last tap position (long-press, mouse).
   void showContextMenuFromTap() {
-    // Disabled globally per user request
-    // contextMenuKey.currentState?.showContextMenu(context, position: _tapPosition);
+    contextMenuKey.currentState?.showContextMenu(context, position: _tapPosition);
   }
 
   /// Show without a tap position (keyboard, gamepad).

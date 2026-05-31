@@ -21,6 +21,10 @@ class PlaylistItemCard extends StatefulWidget {
   final void Function(String itemId)? onRefresh;
   final bool canReorder; // Whether drag handle should be shown
 
+  /// Playlist ID this item belongs to — enables the "Remove from Playlist"
+  /// context-menu action.
+  final String? playlistId;
+
   // Focus state for keyboard/D-pad navigation
   final bool isFocused;
   final int? focusedColumn; // 0=row, 1=drag handle, 2=remove button
@@ -34,6 +38,7 @@ class PlaylistItemCard extends StatefulWidget {
     this.onTap,
     this.onRefresh,
     this.canReorder = true,
+    this.playlistId,
     this.isFocused = false,
     this.focusedColumn,
     this.isMoving = false,
@@ -74,6 +79,8 @@ class _PlaylistItemCardState extends State<PlaylistItemCard> with ContextMenuTap
       item: widget.item,
       onRefresh: widget.onRefresh,
       onTap: widget.onTap,
+      playlistId: widget.playlistId,
+      onRemoveFromPlaylist: widget.onRemove,
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         color: cardColor,
@@ -81,7 +88,7 @@ class _PlaylistItemCardState extends State<PlaylistItemCard> with ContextMenuTap
         child: InkWell(
           onTap: widget.onTap,
           onTapDown: storeTapPosition,
-          onLongPress: null,
+          onLongPress: showContextMenuFromTap,
           onSecondaryTapDown: storeTapPosition,
           onSecondaryTap: showContextMenuFromTap,
           child: Padding(
