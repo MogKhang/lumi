@@ -7,6 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../../../focus/dpad_navigator.dart';
 import '../../../focus/focusable_button.dart';
+import '../../../focus/focusable_slider.dart';
 import '../../../focus/focusable_wrapper.dart';
 import '../../../mpv/mpv.dart';
 import '../../../i18n/strings.g.dart';
@@ -36,6 +37,9 @@ class SyncOffsetControl extends StatefulWidget {
   /// parent to auto-focus the slider when the bar opens.
   final FocusNode? sliderFocusNode;
 
+  /// Focus node for the first track item (for custom D-pad vertical navigation).
+  final FocusNode? firstTrackFocusNode;
+
   const SyncOffsetControl({
     super.key,
     required this.player,
@@ -47,6 +51,7 @@ class SyncOffsetControl extends StatefulWidget {
     this.resetFocusNode,
     this.closeFocusNode,
     this.sliderFocusNode,
+    this.firstTrackFocusNode,
   });
 
   @override
@@ -65,6 +70,9 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
 
   late double _currentOffset;
   Timer? _longPressTimer;
+  FocusNode? _internalSliderFocusNode;
+
+  FocusNode get _sliderFocusNode => widget.sliderFocusNode ?? (_internalSliderFocusNode ??= FocusNode(debugLabel: 'SyncOffsetControl:slider'));
 
   @override
   void initState() {
@@ -83,6 +91,7 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
   @override
   void dispose() {
     _longPressTimer?.cancel();
+    _internalSliderFocusNode?.dispose();
     super.dispose();
   }
 
@@ -243,8 +252,8 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
                 return KeyEventResult.ignored;
               },
               canRequestFocus: false,
-              child: Slider(
-                focusNode: widget.sliderFocusNode,
+              child: FocusableSlider(
+                focusNode: _sliderFocusNode,
                 value: sliderValue,
                 min: _sliderMin,
                 max: _sliderMax,
@@ -280,6 +289,10 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
           FocusableWrapper(
             focusNode: widget.resetFocusNode,
             onSelect: _currentOffset != 0 ? _resetOffset : null,
+            onNavigateLeft: () => _sliderFocusNode.requestFocus(),
+            onNavigateDown: widget.firstTrackFocusNode != null
+                ? () => widget.firstTrackFocusNode!.requestFocus()
+                : null,
             borderRadius: 18,
             autoScroll: false,
             useBackgroundFocus: true,
@@ -333,7 +346,7 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
                 style: TextStyle(color: tokens(context).textMuted),
               ),
               Expanded(
-                child: Slider(
+                child: FocusableSlider(
                   value: sliderValue,
                   min: _sliderMin,
                   max: _sliderMax,

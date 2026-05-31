@@ -10,6 +10,9 @@ class FocusableSlider extends StatefulWidget {
   final double max;
   final int? divisions;
   final ValueChanged<double>? onChanged;
+  final ValueChanged<double>? onChangeEnd;
+  final Color? activeColor;
+  final Color? inactiveColor;
   final FocusNode? focusNode;
   final bool autofocus;
 
@@ -20,6 +23,9 @@ class FocusableSlider extends StatefulWidget {
     this.max = 1.0,
     this.divisions,
     this.onChanged,
+    this.onChangeEnd,
+    this.activeColor,
+    this.inactiveColor,
     this.focusNode,
     this.autofocus = false,
   });
@@ -45,6 +51,7 @@ class _FocusableSliderState extends State<FocusableSlider> {
         final delta = key.isRightKey ? _step : -_step;
         final newValue = (widget.value + delta).clamp(widget.min, widget.max);
         widget.onChanged!(newValue);
+        widget.onChangeEnd?.call(newValue);
       }
       return KeyEventResult.handled;
     }
@@ -74,6 +81,9 @@ class _FocusableSliderState extends State<FocusableSlider> {
           max: widget.max,
           divisions: widget.divisions,
           onChanged: widget.onChanged,
+          onChangeEnd: widget.onChangeEnd,
+          activeColor: widget.activeColor,
+          inactiveColor: widget.inactiveColor,
         ),
       ),
     );

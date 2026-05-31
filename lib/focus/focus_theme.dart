@@ -41,7 +41,7 @@ class FocusTheme {
 
     return BoxDecoration(
       borderRadius: BorderRadius.circular(borderRadius),
-      color: isFocused ? color.withValues(alpha: 0.15) : Colors.transparent,
+      color: isFocused ? color.withValues(alpha: 0.30) : Colors.transparent,
     );
   }
 }

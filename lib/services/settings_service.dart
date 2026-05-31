@@ -275,7 +275,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const rotationLocked = BoolPref('rotation_locked', defaultValue: true);
   static const subtitleFontSize = IntPref('subtitle_font_size', defaultValue: 42);
   static const subtitleTextColor = StringPref('subtitle_text_color', defaultValue: '#FFFFFF');
-  static const subtitleBorderSize = IntPref('subtitle_border_size', defaultValue: 10);
+  static const subtitleBorderSize = IntPref('subtitle_border_size', defaultValue: 3);
   static const subtitleBorderColor = StringPref('subtitle_border_color', defaultValue: '#000000');
   static const subtitleBackgroundColor = StringPref('subtitle_background_color', defaultValue: '#000000');
   static const subtitleBackgroundOpacity = IntPref('subtitle_background_opacity');

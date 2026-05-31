@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../focus/focusable_wrapper.dart';
 import '../../../media/media_source_info.dart';
 import '../../../mpv/mpv.dart';
 import '../../../i18n/strings.g.dart';
@@ -217,10 +219,26 @@ class _SourceAudioColumn extends StatefulWidget {
 
 class _SourceAudioColumnState extends State<_SourceAudioColumn> {
   final _initialScroll = InitialItemScrollController();
+  final FocusNode _firstTrackFocusNode = FocusNode(debugLabel: 'SourceAudioColumn:firstTrack');
+  final FocusNode _resetFocusNode = FocusNode(debugLabel: 'SourceAudioColumn:reset');
+
+  @override
+  void initState() {
+    super.initState();
+    _firstTrackFocusNode.onKeyEvent = (node, event) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp && event is KeyDownEvent) {
+        _resetFocusNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    };
+  }
 
   @override
   void dispose() {
     _initialScroll.dispose();
+    _firstTrackFocusNode.dispose();
+    _resetFocusNode.dispose();
     super.dispose();
   }
 
@@ -242,6 +260,8 @@ class _SourceAudioColumnState extends State<_SourceAudioColumn> {
             widget.onSyncOffsetChanged?.call('audio-delay', offset);
           },
           compact: true,
+          resetFocusNode: _resetFocusNode,
+          firstTrackFocusNode: _firstTrackFocusNode,
         ),
         const Divider(height: 1),
         Expanded(
@@ -254,6 +274,7 @@ class _SourceAudioColumnState extends State<_SourceAudioColumn> {
               return TrackSelectionHelper.buildTrackTile<AudioTrack>(
                 context: context,
                 key: index == 0 ? _initialScroll.firstItemKey : null,
+                focusNode: index == 0 ? _firstTrackFocusNode : null,
                 label: track.label,
                 isSelected: isSelected,
                 onTap: () {
@@ -294,10 +315,26 @@ class _AudioColumn extends StatefulWidget {
 
 class _AudioColumnState extends State<_AudioColumn> {
   final _initialScroll = InitialItemScrollController();
+  final FocusNode _firstTrackFocusNode = FocusNode(debugLabel: 'AudioColumn:firstTrack');
+  final FocusNode _resetFocusNode = FocusNode(debugLabel: 'AudioColumn:reset');
+
+  @override
+  void initState() {
+    super.initState();
+    _firstTrackFocusNode.onKeyEvent = (node, event) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp && event is KeyDownEvent) {
+        _resetFocusNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    };
+  }
 
   @override
   void dispose() {
     _initialScroll.dispose();
+    _firstTrackFocusNode.dispose();
+    _resetFocusNode.dispose();
     super.dispose();
   }
 
@@ -319,6 +356,8 @@ class _AudioColumnState extends State<_AudioColumn> {
             widget.onSyncOffsetChanged?.call('audio-delay', offset);
           },
           compact: true,
+          resetFocusNode: _resetFocusNode,
+          firstTrackFocusNode: _firstTrackFocusNode,
         ),
         const Divider(height: 1),
         Expanded(
@@ -337,6 +376,7 @@ class _AudioColumnState extends State<_AudioColumn> {
               return TrackSelectionHelper.buildTrackTile<AudioTrack>(
                 context: context,
                 key: index == 0 ? _initialScroll.firstItemKey : null,
+                focusNode: index == 0 ? _firstTrackFocusNode : null,
                 label: label,
                 isSelected: track.id == selectedId,
                 onTap: () {
@@ -392,10 +432,26 @@ class _SubtitleColumn extends StatefulWidget {
 
 class _SubtitleColumnState extends State<_SubtitleColumn> {
   final _initialScroll = InitialItemScrollController();
+  final FocusNode _firstTrackFocusNode = FocusNode(debugLabel: 'SubtitleColumn:firstTrack');
+  final FocusNode _resetFocusNode = FocusNode(debugLabel: 'SubtitleColumn:reset');
+
+  @override
+  void initState() {
+    super.initState();
+    _firstTrackFocusNode.onKeyEvent = (node, event) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp && event is KeyDownEvent) {
+        _resetFocusNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    };
+  }
 
   @override
   void dispose() {
     _initialScroll.dispose();
+    _firstTrackFocusNode.dispose();
+    _resetFocusNode.dispose();
     super.dispose();
   }
 
@@ -429,6 +485,8 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
             widget.onSyncOffsetChanged?.call('sub-delay', offset);
           },
           compact: true,
+          resetFocusNode: _resetFocusNode,
+          firstTrackFocusNode: _firstTrackFocusNode,
         ),
         const Divider(height: 1),
         Expanded(
@@ -440,6 +498,7 @@ class _SubtitleColumnState extends State<_SubtitleColumn> {
                 return TrackSelectionHelper.buildOffTile<SubtitleTrack>(
                   context: context,
                   key: _initialScroll.firstItemKey,
+                  focusNode: _firstTrackFocusNode,
                   isSelected: isOffSelected,
                   onTap: () {
                     // Turning off primary also clears secondary
@@ -547,6 +606,13 @@ class _SubtitleOpaqueToggle extends StatefulWidget {
 
 class _SubtitleOpaqueToggleState extends State<_SubtitleOpaqueToggle> {
   late bool _on = SettingsService.instanceOrNull?.read(SettingsService.subtitleOpaqueBox) ?? false;
+  final FocusNode _switchFocusNode = FocusNode(canRequestFocus: false);
+
+  @override
+  void dispose() {
+    _switchFocusNode.dispose();
+    super.dispose();
+  }
 
   Future<void> _toggle(bool value) async {
     setState(() => _on = value);
@@ -556,20 +622,33 @@ class _SubtitleOpaqueToggleState extends State<_SubtitleOpaqueToggle> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          t.videoControls.opaque,
-          style: Theme.of(context).textTheme.bodyMedium,
+    return FocusableWrapper(
+      borderRadius: 8,
+      useBackgroundFocus: true,
+      onSelect: () => _toggle(!_on),
+      child: InkWell(
+        onTap: () => _toggle(!_on),
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                t.videoControls.opaque,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(width: 8),
+              Switch(
+                value: _on,
+                onChanged: _toggle,
+                focusNode: _switchFocusNode,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ],
+          ),
         ),
-        const SizedBox(width: 8),
-        Switch(
-          value: _on,
-          onChanged: _toggle,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
-      ],
+      ),
     );
   }
 }
