@@ -180,10 +180,6 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     }
   }
 
-  void _restartApp(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-  }
-
   Widget _buildThemeTile() {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
@@ -235,12 +231,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
             await settings.SettingsService.instanceOrNull!.write(settings.SettingsService.appLocale, value);
             await LocaleSettings.setLocale(value);
             await initializeDateFormatting(value.languageCode, null);
-            
-            // Allow the UI to settle and show the new language for a moment 
-            // before resetting the navigation stack.
-            await Future.delayed(const Duration(milliseconds: 200));
-            
-            if (context.mounted) _restartApp(context);
+            if (mounted) setState(() {});
           } catch (e, st) {
             appLogger.e('Failed to switch language', error: e, stackTrace: st);
           }

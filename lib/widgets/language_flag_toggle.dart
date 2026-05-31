@@ -23,33 +23,106 @@ class _LanguageFlagToggleState extends State<LanguageFlagToggle> {
     if (LocaleSettings.currentLocale == locale) return;
     await SettingsService.instanceOrNull?.write(SettingsService.appLocale, locale);
     await LocaleSettings.setLocale(locale);
-    if (mounted) setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final current = LocaleSettings.currentLocale;
+    final isVi = current == AppLocale.vi;
+
     return Container(
+      width: 88,
+      height: 40,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.25),
+        color: const Color(0xFF1E1E2C).withValues(alpha: 0.6), // Premium dark theme matching background
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.12),
+          width: 1.5,
+        ),
       ),
-      padding: const EdgeInsets.all(3),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          _FlagButton(
-            flag: const _VietnamFlag(),
-            isActive: current == AppLocale.vi,
-            onTap: () => _select(AppLocale.vi),
-            semanticLabel: 'Tiếng Việt',
+          // Smooth sliding indicator pill
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            left: isVi ? 3 : 45,
+            top: 3,
+            child: Container(
+              width: 38,
+              height: 32,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFEC609B), // App brand tagline pink
+                    Color(0xFFC8457D),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFEC609B).withValues(alpha: 0.3),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(width: 2),
-          _FlagButton(
-            flag: const _UkFlag(),
-            isActive: current == AppLocale.en,
-            onTap: () => _select(AppLocale.en),
-            semanticLabel: 'English',
+          // Clickable flag overlay zones
+          Row(
+            children: [
+              Expanded(
+                child: Semantics(
+                  label: 'Tiếng Việt',
+                  button: true,
+                  selected: isVi,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => _select(AppLocale.vi),
+                    child: Center(
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 200),
+                        opacity: isVi ? 1.0 : 0.5,
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: const ClipOval(child: _VietnamFlag()),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Semantics(
+                  label: 'English',
+                  button: true,
+                  selected: !isVi,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => _select(AppLocale.en),
+                    child: Center(
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 200),
+                        opacity: !isVi ? 1.0 : 0.5,
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: const ClipOval(child: _UkFlag()),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -57,49 +130,6 @@ class _LanguageFlagToggleState extends State<LanguageFlagToggle> {
   }
 }
 
-class _FlagButton extends StatelessWidget {
-  final Widget flag;
-  final bool isActive;
-  final VoidCallback onTap;
-  final String semanticLabel;
-
-  const _FlagButton({
-    required this.flag,
-    required this.isActive,
-    required this.onTap,
-    required this.semanticLabel,
-  });
-
-  static const double _size = 30;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: semanticLabel,
-      button: true,
-      selected: isActive,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 150),
-          opacity: isActive ? 1.0 : 0.4,
-          child: Container(
-            width: _size,
-            height: _size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: isActive ? const Color(0xFFEC609B) : Colors.transparent,
-                width: 2,
-              ),
-            ),
-            child: ClipOval(child: flag),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 /// Vietnam flag: red field with a centered yellow five-pointed star.
 class _VietnamFlag extends StatelessWidget {
