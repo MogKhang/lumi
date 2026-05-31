@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../focus/focusable_wrapper.dart';
 import '../i18n/strings.g.dart';
 import '../services/settings_service.dart';
 
@@ -100,118 +101,131 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      width: trackWidth,
-      height: trackHeight,
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: Stack(
-        children: <Widget>[
-          // Interactive background track
-          GestureDetector(
-            onTap: () {
-              initialPosition = !initialPosition;
-              final index = initialPosition ? 0 : 1;
-              widget.onToggleCallback(index);
-              setState(() {});
-            },
-            child: Container(
-              width: trackWidth,
-              height: trackHeight,
-              decoration: ShapeDecoration(
-                color: widget.backgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(trackHeight / 2),
-                  side: BorderSide(
-                    color: isDark 
-                        ? Colors.white.withValues(alpha: 0.12)
-                        : Colors.black.withValues(alpha: 0.08),
-                    width: 1.0,
-                  ),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  // Left background flag slot (OFF position, Vietnamese flag)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(paddingSize),
-                      child: Container(
-                        width: slideSize,
-                        height: slideSize,
-                        alignment: Alignment.center,
-                        child: Opacity(
-                          opacity: 0.45, // Brighter flag visibility
-                          child: SizedBox(
-                            width: flagSize,
-                            height: flagSize,
-                            child: ClipOval(child: widget.widgets[0]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Right background flag slot (ON position, UK flag)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(paddingSize),
-                      child: Container(
-                        width: slideSize,
-                        height: slideSize,
-                        alignment: Alignment.center,
-                        child: Opacity(
-                          opacity: 0.45, // Brighter flag visibility
-                          child: SizedBox(
-                            width: flagSize,
-                            height: flagSize,
-                            child: ClipOval(child: widget.widgets[1]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+    final toggleWidget = GestureDetector(
+      onTap: () {
+        initialPosition = !initialPosition;
+        final index = initialPosition ? 0 : 1;
+        widget.onToggleCallback(index);
+        setState(() {});
+      },
+      child: Container(
+        width: trackWidth,
+        height: trackHeight,
+        decoration: ShapeDecoration(
+          color: widget.backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(trackHeight / 2),
+            side: BorderSide(
+              color: isDark 
+                  ? Colors.white.withValues(alpha: 0.12)
+                  : Colors.black.withValues(alpha: 0.08),
+              width: 1.0,
             ),
           ),
-          // Seamless animated active flag selector (ON/OFF)
-          AnimatedAlign(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.decelerate,
-            alignment:
-                initialPosition ? Alignment.centerLeft : Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.all(paddingSize),
-              child: Container(
-                width: slideSize,
-                height: slideSize,
-                alignment: Alignment.center,
+        ),
+        child: Stack(
+          children: [
+            // Left background flag slot (OFF position, Vietnamese flag)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(paddingSize),
                 child: Container(
-                  width: flagSize,
-                  height: flagSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isDark ? Colors.white.withValues(alpha: 0.9) : Colors.black.withValues(alpha: 0.8),
-                      width: 1.5,
+                  width: slideSize,
+                  height: slideSize,
+                  alignment: Alignment.center,
+                  child: Opacity(
+                    opacity: 0.45, // Brighter flag visibility
+                    child: SizedBox(
+                      width: flagSize,
+                      height: flagSize,
+                      child: ClipOval(child: widget.widgets[0]),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.2),
-                        blurRadius: 4,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: initialPosition ? widget.widgets[0] : widget.widgets[1],
                   ),
                 ),
               ),
             ),
+            // Right background flag slot (ON position, UK flag)
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(paddingSize),
+                child: Container(
+                  width: slideSize,
+                  height: slideSize,
+                  alignment: Alignment.center,
+                  child: Opacity(
+                    opacity: 0.45, // Brighter flag visibility
+                    child: SizedBox(
+                      width: flagSize,
+                      height: flagSize,
+                      child: ClipOval(child: widget.widgets[1]),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: FocusableWrapper(
+        borderRadius: trackHeight / 2, // 18.0
+        disableScale: true,
+        onSelect: () {
+          initialPosition = !initialPosition;
+          final index = initialPosition ? 0 : 1;
+          widget.onToggleCallback(index);
+          setState(() {});
+        },
+        child: SizedBox(
+          width: trackWidth,
+          height: trackHeight,
+          child: Stack(
+            children: <Widget>[
+              toggleWidget,
+              // Seamless animated active flag selector (ON/OFF)
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.decelerate,
+                alignment:
+                    initialPosition ? Alignment.centerLeft : Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(paddingSize),
+                  child: Container(
+                    width: slideSize,
+                    height: slideSize,
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: flagSize,
+                      height: flagSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isDark ? Colors.white.withValues(alpha: 0.9) : Colors.black.withValues(alpha: 0.8),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: initialPosition ? widget.widgets[0] : widget.widgets[1],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
