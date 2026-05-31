@@ -186,23 +186,24 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
               child: Container(
                 width: slideSize,
                 height: slideSize,
-                decoration: ShapeDecoration(
-                  color: widget.buttonColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(slideSize / 2),
-                  ),
-                  shadows: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.15),
-                      blurRadius: 6,
-                      offset: const Offset(0, 1.5),
-                    ),
-                  ],
-                ),
                 alignment: Alignment.center,
-                child: SizedBox(
+                child: Container(
                   width: flagSize,
                   height: flagSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isDark ? Colors.white.withValues(alpha: 0.9) : Colors.black.withValues(alpha: 0.8),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.2),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
                   child: ClipOval(
                     child: initialPosition ? widget.widgets[0] : widget.widgets[1],
                   ),

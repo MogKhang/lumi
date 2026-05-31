@@ -1091,7 +1091,7 @@ class _TranslationsGenresVi extends TranslationsGenresEn {
 		'Travel': 'Du lịch',
 		'Vie': 'Thuyết minh xưa',
 		'War': 'Chiến tranh',
-		'Western': 'Cao bồi',
+		'Western': 'Viễn tây',
 	};
 }
 
@@ -2833,7 +2833,7 @@ extension on TranslationsVi {
 			'genres.names.Travel' => 'Du lịch',
 			'genres.names.Vie' => 'Thuyết minh xưa',
 			'genres.names.War' => 'Chiến tranh',
-			'genres.names.Western' => 'Cao bồi',
+			'genres.names.Western' => 'Viễn tây',
 			'collections.title' => 'Collections',
 			'collections.collection' => 'Collection',
 			'collections.empty' => 'Collection is empty',
