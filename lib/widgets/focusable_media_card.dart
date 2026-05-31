@@ -36,6 +36,10 @@ class FocusableMediaCard extends StatefulWidget {
   /// Whether to disable the scale animation on focus (e.g. in list view).
   final bool disableScale;
 
+  /// Whether the long-press / right-click context menu is available.
+  /// Disabled on Collections and Playlists tabs.
+  final bool enableContextMenu;
+
   /// Whether to hide the content rating in list view.
   final bool hideContentRating;
 
@@ -93,6 +97,7 @@ class FocusableMediaCard extends StatefulWidget {
     this.hideContentRating = false,
     this.hideRating = false,
     this.hideStudio = false,
+    this.enableContextMenu = true,
     this.focusNode,
     this.onNavigateUp,
     this.onNavigateDown,
@@ -143,6 +148,7 @@ class _FocusableMediaCardState extends State<FocusableMediaCard> {
         hideContentRating: widget.hideContentRating,
         hideRating: widget.hideRating,
         hideStudio: widget.hideStudio,
+        enableContextMenu: widget.enableContextMenu,
       ),
     );
   }

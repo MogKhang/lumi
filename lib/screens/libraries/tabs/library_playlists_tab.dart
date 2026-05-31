@@ -57,6 +57,7 @@ class _LibraryPlaylistsTabState extends LibraryGridTabState<MediaPlaylist, Libra
       item: playlist,
       focusNode: index == 0 ? firstItemFocusNode : null,
       disableScale: gridContext?.isListMode ?? false,
+      enableContextMenu: false,
       onListRefresh: loadItems,
       onBack: widget.onBack,
       onNavigateUp: gridContext?.isFirstRow == true ? widget.onBack : null,

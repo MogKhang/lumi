@@ -225,8 +225,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
           context: context,
           title: t.settings.language,
           options: [
-            DialogOption(value: AppLocale.en, title: _getLanguageDisplayName(AppLocale.en)),
             DialogOption(value: AppLocale.vi, title: _getLanguageDisplayName(AppLocale.vi)),
+            DialogOption(value: AppLocale.en, title: _getLanguageDisplayName(AppLocale.en)),
           ],
           currentValue: LocaleSettings.currentLocale,
         );

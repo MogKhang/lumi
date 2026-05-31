@@ -46,6 +46,10 @@ class MediaCard extends StatefulWidget {
   final bool hideRating;
   final bool hideStudio;
 
+  /// Whether the long-press / right-click context menu is available.
+  /// Disabled on Collections and Playlists tabs.
+  final bool enableContextMenu;
+
   const MediaCard({
     super.key,
     required this.item,
@@ -64,6 +68,7 @@ class MediaCard extends StatefulWidget {
     this.hideContentRating = false,
     this.hideRating = false,
     this.hideStudio = false,
+    this.enableContextMenu = true,
   });
 
   @override
@@ -202,9 +207,9 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
             semanticLabel: semanticLabel,
             onTap: () => _handleTap(context),
             onTapDown: storeTapPosition,
-            onLongPress: showContextMenuFromTap,
+            onLongPress: widget.enableContextMenu ? showContextMenuFromTap : null,
             onSecondaryTapDown: storeTapPosition,
-            onSecondaryTap: showContextMenuFromTap,
+            onSecondaryTap: widget.enableContextMenu ? showContextMenuFromTap : null,
             density: SettingsService.instanceOrNull!.read(SettingsService.libraryDensity),
             isOffline: widget.isOffline,
             localPosterPath: localPosterPath,
@@ -244,9 +249,9 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
         canRequestFocus: false,
         onTap: () => _handleTap(context),
         onTapDown: storeTapPosition,
-        onLongPress: showContextMenuFromTap,
+        onLongPress: widget.enableContextMenu ? showContextMenuFromTap : null,
         onSecondaryTapDown: storeTapPosition,
-        onSecondaryTap: showContextMenuFromTap,
+        onSecondaryTap: widget.enableContextMenu ? showContextMenuFromTap : null,
         borderRadius: BorderRadius.circular(tokens(context).radiusSm),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(3, 3, 3, 1),
