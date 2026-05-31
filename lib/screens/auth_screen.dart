@@ -23,6 +23,7 @@ import '../media/media_backend.dart';
 import '../utils/navigation_transitions.dart';
 import '../widgets/backend_badge.dart';
 import '../widgets/dialog_action_button.dart';
+import '../widgets/language_flag_toggle.dart';
 import 'auth/plex_pin_auth_flow.dart';
 import 'main_screen.dart';
 import 'profile/profile_switch_screen.dart';
@@ -226,7 +227,9 @@ class _AuthScreenState extends State<AuthScreen> {
       canRequestFocus: false,
       onKeyEvent: (_, event) => handleBackKeyNavigation(context, event),
       child: Scaffold(
-        body: Center(
+        body: Stack(
+          children: [
+            Center(
           child: Container(
             constraints: BoxConstraints(maxWidth: isDesktop ? 800 : 400),
             padding: const EdgeInsets.all(24),
@@ -292,6 +295,18 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
           ),
+        ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: const LanguageFlagToggle(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
