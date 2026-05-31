@@ -146,7 +146,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get refresh => 'Refresh';
 	@override String get yes => 'Yes';
 	@override String get no => 'No';
-	@override String get delete => 'Delete';
+	@override String get delete => 'Xóa';
 	@override String get shuffle => 'Shuffle';
 	@override String get addTo => 'Add to...';
 	@override String get createNew => 'Tạo mới';
@@ -1140,24 +1140,24 @@ class _TranslationsPlaylistsVi extends TranslationsPlaylistsEn {
 	@override String get playlistName => 'Tên danh sách';
 	@override String get enterPlaylistName => 'Đặt tên danh sách';
 	@override String get delete => 'Delete Playlist';
-	@override String get removeItem => 'Remove from Playlist';
+	@override String get removeItem => 'Gỡ khỏi danh sách';
 	@override String get smartPlaylist => 'Smart Playlist';
 	@override String itemCount({required Object count}) => '${count} items';
 	@override String get oneItem => '1 item';
-	@override String get emptyPlaylist => 'This playlist is empty';
-	@override String get deleteConfirm => 'Delete Playlist?';
-	@override String deleteMessage({required Object name}) => 'Are you sure you want to delete "${name}"?';
+	@override String get emptyPlaylist => 'Danh sách trống';
+	@override String get deleteConfirm => 'Xóa danh sách?';
+	@override String deleteMessage({required Object name}) => 'Bạn muốn xóa danh sách "${name}"?';
 	@override String get created => 'Tạo danh sách thành công';
-	@override String get deleted => 'Playlist deleted';
+	@override String get deleted => 'Đã xóa danh sách';
 	@override String get itemAdded => 'Added to playlist';
-	@override String get itemRemoved => 'Removed from playlist';
+	@override String get itemRemoved => 'Đã gỡ khỏi danh sách';
 	@override String get selectPlaylist => 'Select Playlist';
-	@override String get errorCreating => 'Failed to create playlist';
-	@override String get errorDeleting => 'Failed to delete playlist';
-	@override String get errorLoading => 'Failed to load playlists';
-	@override String get errorAdding => 'Failed to add to playlist';
-	@override String get errorReordering => 'Failed to reorder playlist item';
-	@override String get errorRemoving => 'Failed to remove from playlist';
+	@override String get errorCreating => 'Lỗi không thể tạo danh sách';
+	@override String get errorDeleting => 'Lỗi không thể xóa danh sách';
+	@override String get errorLoading => 'Lỗi không thể tải danh sách';
+	@override String get errorAdding => 'Lỗi không thể thêm danh sách';
+	@override String get errorReordering => 'Lỗi không thể sắp xếp danh sách';
+	@override String get errorRemoving => 'Lỗi không thể gỡ khỏi danh sách';
 }
 
 // Path: watchTogether
@@ -2079,7 +2079,7 @@ extension on TranslationsVi {
 			'common.refresh' => 'Refresh',
 			'common.yes' => 'Yes',
 			'common.no' => 'No',
-			'common.delete' => 'Delete',
+			'common.delete' => 'Xóa',
 			'common.shuffle' => 'Shuffle',
 			'common.addTo' => 'Add to...',
 			'common.createNew' => 'Tạo mới',
@@ -2863,24 +2863,24 @@ extension on TranslationsVi {
 			'playlists.playlistName' => 'Tên danh sách',
 			'playlists.enterPlaylistName' => 'Đặt tên danh sách',
 			'playlists.delete' => 'Delete Playlist',
-			'playlists.removeItem' => 'Remove from Playlist',
+			'playlists.removeItem' => 'Gỡ khỏi danh sách',
 			'playlists.smartPlaylist' => 'Smart Playlist',
 			'playlists.itemCount' => ({required Object count}) => '${count} items',
 			'playlists.oneItem' => '1 item',
-			'playlists.emptyPlaylist' => 'This playlist is empty',
-			'playlists.deleteConfirm' => 'Delete Playlist?',
-			'playlists.deleteMessage' => ({required Object name}) => 'Are you sure you want to delete "${name}"?',
+			'playlists.emptyPlaylist' => 'Danh sách trống',
+			'playlists.deleteConfirm' => 'Xóa danh sách?',
+			'playlists.deleteMessage' => ({required Object name}) => 'Bạn muốn xóa danh sách "${name}"?',
 			'playlists.created' => 'Tạo danh sách thành công',
-			'playlists.deleted' => 'Playlist deleted',
+			'playlists.deleted' => 'Đã xóa danh sách',
 			'playlists.itemAdded' => 'Added to playlist',
-			'playlists.itemRemoved' => 'Removed from playlist',
+			'playlists.itemRemoved' => 'Đã gỡ khỏi danh sách',
 			'playlists.selectPlaylist' => 'Select Playlist',
-			'playlists.errorCreating' => 'Failed to create playlist',
-			'playlists.errorDeleting' => 'Failed to delete playlist',
-			'playlists.errorLoading' => 'Failed to load playlists',
-			'playlists.errorAdding' => 'Failed to add to playlist',
-			'playlists.errorReordering' => 'Failed to reorder playlist item',
-			'playlists.errorRemoving' => 'Failed to remove from playlist',
+			'playlists.errorCreating' => 'Lỗi không thể tạo danh sách',
+			'playlists.errorDeleting' => 'Lỗi không thể xóa danh sách',
+			'playlists.errorLoading' => 'Lỗi không thể tải danh sách',
+			'playlists.errorAdding' => 'Lỗi không thể thêm danh sách',
+			'playlists.errorReordering' => 'Lỗi không thể sắp xếp danh sách',
+			'playlists.errorRemoving' => 'Lỗi không thể gỡ khỏi danh sách',
 			'watchTogether.title' => 'Watch Together',
 			'watchTogether.description' => 'Watch content in sync with friends and family',
 			'watchTogether.createSession' => 'Create Session',
