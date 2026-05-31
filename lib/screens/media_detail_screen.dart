@@ -38,6 +38,7 @@ import '../media/media_server_client.dart';
 import '../services/media_list_playback_launcher.dart';
 import '../services/offline_watch_sync_service.dart';
 import '../utils/content_utils.dart';
+import '../utils/genre_assets.dart';
 import '../utils/rating_utils.dart';
 import '../models/download_models.dart';
 import '../services/download_storage_service.dart';
@@ -2517,7 +2518,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      genre,
+                      translatedGenreName(genre),
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                         letterSpacing: 0.5,

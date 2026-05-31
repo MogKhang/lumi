@@ -132,7 +132,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 
 	// Translations
 	@override String get cancel => 'Hủy';
-	@override String get save => 'Save';
+	@override String get save => 'Lưu';
 	@override String get ok => 'OK';
 	@override String get close => 'Close';
 	@override String get clear => 'Thiết lập lại';
@@ -149,7 +149,7 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get delete => 'Delete';
 	@override String get shuffle => 'Shuffle';
 	@override String get addTo => 'Add to...';
-	@override String get createNew => 'Create new';
+	@override String get createNew => 'Tạo mới';
 	@override String get connect => 'Connect';
 	@override String get disconnect => 'Disconnect';
 	@override String get play => 'Play';
@@ -1136,9 +1136,9 @@ class _TranslationsPlaylistsVi extends TranslationsPlaylistsEn {
 	@override String get title => 'Playlists';
 	@override String get playlist => 'Playlist';
 	@override String get noPlaylists => 'Chưa có danh sách';
-	@override String get create => 'Create Playlist';
-	@override String get playlistName => 'Playlist Name';
-	@override String get enterPlaylistName => 'Enter playlist name';
+	@override String get create => 'Tạo danh sách';
+	@override String get playlistName => 'Tên danh sách';
+	@override String get enterPlaylistName => 'Đặt tên danh sách';
 	@override String get delete => 'Delete Playlist';
 	@override String get removeItem => 'Remove from Playlist';
 	@override String get smartPlaylist => 'Smart Playlist';
@@ -1147,7 +1147,7 @@ class _TranslationsPlaylistsVi extends TranslationsPlaylistsEn {
 	@override String get emptyPlaylist => 'This playlist is empty';
 	@override String get deleteConfirm => 'Delete Playlist?';
 	@override String deleteMessage({required Object name}) => 'Are you sure you want to delete "${name}"?';
-	@override String get created => 'Playlist created';
+	@override String get created => 'Tạo danh sách thành công';
 	@override String get deleted => 'Playlist deleted';
 	@override String get itemAdded => 'Added to playlist';
 	@override String get itemRemoved => 'Removed from playlist';
@@ -2065,7 +2065,7 @@ extension on TranslationsVi {
 			'auth.quickConnectCancel' => 'Hủy',
 			'auth.quickConnectExpired' => 'Quick Connect code expired before approval. Please try again.',
 			'common.cancel' => 'Hủy',
-			'common.save' => 'Save',
+			'common.save' => 'Lưu',
 			'common.ok' => 'OK',
 			'common.close' => 'Close',
 			'common.clear' => 'Thiết lập lại',
@@ -2082,7 +2082,7 @@ extension on TranslationsVi {
 			'common.delete' => 'Delete',
 			'common.shuffle' => 'Shuffle',
 			'common.addTo' => 'Add to...',
-			'common.createNew' => 'Create new',
+			'common.createNew' => 'Tạo mới',
 			'common.connect' => 'Connect',
 			'common.disconnect' => 'Disconnect',
 			'common.play' => 'Play',
@@ -2859,9 +2859,9 @@ extension on TranslationsVi {
 			'playlists.title' => 'Playlists',
 			'playlists.playlist' => 'Playlist',
 			'playlists.noPlaylists' => 'Chưa có danh sách',
-			'playlists.create' => 'Create Playlist',
-			'playlists.playlistName' => 'Playlist Name',
-			'playlists.enterPlaylistName' => 'Enter playlist name',
+			'playlists.create' => 'Tạo danh sách',
+			'playlists.playlistName' => 'Tên danh sách',
+			'playlists.enterPlaylistName' => 'Đặt tên danh sách',
 			'playlists.delete' => 'Delete Playlist',
 			'playlists.removeItem' => 'Remove from Playlist',
 			'playlists.smartPlaylist' => 'Smart Playlist',
@@ -2870,7 +2870,7 @@ extension on TranslationsVi {
 			'playlists.emptyPlaylist' => 'This playlist is empty',
 			'playlists.deleteConfirm' => 'Delete Playlist?',
 			'playlists.deleteMessage' => ({required Object name}) => 'Are you sure you want to delete "${name}"?',
-			'playlists.created' => 'Playlist created',
+			'playlists.created' => 'Tạo danh sách thành công',
 			'playlists.deleted' => 'Playlist deleted',
 			'playlists.itemAdded' => 'Added to playlist',
 			'playlists.itemRemoved' => 'Removed from playlist',
