@@ -15,6 +15,8 @@ class FocusableSlider extends StatefulWidget {
   final Color? inactiveColor;
   final FocusNode? focusNode;
   final bool autofocus;
+  final double? step;
+  final bool blockSelectKey;
 
   const FocusableSlider({
     super.key,
@@ -28,6 +30,8 @@ class FocusableSlider extends StatefulWidget {
     this.inactiveColor,
     this.focusNode,
     this.autofocus = false,
+    this.step,
+    this.blockSelectKey = true,
   });
 
   @override
@@ -38,6 +42,9 @@ class _FocusableSliderState extends State<FocusableSlider> {
   bool _isFocused = false;
 
   double get _step {
+    if (widget.step != null) {
+      return widget.step!;
+    }
     if (widget.divisions != null && widget.divisions! > 0) {
       return (widget.max - widget.min) / widget.divisions!;
     }
@@ -54,6 +61,12 @@ class _FocusableSliderState extends State<FocusableSlider> {
         widget.onChangeEnd?.call(newValue);
       }
       return KeyEventResult.handled;
+    }
+    if (key.isSelectKey) {
+      if (widget.blockSelectKey) {
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
     }
     return KeyEventResult.ignored;
   }

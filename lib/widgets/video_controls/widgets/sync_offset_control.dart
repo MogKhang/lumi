@@ -258,6 +258,8 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
                 min: _sliderMin,
                 max: _sliderMax,
                 divisions: _sliderDivisions,
+                step: 100.0,
+                blockSelectKey: false,
                 activeColor: Theme.of(context).colorScheme.primary,
                 inactiveColor: Theme.of(context).colorScheme.outlineVariant,
                 onChanged: (value) {
@@ -351,6 +353,7 @@ class _SyncOffsetControlState extends State<SyncOffsetControl> {
                   min: _sliderMin,
                   max: _sliderMax,
                   divisions: _sliderDivisions,
+                  step: 100.0,
                   activeColor: Theme.of(context).colorScheme.primary,
                   inactiveColor: Theme.of(context).colorScheme.outlineVariant,
                   onChanged: (value) {
