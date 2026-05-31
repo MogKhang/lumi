@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../focus/focusable_action_bar.dart';
 import '../../media/media_item.dart';
-import '../../media/media_kind.dart';
 import '../../media/media_playlist.dart';
 import '../../services/media_list_playback_launcher.dart';
 import '../../services/playlist_items_loader.dart';
@@ -69,17 +68,6 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
     final hasRule = isVideoPlaylist && context.select<DownloadProvider, bool>((p) => p.hasSyncRule(ruleKey));
 
     return [
-      if (items.isNotEmpty) ...[
-        FocusableAction(icon: Symbols.play_arrow_rounded, tooltip: t.common.play, onPressed: playItems),
-        FocusableAction(icon: Symbols.shuffle_rounded, tooltip: t.common.shuffle, onPressed: shufflePlayItems),
-      ],
-      if (!PlatformDetector.isAppleTV() && isVideoPlaylist && (items.isNotEmpty || hasRule))
-        FocusableAction(
-          icon: hasRule ? Symbols.sync_rounded : Symbols.download_rounded,
-          tooltip: hasRule ? t.downloads.manageSyncRule : t.downloads.downloadNow,
-          onPressed: hasRule ? _managePlaylistSyncRule : _downloadPlaylist,
-          iconColor: hasRule ? Colors.teal : null,
-        ),
       if (!PlatformDetector.isAppleTV() && hasRule)
         FocusableAction(
           icon: Symbols.sync_disabled_rounded,
@@ -100,25 +88,10 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
     ];
   }
 
-  /// Synthesise a [MediaItem] view of the current playlist for the
-  /// download_utils helpers.
-  MediaItem _playlistAsMetadata() => MediaItem(
-    id: widget.playlist.id,
-    backend: widget.playlist.backend,
-    kind: MediaKind.playlist,
-    title: widget.playlist.title,
-    thumbPath: widget.playlist.thumbPath,
-    serverId: widget.playlist.serverId ?? mediaClient.serverId,
-    serverName: widget.playlist.serverName,
-  );
-
   String _playlistSyncRuleKey() {
     final serverId = widget.playlist.serverId ?? mediaClient.serverId;
     return context.read<DownloadProvider>().syncRuleKeyForClient(mediaClient, widget.playlist.id, serverId: serverId);
   }
-
-  Future<void> _managePlaylistSyncRule() =>
-      manageSyncRule(context, downloadProvider: context.read<DownloadProvider>(), globalKey: _playlistSyncRuleKey());
 
   Future<void> _removePlaylistSyncRule() => removeSyncRuleAndSnack(
     context,
@@ -195,31 +168,6 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
         isAppBarFocused = false;
       });
       _listFocusNode.requestFocus();
-    }
-  }
-
-  Future<void> _downloadPlaylist() async {
-    final downloadProvider = Provider.of<DownloadProvider>(context, listen: false);
-
-    try {
-      final result = await showPlaylistDownloadOptionsAndQueue(
-        context,
-        playlistMetadata: _playlistAsMetadata(),
-        items: items,
-        client: mediaClient,
-        downloadProvider: downloadProvider,
-      );
-      if (result == null || !mounted) return;
-
-      showSuccessSnackBar(context, result.toSnackBarMessage());
-    } on CellularDownloadBlockedException {
-      if (mounted) {
-        showErrorSnackBar(context, t.settings.cellularDownloadBlocked);
-      }
-    } catch (e) {
-      if (mounted) {
-        showErrorSnackBar(context, t.messages.errorLoading(error: e.toString()));
-      }
     }
   }
 
