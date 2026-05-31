@@ -113,7 +113,7 @@ class _TranslationsAuthVi extends TranslationsAuthEn {
 	@override String get authenticationTimeout => 'Phiên xác thực đã quá hạn. Hãy thử lại.';
 	@override String get scanQRToSignIn => 'Quét mã QR này để đăng nhập';
 	@override String get waitingForAuth => 'Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.';
-	@override String get useBrowser => 'Use browser';
+	@override String get useBrowser => 'Đăng nhập bằng trình duyệt web';
 	@override String get or => 'or';
 	@override String get connectToJellyfin => 'Connect to Jellyfin';
 	@override String get useQuickConnect => 'Use Quick Connect';
@@ -2055,7 +2055,7 @@ extension on TranslationsVi {
 			'auth.authenticationTimeout' => 'Phiên xác thực đã quá hạn. Hãy thử lại.',
 			'auth.scanQRToSignIn' => 'Quét mã QR này để đăng nhập',
 			'auth.waitingForAuth' => 'Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.',
-			'auth.useBrowser' => 'Use browser',
+			'auth.useBrowser' => 'Đăng nhập bằng trình duyệt web',
 			'auth.or' => 'or',
 			'auth.connectToJellyfin' => 'Connect to Jellyfin',
 			'auth.useQuickConnect' => 'Use Quick Connect',

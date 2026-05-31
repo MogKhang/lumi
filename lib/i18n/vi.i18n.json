@@ -11,7 +11,7 @@
     "authenticationTimeout": "Phiên xác thực đã quá hạn. Hãy thử lại.",
     "scanQRToSignIn": "Quét mã QR này để đăng nhập",
     "waitingForAuth": "Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.",
-    "useBrowser": "Use browser",
+    "useBrowser": "Đăng nhập bằng trình duyệt web",
     "or": "or",
     "connectToJellyfin": "Connect to Jellyfin",
     "useQuickConnect": "Use Quick Connect",
