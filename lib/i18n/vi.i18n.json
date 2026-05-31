@@ -7,7 +7,7 @@
     "signIn": "Sign in",
     "signInWithPlex": "Đăng nhập tài khoản Plex",
     "showQRCode": "Quét mã QR",
-    "authenticate": "Authenticate",
+    "authenticate": "Xác thực",
     "authenticationTimeout": "Phiên xác thực đã quá hạn. Hãy thử lại.",
     "scanQRToSignIn": "Quét mã QR này để đăng nhập",
     "waitingForAuth": "Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.",

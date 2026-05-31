@@ -38,6 +38,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  Translations get t => context.t;
   bool _isAuthenticating = false;
   String? _errorMessage;
   // Reuse a one-shot service for the debug-token verify path; the Plex

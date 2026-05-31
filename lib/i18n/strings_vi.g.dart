@@ -109,7 +109,7 @@ class _TranslationsAuthVi extends TranslationsAuthEn {
 	@override String get signIn => 'Sign in';
 	@override String get signInWithPlex => 'Đăng nhập tài khoản Plex';
 	@override String get showQRCode => 'Quét mã QR';
-	@override String get authenticate => 'Authenticate';
+	@override String get authenticate => 'Xác thực';
 	@override String get authenticationTimeout => 'Phiên xác thực đã quá hạn. Hãy thử lại.';
 	@override String get scanQRToSignIn => 'Quét mã QR này để đăng nhập';
 	@override String get waitingForAuth => 'Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.';
@@ -2051,7 +2051,7 @@ extension on TranslationsVi {
 			'auth.signIn' => 'Sign in',
 			'auth.signInWithPlex' => 'Đăng nhập tài khoản Plex',
 			'auth.showQRCode' => 'Quét mã QR',
-			'auth.authenticate' => 'Authenticate',
+			'auth.authenticate' => 'Xác thực',
 			'auth.authenticationTimeout' => 'Phiên xác thực đã quá hạn. Hãy thử lại.',
 			'auth.scanQRToSignIn' => 'Quét mã QR này để đăng nhập',
 			'auth.waitingForAuth' => 'Đang xác thực...\nHãy thực hiện đăng nhập qua trang web.',

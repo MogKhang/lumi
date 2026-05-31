@@ -5,12 +5,6 @@ import 'package:flutter/material.dart';
 import '../i18n/strings.g.dart';
 import '../services/settings_service.dart';
 
-/// A compact two-flag language switcher: Vietnamese (left) and English (right).
-///
-/// The active locale's flag is highlighted; the inactive one is greyed out.
-/// Tapping a flag switches the app locale instantly via [LocaleSettings] (the
-/// app-wide [TranslationProvider] rebuilds the whole tree, so no restart is
-/// needed) and persists the choice to [SettingsService].
 class LanguageFlagToggle extends StatefulWidget {
   const LanguageFlagToggle({super.key});
 
@@ -32,104 +26,195 @@ class _LanguageFlagToggleState extends State<LanguageFlagToggle> {
   Widget build(BuildContext context) {
     final current = LocaleSettings.currentLocale;
     final isVi = current == AppLocale.vi;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final trackColor = isDark
+        ? const Color(0xFF3B3B4F) // Brighter premium dark/violet-grey for dark mode
+        : const Color(0xFFE2E2EC); // Crisp light grey-blue for light mode
+
+    final sliderColor = isDark
+        ? const Color(0xFFFFFFFF) // White in Dark mode
+        : const Color(0xFF000000); // Black in Light mode
+
+    return AnimatedToggle(
+      initialPosition: isVi,
+      onToggleCallback: (value) {
+        final nextLocale = value == 0 ? AppLocale.vi : AppLocale.en;
+        _select(nextLocale);
+      },
+      buttonColor: sliderColor,
+      backgroundColor: trackColor,
+      widgets: const [
+        _VietnamFlag(),
+        _UkFlag(),
+      ],
+    );
+  }
+}
+
+class AnimatedToggle extends StatefulWidget {
+  final List<Widget> widgets;
+  final ValueChanged<int> onToggleCallback;
+  final Color backgroundColor;
+  final Color buttonColor;
+  final bool initialPosition;
+
+  const AnimatedToggle({
+    super.key,
+    required this.widgets,
+    required this.onToggleCallback,
+    required this.initialPosition,
+    this.backgroundColor = const Color(0xFF2C2C3E),
+    this.buttonColor = const Color(0xFFEC609B),
+  });
+
+  @override
+  State<AnimatedToggle> createState() => _AnimatedToggleState();
+}
+
+class _AnimatedToggleState extends State<AnimatedToggle> {
+  late bool initialPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    initialPosition = widget.initialPosition;
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedToggle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialPosition != widget.initialPosition) {
+      initialPosition = widget.initialPosition;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Compact, nice and neat size configuration
+    const double trackWidth = 80.0;
+    const double trackHeight = 36.0;
+    const double slideSize = 32.0;
+    const double flagSize = 20.0;
+    const double paddingSize = 2.0;
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      width: 88,
-      height: 40,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E1E2C).withValues(alpha: 0.6), // Premium dark theme matching background
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.12),
-          width: 1.5,
-        ),
-      ),
+      width: trackWidth,
+      height: trackHeight,
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Stack(
-        children: [
-          // Smooth sliding indicator pill
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeInOut,
-            left: isVi ? 3 : 45,
-            top: 3,
+        children: <Widget>[
+          // Interactive background track
+          GestureDetector(
+            onTap: () {
+              initialPosition = !initialPosition;
+              final index = initialPosition ? 0 : 1;
+              widget.onToggleCallback(index);
+              setState(() {});
+            },
             child: Container(
-              width: 38,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFEC609B), // App brand tagline pink
-                    Color(0xFFC8457D),
-                  ],
+              width: trackWidth,
+              height: trackHeight,
+              decoration: ShapeDecoration(
+                color: widget.backgroundColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(trackHeight / 2),
+                  side: BorderSide(
+                    color: isDark 
+                        ? Colors.white.withValues(alpha: 0.12)
+                        : Colors.black.withValues(alpha: 0.08),
+                    width: 1.0,
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFEC609B).withValues(alpha: 0.3),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
+              ),
+              child: Stack(
+                children: [
+                  // Left background flag slot (OFF position, Vietnamese flag)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(paddingSize),
+                      child: Container(
+                        width: slideSize,
+                        height: slideSize,
+                        alignment: Alignment.center,
+                        child: Opacity(
+                          opacity: 0.45, // Brighter flag visibility
+                          child: SizedBox(
+                            width: flagSize,
+                            height: flagSize,
+                            child: ClipOval(child: widget.widgets[0]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Right background flag slot (ON position, UK flag)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(paddingSize),
+                      child: Container(
+                        width: slideSize,
+                        height: slideSize,
+                        alignment: Alignment.center,
+                        child: Opacity(
+                          opacity: 0.45, // Brighter flag visibility
+                          child: SizedBox(
+                            width: flagSize,
+                            height: flagSize,
+                            child: ClipOval(child: widget.widgets[1]),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          // Clickable flag overlay zones
-          Row(
-            children: [
-              Expanded(
-                child: Semantics(
-                  label: 'Tiếng Việt',
-                  button: true,
-                  selected: isVi,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => _select(AppLocale.vi),
-                    child: Center(
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: isVi ? 1.0 : 0.5,
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: const ClipOval(child: _VietnamFlag()),
-                        ),
-                      ),
+          // Seamless animated active flag selector (ON/OFF)
+          AnimatedAlign(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.decelerate,
+            alignment:
+                initialPosition ? Alignment.centerLeft : Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.all(paddingSize),
+              child: Container(
+                width: slideSize,
+                height: slideSize,
+                decoration: ShapeDecoration(
+                  color: widget.buttonColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(slideSize / 2),
+                  ),
+                  shadows: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.15),
+                      blurRadius: 6,
+                      offset: const Offset(0, 1.5),
                     ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: flagSize,
+                  height: flagSize,
+                  child: ClipOval(
+                    child: initialPosition ? widget.widgets[0] : widget.widgets[1],
                   ),
                 ),
               ),
-              Expanded(
-                child: Semantics(
-                  label: 'English',
-                  button: true,
-                  selected: !isVi,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => _select(AppLocale.en),
-                    child: Center(
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: !isVi ? 1.0 : 0.5,
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: const ClipOval(child: _UkFlag()),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 }
-
 
 /// Vietnam flag: red field with a centered yellow five-pointed star.
 class _VietnamFlag extends StatelessWidget {

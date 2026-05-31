@@ -175,8 +175,6 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         return 'English';
       case AppLocale.vi:
         return 'Tiếng Việt';
-      default:
-        return locale.languageCode;
     }
   }
 

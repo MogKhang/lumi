@@ -70,6 +70,7 @@ class PlexPinAuthFlow extends StatefulWidget {
 }
 
 class _PlexPinAuthFlowState extends State<PlexPinAuthFlow> {
+  Translations get t => context.t;
   PlexAuthService? _authService;
   bool _isPolling = false;
   bool _useQr = false;
