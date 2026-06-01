@@ -19,9 +19,11 @@ class KeyboardShortcutsScreen extends StatelessWidget {
       listenable: keyboardService,
       builder: (context, _) {
         final hotkeys = keyboardService.hotkeys;
-        final actions = hotkeys.keys.toList();
+        // shader_toggle and skip_marker are excluded from the UI.
+        const hiddenActions = {'shader_toggle', 'skip_marker'};
+        final actions = hotkeys.keys.where((a) => !hiddenActions.contains(a)).toList();
         return FocusedScrollScaffold(
-          title: Text(t.settings.keyboardShortcuts),
+          title: Text(t.settings.videoPlayerControls),
           slivers: [
             SliverToBoxAdapter(
               child: Padding(

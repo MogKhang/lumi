@@ -231,8 +231,6 @@ Map<String, HotKey> _defaultKeyboardHotkeys() => {
   'speed_reset': const HotKey(key: PhysicalKeyboardKey.keyR),
   'sub_seek_next': const HotKey(key: PhysicalKeyboardKey.arrowRight, modifiers: [HotKeyModifier.control]),
   'sub_seek_prev': const HotKey(key: PhysicalKeyboardKey.arrowLeft, modifiers: [HotKeyModifier.control]),
-  'shader_toggle': const HotKey(key: PhysicalKeyboardKey.keyG),
-  'skip_marker': const HotKey(key: PhysicalKeyboardKey.enter),
 };
 
 Map<String, String> _decodeKeyboardShortcuts(dynamic raw) {

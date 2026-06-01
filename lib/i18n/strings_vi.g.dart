@@ -1061,7 +1061,7 @@ class _TranslationsGenresVi extends TranslationsGenresEn {
 	@override String get title => 'Thể loại';
 	@override String get empty => 'Không tìm thấy thể loại nào';
 	@override Map<String, String> get names => {
-		'18+': '18+',
+		'18+': 'Cấp 3',
 		'90s': 'Tuổi thơ',
 		'Action': 'Hành động',
 		'Adventure': 'Phiêu lưu',
@@ -2803,7 +2803,7 @@ extension on TranslationsVi {
 			'liveTv.recordShow' => 'Record show',
 			'genres.title' => 'Thể loại',
 			'genres.empty' => 'Không tìm thấy thể loại nào',
-			'genres.names.18+' => '18+',
+			'genres.names.18+' => 'Cấp 3',
 			'genres.names.90s' => 'Tuổi thơ',
 			'genres.names.Action' => 'Hành động',
 			'genres.names.Adventure' => 'Phiêu lưu',

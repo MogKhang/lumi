@@ -1210,7 +1210,7 @@ class _MainScreenState extends State<MainScreen>
       return SettingValueBuilder<bool>(
         pref: SettingsService.alwaysKeepSidebarOpen,
         builder: (context, alwaysKeepOpen, _) {
-          final alwaysExpanded = alwaysKeepOpen || PlatformDetector.isTV();
+          final alwaysExpanded = alwaysKeepOpen || PlatformDetector.isTV() || Platform.isWindows;
           final contentLeftPadding = alwaysExpanded
               ? SideNavigationRailState.expandedWidth
               : SideNavigationRailState.collapsedWidth;

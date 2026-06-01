@@ -23,7 +23,6 @@ import '../../services/keyboard_shortcuts_service.dart';
 import '../../services/settings_service.dart' as settings;
 import '../../widgets/desktop_app_bar.dart';
 import '../../widgets/setting_tile.dart';
-import '../../widgets/settings_section.dart';
 import '../../profiles/active_profile_provider.dart';
 import '../../profiles/profile.dart';
 import '../../utils/platform_detector.dart';
@@ -136,8 +135,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                       if (PlatformDetector.isAndroid(context)) _buildPlayerBackendTile(),
                       _buildDefaultQualityTile(),
                       _buildProfileSwitcherTile(),
-                      if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
                       _buildSwitchServerTile(),
+                      if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
                       _buildLogoutTile(),
                     ]),
                   ),
@@ -286,7 +285,6 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SettingsSectionHeader(t.settings.keyboardShortcuts),
         SettingNavigationTile(
           icon: Symbols.keyboard_rounded,
           title: t.settings.videoPlayerControls,
