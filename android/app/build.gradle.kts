@@ -1,6 +1,18 @@
 import java.io.FileInputStream
 import java.util.Properties
 
+// Read version from pubspec.yaml — single source of truth.
+// Format: "version: X.Y.Z+N"  →  versionName="X.Y.Z", versionCode=N
+fun pubspecVersion(): Pair<String, Int> {
+  val pubspec = rootProject.file("../pubspec.yaml")
+  val line = pubspec.readLines().first { it.trimStart().startsWith("version:") }
+  val raw = line.substringAfter("version:").trim()
+  val name = raw.substringBefore("+")
+  val code = raw.substringAfter("+", "0").toIntOrNull() ?: 0
+  return name to code
+}
+val (pubspecVersionName, pubspecVersionCode) = pubspecVersion()
+
 plugins {
   id("com.android.application")
   id("kotlin-android")
@@ -92,8 +104,8 @@ android {
     // For more information, see: https://flutter.dev/to/review-gradle-config.
     minSdk = 25 // Fire OS 6.x (API 25); overrides libmpv-android's minSdk=26
     targetSdk = flutter.targetSdkVersion
-    versionCode = flutter.versionCode
-    versionName = flutter.versionName
+    versionCode = pubspecVersionCode
+    versionName = pubspecVersionName
 
     externalNativeBuild {
       cmake {
@@ -105,7 +117,7 @@ android {
     }
 
     if (System.getenv("AMAZON") != null) {
-      versionCode = (flutter.versionCode ?: 0) + 3000
+      versionCode = pubspecVersionCode + 3000
       ndk {
         abiFilters += listOf("armeabi-v7a", "arm64-v8a")
       }
