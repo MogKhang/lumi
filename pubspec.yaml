@@ -1,7 +1,7 @@
 name: lumi
 description: "A beautiful Plex client for Flutter"
 publish_to: "none"
-version: 2.0.0+82
+version: 2.1.0+83
 
 environment:
   sdk: ">=3.10.7 <4.0.0"
