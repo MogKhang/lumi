@@ -51,6 +51,12 @@ sealed class Connection {
   /// profile/account name; Jellyfin shows the server name.
   String get displayLabel;
 
+  /// The raw account username for this connection, without any active
+  /// Home-user prefix. Plex: the plex.tv account username/email captured at
+  /// sign-in; Jellyfin: the server user name. Used where we want to show the
+  /// account identity itself rather than the switched-into profile.
+  String get accountName;
+
   /// Secondary line shown beneath [displayLabel] in connection-list UIs.
   /// Plex: server count; Jellyfin: `userName · baseUrl`. May be null when
   /// no useful subtitle exists.
@@ -119,6 +125,9 @@ class PlexAccountConnection extends Connection {
 
   @override
   String get displayLabel => displayName;
+
+  @override
+  String get accountName => accountLabel;
 
   @override
   String? get displaySubtitle => servers.length == 1 ? '1 Plex server' : '${servers.length} Plex servers';
@@ -250,6 +259,9 @@ class JellyfinConnection extends Connection {
 
   @override
   String get displayLabel => serverName;
+
+  @override
+  String get accountName => userName;
 
   @override
   String? get displaySubtitle => '$userName · ${_truncateUrl(baseUrl)}';

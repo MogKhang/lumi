@@ -356,7 +356,7 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
       final parentId = profile.parentConnectionId;
       if (parentId != null) {
         final conn = view.connectionsById[parentId];
-        if (conn != null) chips.add(_ChipData(backend: conn.backend, label: conn.displayLabel));
+        if (conn != null) chips.add(_ChipData(backend: conn.backend, label: conn.accountName));
       }
     }
     final pcs = visibleProfileConnections(
@@ -365,7 +365,7 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
     );
     for (final pc in pcs) {
       final conn = view.connectionsById[pc.connectionId];
-      if (conn != null) chips.add(_ChipData(backend: conn.backend, label: conn.displayLabel));
+      if (conn != null) chips.add(_ChipData(backend: conn.backend, label: conn.accountName));
     }
     return chips;
   }
