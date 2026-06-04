@@ -161,16 +161,18 @@ class MultiServerManager {
 
   /// Backend-neutral "may the current user download/sync offline from
   /// [serverId]?" probe used to gate the Downloads UI. Returns:
-  ///   - Plex: [PlexServer.canDownload] (`owned || allowSync`) — the
-  ///     server-side "Allow Downloads" sharing flag, with owners always
-  ///     allowed.
+  ///   - Plex: owner (`PlexServer.owned`) always allowed; friends gated on the
+  ///     per-token `allowSync` probed from the server's root MediaContainer
+  ///     ([PlexClient.serverAllowsSyncCached]). The resources list does not
+  ///     echo a friend's download grant, so we read it from the server itself.
   ///   - Jellyfin: `true` — Jellyfin has no per-friend sync flag, so offline
   ///     download stays available as before.
   ///   - Unknown server: `false`.
   bool canDownloadFromServer(String serverId) {
     final client = _clients[serverId];
     if (client is PlexClient) {
-      return _plexServers[serverId]?.canDownload == true;
+      if (_plexServers[serverId]?.owned == true) return true;
+      return client.serverAllowsSyncCached;
     }
     if (client is JellyfinClient) {
       return true;
@@ -181,6 +183,22 @@ class MultiServerManager {
   /// True when the current user may download from at least one connected,
   /// online server. Drives the visibility of the Downloads entry in Settings.
   bool get canDownloadFromAnyServer => onlineServerIds.any(canDownloadFromServer);
+
+  /// Force the per-server `allowSync` probe for every online Plex server and
+  /// wait for all results. Owners are skipped (always allowed). Used by the
+  /// Settings/Downloads gate to ensure the cached value is populated before
+  /// it reads [canDownloadFromServer] — the post-connect warm-up is fire-and-
+  /// forget and may not have landed yet on a fresh launch.
+  Future<void> ensureDownloadPermissionsLoaded() async {
+    final probes = <Future<void>>[];
+    for (final serverId in onlineServerIds) {
+      final client = _clients[serverId];
+      if (client is PlexClient && _plexServers[serverId]?.owned != true) {
+        probes.add(client.serverAllowsSync());
+      }
+    }
+    if (probes.isNotEmpty) await Future.wait(probes);
+  }
 
   /// Get all online clients
   Map<String, MediaServerClient> get onlineClients {

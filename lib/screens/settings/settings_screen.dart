@@ -81,6 +81,15 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         setStateIfMounted(() => _keyboardService = s);
       });
     }
+    // Friends' download grant is probed from the server post-connect and may
+    // not have landed yet. Force it, then rebuild so the Downloads row appears
+    // for permitted regular users (not just owners).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<MultiServerProvider>().serverManager.ensureDownloadPermissionsLoaded().then((_) {
+        setStateIfMounted(() {});
+      });
+    });
   }
 
   @override

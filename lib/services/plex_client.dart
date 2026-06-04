@@ -173,6 +173,14 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
   /// playback).
   Future<bool>? _serverTranscoderPending;
 
+  /// Cached result of [serverAllowsSync] — the current token's per-server
+  /// "Allow Downloads" grant, read from the root MediaContainer's `allowSync`.
+  /// `null` = not yet fetched.
+  bool? _serverAllowSyncCached;
+
+  /// In-flight probe for [serverAllowsSync], used to dedupe concurrent callers.
+  Future<bool>? _serverAllowSyncPending;
+
   /// Libraries parsed from /media/providers (includes individually shared items)
   List<PlexLibraryDto> _providerLibraries = const [];
 
@@ -233,6 +241,9 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
     if (seedTranscoderVideoSupport == null) {
       unawaited(client.serverSupportsVideoTranscoding());
     }
+    // Warm the download-permission probe too so the Downloads UI gate has an
+    // answer ready without paying the probe cost on first paint.
+    unawaited(client.serverAllowsSync());
     return client;
   }
 
@@ -2480,6 +2491,39 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
       appLogger.w('Failed to query server transcoder capability', error: e);
       _serverTranscoderCached = true;
       return true;
+    }
+  }
+
+  /// Whether the current user may download/sync content from this server.
+  ///
+  /// Reads `allowSync` from the root MediaContainer — Plex reports this
+  /// per-token, so it reflects the friend's server-side "Allow Downloads"
+  /// grant (owners always get `1`). Result is cached for the lifetime of this
+  /// [PlexClient]. Fails **closed** (`false`) — unlike the transcoder probe,
+  /// guessing "allowed" here would surface a Download button that the server
+  /// then rejects.
+  Future<bool> serverAllowsSync() {
+    final cached = _serverAllowSyncCached;
+    if (cached != null) return Future.value(cached);
+    return _serverAllowSyncPending ??= _fetchAllowSyncCapability();
+  }
+
+  /// Synchronous view of the sync grant — returns the cached value, or `false`
+  /// (assume not allowed) until the post-connect warm-up lands. UI gates read
+  /// this; they re-render once the async probe completes.
+  bool get serverAllowsSyncCached => _serverAllowSyncCached ?? false;
+
+  Future<bool> _fetchAllowSyncCapability() async {
+    try {
+      final response = await _http.get('/', timeout: const Duration(seconds: 5));
+      final container = _getMediaContainer(response);
+      final allowed = flexibleBool(container?['allowSync']);
+      _serverAllowSyncCached = allowed;
+      return allowed;
+    } catch (e) {
+      appLogger.w('Failed to query server allowSync capability', error: e);
+      _serverAllowSyncCached = false;
+      return false;
     }
   }
 
