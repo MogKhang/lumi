@@ -117,16 +117,21 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
           ),
           if (minimal && (metadata.isMovie || metadata.isShow)) ...[
             const SizedBox(width: 12),
-            FilledButton.tonal(
-              onPressed: () => _showAddToPlaylistDialog(context, metadata),
-              style: actionButtonStyle(padding: const EdgeInsets.symmetric(horizontal: 16)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppIcon(Symbols.playlist_add_rounded, fill: 1, size: 20),
-                  SizedBox(width: 8),
-                  Text(t.mediaDetail.addToPlaylist),
-                ],
+            Focus(
+              skipTraversal: true,
+              onKeyEvent: _handleAddToPlaylistKeyEvent,
+              child: FilledButton.tonal(
+                focusNode: _addToPlaylistFocusNode,
+                onPressed: () => _showAddToPlaylistDialog(context, metadata),
+                style: actionButtonStyle(padding: const EdgeInsets.symmetric(horizontal: 16)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppIcon(Symbols.playlist_add_rounded, fill: 1, size: 20),
+                    SizedBox(width: 8),
+                    Text(t.mediaDetail.addToPlaylist),
+                  ],
+                ),
               ),
             ),
           ],

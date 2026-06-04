@@ -126,6 +126,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   final FocusNode _lastEpisodeFocusNode = FocusNode(debugLabel: 'last_episode');
 
   late final FocusNode _playButtonFocusNode;
+  late final FocusNode _addToPlaylistFocusNode;
   late final FocusNode _ratingChipFocusNode;
   Timer? _selectKeyTimer;
   bool _isSelectKeyDown = false;
@@ -441,6 +442,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     _scrollController.addListener(_onScroll);
     _extrasFocusNode = FocusNode(debugLabel: 'extras_row');
     _playButtonFocusNode = FocusNode(debugLabel: 'play_button');
+    _addToPlaylistFocusNode = FocusNode(debugLabel: 'add_to_playlist_button');
     _ratingChipFocusNode = FocusNode(debugLabel: 'rating_chip');
     _overviewFocusNode = FocusNode(debugLabel: 'overview');
     _castFocusNode = FocusNode(debugLabel: 'cast_row');
@@ -459,6 +461,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     _extrasScrollController.dispose();
     _extrasFocusNode.dispose();
     _playButtonFocusNode.dispose();
+    _addToPlaylistFocusNode.dispose();
     _ratingChipFocusNode.dispose();
     _overviewFocusNode.dispose();
     _castFocusNode.dispose();
@@ -1434,9 +1437,38 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   }
 
   /// Intercept DOWN from the play button row to focus the first available section
+  /// Key handling for the TV "Add to Playlist" button (right of Watch in the
+  /// minimal movie/show layout). LEFT returns to Watch; UP/DOWN reuse the play
+  /// button's vertical navigation so both buttons behave the same.
+  KeyEventResult _handleAddToPlaylistKeyEvent(FocusNode node, KeyEvent event) {
+    final key = event.logicalKey;
+    if (!event.isActionable) return KeyEventResult.ignored;
+
+    if (key.isLeftKey) {
+      _playButtonFocusNode.requestFocus();
+      return KeyEventResult.handled;
+    }
+    if (key.isUpKey || key.isDownKey) {
+      return _handlePlayButtonKeyEvent(node, event);
+    }
+    return KeyEventResult.ignored;
+  }
+
   KeyEventResult _handlePlayButtonKeyEvent(FocusNode _, KeyEvent event) {
     final key = event.logicalKey;
     if (!event.isActionable) return KeyEventResult.ignored;
+
+    final metadata = _fullMetadata ?? _metadata;
+
+    // RIGHT: move to the Add to Playlist button (TV minimal layout only — it
+    // sits to the right of Watch for movies/shows).
+    if (key.isRightKey) {
+      if ((metadata.isMovie || metadata.isShow) && !widget.isOffline) {
+        _addToPlaylistFocusNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    }
 
     // UP: focus the rating chip if available
     if (key.isUpKey) {
@@ -1448,8 +1480,6 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     }
 
     if (!key.isDownKey) return KeyEventResult.ignored;
-
-    final metadata = _fullMetadata ?? _metadata;
 
     // DOWN order: overview → seasons → cast → extras
     if (metadata.summary != null && metadata.summary!.isNotEmpty) {
