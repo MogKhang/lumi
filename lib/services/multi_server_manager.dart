@@ -159,6 +159,29 @@ class MultiServerManager {
     return false;
   }
 
+  /// Backend-neutral "may the current user download/sync offline from
+  /// [serverId]?" probe used to gate the Downloads UI. Returns:
+  ///   - Plex: [PlexServer.canDownload] (`owned || allowSync`) — the
+  ///     server-side "Allow Downloads" sharing flag, with owners always
+  ///     allowed.
+  ///   - Jellyfin: `true` — Jellyfin has no per-friend sync flag, so offline
+  ///     download stays available as before.
+  ///   - Unknown server: `false`.
+  bool canDownloadFromServer(String serverId) {
+    final client = _clients[serverId];
+    if (client is PlexClient) {
+      return _plexServers[serverId]?.canDownload == true;
+    }
+    if (client is JellyfinClient) {
+      return true;
+    }
+    return false;
+  }
+
+  /// True when the current user may download from at least one connected,
+  /// online server. Drives the visibility of the Downloads entry in Settings.
+  bool get canDownloadFromAnyServer => onlineServerIds.any(canDownloadFromServer);
+
   /// Get all online clients
   Map<String, MediaServerClient> get onlineClients {
     final result = <String, MediaServerClient>{};

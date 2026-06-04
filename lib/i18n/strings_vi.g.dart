@@ -153,8 +153,8 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get connect => 'Connect';
 	@override String get disconnect => 'Disconnect';
 	@override String get play => 'Play';
-	@override String get pause => 'Pause';
-	@override String get resume => 'Resume';
+	@override String get pause => 'Tạm ngưng';
+	@override String get resume => 'Tiếp tục';
 	@override String get error => 'Error';
 	@override String get search => 'Tìm kiếm';
 	@override String get home => 'Trang chủ';
@@ -362,7 +362,7 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get creditsPattern => 'Credits Marker Pattern';
 	@override String get creditsPatternDescription => 'Regex pattern to match credits markers in chapter titles';
 	@override String get invalidRegex => 'Invalid regular expression';
-	@override String get downloads => 'Downloads';
+	@override String get downloads => 'Tải về';
 	@override String get downloadLocationDescription => 'Choose where to store downloaded content';
 	@override String get downloadLocationDefault => 'Default (App Storage)';
 	@override String get downloadLocationCustom => 'Custom Location';
@@ -1236,27 +1236,27 @@ class _TranslationsDownloadsVi extends TranslationsDownloadsEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Downloads';
-	@override String get manage => 'Manage';
-	@override String get tvShows => 'TV Shows';
-	@override String get movies => 'Movies';
-	@override String get noDownloads => 'No downloads yet';
-	@override String get noDownloadsDescription => 'Downloaded content will appear here for offline viewing';
-	@override String get downloadNow => 'Download';
-	@override String get deleteDownload => 'Delete download';
-	@override String get retryDownload => 'Retry download';
-	@override String get downloadQueued => 'Download queued';
+	@override String get title => 'Tải về';
+	@override String get manage => 'Quản lý';
+	@override String get tvShows => 'Phim bộ';
+	@override String get movies => 'Phim lẻ';
+	@override String get noDownloads => 'Chưa có phim';
+	@override String get noDownloadsDescription => 'Phim đã tải về sẽ xuất hiện tại đây';
+	@override String get downloadNow => 'Tải về';
+	@override String get deleteDownload => 'Xóa tải về';
+	@override String get retryDownload => 'Tải lại';
+	@override String get downloadQueued => 'Đã thêm vào danh sách tải';
 	@override String get serverErrorBitrate => 'Server error — the file may exceed the remote streaming bitrate limit';
 	@override String episodesQueued({required Object count}) => '${count} episodes queued for download';
-	@override String get downloadDeleted => 'Download deleted';
-	@override String deleteConfirm({required Object title}) => 'Are you sure you want to delete "${title}"? This will remove the downloaded file from your device.';
-	@override String get deleting => 'Deleting...';
-	@override String deletingWithProgress({required Object title, required Object current, required Object total}) => 'Deleting ${title}... (${current} of ${total})';
-	@override String get queuedTooltip => 'Queued';
-	@override String queuedFilesTooltip({required Object files}) => 'Queued ${files}';
-	@override String get downloadingTooltip => 'Downloading...';
-	@override String downloadingFilesTooltip({required Object files}) => 'Downloading ${files}';
-	@override String get noDownloadsTree => 'No downloads';
+	@override String get downloadDeleted => 'Đã xóa';
+	@override String deleteConfirm({required Object title}) => 'Bạn có chắc muốn xóa "${title}"?';
+	@override String get deleting => 'Đang xóa...';
+	@override String deletingWithProgress({required Object title, required Object current, required Object total}) => 'Đang xóa ${title}... (${current} of ${total})';
+	@override String get queuedTooltip => 'Đang chờ';
+	@override String queuedFilesTooltip({required Object files}) => 'Đang chờ ${files}';
+	@override String get downloadingTooltip => 'Đang tải...';
+	@override String downloadingFilesTooltip({required Object files}) => 'Đang tải ${files}';
+	@override String get noDownloadsTree => 'Chưa có phim';
 	@override String get pauseAll => 'Pause all';
 	@override String get resumeAll => 'Resume all';
 	@override String get deleteAll => 'Delete all';
@@ -1270,15 +1270,15 @@ class _TranslationsDownloadsVi extends TranslationsDownloadsEn {
 	@override String get keepSynced => 'Keep synced';
 	@override String get downloadOnce => 'Download once';
 	@override String keepNUnwatched({required Object count}) => 'Keep ${count} unwatched';
-	@override String get editSyncRule => 'Edit sync rule';
-	@override String get removeSyncRule => 'Remove sync rule';
+	@override String get editSyncRule => 'Chỉnh sửa lệnh tải về';
+	@override String get removeSyncRule => 'Xóa lệnh tải về';
 	@override String removeSyncRuleConfirm({required Object title}) => 'Stop syncing "${title}"? Downloaded episodes will be kept.';
 	@override String syncRuleCreated({required Object count}) => 'Sync rule created — keeping ${count} unwatched episodes';
 	@override String get syncRuleUpdated => 'Sync rule updated';
 	@override String get syncRuleRemoved => 'Sync rule removed';
 	@override String syncedNewEpisodes({required Object count, required Object title}) => 'Synced ${count} new episodes for ${title}';
-	@override String get activeSyncRules => 'Sync rules';
-	@override String get noSyncRules => 'No sync rules';
+	@override String get activeSyncRules => 'Lệnh tải về';
+	@override String get noSyncRules => 'Chưa có lệnh tải về';
 	@override String get manageSyncRule => 'Manage sync';
 	@override String get editEpisodeCount => 'Episode count';
 	@override String get editSyncFilter => 'Sync filter';
@@ -2086,8 +2086,8 @@ extension on TranslationsVi {
 			'common.connect' => 'Connect',
 			'common.disconnect' => 'Disconnect',
 			'common.play' => 'Play',
-			'common.pause' => 'Pause',
-			'common.resume' => 'Resume',
+			'common.pause' => 'Tạm ngưng',
+			'common.resume' => 'Tiếp tục',
 			'common.error' => 'Error',
 			'common.search' => 'Tìm kiếm',
 			'common.home' => 'Trang chủ',
@@ -2259,7 +2259,7 @@ extension on TranslationsVi {
 			'settings.creditsPattern' => 'Credits Marker Pattern',
 			'settings.creditsPatternDescription' => 'Regex pattern to match credits markers in chapter titles',
 			'settings.invalidRegex' => 'Invalid regular expression',
-			'settings.downloads' => 'Downloads',
+			'settings.downloads' => 'Tải về',
 			'settings.downloadLocationDescription' => 'Choose where to store downloaded content',
 			'settings.downloadLocationDefault' => 'Default (App Storage)',
 			'settings.downloadLocationCustom' => 'Custom Location',
@@ -2941,27 +2941,27 @@ extension on TranslationsVi {
 			'watchTogether.removeRoom' => 'Remove',
 			'watchTogether.guestSwitchUnavailable' => 'Couldn\'t switch — server unavailable for sync',
 			'watchTogether.guestSwitchFailed' => 'Couldn\'t switch — content not found on this server',
-			'downloads.title' => 'Downloads',
-			'downloads.manage' => 'Manage',
-			'downloads.tvShows' => 'TV Shows',
-			'downloads.movies' => 'Movies',
-			'downloads.noDownloads' => 'No downloads yet',
-			'downloads.noDownloadsDescription' => 'Downloaded content will appear here for offline viewing',
-			'downloads.downloadNow' => 'Download',
-			'downloads.deleteDownload' => 'Delete download',
-			'downloads.retryDownload' => 'Retry download',
-			'downloads.downloadQueued' => 'Download queued',
+			'downloads.title' => 'Tải về',
+			'downloads.manage' => 'Quản lý',
+			'downloads.tvShows' => 'Phim bộ',
+			'downloads.movies' => 'Phim lẻ',
+			'downloads.noDownloads' => 'Chưa có phim',
+			'downloads.noDownloadsDescription' => 'Phim đã tải về sẽ xuất hiện tại đây',
+			'downloads.downloadNow' => 'Tải về',
+			'downloads.deleteDownload' => 'Xóa tải về',
+			'downloads.retryDownload' => 'Tải lại',
+			'downloads.downloadQueued' => 'Đã thêm vào danh sách tải',
 			'downloads.serverErrorBitrate' => 'Server error — the file may exceed the remote streaming bitrate limit',
 			'downloads.episodesQueued' => ({required Object count}) => '${count} episodes queued for download',
-			'downloads.downloadDeleted' => 'Download deleted',
-			'downloads.deleteConfirm' => ({required Object title}) => 'Are you sure you want to delete "${title}"? This will remove the downloaded file from your device.',
-			'downloads.deleting' => 'Deleting...',
-			'downloads.deletingWithProgress' => ({required Object title, required Object current, required Object total}) => 'Deleting ${title}... (${current} of ${total})',
-			'downloads.queuedTooltip' => 'Queued',
-			'downloads.queuedFilesTooltip' => ({required Object files}) => 'Queued ${files}',
-			'downloads.downloadingTooltip' => 'Downloading...',
-			'downloads.downloadingFilesTooltip' => ({required Object files}) => 'Downloading ${files}',
-			'downloads.noDownloadsTree' => 'No downloads',
+			'downloads.downloadDeleted' => 'Đã xóa',
+			'downloads.deleteConfirm' => ({required Object title}) => 'Bạn có chắc muốn xóa "${title}"?',
+			'downloads.deleting' => 'Đang xóa...',
+			'downloads.deletingWithProgress' => ({required Object title, required Object current, required Object total}) => 'Đang xóa ${title}... (${current} of ${total})',
+			'downloads.queuedTooltip' => 'Đang chờ',
+			'downloads.queuedFilesTooltip' => ({required Object files}) => 'Đang chờ ${files}',
+			'downloads.downloadingTooltip' => 'Đang tải...',
+			'downloads.downloadingFilesTooltip' => ({required Object files}) => 'Đang tải ${files}',
+			'downloads.noDownloadsTree' => 'Chưa có phim',
 			'downloads.pauseAll' => 'Pause all',
 			'downloads.resumeAll' => 'Resume all',
 			'downloads.deleteAll' => 'Delete all',
@@ -2975,15 +2975,15 @@ extension on TranslationsVi {
 			'downloads.keepSynced' => 'Keep synced',
 			'downloads.downloadOnce' => 'Download once',
 			'downloads.keepNUnwatched' => ({required Object count}) => 'Keep ${count} unwatched',
-			'downloads.editSyncRule' => 'Edit sync rule',
-			'downloads.removeSyncRule' => 'Remove sync rule',
+			'downloads.editSyncRule' => 'Chỉnh sửa lệnh tải về',
+			'downloads.removeSyncRule' => 'Xóa lệnh tải về',
 			'downloads.removeSyncRuleConfirm' => ({required Object title}) => 'Stop syncing "${title}"? Downloaded episodes will be kept.',
 			'downloads.syncRuleCreated' => ({required Object count}) => 'Sync rule created — keeping ${count} unwatched episodes',
 			'downloads.syncRuleUpdated' => 'Sync rule updated',
 			'downloads.syncRuleRemoved' => 'Sync rule removed',
 			'downloads.syncedNewEpisodes' => ({required Object count, required Object title}) => 'Synced ${count} new episodes for ${title}',
-			'downloads.activeSyncRules' => 'Sync rules',
-			'downloads.noSyncRules' => 'No sync rules',
+			'downloads.activeSyncRules' => 'Lệnh tải về',
+			'downloads.noSyncRules' => 'Chưa có lệnh tải về',
 			'downloads.manageSyncRule' => 'Manage sync',
 			'downloads.editEpisodeCount' => 'Episode count',
 			'downloads.editSyncFilter' => 'Sync filter',

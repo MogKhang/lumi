@@ -203,6 +203,27 @@ class MediaContextMenuState extends State<MediaContextMenu> {
         );
       }
 
+      // Download — offline playback. Gated on:
+      //   - item kind: movies, shows, seasons, episodes (the downloadable
+      //     leaf/container kinds; collections/playlists have their own flow)
+      //   - the active user's server-side download permission
+      //     (Plex "Allow Downloads"; Jellyfin always allowed)
+      //   - the item not already being downloaded
+      if (mediaKind == MediaKind.movie ||
+          mediaKind == MediaKind.show ||
+          mediaKind == MediaKind.season ||
+          mediaKind == MediaKind.episode) {
+        final serverId = mediaItem.serverId;
+        final canDownload =
+            serverId != null && context.read<MultiServerProvider>().serverManager.canDownloadFromServer(serverId);
+        final alreadyDownloaded = context.read<DownloadProvider>().isDownloaded(mediaItem.globalKey);
+        if (canDownload && !alreadyDownloaded) {
+          menuActions.add(
+            _MenuAction(value: 'download', icon: Symbols.download_rounded, label: t.downloads.downloadNow),
+          );
+        }
+      }
+
       // Remove from Playlist — only when shown inside a playlist detail screen.
       if (widget.playlistId != null) {
         menuActions.add(

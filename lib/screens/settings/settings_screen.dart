@@ -28,6 +28,7 @@ import '../../profiles/profile.dart';
 import '../../utils/platform_detector.dart';
 import '../../profiles/profile_registry.dart';
 import 'keyboard_shortcuts_screen.dart';
+import '../downloads/downloads_screen.dart';
 import '../profile/profile_switch_screen.dart';
 import '../../widgets/settings_builder.dart';
 import '../../models/transcode_quality_preset.dart';
@@ -59,6 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   // Focus tracking keys
   static const _kDonate = 'donate';
   static const _kTheme = 'theme';
+  static const _kDownloads = 'downloads';
   static const _kLogout = 'logout';
 
   KeyboardShortcutsService? _keyboardService;
@@ -134,6 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                       _buildLanguageTile(context),
                       if (PlatformDetector.isAndroid(context)) _buildPlayerBackendTile(),
                       _buildDefaultQualityTile(),
+                      _buildDownloadsTile(),
                       _buildProfileSwitcherTile(),
                       _buildSwitchServerTile(),
                       if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
@@ -276,6 +279,31 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
           .toList(),
       decode: (p) => p,
       encode: (p) => p,
+    );
+  }
+
+  /// Downloads entry — shown only when the active user has server-side
+  /// permission to download offline (Plex "Allow Downloads"; Jellyfin always).
+  /// Watches [MultiServerProvider] so the row appears/disappears as servers
+  /// come online or permissions refresh.
+  Widget _buildDownloadsTile() {
+    return Consumer<MultiServerProvider>(
+      builder: (context, multiServer, _) {
+        if (!multiServer.serverManager.canDownloadFromAnyServer) {
+          return const SizedBox.shrink();
+        }
+        return ListTile(
+          focusNode: _focusTracker.get(_kDownloads),
+          leading: const AppIcon(Symbols.download_rounded, fill: 1),
+          title: Text(t.settings.downloads),
+          trailing: const AppIcon(Symbols.chevron_right_rounded, fill: 1),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const DownloadsScreen()),
+            );
+          },
+        );
+      },
     );
   }
 

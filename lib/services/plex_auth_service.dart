@@ -266,6 +266,12 @@ class PlexServer {
   final String accessToken;
   final List<PlexConnection> connections;
   final bool owned;
+
+  /// Plex's per-server "Allow Downloads" sharing flag — true when the owner
+  /// has granted this friend the right to sync/download content for offline
+  /// playback. Always-effective for owned servers; see [canDownload].
+  final bool allowSync;
+
   final String? product;
   final String? platform;
   final DateTime? lastSeenAt;
@@ -277,6 +283,7 @@ class PlexServer {
     required this.accessToken,
     required this.connections,
     required this.owned,
+    this.allowSync = false,
     this.product,
     this.platform,
     this.lastSeenAt,
@@ -329,6 +336,7 @@ class PlexServer {
       accessToken: json['accessToken'] as String, // Safe because validated above
       connections: connections,
       owned: json['owned'] as bool? ?? false,
+      allowSync: json['allowSync'] as bool? ?? false,
       product: json['product'] as String?,
       platform: json['platform'] as String?,
       lastSeenAt: lastSeenAt,
@@ -364,6 +372,7 @@ class PlexServer {
       'accessToken': accessToken,
       'connections': connections.map((c) => c.toJson()).toList(),
       'owned': owned,
+      'allowSync': allowSync,
       'product': product,
       'platform': platform,
       'lastSeenAt': lastSeenAt?.toIso8601String(),
@@ -373,6 +382,10 @@ class PlexServer {
 
   /// Check if server is online using the presence field
   bool get isOnline => presence;
+
+  /// Whether the current user may download/sync content from this server.
+  /// Owners always can; friends only when granted [allowSync] server-side.
+  bool get canDownload => owned || allowSync;
 
   /// Find the best working connection by testing them
   /// Returns a Stream that emits connections progressively:
