@@ -125,9 +125,9 @@ class DownloadsScreenState extends State<DownloadsScreen> with TickerProviderSta
         children: [
           _buildTabChip(t.downloads.manage, 0),
           const SizedBox(width: 8),
-          _buildTabChip(t.downloads.tvShows, 1),
+          _buildTabChip(t.downloads.movies, 1),
           const SizedBox(width: 8),
-          _buildTabChip(t.downloads.movies, 2),
+          _buildTabChip(t.downloads.tvShows, 2),
         ],
       );
     }
@@ -180,9 +180,9 @@ class DownloadsScreenState extends State<DownloadsScreen> with TickerProviderSta
                         children: [
                           _buildTabChip(t.downloads.manage, 0),
                           const SizedBox(width: 8),
-                          _buildTabChip(t.downloads.tvShows, 1),
+                          _buildTabChip(t.downloads.movies, 1),
                           const SizedBox(width: 8),
-                          _buildTabChip(t.downloads.movies, 2),
+                          _buildTabChip(t.downloads.tvShows, 2),
                         ],
                       ),
                     ),
@@ -229,12 +229,12 @@ class DownloadsScreenState extends State<DownloadsScreen> with TickerProviderSta
                         },
                       ),
                       _DownloadsGridContent(
-                        type: DownloadType.tvShows,
+                        type: DownloadType.movies,
                         suppressAutoFocus: suppressAutoFocus,
                         onBack: focusTabBar,
                       ),
                       _DownloadsGridContent(
-                        type: DownloadType.movies,
+                        type: DownloadType.tvShows,
                         suppressAutoFocus: suppressAutoFocus,
                         onBack: focusTabBar,
                       ),
