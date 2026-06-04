@@ -2451,21 +2451,36 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Movie Poster (Center aligned)
-            SizedBox(
-              width: size.width * 0.45,
-              child: AspectRatio(
-                aspectRatio: 2 / 3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: OptimizedMediaImage(
-                    client: _getArtworkMediaClient(context),
-                    imagePath: metadata.thumbPath,
-                    fit: BoxFit.cover,
-                    imageType: ImageType.poster,
+            // Movie Poster (Center aligned). On landscape/TV the screen is wide
+            // and short, so 45% of width yields a poster taller than the screen
+            // and pushes title/year/genre/button off. Cap the poster height to
+            // a fraction of screen height there and derive width from the 2:3
+            // aspect ratio; keep the width-based size on tall phone layouts.
+            Builder(
+              builder: (context) {
+                final isLandscape = size.width > size.height;
+                final widthFromWidth = size.width * 0.45;
+                // Height budget leaves room for title + year + genres + button.
+                final widthFromHeight = (size.height * 0.42) * (2 / 3);
+                final posterWidth = isLandscape
+                    ? widthFromHeight.clamp(140.0, widthFromWidth)
+                    : widthFromWidth;
+                return SizedBox(
+                  width: posterWidth,
+                  child: AspectRatio(
+                    aspectRatio: 2 / 3,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: OptimizedMediaImage(
+                        client: _getArtworkMediaClient(context),
+                        imagePath: metadata.thumbPath,
+                        fit: BoxFit.cover,
+                        imageType: ImageType.poster,
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
             const SizedBox(height: 16),
             // Movie Title (Center aligned)
