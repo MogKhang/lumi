@@ -771,11 +771,13 @@ class _MainScreenState extends State<MainScreen>
             key: _moviesKey,
             filterKind: MediaKind.movie,
             onLibraryOrderChanged: _onLibraryOrderChanged,
+            onLibrarySelected: _onLibrarySelectedFromScreen,
           ),
           NavigationTabId.shows => LibrariesScreen(
             key: _showsKey,
             filterKind: MediaKind.show,
             onLibraryOrderChanged: _onLibraryOrderChanged,
+            onLibrarySelected: _onLibrarySelectedFromScreen,
           ),
           NavigationTabId.liveTv => LiveTvScreen(key: _liveTvKey),
           NavigationTabId.settings => SettingsScreen(key: _settingsKey),
@@ -1149,6 +1151,16 @@ class _MainScreenState extends State<MainScreen>
     if (!_isOffline && tab == NavigationTabId.discover) {
       _onDiscoverBecameVisible();
     }
+  }
+
+  /// Handle a library change that originated inside the movies/shows screen
+  /// (header library picker). Only updates the tracked key so the side nav
+  /// rail highlight follows along — the screen already loaded the content.
+  void _onLibrarySelectedFromScreen(String libraryGlobalKey) {
+    if (_selectedLibraryGlobalKey == libraryGlobalKey) return;
+    setState(() {
+      _selectedLibraryGlobalKey = libraryGlobalKey;
+    });
   }
 
   /// Handle library selection from side navigation rail

@@ -28,6 +28,7 @@ import '../../utils/snackbar_helper.dart';
 import '../../utils/content_utils.dart';
 
 import '../../widgets/desktop_app_bar.dart';
+import '../../widgets/focusable_popup_menu_button.dart';
 import '../../widgets/overlay_sheet.dart';
 import '../../services/storage_service.dart';
 import '../../mixins/refreshable.dart';
@@ -78,7 +79,12 @@ class LibrariesScreen extends StatefulWidget {
   final VoidCallback? onLibraryOrderChanged;
   final MediaKind? filterKind;
 
-  const LibrariesScreen({super.key, this.onLibraryOrderChanged, this.filterKind});
+  /// Notifies the parent (MainScreen) when the active library changes from
+  /// within this screen — e.g. via the header library picker — so the side
+  /// navigation rail's highlight stays in sync.
+  final ValueChanged<String>? onLibrarySelected;
+
+  const LibrariesScreen({super.key, this.onLibraryOrderChanged, this.filterKind, this.onLibrarySelected});
 
   @override
   State<LibrariesScreen> createState() => _LibrariesScreenState();
@@ -119,6 +125,10 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
   @override
   List<FocusNode> get tabChipFocusNodes => _tabFocusNodes;
+
+  /// Focus node for the header library picker (shown when a movie/show kind
+  /// has 2+ libraries). Lets TV D-pad reach the picker from the tab row.
+  final FocusNode _libraryPickerFocusNode = FocusNode(debugLabel: 'library_picker');
 
   // App bar action bar
   final _actionBarKey = GlobalKey<FocusableActionBarState>();
@@ -196,6 +206,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     if (widget.filterKind != null) {
       visibleLibraries = visibleLibraries.where((lib) => lib.kind == widget.filterKind).toList();
     }
+    _sortLibrariesAlphabetically(visibleLibraries);
 
     // Load saved preferences
     final storage = await StorageService.getInstance();
@@ -367,6 +378,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     for (final node in _tabFocusNodes) {
       node.dispose();
     }
+    _libraryPickerFocusNode.dispose();
     disposeTabNavigation();
     super.dispose();
   }
@@ -487,6 +499,12 @@ class _LibrariesScreenState extends State<LibrariesScreen>
       // Clear loaded tabs tracking for new library
       _loadedTabs.clear();
     });
+
+    // Keep the side nav rail highlight in sync when the change originated here
+    // (header picker). No-op cost when MainScreen already drove the change.
+    if (isLibraryChange) {
+      widget.onLibrarySelected?.call(libraryGlobalKey);
+    }
 
     // The new TabBarView mounts with fresh inner positions at offset 0;
     // bring the floating header back too. Also covers the case where the
@@ -806,7 +824,64 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     );
   }
 
-  Widget _buildAppBarTitle(MediaLibrary? selectedLibrary) {
+  /// Sort libraries by their display title, case-insensitively.
+  void _sortLibrariesAlphabetically(List<MediaLibrary> libraries) {
+    libraries.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+  }
+
+  /// Header dropdown for switching between libraries of the current kind.
+  /// Returns null when there are fewer than two libraries (nothing to pick),
+  /// so movie/show kinds with a single library keep the current behaviour.
+  Widget? _buildLibraryPicker(List<MediaLibrary> libraries, MediaLibrary? selectedLibrary) {
+    if (libraries.length < 2) return null;
+
+    final theme = Theme.of(context);
+    final label = selectedLibrary?.title ?? libraries.first.title;
+
+    return FocusablePopupMenuButton<String>(
+      focusNode: _libraryPickerFocusNode,
+      tooltip: t.libraries.title,
+      onSelected: (globalKey) => unawaited(_loadLibraryContent(globalKey)),
+      onNavigateLeft: onTabBarBack,
+      onNavigateRight: () => getTabChipFocusNode(0).requestFocus(),
+      onNavigateDown: _focusCurrentTabFromTabBar,
+      icon: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 220),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            const AppIcon(Symbols.arrow_drop_down_rounded, fill: 1),
+          ],
+        ),
+      ),
+      itemBuilder: (_) => [
+        for (final library in libraries)
+          PopupMenuItem<String>(
+            value: library.globalKey,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 28,
+                  child: library.globalKey == selectedLibrary?.globalKey
+                      ? const AppIcon(Symbols.check_rounded, fill: 1)
+                      : null,
+                ),
+                Expanded(child: Text(library.title, overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAppBarTitle(MediaLibrary? selectedLibrary, List<MediaLibrary> libraries) {
     final useLogo = widget.filterKind == MediaKind.movie || widget.filterKind == MediaKind.show;
 
     final titleWidget = useLogo
@@ -820,12 +895,16 @@ class _LibrariesScreenState extends State<LibrariesScreen>
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           );
 
+    // Library dropdown — only when this movie/show kind has 2+ libraries.
+    final picker = useLogo ? _buildLibraryPicker(libraries, selectedLibrary) : null;
+
     // On desktop/TV with side nav, show title and tabs in app bar
     if (PlatformDetector.shouldUseSideNavigation(context)) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           titleWidget,
+          if (picker != null) ...[const SizedBox(width: 12), picker],
           const SizedBox(width: 24),
           for (int i = 0; i < _visibleTabs.length; i++) ...[
             if (i > 0) const SizedBox(width: 8),
@@ -836,6 +915,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
               onNavigateDown: _focusCurrentTabFromTabBar,
               onNavigateRightFromLast:
                   () => PlatformDetector.isTV() ? null : _actionBarKey.currentState?.requestFocusOnFirst(),
+              onNavigateLeftFromFirst: picker != null ? () => _libraryPickerFocusNode.requestFocus() : null,
             ),
           ],
         ],
@@ -843,6 +923,16 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     }
 
     // On mobile, the title is shown here; tabs are moved to the AppBar bottom
+    if (picker != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          titleWidget,
+          const SizedBox(width: 12),
+          picker,
+        ],
+      );
+    }
     return titleWidget;
   }
 
@@ -958,11 +1048,13 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     final hiddenLibrariesProvider = context.watch<HiddenLibrariesProvider>();
     final hiddenKeys = hiddenLibrariesProvider.hiddenLibraryKeys;
 
-    // Compute visible libraries (filtered from all libraries)
+    // Compute visible libraries (filtered from all libraries), alphabetically
+    // ordered so the picker list and the default selection are consistent.
     var visibleLibraries = allLibraries.where((lib) => !hiddenKeys.contains(lib.globalKey)).toList();
     if (widget.filterKind != null) {
       visibleLibraries = visibleLibraries.where((lib) => lib.kind == widget.filterKind).toList();
     }
+    _sortLibrariesAlphabetically(visibleLibraries);
 
     // Resolve selected library defensively — may be null if server temporarily dropped during refresh
     final selectedLibrary = _selectedLibraryGlobalKey != null
@@ -983,7 +1075,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     Widget appBar({required bool pinned, bool? isFloating}) {
       final isTV = PlatformDetector.isTV();
       return DesktopSliverAppBar(
-        title: _buildAppBarTitle(selectedLibrary),
+        title: _buildAppBarTitle(selectedLibrary, visibleLibraries),
         pinned: pinned,
         floating: isFloating ?? false,
         snap: isFloating ?? false,
