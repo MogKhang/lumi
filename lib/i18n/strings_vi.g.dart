@@ -168,11 +168,11 @@ class _TranslationsCommonVi extends TranslationsCommonEn {
 	@override String get refreshingServers => 'Refreshing servers...';
 	@override String get loadingServers => 'Loading servers...';
 	@override String get connectingToServers => 'Kiểm tra tín hiệu máy chủ...';
-	@override String get startingOfflineMode => 'Starting offline mode...';
-	@override String get loading => 'Loading...';
-	@override String get fullscreen => 'Fullscreen';
-	@override String get exitFullscreen => 'Exit fullscreen';
-	@override String get pressBackAgainToExit => 'Press back again to exit';
+	@override String get startingOfflineMode => 'Bật chế độ ngoại tuyến...';
+	@override String get loading => 'Đang tải...';
+	@override String get fullscreen => 'Mở chế độ toàn màn hình';
+	@override String get exitFullscreen => 'Tắt chế độ toàn màn hình';
+	@override String get pressBackAgainToExit => 'Ấn nút Back lần nữa để thoát';
 	@override String get done => 'Hoàn tất';
 }
 
@@ -2101,11 +2101,11 @@ extension on TranslationsVi {
 			'common.refreshingServers' => 'Refreshing servers...',
 			'common.loadingServers' => 'Loading servers...',
 			'common.connectingToServers' => 'Kiểm tra tín hiệu máy chủ...',
-			'common.startingOfflineMode' => 'Starting offline mode...',
-			'common.loading' => 'Loading...',
-			'common.fullscreen' => 'Fullscreen',
-			'common.exitFullscreen' => 'Exit fullscreen',
-			'common.pressBackAgainToExit' => 'Press back again to exit',
+			'common.startingOfflineMode' => 'Bật chế độ ngoại tuyến...',
+			'common.loading' => 'Đang tải...',
+			'common.fullscreen' => 'Mở chế độ toàn màn hình',
+			'common.exitFullscreen' => 'Tắt chế độ toàn màn hình',
+			'common.pressBackAgainToExit' => 'Ấn nút Back lần nữa để thoát',
 			'common.done' => 'Hoàn tất',
 			'screens.licenses' => 'Licenses',
 			'screens.switchProfile' => 'Chọn hồ sơ',

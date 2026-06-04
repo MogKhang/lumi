@@ -60,11 +60,11 @@
     "refreshingServers": "Refreshing servers...",
     "loadingServers": "Loading servers...",
     "connectingToServers": "Kiểm tra tín hiệu máy chủ...",
-    "startingOfflineMode": "Starting offline mode...",
-    "loading": "Loading...",
-    "fullscreen": "Fullscreen",
-    "exitFullscreen": "Exit fullscreen",
-    "pressBackAgainToExit": "Press back again to exit",
+    "startingOfflineMode": "Bật chế độ ngoại tuyến...",
+    "loading": "Đang tải...",
+    "fullscreen": "Mở chế độ toàn màn hình",
+    "exitFullscreen": "Tắt chế độ toàn màn hình",
+    "pressBackAgainToExit": "Ấn nút Back lần nữa để thoát",
     "done": "Hoàn tất"
   },
   "screens": {
