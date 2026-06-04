@@ -6,7 +6,7 @@ import '../i18n/strings.g.dart';
 
 
 /// Navigation tab identifiers
-enum NavigationTabId { discover, movies, shows, liveTv, settings }
+enum NavigationTabId { discover, search, movies, shows, liveTv, settings }
 
 /// Represents a navigation tab with its configuration
 class NavigationTab {
@@ -39,6 +39,7 @@ class NavigationTab {
 
 // Label getters (must be top-level for const constructor)
 String _getHomeLabel() => t.common.home;
+String _getSearchLabel() => t.common.search;
 String _getMoviesLabel() => t.navigation.movies;
 String _getShowsLabel() => t.navigation.shows;
 String _getLiveTvLabel() => t.navigation.liveTv;
@@ -47,6 +48,7 @@ String _getSettingsLabel() => t.common.settings;
 /// All navigation tabs in display order
 const allNavigationTabs = [
   NavigationTab(id: NavigationTabId.discover, onlineOnly: true, icon: Symbols.home_rounded, getLabel: _getHomeLabel),
+  NavigationTab(id: NavigationTabId.search, onlineOnly: true, icon: Symbols.search_rounded, getLabel: _getSearchLabel),
   NavigationTab(
     id: NavigationTabId.movies,
     onlineOnly: true,

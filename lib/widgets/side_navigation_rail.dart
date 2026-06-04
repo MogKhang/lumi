@@ -199,6 +199,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   static const Duration _collapseDelay = Duration(milliseconds: 150);
 
   static const _kHome = 'home';
+  static const _kSearch = 'search';
   static const _kMovies = 'movies';
   static const _kShows = 'shows';
   static const _kSettings = 'settings';
@@ -311,6 +312,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   }) {
     return {
       _kHome,
+      if (!widget.isOfflineMode) _kSearch,
       _kMovies,
       _kShows,
       _kSettings,
@@ -397,6 +399,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       if (widget.isOfflineMode && widget.onReconnect != null) _kReconnect,
       if (!widget.isOfflineMode) ...[
         _kHome,
+        _kSearch,
         _kMovies,
         if (_moviesExpanded && showMoviesDropdown) ...[
           ..._focusKeysForLibraryRows(visibleMovieRows),
@@ -647,6 +650,19 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                                   isFocused: _focusTracker.isFocused(_kHome),
                                   onTap: () => widget.onDestinationSelected(NavigationTabId.discover),
                                   focusNode: _focusTracker.get(_kHome),
+                                  isCollapsed: isCollapsed,
+                                ),
+
+                                const SizedBox(height: 8),
+
+                                _buildNavItem(
+                                  icon: Symbols.search_rounded,
+                                  selectedIcon: Symbols.search_rounded,
+                                  label: Translations.of(context).common.search,
+                                  isSelected: widget.selectedTab == NavigationTabId.search,
+                                  isFocused: _focusTracker.isFocused(_kSearch),
+                                  onTap: () => widget.onDestinationSelected(NavigationTabId.search),
+                                  focusNode: _focusTracker.get(_kSearch),
                                   isCollapsed: isCollapsed,
                                 ),
 

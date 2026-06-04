@@ -131,6 +131,7 @@ class _MainScreenState extends State<MainScreen>
 
   late List<Widget> _screens;
   final GlobalKey<State<DiscoverScreen>> _discoverKey = GlobalKey();
+  final GlobalKey<State<SearchScreen>> _searchKey = GlobalKey();
   final GlobalKey<State<LibrariesScreen>> _moviesKey = GlobalKey();
   final GlobalKey<State<LibrariesScreen>> _showsKey = GlobalKey();
   final GlobalKey<State<LiveTvScreen>> _liveTvKey = GlobalKey();
@@ -635,17 +636,18 @@ class _MainScreenState extends State<MainScreen>
     };
     receiver.onTabDiscover = () => _selectTab(NavigationTabId.discover);
     receiver.onTabLibraries = () => _selectTab(NavigationTabId.movies);
-    receiver.onTabSearch = () {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const SearchScreen()),
-      );
-    };
+    receiver.onTabSearch = () => _selectTab(NavigationTabId.search);
     receiver.onTabSettings = () => _selectTab(NavigationTabId.settings);
     receiver.onHome = () => _selectTab(NavigationTabId.discover);
     receiver.onSearchAction = (query) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => SearchScreen(initialQuery: query)),
-      );
+      _selectTab(NavigationTabId.search);
+      if (query != null && query.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_searchKey.currentState case final SearchInputFocusable searchable) {
+            searchable.setSearchQuery(query);
+          }
+        });
+      }
     };
   }
 
@@ -774,6 +776,7 @@ class _MainScreenState extends State<MainScreen>
       for (final tab in _getVisibleTabs(offline))
         switch (tab.id) {
           NavigationTabId.discover => DiscoverScreen(key: _discoverKey),
+          NavigationTabId.search => SearchScreen(key: _searchKey),
           NavigationTabId.movies => LibrariesScreen(
             key: _moviesKey,
             filterKind: MediaKind.movie,
@@ -1019,9 +1022,16 @@ class _MainScreenState extends State<MainScreen>
 
     if (!isSearchKey && !isMacShortcut && !isOtherShortcut) return KeyEventResult.ignored;
 
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const SearchScreen()),
-    );
+    // Select the Search tab (no-op offline; the tab is online-only). Move focus
+    // into content if we were on the sidebar, then focus the search input once
+    // the IndexedStack has revealed the tab.
+    _selectTab(NavigationTabId.search);
+    if (_isSidebarFocused) _focusContent();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_searchKey.currentState case final SearchInputFocusable searchable) {
+        searchable.focusSearchInput();
+      }
+    });
     return KeyEventResult.handled;
   }
 
@@ -1160,6 +1170,16 @@ class _MainScreenState extends State<MainScreen>
     if (!_isOffline && tab == NavigationTabId.discover) {
       _onDiscoverBecameVisible();
     }
+
+    // Focus the search input after the IndexedStack has made the search tab
+    // visible (synchronous focus would target the still-offstage child).
+    if (tab == NavigationTabId.search) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_searchKey.currentState case final SearchInputFocusable searchable) {
+          searchable.focusSearchInput();
+        }
+      });
+    }
   }
 
   /// Handle a library change that originated inside the movies/shows screen
@@ -1209,6 +1229,7 @@ class _MainScreenState extends State<MainScreen>
   GlobalKey? _screenKeyFor(NavigationTabId tab) {
     return switch (tab) {
       NavigationTabId.discover => _discoverKey,
+      NavigationTabId.search => _searchKey,
       NavigationTabId.movies => _moviesKey,
       NavigationTabId.shows => _showsKey,
       NavigationTabId.liveTv => _liveTvKey,

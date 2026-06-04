@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:lumi/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import '../focus/focusable_action_bar.dart';
 import '../focus/input_mode_tracker.dart';
 import '../focus/key_event_utils.dart';
 import '../utils/global_key_utils.dart';
@@ -43,7 +42,6 @@ import '../theme/mono_tokens.dart';
 import '../services/watch_next_service.dart';
 import 'libraries/content_state_builder.dart';
 import 'main_screen.dart';
-import 'search_screen.dart';
 import '../widgets/desktop_app_bar.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -164,7 +162,6 @@ class _DiscoverScreenState extends State<DiscoverScreen>
 
   // Hero and app bar focus
   late FocusNode _heroFocusNode;
-  final _actionBarKey = GlobalKey<FocusableActionBarState>();
 
   /// Backend-neutral hero client lookup. Returns the actual
   /// [MediaServerClient] for the item's server (Plex or Jellyfin) so
@@ -223,7 +220,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
         keys.first.currentState?.requestFocusFromMemory();
         _focusPending = false;
       } else {
-        _actionBarKey.currentState?.requestFocusOnFirst();
+        _navigateToSidebar();
       }
     }
     _scrollToTop();
@@ -235,13 +232,11 @@ class _DiscoverScreenState extends State<DiscoverScreen>
     if (_isHeroSectionVisible) {
       _heroFocusNode.requestFocus();
     } else {
-      _actionBarKey.currentState?.requestFocusOnFirst();
+      // Nothing above the top hub now that the search action is gone — exit to
+      // the side nav rail.
+      _navigateToSidebar();
     }
     _scrollToTop();
-  }
-
-  void _focusContentFromAppBar() {
-    _focusLandingContent();
   }
 
   /// Handle vertical navigation between hubs
@@ -332,7 +327,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       final keys = _allHubKeys;
       if (keys.isNotEmpty) keys.first.currentState?.requestFocusFromMemory();
     },
-    onUp: () => _actionBarKey.currentState?.requestFocusOnFirst(),
+    onUp: _navigateToSidebar,
     onLeft: () {
       if (_currentHeroIndex > 0) {
         _heroController.previousPage(duration: tokens(context).slow, curve: Curves.easeInOut);
@@ -876,21 +871,6 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       shadowColor: Colors.transparent,
       scrolledUnderElevation: 0,
-      actions: [
-        FocusableActionBar(
-          key: _actionBarKey,
-          onNavigateLeft: _navigateToSidebar,
-          onNavigateDown: _focusContentFromAppBar,
-          actions: [
-            FocusableAction(
-              icon: Symbols.search_rounded,
-              onPressed: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchScreen())),
-              tooltip: t.common.search,
-            ),
-          ],
-        ),
-      ],
     );
   }
 

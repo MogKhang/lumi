@@ -17,8 +17,8 @@ import '../widgets/desktop_app_bar.dart';
 import '../widgets/loading_indicator_box.dart';
 import '../widgets/pill_input_decoration.dart';
 import '../widgets/focusable_media_card.dart';
-import '../utils/focus_utils.dart';
 import 'libraries/state_messages.dart';
+import 'main_screen.dart';
 import '../services/settings_service.dart';
 import '../widgets/settings_builder.dart';
 
@@ -52,7 +52,9 @@ class _SearchScreenState extends State<SearchScreen>
       _searchController.text = widget.initialQuery!;
     }
 
-    FocusUtils.requestFocusAfterBuild(this, _searchFocusNode);
+    // Focus is driven by the parent when this tab becomes active
+    // (focusActiveTabIfReady / focusSearchInput), not on build — otherwise the
+    // offstage IndexedStack child would steal focus on app startup.
   }
 
   @override
@@ -265,7 +267,6 @@ class _SearchScreenState extends State<SearchScreen>
                 child: FocusableTextField(
                   controller: _searchController,
                   focusNode: _searchFocusNode,
-                  autofocus: true,
                   textInputAction: TextInputAction.search,
                   onNavigateDown: _searchResults.isNotEmpty && !_isSearching
                       ? _firstResultFocusNode.requestFocus
@@ -274,7 +275,9 @@ class _SearchScreenState extends State<SearchScreen>
                     if (_searchController.text.isNotEmpty) {
                       _searchController.clear();
                     } else {
-                      Navigator.of(context).pop();
+                      // Embedded as a navigation tab — hand focus back to the
+                      // side nav rail rather than popping the main route.
+                      MainScreenFocusScope.of(context)?.focusSidebar();
                     }
                   },
                   decoration: pillInputDecoration(
