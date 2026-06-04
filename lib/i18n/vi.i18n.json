@@ -62,9 +62,9 @@
     "connectingToServers": "Kiểm tra tín hiệu máy chủ...",
     "startingOfflineMode": "Bật chế độ ngoại tuyến...",
     "loading": "Đang tải...",
-    "fullscreen": "Mở chế độ toàn màn hình",
-    "exitFullscreen": "Tắt chế độ toàn màn hình",
-    "pressBackAgainToExit": "Ấn nút Back lần nữa để thoát",
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "pressBackAgainToExit": "Ấn lần nữa để thoát",
     "done": "Hoàn tất"
   },
   "screens": {
