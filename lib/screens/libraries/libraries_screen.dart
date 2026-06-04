@@ -126,10 +126,6 @@ class _LibrariesScreenState extends State<LibrariesScreen>
   @override
   List<FocusNode> get tabChipFocusNodes => _tabFocusNodes;
 
-  /// Focus node for the header library picker (shown when a movie/show kind
-  /// has 2+ libraries). Lets TV D-pad reach the picker from the tab row.
-  final FocusNode _libraryPickerFocusNode = FocusNode(debugLabel: 'library_picker');
-
   // App bar action bar
   final _actionBarKey = GlobalKey<FocusableActionBarState>();
 
@@ -378,7 +374,6 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     for (final node in _tabFocusNodes) {
       node.dispose();
     }
-    _libraryPickerFocusNode.dispose();
     disposeTabNavigation();
     super.dispose();
   }
@@ -474,11 +469,11 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
   /// Public method to load a library by key (called from MainScreen side nav)
   @override
-  void loadLibraryByKey(String libraryGlobalKey) {
-    _loadLibraryContent(libraryGlobalKey);
+  void loadLibraryByKey(String libraryGlobalKey, {bool focusContent = true}) {
+    _loadLibraryContent(libraryGlobalKey, focusContent: focusContent);
   }
 
-  Future<void> _loadLibraryContent(String libraryGlobalKey) async {
+  Future<void> _loadLibraryContent(String libraryGlobalKey, {bool focusContent = true}) async {
     final librariesProvider = context.read<LibrariesProvider>();
     final allLibraries = librariesProvider.libraries;
 
@@ -488,6 +483,12 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     if (selectedLibrary == null) return;
 
     final isLibraryChange = _selectedLibraryGlobalKey != libraryGlobalKey;
+
+    // When the change came from the side nav rail, keep focus on the rail: mark
+    // auto-focus suppressed so tab data-loaded callbacks don't pull focus in.
+    if (!focusContent) {
+      suppressAutoFocus = true;
+    }
 
     // Update visible tabs and state in the same synchronous block so no
     // intermediate rebuild can see a mismatched controller/key pair.
@@ -543,11 +544,14 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     // Focus is handled by onDataLoaded callbacks from each tab.
     // However, on first load the tab might finish loading before the tab index
     // is restored. Check if the current tab has already loaded and focus if so.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _selectedLibraryGlobalKey == libraryGlobalKey && _loadedTabs.contains(tabController.index)) {
-        _focusCurrentTab();
-      }
-    });
+    // Skip entirely when the caller asked to keep focus on the side nav rail.
+    if (focusContent) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _selectedLibraryGlobalKey == libraryGlobalKey && _loadedTabs.contains(tabController.index)) {
+          _focusCurrentTab();
+        }
+      });
+    }
   }
 
   @override
@@ -839,12 +843,8 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     final label = selectedLibrary?.title ?? libraries.first.title;
 
     return FocusablePopupMenuButton<String>(
-      focusNode: _libraryPickerFocusNode,
       tooltip: t.libraries.title,
       onSelected: (globalKey) => unawaited(_loadLibraryContent(globalKey)),
-      onNavigateLeft: onTabBarBack,
-      onNavigateRight: () => getTabChipFocusNode(0).requestFocus(),
-      onNavigateDown: _focusCurrentTabFromTabBar,
       icon: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 220),
         child: Row(
@@ -895,16 +895,15 @@ class _LibrariesScreenState extends State<LibrariesScreen>
             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           );
 
-    // Library dropdown — only when this movie/show kind has 2+ libraries.
-    final picker = useLogo ? _buildLibraryPicker(libraries, selectedLibrary) : null;
-
-    // On desktop/TV with side nav, show title and tabs in app bar
+    // On desktop/TV with side nav, show title and tabs in app bar. The library
+    // picker is intentionally omitted here — desktop/TV already switch
+    // libraries from the side navigation rail, so a header dropdown would be
+    // redundant. It is shown on mobile only (no side nav).
     if (PlatformDetector.shouldUseSideNavigation(context)) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           titleWidget,
-          if (picker != null) ...[const SizedBox(width: 12), picker],
           const SizedBox(width: 24),
           for (int i = 0; i < _visibleTabs.length; i++) ...[
             if (i > 0) const SizedBox(width: 8),
@@ -915,14 +914,15 @@ class _LibrariesScreenState extends State<LibrariesScreen>
               onNavigateDown: _focusCurrentTabFromTabBar,
               onNavigateRightFromLast:
                   () => PlatformDetector.isTV() ? null : _actionBarKey.currentState?.requestFocusOnFirst(),
-              onNavigateLeftFromFirst: picker != null ? () => _libraryPickerFocusNode.requestFocus() : null,
             ),
           ],
         ],
       );
     }
 
-    // On mobile, the title is shown here; tabs are moved to the AppBar bottom
+    // On mobile, the title is shown here; tabs are moved to the AppBar bottom.
+    // Library dropdown — only when this movie/show kind has 2+ libraries.
+    final picker = useLogo ? _buildLibraryPicker(libraries, selectedLibrary) : null;
     if (picker != null) {
       return Row(
         mainAxisSize: MainAxisSize.min,

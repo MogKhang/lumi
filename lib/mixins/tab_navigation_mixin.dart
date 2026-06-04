@@ -94,7 +94,6 @@ mixin TabNavigationMixin<T extends StatefulWidget> on State<T>, TickerProviderSt
     required VoidCallback onSelectWhenActive,
     required VoidCallback onNavigateDown,
     VoidCallback? onNavigateRightFromLast,
-    VoidCallback? onNavigateLeftFromFirst,
   }) {
     final isSelected = tabController.index == index;
     return FocusableTabChip(
@@ -119,7 +118,7 @@ mixin TabNavigationMixin<T extends StatefulWidget> on State<T>, TickerProviderSt
               });
               getTabChipFocusNode(newIndex).requestFocus();
             }
-          : (onNavigateLeftFromFirst ?? onTabBarBack),
+          : onTabBarBack,
       onNavigateRight: index < tabCount - 1
           ? () {
               final newIndex = index + 1;

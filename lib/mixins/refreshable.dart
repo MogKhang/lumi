@@ -16,5 +16,8 @@ mixin SearchInputFocusable {
 }
 
 mixin LibraryLoadable {
-  void loadLibraryByKey(String libraryGlobalKey);
+  /// Load [libraryGlobalKey]'s content. When [focusContent] is false the screen
+  /// does not move focus into its grid — used when a selection originates from
+  /// the side navigation rail so focus stays on the rail for fast hopping.
+  void loadLibraryByKey(String libraryGlobalKey, {bool focusContent = true});
 }

@@ -249,7 +249,14 @@ class _MainScreenState extends State<MainScreen>
       // Focus content initially (replaces autofocus which caused focus stealing issues)
       // Skip if profile selection is on top — it manages its own focus.
       if (!_isSidebarFocused && !_isShowingProfileSelection) {
-        _contentFocusScope.requestFocus();
+        // On Android TV, start on the side nav (Home tab) so the user can
+        // immediately switch tabs with the D-pad rather than landing inside
+        // the Home content and having to navigate back out first.
+        if (PlatformDetector.isTV()) {
+          _focusSidebar();
+        } else {
+          _contentFocusScope.requestFocus();
+        }
       }
 
       // Check for updates on startup
@@ -1120,7 +1127,7 @@ class _MainScreenState extends State<MainScreen>
     }
   }
 
-  void _selectTab(NavigationTabId tab) {
+  void _selectTab(NavigationTabId tab, {bool focusContent = true}) {
     // Guard: ignore if tab isn't available in current mode
     if (!_getVisibleTabs(_isOffline).any((t) => t.id == tab)) return;
 
@@ -1142,7 +1149,9 @@ class _MainScreenState extends State<MainScreen>
       if (newState case final TabVisibilityAware aware) {
         aware.onTabShown();
       }
-      if (newState case final FocusableTab focusable) {
+      // Skip focusing the content when the caller wants focus to stay put
+      // (e.g. selecting a library from the side nav rail).
+      if (newState case final FocusableTab focusable when focusContent) {
         focusable.focusActiveTabIfReady();
       }
     }
@@ -1163,7 +1172,12 @@ class _MainScreenState extends State<MainScreen>
     });
   }
 
-  /// Handle library selection from side navigation rail
+  /// Handle library selection from side navigation rail.
+  ///
+  /// Focus is intentionally kept on the rail (not moved into the library grid)
+  /// so the user can keep hopping between libraries with the D-pad/arrow keys.
+  /// Navigating into the content is a separate, explicit action
+  /// (`onNavigateToContent`).
   void _selectLibrary(String libraryGlobalKey) {
     _selectedLibraryGlobalKey = libraryGlobalKey;
 
@@ -1172,15 +1186,12 @@ class _MainScreenState extends State<MainScreen>
     final library = librariesProvider.libraries.firstWhere((lib) => lib.globalKey == libraryGlobalKey);
 
     final tabId = library.kind == MediaKind.show ? NavigationTabId.shows : NavigationTabId.movies;
-    _selectTab(tabId);
+    _selectTab(tabId, focusContent: false);
 
     // Tell the appropriate screen to load this library after tab switch
     final key = _screenKeyFor(tabId);
     if (key?.currentState case final LibraryLoadable loadable) {
-      loadable.loadLibraryByKey(libraryGlobalKey);
-    }
-    if (key?.currentState case final FocusableTab focusable) {
-      focusable.focusActiveTabIfReady();
+      loadable.loadLibraryByKey(libraryGlobalKey, focusContent: false);
     }
   }
 
@@ -1282,8 +1293,10 @@ class _MainScreenState extends State<MainScreen>
                                 _focusContent();
                               },
                               onLibrarySelected: (key) {
+                                // Keep focus on the rail so the user can keep
+                                // hopping between libraries; _selectLibrary
+                                // loads content without stealing focus.
                                 _selectLibrary(key);
-                                _focusContent();
                               },
                               onNavigateToContent: _focusContent,
                               onReconnect: _triggerReconnect,
