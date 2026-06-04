@@ -922,47 +922,76 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
     // On mobile, the title is shown here; tabs are moved to the AppBar bottom.
     // Library dropdown — only when this movie/show kind has 2+ libraries.
+    //
+    // Tablets (wide) keep the picker in the logo row, horizontally centered.
+    // Phones (narrow) move it to its own row under the logo — built in
+    // _buildMobileTabBar — so it isn't cramped beside the logo.
     final picker = useLogo ? _buildLibraryPicker(libraries, selectedLibrary) : null;
-    if (picker != null) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          titleWidget,
-          const SizedBox(width: 12),
-          picker,
-        ],
+    if (picker != null && PlatformDetector.isTablet(context)) {
+      return SizedBox(
+        width: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(alignment: Alignment.centerLeft, child: titleWidget),
+            picker,
+          ],
+        ),
       );
     }
     return titleWidget;
   }
 
-  PreferredSizeWidget? _buildMobileTabBar() {
+  PreferredSizeWidget? _buildMobileTabBar(MediaLibrary? selectedLibrary, List<MediaLibrary> libraries) {
     if (PlatformDetector.shouldUseSideNavigation(context) || _selectedLibraryGlobalKey == null) {
       return null;
     }
 
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(48),
-      child: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (int i = 0; i < _visibleTabs.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                buildTabChip(
-                  _getTabLabel(_visibleTabs[i]),
-                  i,
-                  onSelectWhenActive: _focusCurrentTab,
-                  onNavigateDown: _focusCurrentTabFromTabBar,
-                  onNavigateRightFromLast: () => _actionBarKey.currentState?.requestFocusOnFirst(),
-                ),
-              ],
+    final tabRow = Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (int i = 0; i < _visibleTabs.length; i++) ...[
+              if (i > 0) const SizedBox(width: 8),
+              buildTabChip(
+                _getTabLabel(_visibleTabs[i]),
+                i,
+                onSelectWhenActive: _focusCurrentTab,
+                onNavigateDown: _focusCurrentTabFromTabBar,
+                onNavigateRightFromLast: () => _actionBarKey.currentState?.requestFocusOnFirst(),
+              ),
             ],
-          ),
+          ],
         ),
+      ),
+    );
+
+    // Phones show the library picker on its own row above the tabs (tablets
+    // keep it in the logo row — see _buildAppBarTitle). Aligned left so its
+    // edge lines up with the tab row beneath it.
+    final useLogo = widget.filterKind == MediaKind.movie || widget.filterKind == MediaKind.show;
+    final picker = (useLogo && PlatformDetector.isPhone(context))
+        ? _buildLibraryPicker(libraries, selectedLibrary)
+        : null;
+
+    if (picker == null) {
+      return PreferredSize(preferredSize: const Size.fromHeight(48), child: tabRow);
+    }
+
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+            child: Align(alignment: Alignment.centerLeft, child: picker),
+          ),
+          tabRow,
+        ],
       ),
     );
   }
@@ -1079,7 +1108,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
         pinned: pinned,
         floating: isFloating ?? false,
         snap: isFloating ?? false,
-        bottom: isTV ? _buildTVActionBar() : _buildMobileTabBar(),
+        bottom: isTV ? _buildTVActionBar() : _buildMobileTabBar(selectedLibrary, visibleLibraries),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         shadowColor: Colors.transparent,
