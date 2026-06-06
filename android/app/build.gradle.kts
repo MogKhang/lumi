@@ -156,6 +156,11 @@ android {
       ndk {
         debugSymbolLevel = "FULL"
       }
+      // Suppress R8 missing-class warnings from transitive deps (GMS, Sentry).
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro",
+      )
     }
   }
 
