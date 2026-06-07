@@ -1,6 +1,5 @@
 <h1>
   <img src="assets/lumi-text.png" alt="Lumi Logo" height="24" style="vertical-align: middle;" />
-  Lumi
 </h1>
 
 A modern Plex client for desktop and mobile. Built with Flutter for native performance and a clean interface.
