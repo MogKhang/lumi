@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=Plezy
+Name=Lumi
 Comment=A modern Plex client for desktop and mobile
-Exec=plezy
-Icon=plezy
+Exec=lumi
+Icon=lumi
 Terminal=false
 Categories=AudioVideo;Video;Player;
 Keywords=plex;media;streaming;video;
-StartupWMClass=plezy
+StartupWMClass=lumi

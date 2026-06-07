@@ -52,14 +52,6 @@ extension _VideoPlayerDisplayMatchingMethods on VideoPlayerScreenState {
         await player!.play();
       }
 
-      unawaited(
-        Sentry.addBreadcrumb(
-          Breadcrumb(
-            message: 'Frame rate matching: ${fps}fps, switched=$didSwitch, delay=${delaySec}s',
-            category: 'player',
-          ),
-        ),
-      );
       appLogger.d('Frame rate matching: Set display to ${fps}fps (duration: ${durationMs}ms, switched=$didSwitch)');
     } catch (e) {
       appLogger.w('Failed to apply frame rate matching', error: e);
@@ -72,7 +64,6 @@ extension _VideoPlayerDisplayMatchingMethods on VideoPlayerScreenState {
 
     try {
       await player!.clearVideoFrameRate();
-      unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'Frame rate matching cleared', category: 'player')));
       appLogger.d('Frame rate matching: Cleared, restored default display mode');
     } catch (e) {
       appLogger.d('Failed to clear frame rate matching', error: e);

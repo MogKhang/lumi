@@ -48,7 +48,7 @@ body:
       required: true
 
   - type: input
-    id: plezy-version
+    id: lumi-version
     attributes:
       label: Lumi Version
       description: Check the app settings for the version number and paste it here

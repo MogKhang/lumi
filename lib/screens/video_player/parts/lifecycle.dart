@@ -19,23 +19,6 @@ extension _VideoPlayerLifecycleMethods on VideoPlayerScreenState {
   void _recordLifecycleState(String state, {String? action}) {
     final isTv = PlatformDetector.isTV();
     final pipActive = PipService().isPipActive.value;
-    final breadcrumbData = <String, dynamic>{
-      'state': state,
-      'isTv': isTv,
-      'autoPipEnabled': _autoPipEnabled,
-      'pipActive': pipActive,
-      'pipTransitionInFlight': _androidAutoPipTransitionInFlight,
-      'hiddenForBackground': _hiddenForBackground,
-      'backend': _playerBackendLabel,
-    };
-    if (action != null) {
-      breadcrumbData['action'] = action;
-    }
-
-    Sentry.addBreadcrumb(
-      Breadcrumb(message: 'Player lifecycle $state', category: 'player.lifecycle', data: breadcrumbData),
-    );
-
     appLogger.d(
       'Player lifecycle: state=$state'
       '${action != null ? ' action=$action' : ''}'
@@ -72,10 +55,6 @@ extension _VideoPlayerLifecycleMethods on VideoPlayerScreenState {
       _recordLifecycleState('hidden', action: 'skipped_for_pip');
       return;
     }
-
-    // Suppress Watch Together heartbeats while backgrounded so App Nap
-    // doesn't cause stale position broadcasts that make guests loop.
-    _watchTogetherProvider?.setBackgrounded(true);
 
     final currentPlayer = player;
     if (currentPlayer == null || !_isPlayerInitialized) {
@@ -116,7 +95,6 @@ extension _VideoPlayerLifecycleMethods on VideoPlayerScreenState {
 
   Future<void> _handleAppResumed() async {
     _recordLifecycleState('resumed', action: 'begin');
-    _watchTogetherProvider?.setBackgrounded(false);
 
     if (Platform.isAndroid && _androidAutoPipTransitionInFlight && !PipService().isPipActive.value) {
       _setAndroidAutoPipTransitionInFlight(false, reason: 'resume_without_pip');

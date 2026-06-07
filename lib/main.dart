@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'connection/connection.dart';
 import 'connection/connection_bootstrap.dart';
 import 'connection/connection_registry.dart';
@@ -35,11 +34,6 @@ import 'utils/platform_detector.dart';
 import 'services/apple_tv_remote_touch_service.dart';
 import 'services/discord_rpc_service.dart';
 import 'services/gamepad_service.dart';
-import 'services/trakt/trakt_scrobble_service.dart';
-import 'services/trakt/trakt_sync_service.dart';
-import 'services/trackers/tracker_coordinator.dart';
-import 'providers/trakt_account_provider.dart';
-import 'providers/trackers_provider.dart';
 import 'providers/user_profile_provider.dart';
 import 'providers/multi_server_provider.dart';
 import 'providers/theme_provider.dart';
@@ -52,7 +46,6 @@ import 'providers/offline_watch_provider.dart';
 import 'providers/companion_remote_provider.dart';
 import 'providers/shader_provider.dart';
 import 'utils/snackbar_helper.dart';
-import 'watch_together/providers/watch_together_provider.dart';
 import 'services/multi_server_manager.dart';
 import 'services/offline_watch_sync_service.dart';
 import 'services/data_aggregation_service.dart';
@@ -75,12 +68,9 @@ import 'focus/input_mode_tracker.dart';
 import 'focus/key_event_utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'utils/navigation_transitions.dart';
-import 'utils/log_redaction_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-const bool _enableSentry = bool.fromEnvironment('ENABLE_SENTRY', defaultValue: false);
 const String gitCommit = String.fromEnvironment('GIT_COMMIT');
-const String _sentryEnvironment = String.fromEnvironment('SENTRY_ENVIRONMENT');
 
 // Workaround for Flutter bug #177992: iPadOS 26.1+ misinterprets fake touch events
 // at (0,0) as barrier taps, causing modals to dismiss immediately.
@@ -121,28 +111,6 @@ Future<void> main() async {
   // target in Flutter's tool), so register platform stores manually for
   // the plugins we use.
   _registerTvosPlatformPlugins();
-
-  if (_enableSentry) {
-    final packageInfo = await PackageInfo.fromPlatform();
-
-    await SentryFlutter.init((options) {
-      options.dsn = 'https://6a1a6ef8c72140099b2798973c1bfb2f@bugs.plezy.app/1';
-      options.release = gitCommit.isNotEmpty
-          ? 'lumi@${gitCommit.substring(0, 7)}'
-          : 'lumi@${packageInfo.version}+${packageInfo.buildNumber}';
-      if (_sentryEnvironment.isNotEmpty) options.environment = _sentryEnvironment;
-      options.tracesSampleRate = 0;
-      options.attachStacktrace = true;
-      options.enableAutoSessionTracking = false;
-      options.recordHttpBreadcrumbs = false;
-      options.captureNativeFailedRequests = false;
-      options.enableAppHangTracking = !kDebugMode;
-      options.appHangTimeoutInterval = const Duration(seconds: 3);
-      options.beforeSend = _beforeSend;
-      options.beforeBreadcrumb = _beforeBreadcrumb;
-    }, appRunner: _bootstrapApp);
-    return;
-  }
 
   await _bootstrapApp();
 }
@@ -224,8 +192,6 @@ Future<void> _bootstrapApp() async {
     unawaited(DiscordRPCService.instance.initialize());
   }
 
-  await TraktScrobbleService.instance.initialize();
-
   _registerShaderLicenses();
 
   // In release mode, show a colored placeholder instead of a blank/white screen
@@ -236,96 +202,6 @@ Future<void> _bootstrapApp() async {
   };
 
   runApp(const MainApp());
-}
-
-Breadcrumb? _beforeBreadcrumb(Breadcrumb? breadcrumb, Hint _) {
-  if (breadcrumb == null) return null;
-
-  final message = breadcrumb.message;
-  final data = breadcrumb.data;
-  if (message == null && (data == null || data.isEmpty)) return breadcrumb;
-
-  if (message != null) breadcrumb.message = LogRedactionManager.redact(message);
-  if (data != null) breadcrumb.data = data.map((k, v) => MapEntry(k, v is String ? LogRedactionManager.redact(v) : v));
-  return breadcrumb;
-}
-
-FutureOr<SentryEvent?> _beforeSend(SentryEvent event, Hint _) {
-  // Drop event if user opted out of crash reporting
-  final instance = SettingsService.instanceOrNull;
-  if (instance != null && !instance.read(SettingsService.crashReporting)) return null;
-
-  // Drop unactionable errors
-  final exceptions = event.exceptions;
-  if (exceptions != null) {
-    bool shouldDrop(SentryException e) {
-      final v = e.value;
-      // Windows file-lock errors from cache manager cleanup
-      if (e.type == 'FileSystemException' && v != null && v.contains('plexImageCache') && v.contains('errno = 32')) {
-        return true;
-      }
-      // Linux without DBus/NetworkManager
-      if (e.type == 'DBusServiceUnknownException' || (v != null && v.contains('system_bus_socket'))) {
-        return true;
-      }
-      // Device out of disk space
-      if (v != null &&
-          (v.contains('SQLITE_FULL') ||
-              v.contains('No space left on device') ||
-              v.contains('errno = 112') ||
-              v.contains('database or disk is full'))) {
-        return true;
-      }
-      // Native HTTP errors from CFNetwork (server errors, not actionable)
-      if (e.type == 'HTTPClientError') return true;
-      // Discord RPC errors when Discord is not running
-      if (e.type == 'DiscordStateException') return true;
-      return false;
-    }
-
-    if (exceptions.any(shouldDrop)) return null;
-
-    // Scrub Plex tokens and server URLs from exception messages
-    for (final e in exceptions) {
-      final value = e.value;
-      if (value != null) {
-        e.value = LogRedactionManager.redact(value);
-      }
-    }
-  }
-
-  // Enrich TimeoutException with operation name + duration as tags/fingerprint.
-  // value format: "TimeoutException after 0:00:05.000000: <operation> timed out"
-  if (exceptions != null) {
-    final timeoutException = exceptions.where((e) => e.type == 'TimeoutException').firstOrNull;
-    if (timeoutException != null) {
-      final value = timeoutException.value ?? '';
-      final colonIdx = value.indexOf(': ');
-      final message = colonIdx >= 0 ? value.substring(colonIdx + 2) : value;
-      final operation = message.endsWith(' timed out')
-          ? message.substring(0, message.length - ' timed out'.length)
-          : null;
-      final durationMatch = RegExp(r'after (\d+:\d{2}:\d{2}\.\d+)').firstMatch(value);
-
-      final tags = event.tags ??= {};
-      if (operation != null) tags['timeout.operation'] = operation;
-      if (durationMatch != null) tags['timeout.duration'] = durationMatch.group(1)!;
-      event.fingerprint = ['TimeoutException', ?operation];
-    }
-  }
-
-  // Scrub breadcrumb messages and data
-  final breadcrumbs = event.breadcrumbs;
-  if (breadcrumbs != null) {
-    for (final b in breadcrumbs) {
-      final message = b.message;
-      final data = b.data;
-      if (message != null) b.message = LogRedactionManager.redact(message);
-      if (data != null) b.data = data.map((k, v) => MapEntry(k, v is String ? LogRedactionManager.redact(v) : v));
-    }
-  }
-
-  return event;
 }
 
 void _registerShaderLicenses() {
@@ -456,10 +332,6 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
 
     _offlineWatchSyncService = OfflineWatchSyncService(database: _appDatabase, serverManager: _serverManager);
 
-    // Trakt sync service (subscribes to WatchStateNotifier, requires serverManager
-    // to resolve PlexClients for GUID lookups).
-    TraktSyncService.instance.initialize(serverManager: _serverManager);
-
     _appLifecycleListener = AppLifecycleListener(
       onExitRequested: () async {
         httpClient.close();
@@ -584,7 +456,6 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
       case AppLifecycleState.resumed:
         // App came back to foreground - trigger sync check and start new session
         _offlineWatchSyncService.onAppResumed();
-        TraktSyncService.instance.flushQueue();
         InAppReviewService.instance.startSession();
         // Re-probe servers — mobile OS may have dropped TCP connections during doze/sleep.
         // On desktop, resumed fires on every window focus (alt-tab), so apply a cooldown
@@ -782,14 +653,9 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
           },
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        // Tracker accounts — depend on UserProfileProvider for per-profile
-        // session scoping. Hydrated and rebound by `_TrackerProfileBootstrap`.
-        ChangeNotifierProvider(create: (context) => TraktAccountProvider()),
-        ChangeNotifierProvider(create: (context) => TrackersProvider()),
         ChangeNotifierProvider(create: (context) => HiddenLibrariesProvider(), lazy: true),
         ChangeNotifierProvider(create: (context) => LibrariesProvider()),
         ChangeNotifierProvider(create: (context) => PlaybackStateProvider()),
-        ChangeNotifierProvider(create: (context) => WatchTogetherProvider()),
         ChangeNotifierProvider(create: (context) => CompanionRemoteProvider()),
         ChangeNotifierProvider(create: (context) => ShaderProvider()),
       ],
@@ -798,12 +664,7 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
           return TranslationProvider(
             child: Builder(
               builder: (context) {
-                final trakt = context.read<TraktAccountProvider>();
-                final trackers = context.read<TrackersProvider>();
-                return _TrackerProfileBootstrap(
-                  onProfileChanged: [trakt.onActiveProfileChanged, trackers.onActiveProfileChanged],
-                  onFirstMount: TrackerCoordinator.instance.initialize,
-                  child: Listener(
+                return Listener(
                     onPointerDown: (event) {
                       if ((event.buttons & kBackMouseButton) != 0) {
                         rootNavigatorKey.currentState?.maybePop();
@@ -843,8 +704,7 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
                         ),
                       ),
                     ),
-                  ),
-                );
+                  );
               },
             ),
           );
@@ -901,69 +761,6 @@ class _AppleTvScale extends StatelessWidget {
       },
     );
   }
-}
-
-/// Hydrates Trakt and MAL/AniList/Simkl providers with the active profile's
-/// sessions and rebinds their services whenever the user switches profiles.
-///
-/// Lives high in the widget tree (above MaterialApp) so the listener survives
-/// route changes. [onFirstMount] runs exactly once after the first
-/// `didChangeDependencies`.
-class _TrackerProfileBootstrap extends StatefulWidget {
-  final Widget child;
-  final List<Future<void> Function(String? profileId)> onProfileChanged;
-  final VoidCallback? onFirstMount;
-
-  const _TrackerProfileBootstrap({required this.child, required this.onProfileChanged, this.onFirstMount});
-
-  @override
-  State<_TrackerProfileBootstrap> createState() => _TrackerProfileBootstrapState();
-}
-
-class _TrackerProfileBootstrapState extends State<_TrackerProfileBootstrap> {
-  ActiveProfileProvider? _provider;
-  String? _lastId;
-  bool _initialized = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final provider = context.read<ActiveProfileProvider>();
-
-    if (!identical(_provider, provider)) {
-      _provider?.removeListener(_onProfileChanged);
-      _provider = provider;
-      _provider!.addListener(_onProfileChanged);
-    }
-
-    if (!_initialized) {
-      _initialized = true;
-      widget.onFirstMount?.call();
-      _onProfileChanged();
-    }
-  }
-
-  void _onProfileChanged() {
-    final id = _provider?.activeId;
-    if (id == _lastId) return;
-    _lastId = id;
-    for (final fn in widget.onProfileChanged) {
-      unawaited(
-        fn(id).catchError((Object e, StackTrace s) {
-          appLogger.w('Tracker profile bootstrap failed', error: e, stackTrace: s);
-        }),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _provider?.removeListener(_onProfileChanged);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => widget.child;
 }
 
 class OrientationAwareSetup extends StatefulWidget {
@@ -1023,7 +820,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     _setStatus(t.common.checkingNetwork);
 
     // Check network connectivity first thing to avoid hanging on other initialization tasks
-    // that might try to hit the network (like Plex bootstrap or Sentry breadcrumbs).
+    // that might try to hit the network (like Plex bootstrap).
     appLogger.d('Setup: checking network connectivity');
     bool hasNetwork;
     try {
@@ -1114,16 +911,6 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
       });
     }
 
-    final plexCount = allConnections.whereType<PlexAccountConnection>().fold<int>(0, (n, c) => n + c.servers.length);
-    final jellyfinCount = allConnections.whereType<JellyfinConnection>().length;
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(
-          message: 'Handing off to MainScreen with $plexCount Plex server(s) + $jellyfinCount Jellyfin',
-          category: 'setup',
-        ),
-      ),
-    );
     _setStatus(t.common.connectingToServers);
 
     // Snapshot Provider refs before further awaits.

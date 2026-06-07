@@ -103,26 +103,26 @@ jobs:
 
       - name: Package APKs
         run: |
-          tar -czf plezy-android-arm64-v8a.tar.gz -C build/app/outputs/flutter-apk app-arm64-v8a-release.apk --transform 's/app-arm64-v8a-release.apk/plezy.apk/'
-          tar -czf plezy-android-armeabi-v7a.tar.gz -C build/app/outputs/flutter-apk app-armeabi-v7a-release.apk --transform 's/app-armeabi-v7a-release.apk/plezy.apk/'
-          tar -czf plezy-android-x86_64.tar.gz -C build/app/outputs/flutter-apk app-x86_64-release.apk --transform 's/app-x86_64-release.apk/plezy.apk/'
+          tar -czf lumi-android-arm64-v8a.tar.gz -C build/app/outputs/flutter-apk app-arm64-v8a-release.apk --transform 's/app-arm64-v8a-release.apk/lumi.apk/'
+          tar -czf lumi-android-armeabi-v7a.tar.gz -C build/app/outputs/flutter-apk app-armeabi-v7a-release.apk --transform 's/app-armeabi-v7a-release.apk/lumi.apk/'
+          tar -czf lumi-android-x86_64.tar.gz -C build/app/outputs/flutter-apk app-x86_64-release.apk --transform 's/app-x86_64-release.apk/lumi.apk/'
 
       - name: Attest APKs
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            plezy-android-arm64-v8a.tar.gz
-            plezy-android-armeabi-v7a.tar.gz
-            plezy-android-x86_64.tar.gz
+            lumi-android-arm64-v8a.tar.gz
+            lumi-android-armeabi-v7a.tar.gz
+            lumi-android-x86_64.tar.gz
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: |
-            plezy-android-arm64-v8a.tar.gz
-            plezy-android-armeabi-v7a.tar.gz
-            plezy-android-x86_64.tar.gz
+            lumi-android-arm64-v8a.tar.gz
+            lumi-android-armeabi-v7a.tar.gz
+            lumi-android-x86_64.tar.gz
 
   build-ios:
     runs-on: macos-26
@@ -200,18 +200,18 @@ jobs:
         run: |
           mkdir -p Payload
           cp -r build/ios/iphoneos/Runner.app Payload/
-          zip -r plezy-ios.ipa Payload
+          zip -r lumi-ios.ipa Payload
 
       - name: Attest IPA
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: plezy-ios.ipa
+          subject-path: lumi-ios.ipa
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: plezy-ios.ipa
+          path: lumi-ios.ipa
 
   build-macos:
     runs-on: macos-26
@@ -374,7 +374,7 @@ jobs:
           mkdir -p dmg-staging
           cp -R build/macos/Build/Products/Release/Lumi.app dmg-staging/
           ln -s /Applications dmg-staging/Applications
-          hdiutil create -format ULMO -srcfolder dmg-staging -volname "Lumi" plezy-macos.dmg
+          hdiutil create -format ULMO -srcfolder dmg-staging -volname "Lumi" lumi-macos.dmg
 
       - name: Sign DMG for Sparkle (EdDSA)
         if: env.SPARKLE_PRIVATE_KEY != ''
@@ -382,17 +382,17 @@ jobs:
           SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
         run: |
           printf -- "-----BEGIN ED25519 PRIVATE KEY-----\n%s\n-----END ED25519 PRIVATE KEY-----\n" "$SPARKLE_PRIVATE_KEY" > ed25519_key.pem
-          OUTPUT=$(dart run auto_updater:sign_update plezy-macos.dmg ed25519_key.pem)
+          OUTPUT=$(dart run auto_updater:sign_update lumi-macos.dmg ed25519_key.pem)
           rm ed25519_key.pem
           # Extract edSignature value from output like: sparkle:edSignature="..." length="..."
           SIGNATURE=$(echo "$OUTPUT" | grep -o 'edSignature="[^"]*"' | sed 's/edSignature="//;s/"//')
           echo "MACOS_ED_SIGNATURE=$SIGNATURE" >> $GITHUB_ENV
-          echo "MACOS_DMG_SIZE=$(stat -f%z plezy-macos.dmg)" >> $GITHUB_ENV
+          echo "MACOS_DMG_SIZE=$(stat -f%z lumi-macos.dmg)" >> $GITHUB_ENV
 
       - name: Attest macOS DMG
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: plezy-macos.dmg
+          subject-path: lumi-macos.dmg
 
       - name: Write macOS signature metadata
         run: |
@@ -404,7 +404,7 @@ jobs:
         with:
           name: macos-dmg
           path: |
-            plezy-macos.dmg
+            lumi-macos.dmg
             macos-ed-signature.txt
             macos-dmg-size.txt
 
@@ -729,7 +729,7 @@ jobs:
             while IFS= read -r -d '' file; do
               mkdir -p "$SYMBOL_ROOT/$(dirname "$file")"
               cp "$file" "$SYMBOL_ROOT/$file"
-            done < <(find build/linux -path '*/release/bundle/plezy' -type f -print0)
+            done < <(find build/linux -path '*/release/bundle/lumi' -type f -print0)
           fi
 
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
@@ -758,12 +758,12 @@ jobs:
         run: bash linux/packaging/bundle-libs.sh build/linux/x64/release/bundle
 
       - name: Copy wrapper script into bundle
-        run: cp linux/packaging/plezy.sh build/linux/x64/release/bundle/plezy.sh
+        run: cp linux/packaging/lumi.sh build/linux/x64/release/bundle/lumi.sh
 
       - name: Verify no missing dependencies
         run: |
           cd build/linux/x64/release/bundle
-          MISSING=$(LD_LIBRARY_PATH=lib ldd ./plezy 2>&1 | grep "not found" || true)
+          MISSING=$(LD_LIBRARY_PATH=lib ldd ./lumi 2>&1 | grep "not found" || true)
           if [[ -n "$MISSING" ]]; then
             echo "ERROR: Unresolved dependencies found:" >&2
             echo "$MISSING" >&2
@@ -774,26 +774,26 @@ jobs:
       - name: Create tarball
         run: |
           cd build/linux/x64/release/bundle
-          tar -czf $GITHUB_WORKSPACE/plezy-linux-x64.tar.gz *
+          tar -czf $GITHUB_WORKSPACE/lumi-linux-x64.tar.gz *
 
       - name: Attest Linux x64 artifacts
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            plezy-linux-x64.tar.gz
-            plezy-linux-x64.deb
-            plezy-linux-x64.rpm
-            plezy-linux-x64.pkg.tar.zst
+            lumi-linux-x64.tar.gz
+            lumi-linux-x64.deb
+            lumi-linux-x64.rpm
+            lumi-linux-x64.pkg.tar.zst
 
       - name: Upload Linux x64 artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64
           path: |
-            plezy-linux-x64.tar.gz
-            plezy-linux-x64.deb
-            plezy-linux-x64.rpm
-            plezy-linux-x64.pkg.tar.zst
+            lumi-linux-x64.tar.gz
+            lumi-linux-x64.deb
+            lumi-linux-x64.rpm
+            lumi-linux-x64.pkg.tar.zst
 
   build-linux-arm64:
     runs-on: ubuntu-24.04-arm
@@ -868,7 +868,7 @@ jobs:
             while IFS= read -r -d '' file; do
               mkdir -p "$SYMBOL_ROOT/$(dirname "$file")"
               cp "$file" "$SYMBOL_ROOT/$file"
-            done < <(find build/linux -path '*/release/bundle/plezy' -type f -print0)
+            done < <(find build/linux -path '*/release/bundle/lumi' -type f -print0)
           fi
 
           find "$SYMBOL_ROOT" -type f -print -quit | grep -q .
@@ -907,12 +907,12 @@ jobs:
         run: bash linux/packaging/bundle-libs.sh ${{ steps.find-bundle.outputs.bundle_dir }}
 
       - name: Copy wrapper script into bundle
-        run: cp linux/packaging/plezy.sh ${{ steps.find-bundle.outputs.bundle_dir }}/plezy.sh
+        run: cp linux/packaging/lumi.sh ${{ steps.find-bundle.outputs.bundle_dir }}/lumi.sh
 
       - name: Verify no missing dependencies
         run: |
           cd ${{ steps.find-bundle.outputs.bundle_dir }}
-          MISSING=$(LD_LIBRARY_PATH=lib ldd ./plezy 2>&1 | grep "not found" || true)
+          MISSING=$(LD_LIBRARY_PATH=lib ldd ./lumi 2>&1 | grep "not found" || true)
           if [[ -n "$MISSING" ]]; then
             echo "ERROR: Unresolved dependencies found:" >&2
             echo "$MISSING" >&2
@@ -923,71 +923,26 @@ jobs:
       - name: Create tarball
         run: |
           cd ${{ steps.find-bundle.outputs.bundle_dir }}
-          tar -czf $GITHUB_WORKSPACE/plezy-linux-arm64.tar.gz *
+          tar -czf $GITHUB_WORKSPACE/lumi-linux-arm64.tar.gz *
 
       - name: Attest Linux arm64 artifacts
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            plezy-linux-arm64.tar.gz
-            plezy-linux-arm64.deb
-            plezy-linux-arm64.rpm
-            plezy-linux-arm64.pkg.tar.zst
+            lumi-linux-arm64.tar.gz
+            lumi-linux-arm64.deb
+            lumi-linux-arm64.rpm
+            lumi-linux-arm64.pkg.tar.zst
 
       - name: Upload Linux arm64 artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-arm64
           path: |
-            plezy-linux-arm64.tar.gz
-            plezy-linux-arm64.deb
-            plezy-linux-arm64.rpm
-            plezy-linux-arm64.pkg.tar.zst
-
-  upload-symbols:
-    if: github.repository == 'mogkhang/lumi'
-    needs: [build-android, build-ios, build-macos, build-windows-x64, build-windows-arm64, build-linux-x64, build-linux-arm64]
-    runs-on: ${{ matrix.os }}
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: android-apk
-            os: ubuntu-latest
-            command: ./scripts/upload-symbols.sh android-apk symbol-inputs/android-apk
-          - platform: ios
-            os: ubuntu-latest
-            command: ./scripts/upload-symbols.sh ios symbol-inputs/ios
-          - platform: macos
-            os: ubuntu-latest
-            command: ./scripts/upload-symbols.sh macos symbol-inputs/macos
-          - platform: windows-x64
-            os: windows-latest
-            command: ./scripts/upload-symbols.ps1 windows-x64 symbol-inputs/windows-x64
-          - platform: windows-arm64
-            os: windows-latest
-            command: ./scripts/upload-symbols.ps1 windows-arm64 symbol-inputs/windows-arm64
-          - platform: linux-x64
-            os: ubuntu-latest
-            command: ./scripts/upload-symbols.sh linux-x64 symbol-inputs/linux-x64
-          - platform: linux-arm64
-            os: ubuntu-latest
-            command: ./scripts/upload-symbols.sh linux-arm64 symbol-inputs/linux-arm64
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download symbols artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: symbols-${{ matrix.platform }}
-          path: symbol-inputs/${{ matrix.platform }}
-
-      - name: Upload symbols to bugs.plezy.app
-        env:
-          BUGS_ADMIN_TOKEN: ${{ secrets.BUGS_ADMIN_TOKEN }}
-        run: ${{ matrix.command }}
+            lumi-linux-arm64.tar.gz
+            lumi-linux-arm64.deb
+            lumi-linux-arm64.rpm
+            lumi-linux-arm64.pkg.tar.zst
 
   create-release:
     needs: [build-android, build-ios, build-macos, package-windows, build-linux-x64, build-linux-arm64]
@@ -1099,7 +1054,7 @@ jobs:
           # macOS enclosure
           if [ -n "$MACOS_ED_SIG" ]; then
             cat >> appcast.xml << XMLEOF
-                <enclosure url="https://github.com/mogkhang/lumi/releases/download/${VERSION}/plezy-macos.dmg"
+                <enclosure url="https://github.com/mogkhang/lumi/releases/download/${VERSION}/lumi-macos.dmg"
                            length="${MACOS_DMG_SIZE}" type="application/octet-stream"
                            sparkle:edSignature="${MACOS_ED_SIG}"
                            sparkle:os="macos" />
@@ -1133,11 +1088,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/android-apk/plezy-android-arm64-v8a.tar.gz
-            artifacts/android-apk/plezy-android-armeabi-v7a.tar.gz
-            artifacts/android-apk/plezy-android-x86_64.tar.gz
-            artifacts/ios-ipa/plezy-ios.ipa
-            artifacts/macos-dmg/plezy-macos.dmg
+            artifacts/android-apk/lumi-android-arm64-v8a.tar.gz
+            artifacts/android-apk/lumi-android-armeabi-v7a.tar.gz
+            artifacts/android-apk/lumi-android-x86_64.tar.gz
+            artifacts/ios-ipa/lumi-ios.ipa
+            artifacts/macos-dmg/lumi-macos.dmg
             artifacts/windows-x64-portable/lumi-windows-x64-portable.7z
             artifacts/windows-arm64-portable/lumi-windows-arm64-portable.7z
             artifacts/windows-installer/lumi-windows-installer.exe

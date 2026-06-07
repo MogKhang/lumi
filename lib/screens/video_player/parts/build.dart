@@ -143,21 +143,11 @@ extension _VideoPlayerBuildMethods on VideoPlayerScreenState {
                       }
                     });
 
-                    // Compute canControl from Watch Together provider (reactive)
-                    bool canControl = true;
-                    try {
-                      canControl = context.select<WatchTogetherProvider, bool>(
-                        (wt) => wt.isInSession ? wt.canControl() : true,
-                      );
-                    } catch (e) {
-                      // Watch Together not available, default to can control
-                    }
-
                     VoidCallback? onNext;
                     if (widget.isLive) {
                       onNext = _hasNextChannel ? () => _switchLiveChannel(1) : null;
                     } else {
-                      onNext = (_nextEpisode != null && _canNavigateEpisodes()) ? _playNext : null;
+                      onNext = _nextEpisode != null ? _playNext : null;
                     }
 
                     VoidCallback? onPrevious;
@@ -165,7 +155,7 @@ extension _VideoPlayerBuildMethods on VideoPlayerScreenState {
                       onPrevious = _hasPreviousChannel ? () => _switchLiveChannel(-1) : null;
                     } else {
                       final canRestartOrPrevious = _currentMetadata.isEpisode || _previousEpisode != null;
-                      onPrevious = (canRestartOrPrevious && _canNavigateEpisodes()) ? _restartOrPlayPrevious : null;
+                      onPrevious = canRestartOrPrevious ? _restartOrPlayPrevious : null;
                     }
 
                     return Video(
@@ -191,11 +181,10 @@ extension _VideoPlayerBuildMethods on VideoPlayerScreenState {
                         onAudioTrackChanged: _onAudioTrackChanged,
                         onSubtitleTrackChanged: _onSubtitleTrackChanged,
                         onSecondarySubtitleTrackChanged: _onSecondarySubtitleTrackChanged,
-                        onSeekCompleted: _notifyWatchTogetherSeek,
                         onBack: _handleBackButton,
                         onReachedEnd: ({skipAutoPlayCountdown = false}) =>
                             _onVideoCompleted(true, skipAutoPlayCountdown: skipAutoPlayCountdown),
-                        canControl: canControl,
+                        canControl: true,
                         hasFirstFrame: _hasFirstFrame,
                         playNextFocusNode: _showPlayNextDialog ? _playNextConfirmFocusNode : null,
                         controlsVisible: _controlsVisible,
@@ -247,8 +236,6 @@ extension _VideoPlayerBuildMethods on VideoPlayerScreenState {
                 hasFirstFrame: _hasFirstFrame,
                 isExiting: _isExiting,
               ),
-              // Watch Together overlays (isolated from video surface repaints)
-              const VideoPlayerWatchTogetherOverlays(),
               // Black overlay during exit (no spinner - just covers transparency)
               VideoPlayerExitOverlay(isExiting: _isExiting),
             ],
