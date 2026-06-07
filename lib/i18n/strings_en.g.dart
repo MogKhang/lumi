@@ -74,7 +74,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsGenresEn genres = TranslationsGenresEn.internal(_root);
 	late final TranslationsCollectionsEn collections = TranslationsCollectionsEn.internal(_root);
 	late final TranslationsPlaylistsEn playlists = TranslationsPlaylistsEn.internal(_root);
-	late final TranslationsWatchTogetherEn watchTogether = TranslationsWatchTogetherEn.internal(_root);
 	late final TranslationsDownloadsEn downloads = TranslationsDownloadsEn.internal(_root);
 	late final TranslationsShadersEn shaders = TranslationsShadersEn.internal(_root);
 	late final TranslationsCompanionRemoteEn companionRemote = TranslationsCompanionRemoteEn.internal(_root);
@@ -83,8 +82,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsMetadataEditEn metadataEdit = TranslationsMetadataEditEn.internal(_root);
 	late final TranslationsMatchScreenEn matchScreen = TranslationsMatchScreenEn.internal(_root);
 	late final TranslationsServerTasksEn serverTasks = TranslationsServerTasksEn.internal(_root);
-	late final TranslationsTraktEn trakt = TranslationsTraktEn.internal(_root);
-	late final TranslationsTrackersEn trackers = TranslationsTrackersEn.internal(_root);
 	late final TranslationsAddServerEn addServer = TranslationsAddServerEn.internal(_root);
 	late final TranslationsLanguagesEn languages = TranslationsLanguagesEn.internal(_root);
 }
@@ -631,21 +628,6 @@ class TranslationsSettingsEn {
 	/// en: 'Use arrow keys to navigate video player controls'
 	String get videoPlayerNavigationDescription => 'Use arrow keys to navigate video player controls';
 
-	/// en: 'Watch Together Relay'
-	String get watchTogetherRelay => 'Watch Together Relay';
-
-	/// en: 'Set a custom relay server for Watch Together. All participants must use the same server.'
-	String get watchTogetherRelayDescription => 'Set a custom relay server for Watch Together. All participants must use the same server.';
-
-	/// en: 'https://my-relay.example.com'
-	String get watchTogetherRelayHint => 'https://my-relay.example.com';
-
-	/// en: 'Crash Reporting'
-	String get crashReporting => 'Crash Reporting';
-
-	/// en: 'Send crash reports to help improve the app'
-	String get crashReportingDescription => 'Send crash reports to help improve the app';
-
 	/// en: 'Debug Logging'
 	String get debugLogging => 'Debug Logging';
 
@@ -852,18 +834,6 @@ class TranslationsSettingsEn {
 
 	/// en: 'Show what you're watching on Discord'
 	String get discordRichPresenceDescription => 'Show what you\'re watching on Discord';
-
-	/// en: 'Trakt'
-	String get trakt => 'Trakt';
-
-	/// en: 'Sync watch history with Trakt'
-	String get traktDescription => 'Sync watch history with Trakt';
-
-	/// en: 'Trackers'
-	String get trackers => 'Trackers';
-
-	/// en: 'Sync progress to Trakt, MyAnimeList, AniList, and Simkl'
-	String get trackersDescription => 'Sync progress to Trakt, MyAnimeList, AniList, and Simkl';
 
 	/// en: 'Companion Remote Server'
 	String get companionRemoteServer => 'Companion Remote Server';
@@ -2613,195 +2583,6 @@ class TranslationsPlaylistsEn {
 	String get errorRemoving => 'Failed to remove from playlist';
 }
 
-// Path: watchTogether
-class TranslationsWatchTogetherEn {
-	TranslationsWatchTogetherEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Watch Together'
-	String get title => 'Watch Together';
-
-	/// en: 'Watch content in sync with friends and family'
-	String get description => 'Watch content in sync with friends and family';
-
-	/// en: 'Create Session'
-	String get createSession => 'Create Session';
-
-	/// en: 'Creating...'
-	String get creating => 'Creating...';
-
-	/// en: 'Join Session'
-	String get joinSession => 'Join Session';
-
-	/// en: 'Joining...'
-	String get joining => 'Joining...';
-
-	/// en: 'Control Mode'
-	String get controlMode => 'Control Mode';
-
-	/// en: 'Who can control playback?'
-	String get controlModeQuestion => 'Who can control playback?';
-
-	/// en: 'Host Only'
-	String get hostOnly => 'Host Only';
-
-	/// en: 'Anyone'
-	String get anyone => 'Anyone';
-
-	/// en: 'Hosting Session'
-	String get hostingSession => 'Hosting Session';
-
-	/// en: 'In Session'
-	String get inSession => 'In Session';
-
-	/// en: 'Session Code'
-	String get sessionCode => 'Session Code';
-
-	/// en: 'Host controls playback'
-	String get hostControlsPlayback => 'Host controls playback';
-
-	/// en: 'Anyone can control playback'
-	String get anyoneCanControl => 'Anyone can control playback';
-
-	/// en: 'Host controls'
-	String get hostControls => 'Host controls';
-
-	/// en: 'Anyone controls'
-	String get anyoneControls => 'Anyone controls';
-
-	/// en: 'Participants'
-	String get participants => 'Participants';
-
-	/// en: 'Host'
-	String get host => 'Host';
-
-	/// en: 'HOST'
-	String get hostBadge => 'HOST';
-
-	/// en: 'You are the host'
-	String get youAreHost => 'You are the host';
-
-	/// en: 'Watching with others'
-	String get watchingWithOthers => 'Watching with others';
-
-	/// en: 'End Session'
-	String get endSession => 'End Session';
-
-	/// en: 'Leave Session'
-	String get leaveSession => 'Leave Session';
-
-	/// en: 'End Session?'
-	String get endSessionQuestion => 'End Session?';
-
-	/// en: 'Leave Session?'
-	String get leaveSessionQuestion => 'Leave Session?';
-
-	/// en: 'This will end the session for all participants.'
-	String get endSessionConfirm => 'This will end the session for all participants.';
-
-	/// en: 'You will be removed from the session.'
-	String get leaveSessionConfirm => 'You will be removed from the session.';
-
-	/// en: 'This will end the watch session for all participants.'
-	String get endSessionConfirmOverlay => 'This will end the watch session for all participants.';
-
-	/// en: 'You will be disconnected from the watch session.'
-	String get leaveSessionConfirmOverlay => 'You will be disconnected from the watch session.';
-
-	/// en: 'End'
-	String get end => 'End';
-
-	/// en: 'Leave'
-	String get leave => 'Leave';
-
-	/// en: 'Syncing...'
-	String get syncing => 'Syncing...';
-
-	/// en: 'Join Watch Session'
-	String get joinWatchSession => 'Join Watch Session';
-
-	/// en: 'Enter 5-character code'
-	String get enterCodeHint => 'Enter 5-character code';
-
-	/// en: 'Paste from clipboard'
-	String get pasteFromClipboard => 'Paste from clipboard';
-
-	/// en: 'Please enter a session code'
-	String get pleaseEnterCode => 'Please enter a session code';
-
-	/// en: 'Session code must be 5 characters'
-	String get codeMustBe5Chars => 'Session code must be 5 characters';
-
-	/// en: 'Enter the session code shared by the host to join their watch session.'
-	String get joinInstructions => 'Enter the session code shared by the host to join their watch session.';
-
-	/// en: 'Failed to create session'
-	String get failedToCreate => 'Failed to create session';
-
-	/// en: 'Failed to join session'
-	String get failedToJoin => 'Failed to join session';
-
-	/// en: 'Session code copied to clipboard'
-	String get sessionCodeCopied => 'Session code copied to clipboard';
-
-	/// en: 'The relay server is unreachable. This may be caused by your ISP blocking the connection. You can still try, but Watch Together may not work.'
-	String get relayUnreachable => 'The relay server is unreachable. This may be caused by your ISP blocking the connection. You can still try, but Watch Together may not work.';
-
-	/// en: 'Reconnecting to host...'
-	String get reconnectingToHost => 'Reconnecting to host...';
-
-	/// en: 'Current Playback'
-	String get currentPlayback => 'Current Playback';
-
-	/// en: 'Join Current Playback'
-	String get joinCurrentPlayback => 'Join Current Playback';
-
-	/// en: 'Jump back into what the host is currently watching'
-	String get joinCurrentPlaybackDescription => 'Jump back into what the host is currently watching';
-
-	/// en: 'Failed to open current playback'
-	String get failedToOpenCurrentPlayback => 'Failed to open current playback';
-
-	/// en: '${name} joined'
-	String participantJoined({required Object name}) => '${name} joined';
-
-	/// en: '${name} left'
-	String participantLeft({required Object name}) => '${name} left';
-
-	/// en: '${name} paused'
-	String participantPaused({required Object name}) => '${name} paused';
-
-	/// en: '${name} resumed'
-	String participantResumed({required Object name}) => '${name} resumed';
-
-	/// en: '${name} seeked'
-	String participantSeeked({required Object name}) => '${name} seeked';
-
-	/// en: '${name} is buffering'
-	String participantBuffering({required Object name}) => '${name} is buffering';
-
-	/// en: 'Waiting for others to load...'
-	String get waitingForParticipants => 'Waiting for others to load...';
-
-	/// en: 'Recent Rooms'
-	String get recentRooms => 'Recent Rooms';
-
-	/// en: 'Rename Room'
-	String get renameRoom => 'Rename Room';
-
-	/// en: 'Remove'
-	String get removeRoom => 'Remove';
-
-	/// en: 'Couldn't switch — server unavailable for sync'
-	String get guestSwitchUnavailable => 'Couldn\'t switch — server unavailable for sync';
-
-	/// en: 'Couldn't switch — content not found on this server'
-	String get guestSwitchFailed => 'Couldn\'t switch — content not found on this server';
-}
-
 // Path: downloads
 class TranslationsDownloadsEn {
 	TranslationsDownloadsEn.internal(this._root);
@@ -3443,83 +3224,6 @@ class TranslationsServerTasksEn {
 
 	/// en: 'No tasks running'
 	String get noTasks => 'No tasks running';
-}
-
-// Path: trakt
-class TranslationsTraktEn {
-	TranslationsTraktEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Trakt'
-	String get title => 'Trakt';
-
-	/// en: 'Connected'
-	String get connected => 'Connected';
-
-	/// en: 'Connected as @${username}'
-	String connectedAs({required Object username}) => 'Connected as @${username}';
-
-	/// en: 'Disconnect Trakt account?'
-	String get disconnectConfirm => 'Disconnect Trakt account?';
-
-	/// en: 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.'
-	String get disconnectConfirmBody => 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.';
-
-	/// en: 'Real-time scrobbling'
-	String get scrobble => 'Real-time scrobbling';
-
-	/// en: 'Send play, pause, and stop events to Trakt during playback.'
-	String get scrobbleDescription => 'Send play, pause, and stop events to Trakt during playback.';
-
-	/// en: 'Sync watched status'
-	String get watchedSync => 'Sync watched status';
-
-	/// en: 'When you mark items watched in Lumi, mark them on Trakt.'
-	String get watchedSyncDescription => 'When you mark items watched in Lumi, mark them on Trakt.';
-}
-
-// Path: trackers
-class TranslationsTrackersEn {
-	TranslationsTrackersEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Trackers'
-	String get title => 'Trackers';
-
-	/// en: 'Keep your watch progress in sync with Trakt and other services.'
-	String get hubSubtitle => 'Keep your watch progress in sync with Trakt and other services.';
-
-	/// en: 'Not connected'
-	String get notConnected => 'Not connected';
-
-	/// en: 'Connected as @${username}'
-	String connectedAs({required Object username}) => 'Connected as @${username}';
-
-	/// en: 'Track progress automatically'
-	String get scrobble => 'Track progress automatically';
-
-	/// en: 'Update your list when you finish an episode or movie.'
-	String get scrobbleDescription => 'Update your list when you finish an episode or movie.';
-
-	/// en: 'Disconnect ${service}?'
-	String disconnectConfirm({required Object service}) => 'Disconnect ${service}?';
-
-	/// en: 'Lumi will stop updating your ${service} list. You can reconnect at any time.'
-	String disconnectConfirmBody({required Object service}) => 'Lumi will stop updating your ${service} list. You can reconnect at any time.';
-
-	/// en: 'Couldn't connect to ${service}. Try again.'
-	String connectFailed({required Object service}) => 'Couldn\'t connect to ${service}. Try again.';
-
-	late final TranslationsTrackersServicesEn services = TranslationsTrackersServicesEn.internal(_root);
-	late final TranslationsTrackersDeviceCodeEn deviceCode = TranslationsTrackersDeviceCodeEn.internal(_root);
-	late final TranslationsTrackersOauthProxyEn oauthProxy = TranslationsTrackersOauthProxyEn.internal(_root);
-	late final TranslationsTrackersLibraryFilterEn libraryFilter = TranslationsTrackersLibraryFilterEn.internal(_root);
 }
 
 // Path: addServer
@@ -4659,114 +4363,6 @@ class TranslationsCompanionRemoteRemoteEn {
 	String get searchHint => 'Search on desktop...';
 }
 
-// Path: trackers.services
-class TranslationsTrackersServicesEn {
-	TranslationsTrackersServicesEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'MyAnimeList'
-	String get mal => 'MyAnimeList';
-
-	/// en: 'AniList'
-	String get anilist => 'AniList';
-
-	/// en: 'Simkl'
-	String get simkl => 'Simkl';
-}
-
-// Path: trackers.deviceCode
-class TranslationsTrackersDeviceCodeEn {
-	TranslationsTrackersDeviceCodeEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Activate Lumi on ${service}'
-	String title({required Object service}) => 'Activate Lumi on ${service}';
-
-	/// en: 'Visit ${url} and enter this code:'
-	String body({required Object url}) => 'Visit ${url} and enter this code:';
-
-	/// en: 'Open ${service} to activate'
-	String openToActivate({required Object service}) => 'Open ${service} to activate';
-
-	/// en: 'Waiting for authorization…'
-	String get waitingForAuthorization => 'Waiting for authorization…';
-
-	/// en: 'Code copied'
-	String get codeCopied => 'Code copied';
-}
-
-// Path: trackers.oauthProxy
-class TranslationsTrackersOauthProxyEn {
-	TranslationsTrackersOauthProxyEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Sign in to ${service}'
-	String title({required Object service}) => 'Sign in to ${service}';
-
-	/// en: 'Scan this QR code with your phone, or open the URL below on any device with a browser.'
-	String get body => 'Scan this QR code with your phone, or open the URL below on any device with a browser.';
-
-	/// en: 'Open ${service} to sign in'
-	String openToSignIn({required Object service}) => 'Open ${service} to sign in';
-
-	/// en: 'URL copied'
-	String get urlCopied => 'URL copied';
-}
-
-// Path: trackers.libraryFilter
-class TranslationsTrackersLibraryFilterEn {
-	TranslationsTrackersLibraryFilterEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Library filter'
-	String get title => 'Library filter';
-
-	/// en: 'Syncing all libraries'
-	String get subtitleAllSyncing => 'Syncing all libraries';
-
-	/// en: 'Nothing syncing'
-	String get subtitleNoneSyncing => 'Nothing syncing';
-
-	/// en: '${count} blocked'
-	String subtitleBlocked({required Object count}) => '${count} blocked';
-
-	/// en: '${count} allowed'
-	String subtitleAllowed({required Object count}) => '${count} allowed';
-
-	/// en: 'Filter mode'
-	String get mode => 'Filter mode';
-
-	/// en: 'Blacklist'
-	String get modeBlacklist => 'Blacklist';
-
-	/// en: 'Whitelist'
-	String get modeWhitelist => 'Whitelist';
-
-	/// en: 'Sync every library except the ones checked below.'
-	String get modeHintBlacklist => 'Sync every library except the ones checked below.';
-
-	/// en: 'Sync only the libraries checked below.'
-	String get modeHintWhitelist => 'Sync only the libraries checked below.';
-
-	/// en: 'Libraries'
-	String get libraries => 'Libraries';
-
-	/// en: 'No libraries available'
-	String get noLibraries => 'No libraries available';
-}
-
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -4935,11 +4531,6 @@ extension on Translations {
 			'settings.keyboardShortcutsDescription' => 'Customize keyboard shortcuts',
 			'settings.videoPlayerNavigation' => 'Video Player Navigation',
 			'settings.videoPlayerNavigationDescription' => 'Use arrow keys to navigate video player controls',
-			'settings.watchTogetherRelay' => 'Watch Together Relay',
-			'settings.watchTogetherRelayDescription' => 'Set a custom relay server for Watch Together. All participants must use the same server.',
-			'settings.watchTogetherRelayHint' => 'https://my-relay.example.com',
-			'settings.crashReporting' => 'Crash Reporting',
-			'settings.crashReportingDescription' => 'Send crash reports to help improve the app',
 			'settings.debugLogging' => 'Debug Logging',
 			'settings.debugLoggingDescription' => 'Enable detailed logging for troubleshooting',
 			'settings.viewLogs' => 'View Logs',
@@ -5009,10 +4600,6 @@ extension on Translations {
 			'settings.maxVolumePercent' => ({required Object percent}) => '${percent}%',
 			'settings.discordRichPresence' => 'Discord Rich Presence',
 			'settings.discordRichPresenceDescription' => 'Show what you\'re watching on Discord',
-			'settings.trakt' => 'Trakt',
-			'settings.traktDescription' => 'Sync watch history with Trakt',
-			'settings.trackers' => 'Trackers',
-			'settings.trackersDescription' => 'Sync progress to Trakt, MyAnimeList, AniList, and Simkl',
 			'settings.companionRemoteServer' => 'Companion Remote Server',
 			'settings.companionRemoteServerDescription' => 'Allow mobile devices on your network to control this app',
 			'settings.autoPip' => 'Auto Picture-in-Picture',
@@ -5287,8 +4874,6 @@ extension on Translations {
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Switch User',
 			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
 			'profiles.removeConnectionTitle' => 'Remove connection?',
@@ -5298,6 +4883,8 @@ extension on Translations {
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
@@ -5608,66 +5195,6 @@ extension on Translations {
 			'playlists.errorAdding' => 'Failed to add to playlist',
 			'playlists.errorReordering' => 'Failed to reorder playlist item',
 			'playlists.errorRemoving' => 'Failed to remove from playlist',
-			'watchTogether.title' => 'Watch Together',
-			'watchTogether.description' => 'Watch content in sync with friends and family',
-			'watchTogether.createSession' => 'Create Session',
-			'watchTogether.creating' => 'Creating...',
-			'watchTogether.joinSession' => 'Join Session',
-			'watchTogether.joining' => 'Joining...',
-			'watchTogether.controlMode' => 'Control Mode',
-			'watchTogether.controlModeQuestion' => 'Who can control playback?',
-			'watchTogether.hostOnly' => 'Host Only',
-			'watchTogether.anyone' => 'Anyone',
-			'watchTogether.hostingSession' => 'Hosting Session',
-			'watchTogether.inSession' => 'In Session',
-			'watchTogether.sessionCode' => 'Session Code',
-			'watchTogether.hostControlsPlayback' => 'Host controls playback',
-			'watchTogether.anyoneCanControl' => 'Anyone can control playback',
-			'watchTogether.hostControls' => 'Host controls',
-			'watchTogether.anyoneControls' => 'Anyone controls',
-			'watchTogether.participants' => 'Participants',
-			'watchTogether.host' => 'Host',
-			'watchTogether.hostBadge' => 'HOST',
-			'watchTogether.youAreHost' => 'You are the host',
-			'watchTogether.watchingWithOthers' => 'Watching with others',
-			'watchTogether.endSession' => 'End Session',
-			'watchTogether.leaveSession' => 'Leave Session',
-			'watchTogether.endSessionQuestion' => 'End Session?',
-			'watchTogether.leaveSessionQuestion' => 'Leave Session?',
-			'watchTogether.endSessionConfirm' => 'This will end the session for all participants.',
-			'watchTogether.leaveSessionConfirm' => 'You will be removed from the session.',
-			'watchTogether.endSessionConfirmOverlay' => 'This will end the watch session for all participants.',
-			'watchTogether.leaveSessionConfirmOverlay' => 'You will be disconnected from the watch session.',
-			'watchTogether.end' => 'End',
-			'watchTogether.leave' => 'Leave',
-			'watchTogether.syncing' => 'Syncing...',
-			'watchTogether.joinWatchSession' => 'Join Watch Session',
-			'watchTogether.enterCodeHint' => 'Enter 5-character code',
-			'watchTogether.pasteFromClipboard' => 'Paste from clipboard',
-			'watchTogether.pleaseEnterCode' => 'Please enter a session code',
-			'watchTogether.codeMustBe5Chars' => 'Session code must be 5 characters',
-			'watchTogether.joinInstructions' => 'Enter the session code shared by the host to join their watch session.',
-			'watchTogether.failedToCreate' => 'Failed to create session',
-			'watchTogether.failedToJoin' => 'Failed to join session',
-			'watchTogether.sessionCodeCopied' => 'Session code copied to clipboard',
-			'watchTogether.relayUnreachable' => 'The relay server is unreachable. This may be caused by your ISP blocking the connection. You can still try, but Watch Together may not work.',
-			'watchTogether.reconnectingToHost' => 'Reconnecting to host...',
-			'watchTogether.currentPlayback' => 'Current Playback',
-			'watchTogether.joinCurrentPlayback' => 'Join Current Playback',
-			'watchTogether.joinCurrentPlaybackDescription' => 'Jump back into what the host is currently watching',
-			'watchTogether.failedToOpenCurrentPlayback' => 'Failed to open current playback',
-			'watchTogether.participantJoined' => ({required Object name}) => '${name} joined',
-			'watchTogether.participantLeft' => ({required Object name}) => '${name} left',
-			'watchTogether.participantPaused' => ({required Object name}) => '${name} paused',
-			'watchTogether.participantResumed' => ({required Object name}) => '${name} resumed',
-			'watchTogether.participantSeeked' => ({required Object name}) => '${name} seeked',
-			'watchTogether.participantBuffering' => ({required Object name}) => '${name} is buffering',
-			'watchTogether.waitingForParticipants' => 'Waiting for others to load...',
-			'watchTogether.recentRooms' => 'Recent Rooms',
-			'watchTogether.renameRoom' => 'Rename Room',
-			'watchTogether.removeRoom' => 'Remove',
-			'watchTogether.guestSwitchUnavailable' => 'Couldn\'t switch — server unavailable for sync',
-			'watchTogether.guestSwitchFailed' => 'Couldn\'t switch — content not found on this server',
 			'downloads.title' => 'Downloads',
 			'downloads.manage' => 'Manage',
 			'downloads.tvShows' => 'TV Shows',
@@ -5801,8 +5328,6 @@ extension on Translations {
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
 			'videoSettings.hdr' => 'HDR',
 			'videoSettings.audioOutput' => 'Audio Output',
-			_ => null,
-		} ?? switch (path) {
 			'videoSettings.performanceOverlay' => 'Performance Overlay',
 			'videoSettings.audioPassthrough' => 'Audio Passthrough',
 			'videoSettings.audioNormalization' => 'Normalize Loudness',
@@ -5872,6 +5397,8 @@ extension on Translations {
 			'metadataEdit.afterAWeek' => 'After a week',
 			'metadataEdit.afterAMonth' => 'After a month',
 			'metadataEdit.onNextRefresh' => 'On next refresh',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.seasons' => 'Seasons',
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',
@@ -5913,48 +5440,6 @@ extension on Translations {
 			'serverTasks.title' => 'Server Tasks',
 			'serverTasks.failedToLoad' => 'Failed to load tasks',
 			'serverTasks.noTasks' => 'No tasks running',
-			'trakt.title' => 'Trakt',
-			'trakt.connected' => 'Connected',
-			'trakt.connectedAs' => ({required Object username}) => 'Connected as @${username}',
-			'trakt.disconnectConfirm' => 'Disconnect Trakt account?',
-			'trakt.disconnectConfirmBody' => 'Lumi will stop sending playback events to Trakt. You can reconnect at any time.',
-			'trakt.scrobble' => 'Real-time scrobbling',
-			'trakt.scrobbleDescription' => 'Send play, pause, and stop events to Trakt during playback.',
-			'trakt.watchedSync' => 'Sync watched status',
-			'trakt.watchedSyncDescription' => 'When you mark items watched in Lumi, mark them on Trakt.',
-			'trackers.title' => 'Trackers',
-			'trackers.hubSubtitle' => 'Keep your watch progress in sync with Trakt and other services.',
-			'trackers.notConnected' => 'Not connected',
-			'trackers.connectedAs' => ({required Object username}) => 'Connected as @${username}',
-			'trackers.scrobble' => 'Track progress automatically',
-			'trackers.scrobbleDescription' => 'Update your list when you finish an episode or movie.',
-			'trackers.disconnectConfirm' => ({required Object service}) => 'Disconnect ${service}?',
-			'trackers.disconnectConfirmBody' => ({required Object service}) => 'Lumi will stop updating your ${service} list. You can reconnect at any time.',
-			'trackers.connectFailed' => ({required Object service}) => 'Couldn\'t connect to ${service}. Try again.',
-			'trackers.services.mal' => 'MyAnimeList',
-			'trackers.services.anilist' => 'AniList',
-			'trackers.services.simkl' => 'Simkl',
-			'trackers.deviceCode.title' => ({required Object service}) => 'Activate Lumi on ${service}',
-			'trackers.deviceCode.body' => ({required Object url}) => 'Visit ${url} and enter this code:',
-			'trackers.deviceCode.openToActivate' => ({required Object service}) => 'Open ${service} to activate',
-			'trackers.deviceCode.waitingForAuthorization' => 'Waiting for authorization…',
-			'trackers.deviceCode.codeCopied' => 'Code copied',
-			'trackers.oauthProxy.title' => ({required Object service}) => 'Sign in to ${service}',
-			'trackers.oauthProxy.body' => 'Scan this QR code with your phone, or open the URL below on any device with a browser.',
-			'trackers.oauthProxy.openToSignIn' => ({required Object service}) => 'Open ${service} to sign in',
-			'trackers.oauthProxy.urlCopied' => 'URL copied',
-			'trackers.libraryFilter.title' => 'Library filter',
-			'trackers.libraryFilter.subtitleAllSyncing' => 'Syncing all libraries',
-			'trackers.libraryFilter.subtitleNoneSyncing' => 'Nothing syncing',
-			'trackers.libraryFilter.subtitleBlocked' => ({required Object count}) => '${count} blocked',
-			'trackers.libraryFilter.subtitleAllowed' => ({required Object count}) => '${count} allowed',
-			'trackers.libraryFilter.mode' => 'Filter mode',
-			'trackers.libraryFilter.modeBlacklist' => 'Blacklist',
-			'trackers.libraryFilter.modeWhitelist' => 'Whitelist',
-			'trackers.libraryFilter.modeHintBlacklist' => 'Sync every library except the ones checked below.',
-			'trackers.libraryFilter.modeHintWhitelist' => 'Sync only the libraries checked below.',
-			'trackers.libraryFilter.libraries' => 'Libraries',
-			'trackers.libraryFilter.noLibraries' => 'No libraries available',
 			'addServer.addJellyfinTitle' => 'Add Jellyfin server',
 			'addServer.jellyfinUrlIntro' => 'Enter your Jellyfin server URL — e.g. `https://jellyfin.example.com`. You can sign in afterwards.',
 			'addServer.serverUrl' => 'Server URL',
