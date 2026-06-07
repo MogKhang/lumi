@@ -1,20 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:lumi/utils/media_server_http_client.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../focus/focusable_action_bar.dart';
-import '../../focus/focusable_button.dart';
 import '../../focus/key_event_utils.dart';
 import '../../i18n/strings.g.dart';
 import '../../mixins/mounted_set_state_mixin.dart';
-import '../../utils/dialogs.dart';
 import '../../main.dart' show gitCommit;
 import '../../utils/app_logger.dart';
 import '../../utils/formatters.dart';
@@ -130,62 +126,6 @@ class _LogsScreenState extends State<LogsScreen> with MountedSetStateMixin {
     showSuccessSnackBar(context, t.messages.logsCopied);
   }
 
-  Future<void> _uploadLogs() async {
-    final logText = _formatAllLogs();
-
-    showLoadingDialog(context);
-
-    try {
-      final response = await httpClient.post(
-        'https://ice.plezy.app/logs',
-        body: logText,
-        headers: {'Content-Type': 'text/plain'},
-      );
-
-      if (!mounted) return;
-      Navigator.of(context).pop(); // dismiss loading
-
-      final data = response.data is String ? jsonDecode(response.data) : response.data;
-      final id = (data as Map<String, dynamic>)['id'] as String;
-
-      unawaited(
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text(t.messages.logsUploaded),
-            content: Row(
-              children: [
-                Text('${t.messages.logId}: '),
-                SelectableText(
-                  id,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', fontSize: 18),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.copy, size: 20),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: id));
-                    showSuccessSnackBar(context, t.messages.logsCopied);
-                  },
-                ),
-              ],
-            ),
-            actions: [
-              FocusableButton(
-                autofocus: true,
-                onPressed: () => Navigator.of(ctx).pop(),
-                child: TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(t.common.close)),
-              ),
-            ],
-          ),
-        ),
-      );
-    } catch (_) {
-      if (!mounted) return;
-      Navigator.of(context).pop(); // dismiss loading
-      showErrorSnackBar(context, t.messages.logsUploadFailed);
-    }
-  }
 
   Color _getLevelColor(Level level) {
     switch (level) {
@@ -298,11 +238,6 @@ class _LogsScreenState extends State<LogsScreen> with MountedSetStateMixin {
                 FocusableActionBar(
                   actions: [
                     FocusableAction(icon: Symbols.refresh_rounded, tooltip: t.common.refresh, onPressed: _loadLogs),
-                    FocusableAction(
-                      icon: Symbols.upload_rounded,
-                      tooltip: t.logs.uploadLogs,
-                      onPressed: _logs.isNotEmpty ? _uploadLogs : null,
-                    ),
                     FocusableAction(
                       icon: Symbols.content_copy_rounded,
                       tooltip: t.logs.copyLogs,

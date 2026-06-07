@@ -57,7 +57,6 @@ import 'search_screen.dart';
 import 'settings/settings_screen.dart';
 import 'profile/profile_switch_screen.dart';
 import '../services/watch_next_service.dart';
-import '../watch_together/watch_together.dart';
 
 /// Provides access to the main screen's focus control.
 class MainScreenFocusScope extends InheritedWidget {
@@ -211,9 +210,7 @@ class _MainScreenState extends State<MainScreen>
     }
     _screens = _buildScreens(_isOffline);
 
-    // Set up Watch Together callbacks immediately (must be synchronous to catch early messages)
     if (!_isOffline) {
-      _setupWatchTogetherCallback();
       _setupWatchNextDeepLink();
     }
 
@@ -486,35 +483,6 @@ class _MainScreenState extends State<MainScreen>
     showSkipVersion: true,
   );
 
-  /// Set up the Watch Together navigation callback for guests
-  void _setupWatchTogetherCallback() {
-    try {
-      final watchTogether = context.read<WatchTogetherProvider>();
-      watchTogether.onMediaSwitched = (ratingKey, serverId, mediaTitle) async {
-        appLogger.d('WatchTogether: Media switch received - navigating to $mediaTitle');
-        await _navigateToWatchTogetherMedia(ratingKey, serverId);
-      };
-      watchTogether.onHostExitedPlayer = () {
-        appLogger.d('WatchTogether: Host exited player - exiting player for guest');
-        // Use rootNavigator to ensure we pop the video player even if nested
-        if (!mounted) return;
-        final navigator = Navigator.of(context, rootNavigator: true);
-        bool isVideoPlayerOnTop = false;
-        navigator.popUntil((route) {
-          if (route.isCurrent) {
-            isVideoPlayerOnTop = route.settings.name == kVideoPlayerRouteName;
-          }
-          return true;
-        });
-        if (isVideoPlayerOnTop && navigator.canPop()) {
-          navigator.pop();
-        }
-      };
-    } catch (e) {
-      appLogger.w('Could not set up Watch Together callback', error: e);
-    }
-  }
-
   /// Set up Watch Next deep link handling for Android TV launcher taps
   void _setupWatchNextDeepLink() {
     if (!Platform.isAndroid) return;
@@ -565,17 +533,6 @@ class _MainScreenState extends State<MainScreen>
       unawaited(navigateToVideoPlayer(context, metadata: metadata));
     } catch (e) {
       appLogger.e('Watch Next: failed to navigate to media', error: e);
-    }
-  }
-
-  /// Navigate to media when host switches content in Watch Together session
-  Future<void> _navigateToWatchTogetherMedia(String ratingKey, String serverId) async {
-    if (!mounted) return; // Check before any context usage
-
-    try {
-      await navigateToWatchTogetherPlayback(context, ratingKey: ratingKey, serverId: serverId);
-    } catch (e) {
-      appLogger.e('WatchTogether: Failed to navigate to media', error: e);
     }
   }
 

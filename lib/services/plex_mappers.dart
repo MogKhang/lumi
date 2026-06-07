@@ -12,7 +12,6 @@
 // resolution and server-tagging.
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../media/media_backend.dart';
 import '../media/media_hub.dart';
@@ -545,13 +544,7 @@ class PlexMetadataDto {
     try {
       return _$PlexMetadataDtoFromJson(json);
     } on TypeError catch (e, st) {
-      Sentry.captureException(
-        e,
-        stackTrace: st,
-        withScope: (scope) {
-          scope.setContexts('json', json);
-        },
-      );
+      appLogger.e('Failed to parse PlexMetadataDto', error: e, stackTrace: st);
       rethrow;
     }
   }

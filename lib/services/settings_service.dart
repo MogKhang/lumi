@@ -14,7 +14,6 @@ export 'base_shared_preferences_service.dart'
     show Pref, BoolPref, IntPref, DoublePref, StringPref, NullableStringPref, StringListPref, EnumPref, JsonPref;
 import '../models/transcode_quality_preset.dart';
 import '../utils/platform_detector.dart';
-import 'trackers/tracker_constants.dart';
 
 enum ThemeMode { system, light, dark, oled }
 
@@ -133,11 +132,6 @@ class _AutoPipPref extends Pref<bool> {
 
   @override
   Future<void> writeTo(BaseSharedPreferencesService svc, bool value) => svc.writeBool(key, value);
-}
-
-String? _trimEmptyAsNull(String? v) {
-  final t = v?.trim();
-  return (t == null || t.isEmpty) ? null : t;
 }
 
 String _legacyMpvEntriesToText(List<dynamic> entries) {
@@ -305,11 +299,6 @@ class SettingsService extends BaseSharedPreferencesService {
   static const showPerformanceOverlay = BoolPref('show_performance_overlay');
   static const autoHidePerformanceOverlay = BoolPref('auto_hide_performance_overlay', defaultValue: true);
   static const enableDiscordRPC = BoolPref('enable_discord_rpc');
-  static const enableTraktScrobble = BoolPref('enable_trakt_scrobble', defaultValue: true);
-  static const enableTraktWatchedSync = BoolPref('enable_trakt_watched_sync', defaultValue: true);
-  static const enableMalScrobble = BoolPref('enable_mal_scrobble', defaultValue: true);
-  static const enableAnilistScrobble = BoolPref('enable_anilist_scrobble', defaultValue: true);
-  static const enableSimklScrobble = BoolPref('enable_simkl_scrobble', defaultValue: true);
   static const matchContentFrameRate = BoolPref('match_content_frame_rate');
   static const tunneledPlayback = BoolPref('tunneled_playback', defaultValue: true);
   static const defaultQualityPreset = EnumPref<TranscodeQualityPreset>(
@@ -338,8 +327,6 @@ class SettingsService extends BaseSharedPreferencesService {
   static const appLocale = _AppLocalePref();
   static const autoPip = _AutoPipPref();
   static const customDownloadPath = NullableStringPref('custom_download_path');
-  static final customRelayUrl = NullableStringPref('custom_relay_url', transform: _trimEmptyAsNull);
-  static const recentRooms = NullableStringPref('watch_together_recent_rooms');
   static const selectedServerId = NullableStringPref('selected_server_id');
 
   static final maxVolume = IntPref('max_volume', defaultValue: 100, transform: (v) => v.clamp(100, 300));
@@ -417,15 +404,6 @@ class SettingsService extends BaseSharedPreferencesService {
 
   static IntPref watchedThresholdPref(String serverId) => IntPref('watched_threshold_$serverId', defaultValue: 90);
 
-  static EnumPref<TrackerLibraryFilterMode> trackerFilterModePref(TrackerService s) => EnumPref(
-    'tracker_library_filter_mode_${s.name}',
-    values: TrackerLibraryFilterMode.values,
-    defaultValue: TrackerLibraryFilterMode.blacklist,
-  );
-
-  static StringListPref trackerFilterIdsPref(TrackerService s) =>
-      StringListPref('tracker_library_filter_ids_${s.name}');
-
   SettingsService._();
 
   static SettingsService? _cachedInstance;
@@ -448,14 +426,6 @@ class SettingsService extends BaseSharedPreferencesService {
 
   static Map<String, String> defaultKeyboardShortcuts() => _defaultKeyboardShortcuts();
   static Map<String, HotKey> defaultKeyboardHotkeys() => _defaultKeyboardHotkeys();
-
-  /// Null keys bypass the filter so we err on the side of syncing.
-  bool isLibraryAllowedForTracker(TrackerService service, String? libraryGlobalKey) {
-    if (libraryGlobalKey == null) return true;
-    final inList = read(trackerFilterIdsPref(service)).contains(libraryGlobalKey);
-    final mode = read(trackerFilterModePref(service));
-    return mode == TrackerLibraryFilterMode.blacklist ? !inList : inList;
-  }
 
   Future<void> removeCustomExternalPlayer(String id) async {
     final players = read(customExternalPlayers).where((p) => p.id != id).toList();
@@ -676,11 +646,6 @@ class SettingsService extends BaseSharedPreferencesService {
     showPerformanceOverlay,
     autoHidePerformanceOverlay,
     enableDiscordRPC,
-    enableTraktScrobble,
-    enableTraktWatchedSync,
-    enableMalScrobble,
-    enableAnilistScrobble,
-    enableSimklScrobble,
     matchContentFrameRate,
     tunneledPlayback,
     defaultPlaybackSpeed,
@@ -715,7 +680,6 @@ class SettingsService extends BaseSharedPreferencesService {
     customShaderPresets,
     selectedExternalPlayer,
     customExternalPlayers,
-    customRelayUrl,
   ];
 
   Future<void> resetAllSettings() async {
@@ -726,9 +690,6 @@ class SettingsService extends BaseSharedPreferencesService {
       prefs.remove(_legacyUseSeasonPosterKey),
       prefs.remove(_legacyMpvConfigEntriesKey),
       prefs.remove(_bufferSizeMigratedKey),
-      ...TrackerService.values.expand(
-        (s) => [prefs.remove(trackerFilterModePref(s).key), prefs.remove(trackerFilterIdsPref(s).key)],
-      ),
     ]);
     refreshListenables();
   }

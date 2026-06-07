@@ -17,15 +17,6 @@ import 'app_logger.dart';
 
 const String kVideoPlayerRouteName = '/video_player';
 
-class WatchTogetherPlaybackNavigationException implements Exception {
-  final String message;
-
-  const WatchTogetherPlaybackNavigationException(this.message);
-
-  @override
-  String toString() => message;
-}
-
 /// Navigates to the VideoPlayerScreen with instant transitions to prevent white flash.
 ///
 /// This utility function provides a consistent way to navigate to the video player
@@ -194,29 +185,4 @@ Future<bool?> navigateToVideoPlayerWithRefresh(
   }
 
   return result;
-}
-
-/// Resolves the current Watch Together media and opens the video player.
-Future<void> navigateToWatchTogetherPlayback(
-  BuildContext context, {
-  required String ratingKey,
-  required String serverId,
-  VoidCallback? onBeforeNavigate,
-}) async {
-  final multiServer = context.read<MultiServerProvider>();
-  final client = multiServer.getClientForServer(serverId);
-
-  if (client == null) {
-    throw const WatchTogetherPlaybackNavigationException('Watch Together server is unavailable');
-  }
-
-  final metadata = await client.fetchItem(ratingKey);
-  if (metadata == null) {
-    throw const WatchTogetherPlaybackNavigationException('Current Watch Together media is unavailable');
-  }
-
-  if (!context.mounted) return;
-
-  onBeforeNavigate?.call();
-  unawaited(navigateToVideoPlayer(context, metadata: metadata));
 }

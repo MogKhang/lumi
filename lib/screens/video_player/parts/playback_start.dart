@@ -257,11 +257,6 @@ extension _VideoPlayerPlaybackStartMethods on VideoPlayerScreenState {
           );
         }
 
-        // Attach player to Watch Together session for sync (if in session)
-        if (mounted && !_isOfflinePlayback) {
-          _attachToWatchTogetherSession();
-          _notifyWatchTogetherMediaChange();
-        }
       }
 
       // Update available versions from the playback data
@@ -381,9 +376,8 @@ extension _VideoPlayerPlaybackStartMethods on VideoPlayerScreenState {
           Future.delayed(Duration(seconds: 2 + delaySec + 1), () {
             _suppressMediaPauseDuringFrameRateSwitch = false;
           });
-          bool didSwitch = false;
           try {
-            didSwitch = await player!.setVideoFrameRate(preKnownFps, durationMs, extraDelayMs: delaySec * 1000);
+            await player!.setVideoFrameRate(preKnownFps, durationMs, extraDelayMs: delaySec * 1000);
           } catch (e) {
             appLogger.w('Failed to apply pre-playback frame rate matching', error: e);
           }
@@ -399,14 +393,6 @@ extension _VideoPlayerPlaybackStartMethods on VideoPlayerScreenState {
             }
           }
 
-          unawaited(
-            Sentry.addBreadcrumb(
-              Breadcrumb(
-                message: 'Pre-playback frame rate: ${preKnownFps}fps, switched=$didSwitch, delay=${delaySec}s',
-                category: 'player',
-              ),
-            ),
-          );
         }
       }
     } on PlaybackException catch (e) {

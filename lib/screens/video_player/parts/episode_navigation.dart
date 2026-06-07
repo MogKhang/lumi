@@ -7,8 +7,6 @@ extension _VideoPlayerEpisodeNavigationMethods on VideoPlayerScreenState {
     _autoPlayTimer?.cancel();
     _dismissStillWatching();
 
-    _notifyWatchTogetherMediaChange(metadata: _nextEpisode);
-
     _setPlayerState(() {
       _isLoadingNext = true;
       _showPlayNextDialog = false;
@@ -19,8 +17,6 @@ extension _VideoPlayerEpisodeNavigationMethods on VideoPlayerScreenState {
 
   Future<void> _playPrevious() async {
     if (_previousEpisode == null || _isLoadingPrevious) return;
-
-    _notifyWatchTogetherMediaChange(metadata: _previousEpisode);
 
     _setPlayerState(() {
       _isLoadingPrevious = true;
@@ -50,7 +46,6 @@ extension _VideoPlayerEpisodeNavigationMethods on VideoPlayerScreenState {
     await currentPlayer.seek(target);
     if (!mounted || currentPlayer != player) return;
 
-    _notifyWatchTogetherSeek(target);
     _updateMediaControlsPlaybackState();
   }
 
@@ -70,8 +65,6 @@ extension _VideoPlayerEpisodeNavigationMethods on VideoPlayerScreenState {
     _isReplacingWithVideo = true;
 
     unawaited(DiscordRPCService.instance.stopPlayback());
-    unawaited(TraktScrobbleService.instance.stopPlayback());
-    unawaited(TrackerCoordinator.instance.stopPlayback());
 
     if (player == null) {
       if (mounted) {
@@ -158,8 +151,6 @@ extension _VideoPlayerEpisodeNavigationMethods on VideoPlayerScreenState {
     _progressTracker?.dispose();
     _progressTracker = null;
     unawaited(DiscordRPCService.instance.stopPlayback());
-    unawaited(TraktScrobbleService.instance.stopPlayback());
-    unawaited(TrackerCoordinator.instance.stopPlayback());
 
     _currentMetadata = episodeMetadata;
     VideoPlayerScreenState._activeId = episodeMetadata.id;

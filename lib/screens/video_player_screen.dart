@@ -8,7 +8,6 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:flutter/services.dart';
 import 'package:os_media_controls/os_media_controls.dart';
 import 'package:provider/provider.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../mpv/mpv.dart';
@@ -37,8 +36,6 @@ import '../providers/companion_remote_provider.dart';
 import '../services/companion_remote/companion_remote_receiver.dart';
 import '../services/fullscreen_state_manager.dart';
 import '../services/discord_rpc_service.dart';
-import '../services/trackers/tracker_coordinator.dart';
-import '../services/trakt/trakt_scrobble_service.dart';
 import '../services/episode_navigation_service.dart';
 import '../services/media_controls_manager.dart';
 import '../services/playback_initialization_service.dart';
@@ -76,7 +73,6 @@ import '../focus/input_mode_tracker.dart';
 import '../focus/dpad_navigator.dart';
 import '../focus/key_event_utils.dart';
 import '../i18n/strings.g.dart';
-import '../watch_together/providers/watch_together_provider.dart';
 
 part 'video_player/parts/companion_remote.dart';
 part 'video_player/parts/display_matching.dart';
@@ -91,7 +87,6 @@ part 'video_player/parts/playback_prompts.dart';
 part 'video_player/parts/playback_services.dart';
 part 'video_player/parts/playback_start.dart';
 part 'video_player/parts/build.dart';
-part 'video_player/parts/watch_together.dart';
 
 bool? _wakelockEnabled;
 
@@ -364,7 +359,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
   AmbientLightingService? _ambientLightingService;
   final EpisodeNavigationService _episodeNavigation = EpisodeNavigationService();
 
-  WatchTogetherProvider? _watchTogetherProvider;
 
   CompanionRemoteProvider? _companionRemoteProvider;
   VoidCallback? _savedOnHome;
@@ -837,7 +831,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
         _liveStreamFallbackLevel = 0;
         if (!_hasFirstFrame.value) {
           _hasFirstFrame.value = true;
-          unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'First frame ready', category: 'player')));
 
           if (Platform.isAndroid && settingsService.read(SettingsService.matchContentFrameRate)) {
             await _applyFrameRateMatching();
@@ -917,37 +910,10 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
   bool _frameRateMatchingApplied = false;
 
   /// Handle back button press
-  /// For non-host participants in Watch Together, shows leave session confirmation
   Future<void> _handleBackButton() async {
     if (_isHandlingBack) return;
     _isHandlingBack = true;
     try {
-      // For non-host participants, show leave session confirmation
-      if (_watchTogetherProvider != null && _watchTogetherProvider!.isInSession && !_watchTogetherProvider!.isHost) {
-        final confirmed = await showConfirmDialog(
-          context,
-          title: 'Leave Session?',
-          message: 'You will be removed from the session.',
-          confirmText: 'Leave',
-          isDestructive: true,
-        );
-
-        if (confirmed && mounted) {
-          await _watchTogetherProvider!.leaveSession();
-          if (mounted) {
-            final navigator = Navigator.of(context);
-            if (navigator.canPop()) {
-              _isExiting.value = true;
-              await _sendStoppedProgressOnce();
-              if (!mounted) return;
-              navigator.pop(true);
-            }
-          }
-        }
-        return;
-      }
-
-      // Default behavior for hosts or non-session users
       if (!mounted) return;
       final navigator = Navigator.of(context);
       if (navigator.canPop()) {
@@ -966,18 +932,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
     WidgetsBinding.instance.removeObserver(this);
 
     _cleanupCompanionRemoteCallbacks();
-
-    // Notify Watch Together guests that host is exiting the player
-    // Use stored reference since context.read() may fail in dispose
-    // Skip if replacing with another video (episode navigation)
-    if (!_isReplacingWithVideo &&
-        _watchTogetherProvider != null &&
-        _watchTogetherProvider!.isHost &&
-        _watchTogetherProvider!.isInSession) {
-      _watchTogetherProvider!.notifyHostExitedPlayer();
-    }
-
-    _detachFromWatchTogetherSession();
 
     _isBuffering.dispose();
     _hasFirstFrame.dispose();
@@ -1041,8 +995,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
     _mediaControlsManager?.dispose();
 
     DiscordRPCService.instance.stopPlayback();
-    TraktScrobbleService.instance.stopPlayback();
-    TrackerCoordinator.instance.stopPlayback();
 
     if (Platform.isWindows && _displayModeService != null) {
       FullscreenStateManager().removeListener(_onFullscreenChanged);
@@ -1087,7 +1039,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       }
     }
 
-    Sentry.addBreadcrumb(Breadcrumb(message: 'Player dispose', category: 'player'));
     final playerToDispose = player;
     player = null;
     if (playerToDispose != null) {
@@ -1126,7 +1077,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
 
   /// Navigate to a specific queue item (called from QueueSheet)
   Future<void> navigateToQueueItem(MediaItem metadata) async {
-    _notifyWatchTogetherMediaChange(metadata: metadata);
     await _navigateToEpisode(metadata);
   }
 
@@ -1197,7 +1147,6 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
     _isExiting.value = true; // Show black overlay during transition
 
     try {
-      _detachFromWatchTogetherSession();
       await _sendStoppedProgressOnce();
       _progressTracker?.stopTracking();
       // Clear frame rate matching before disposing (Android only)

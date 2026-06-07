@@ -15,7 +15,6 @@ extension _VideoPlayerPlaybackPromptMethods on VideoPlayerScreenState {
     unawaited(_progressTracker?.sendProgress('paused'));
     _updateMediaControlsPlaybackState();
     unawaited(DiscordRPCService.instance.pausePlayback());
-    unawaited(TraktScrobbleService.instance.pausePlayback());
     if (_autoPipEnabled) {
       unawaited(_videoPIPManager?.updateAutoPipState(isPlaying: false));
     }
