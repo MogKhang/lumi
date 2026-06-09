@@ -191,6 +191,41 @@ class MediaContextMenuState extends State<MediaContextMenu> {
 
     // Minimal context menu: only the three list-management actions.
     if (!isCollection && !isPlaylist && mediaItem != null) {
+      // Play from Beginning — only for in-progress items (resumable), so the
+      // user can restart from 00:00 instead of resuming. Continue Watching
+      // items always qualify; elsewhere it depends on saved progress.
+      final isInProgress = widget.isInContinueWatching || mediaItem.hasActiveProgress;
+      if (isInProgress &&
+          (mediaKind == MediaKind.movie || mediaKind == MediaKind.episode)) {
+        menuActions.add(
+          _MenuAction(value: 'play_from_beginning', icon: Symbols.replay_rounded, label: t.mediaMenu.playFromBeginning),
+        );
+      }
+
+      // Mark as Watched / Unwatched — available in every view (home, library).
+      // Offer "Mark as Unwatched" when the item has been started or finished
+      // (in-progress or fully watched); otherwise offer "Mark as Watched".
+      // Continue Watching uses the dedicated action so its callback can refresh
+      // the hub instantly; elsewhere the plain unwatch action is used.
+      final canUnwatch =
+          widget.isInContinueWatching ||
+          mediaItem.hasActiveProgress ||
+          mediaItem.isPartiallyWatched ||
+          mediaItem.isWatched;
+      if (canUnwatch) {
+        menuActions.add(
+          _MenuAction(
+            value: widget.isInContinueWatching ? 'remove_from_continue_watching' : 'unwatch',
+            icon: Symbols.visibility_off_rounded,
+            label: t.mediaMenu.markAsUnwatched,
+          ),
+        );
+      } else {
+        menuActions.add(
+          _MenuAction(value: 'watch', icon: Symbols.check_circle_rounded, label: t.mediaMenu.markAsWatched),
+        );
+      }
+
       // Add to Playlist — Plex-only (uses Plex's `addToPlaylist`; the Jellyfin
       // item-add API is different and not wired here yet).
       if (isPlex &&
@@ -228,18 +263,6 @@ class MediaContextMenuState extends State<MediaContextMenu> {
       if (widget.playlistId != null) {
         menuActions.add(
           _MenuAction(value: 'remove_from_playlist', icon: Symbols.playlist_remove_rounded, label: t.playlists.removeItem),
-        );
-      }
-
-      // Remove from Continue Watching — marks the item Unplayed so its progress
-      // bar disappears from the hub.
-      if (widget.isInContinueWatching) {
-        menuActions.add(
-          _MenuAction(
-            value: 'remove_from_continue_watching',
-            icon: Symbols.close_rounded,
-            label: t.mediaMenu.removeFromContinueWatching,
-          ),
         );
       }
     }

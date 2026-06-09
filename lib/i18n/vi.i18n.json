@@ -338,8 +338,8 @@
     "has64bitOffsets": "64-bit Offsets"
   },
   "mediaMenu": {
-    "markAsWatched": "Mark as Watched",
-    "markAsUnwatched": "Mark as Unwatched",
+    "markAsWatched": "Đánh dấu Đã xem",
+    "markAsUnwatched": "Đánh dấu Chưa xem",
     "removeFromContinueWatching": "Gỡ khỏi Phim Đang Xem",
     "goToSeries": "Go to series",
     "goToSeason": "Go to season",
@@ -351,7 +351,7 @@
     "mediaDeletedSuccessfully": "Media item deleted successfully",
     "mediaFailedToDelete": "Failed to delete media item",
     "rate": "Rate",
-    "playFromBeginning": "Play from Beginning",
+    "playFromBeginning": "Xem từ đầu",
     "playVersion": "Play Version..."
   },
   "accessibility": {
@@ -367,8 +367,8 @@
   "tooltips": {
     "shufflePlay": "Shuffle play",
     "playTrailer": "Play trailer",
-    "markAsWatched": "Mark as watched",
-    "markAsUnwatched": "Mark as unwatched"
+    "markAsWatched": "Đánh dấu Đã xem",
+    "markAsUnwatched": "Đánh dấu Chưa xem"
   },
   "videoControls": {
     "audioLabel": "Âm thanh",

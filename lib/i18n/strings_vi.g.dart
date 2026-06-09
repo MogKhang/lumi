@@ -478,8 +478,8 @@ class _TranslationsMediaMenuVi extends TranslationsMediaMenuEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get markAsWatched => 'Mark as Watched';
-	@override String get markAsUnwatched => 'Mark as Unwatched';
+	@override String get markAsWatched => 'Đánh dấu Đã xem';
+	@override String get markAsUnwatched => 'Đánh dấu Chưa xem';
 	@override String get removeFromContinueWatching => 'Gỡ khỏi Phim Đang Xem';
 	@override String get goToSeries => 'Go to series';
 	@override String get goToSeason => 'Go to season';
@@ -491,7 +491,7 @@ class _TranslationsMediaMenuVi extends TranslationsMediaMenuEn {
 	@override String get mediaDeletedSuccessfully => 'Media item deleted successfully';
 	@override String get mediaFailedToDelete => 'Failed to delete media item';
 	@override String get rate => 'Rate';
-	@override String get playFromBeginning => 'Play from Beginning';
+	@override String get playFromBeginning => 'Xem từ đầu';
 	@override String get playVersion => 'Play Version...';
 }
 
@@ -521,8 +521,8 @@ class _TranslationsTooltipsVi extends TranslationsTooltipsEn {
 	// Translations
 	@override String get shufflePlay => 'Shuffle play';
 	@override String get playTrailer => 'Play trailer';
-	@override String get markAsWatched => 'Mark as watched';
-	@override String get markAsUnwatched => 'Mark as unwatched';
+	@override String get markAsWatched => 'Đánh dấu Đã xem';
+	@override String get markAsUnwatched => 'Đánh dấu Chưa xem';
 }
 
 // Path: videoControls
@@ -2183,8 +2183,8 @@ extension on TranslationsVi {
 			'fileInfo.duration' => 'Duration',
 			'fileInfo.optimizedForStreaming' => 'Optimized for Streaming',
 			'fileInfo.has64bitOffsets' => '64-bit Offsets',
-			'mediaMenu.markAsWatched' => 'Mark as Watched',
-			'mediaMenu.markAsUnwatched' => 'Mark as Unwatched',
+			'mediaMenu.markAsWatched' => 'Đánh dấu Đã xem',
+			'mediaMenu.markAsUnwatched' => 'Đánh dấu Chưa xem',
 			'mediaMenu.removeFromContinueWatching' => 'Gỡ khỏi Phim Đang Xem',
 			'mediaMenu.goToSeries' => 'Go to series',
 			'mediaMenu.goToSeason' => 'Go to season',
@@ -2196,7 +2196,7 @@ extension on TranslationsVi {
 			'mediaMenu.mediaDeletedSuccessfully' => 'Media item deleted successfully',
 			'mediaMenu.mediaFailedToDelete' => 'Failed to delete media item',
 			'mediaMenu.rate' => 'Rate',
-			'mediaMenu.playFromBeginning' => 'Play from Beginning',
+			'mediaMenu.playFromBeginning' => 'Xem từ đầu',
 			'mediaMenu.playVersion' => 'Play Version...',
 			'accessibility.mediaCardMovie' => ({required Object title}) => '${title}, movie',
 			'accessibility.mediaCardShow' => ({required Object title}) => '${title}, TV show',
@@ -2208,8 +2208,8 @@ extension on TranslationsVi {
 			'accessibility.tapToPlay' => 'Tap to play',
 			'tooltips.shufflePlay' => 'Shuffle play',
 			'tooltips.playTrailer' => 'Play trailer',
-			'tooltips.markAsWatched' => 'Mark as watched',
-			'tooltips.markAsUnwatched' => 'Mark as unwatched',
+			'tooltips.markAsWatched' => 'Đánh dấu Đã xem',
+			'tooltips.markAsUnwatched' => 'Đánh dấu Chưa xem',
 			'videoControls.audioLabel' => 'Âm thanh',
 			'videoControls.subtitlesLabel' => 'Phụ đề',
 			'videoControls.opaque' => 'Nền đen',
