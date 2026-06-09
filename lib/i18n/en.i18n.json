@@ -96,7 +96,9 @@
     "moreWithActor": "More with ${name}",
     "moreByDirector": "More by ${name}",
     "moreInGenre": "More in ${name}",
-    "similar": "Similar"
+    "similar": "Similar",
+    "collection": "${name} Collection",
+    "tvShowsInCollection": "TV Shows in ${name} Collection"
   },
   "settings": {
     "title": "Settings",

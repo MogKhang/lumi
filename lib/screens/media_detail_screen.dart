@@ -2027,7 +2027,21 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
       return t.relatedHubs.similar;
     }
 
-    // Collection and anything else: keep the server-provided title.
+    // Collection variants. Plex bakes the collection name into the title:
+    //   "TV Shows in [Name] Collection"  (check first — more specific)
+    //   "[Name] Collection"
+    const tvPrefix = 'TV Shows in ';
+    const collectionSuffix = ' Collection';
+    if (lower.startsWith(tvPrefix.toLowerCase()) && lower.endsWith(collectionSuffix.toLowerCase())) {
+      final name = title.substring(tvPrefix.length, title.length - collectionSuffix.length).trim();
+      if (name.isNotEmpty) return t.relatedHubs.tvShowsInCollection(name: name);
+    }
+    if (lower.endsWith(collectionSuffix.toLowerCase())) {
+      final name = title.substring(0, title.length - collectionSuffix.length).trim();
+      if (name.isNotEmpty) return t.relatedHubs.collection(name: name);
+    }
+
+    // Anything else: keep the server-provided title.
     return title;
   }
 

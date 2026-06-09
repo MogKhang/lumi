@@ -96,7 +96,9 @@
     "moreWithActor": "Phim của ${name}",
     "moreByDirector": "Phim của ${name}",
     "moreInGenre": "Phim thể loại ${name}",
-    "similar": "Phim tương tự"
+    "similar": "Phim tương tự",
+    "collection": "Bộ sưu tập ${name}",
+    "tvShowsInCollection": "Bộ sưu tập ${name}"
   },
   "settings": {
     "title": "Cài đặt",

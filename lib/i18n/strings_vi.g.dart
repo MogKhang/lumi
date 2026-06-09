@@ -232,6 +232,8 @@ class _TranslationsRelatedHubsVi extends TranslationsRelatedHubsEn {
 	@override String moreByDirector({required Object name}) => 'Phim của ${name}';
 	@override String moreInGenre({required Object name}) => 'Phim thể loại ${name}';
 	@override String get similar => 'Phim tương tự';
+	@override String collection({required Object name}) => 'Bộ sưu tập ${name}';
+	@override String tvShowsInCollection({required Object name}) => 'Bộ sưu tập ${name}';
 }
 
 // Path: settings
@@ -1966,6 +1968,8 @@ extension on TranslationsVi {
 			'relatedHubs.moreByDirector' => ({required Object name}) => 'Phim của ${name}',
 			'relatedHubs.moreInGenre' => ({required Object name}) => 'Phim thể loại ${name}',
 			'relatedHubs.similar' => 'Phim tương tự',
+			'relatedHubs.collection' => ({required Object name}) => 'Bộ sưu tập ${name}',
+			'relatedHubs.tvShowsInCollection' => ({required Object name}) => 'Bộ sưu tập ${name}',
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -2391,10 +2395,10 @@ extension on TranslationsVi {
 			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
-			'profiles.removeConnectionTitle' => 'Remove connection?',
-			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.removeConnectionTitle' => 'Remove connection?',
+			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
 			'profiles.profileNameLabel' => 'Profile name',
@@ -2905,10 +2909,10 @@ extension on TranslationsVi {
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',
-			'metadataEdit.allEpisodes' => 'All episodes',
-			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.allEpisodes' => 'All episodes',
+			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
 			'metadataEdit.latestEpisode' => 'Latest episode',
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',

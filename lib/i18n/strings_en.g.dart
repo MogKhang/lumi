@@ -403,6 +403,12 @@ class TranslationsRelatedHubsEn {
 
 	/// en: 'Similar'
 	String get similar => 'Similar';
+
+	/// en: '${name} Collection'
+	String collection({required Object name}) => '${name} Collection';
+
+	/// en: 'TV Shows in ${name} Collection'
+	String tvShowsInCollection({required Object name}) => 'TV Shows in ${name} Collection';
 }
 
 // Path: settings
@@ -4484,6 +4490,8 @@ extension on Translations {
 			'relatedHubs.moreByDirector' => ({required Object name}) => 'More by ${name}',
 			'relatedHubs.moreInGenre' => ({required Object name}) => 'More in ${name}',
 			'relatedHubs.similar' => 'Similar',
+			'relatedHubs.collection' => ({required Object name}) => '${name} Collection',
+			'relatedHubs.tvShowsInCollection' => ({required Object name}) => 'TV Shows in ${name} Collection',
 			'settings.title' => 'Settings',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -4909,10 +4917,10 @@ extension on Translations {
 			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
-			'profiles.removeConnectionTitle' => 'Remove connection?',
-			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.removeConnectionTitle' => 'Remove connection?',
+			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
 			'profiles.profileNameLabel' => 'Profile name',
@@ -5423,10 +5431,10 @@ extension on Translations {
 			'metadataEdit.keep' => 'Keep',
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
-			'metadataEdit.latestEpisode' => 'Latest episode',
-			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.latestEpisode' => 'Latest episode',
+			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',
 			'metadataEdit.never' => 'Never',
 			'metadataEdit.afterADay' => 'After a day',
