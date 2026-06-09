@@ -92,6 +92,12 @@
     "episodesListHeader": "Episodes",
     "seasonsColumn": "Seasons"
   },
+  "relatedHubs": {
+    "moreWithActor": "More with ${name}",
+    "moreByDirector": "More by ${name}",
+    "moreInGenre": "More in ${name}",
+    "similar": "Similar"
+  },
   "settings": {
     "title": "Settings",
     "supportDeveloper": "Support Lumi",

@@ -45,6 +45,7 @@ class TranslationsVi extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsScreensVi screens = _TranslationsScreensVi._(_root);
 	@override late final _TranslationsUpdateVi update = _TranslationsUpdateVi._(_root);
 	@override late final _TranslationsMediaDetailVi mediaDetail = _TranslationsMediaDetailVi._(_root);
+	@override late final _TranslationsRelatedHubsVi relatedHubs = _TranslationsRelatedHubsVi._(_root);
 	@override late final _TranslationsSettingsVi settings = _TranslationsSettingsVi._(_root);
 	@override late final _TranslationsSearchVi search = _TranslationsSearchVi._(_root);
 	@override late final _TranslationsHotkeysVi hotkeys = _TranslationsHotkeysVi._(_root);
@@ -218,6 +219,19 @@ class _TranslationsMediaDetailVi extends TranslationsMediaDetailEn {
 	@override String get episode => 'Tập';
 	@override String get episodesListHeader => 'Danh sách tập phim';
 	@override String get seasonsColumn => 'Các phần phim';
+}
+
+// Path: relatedHubs
+class _TranslationsRelatedHubsVi extends TranslationsRelatedHubsEn {
+	_TranslationsRelatedHubsVi._(TranslationsVi root) : this._root = root, super.internal(root);
+
+	final TranslationsVi _root; // ignore: unused_field
+
+	// Translations
+	@override String moreWithActor({required Object name}) => 'Phim của ${name}';
+	@override String moreByDirector({required Object name}) => 'Phim của ${name}';
+	@override String moreInGenre({required Object name}) => 'Phim thể loại ${name}';
+	@override String get similar => 'Phim tương tự';
 }
 
 // Path: settings
@@ -1948,6 +1962,10 @@ extension on TranslationsVi {
 			'mediaDetail.episode' => 'Tập',
 			'mediaDetail.episodesListHeader' => 'Danh sách tập phim',
 			'mediaDetail.seasonsColumn' => 'Các phần phim',
+			'relatedHubs.moreWithActor' => ({required Object name}) => 'Phim của ${name}',
+			'relatedHubs.moreByDirector' => ({required Object name}) => 'Phim của ${name}',
+			'relatedHubs.moreInGenre' => ({required Object name}) => 'Phim thể loại ${name}',
+			'relatedHubs.similar' => 'Phim tương tự',
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -2375,12 +2393,12 @@ extension on TranslationsVi {
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
 			'profiles.removeConnectionTitle' => 'Remove connection?',
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
@@ -2889,12 +2907,12 @@ extension on TranslationsVi {
 			'metadataEdit.keep' => 'Keep',
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.latestEpisode' => 'Latest episode',
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',
 			'metadataEdit.never' => 'Never',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.afterADay' => 'After a day',
 			'metadataEdit.afterAWeek' => 'After a week',
 			'metadataEdit.afterAMonth' => 'After a month',

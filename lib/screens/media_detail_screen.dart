@@ -1414,7 +1414,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     if (client == null) return;
 
     try {
-      final relatedHubs = await client.fetchRelatedHubs(_metadata.id);
+      final relatedHubs = _sortRelatedHubs(await client.fetchRelatedHubs(_metadata.id));
 
       setStateIfMounted(() {
         _relatedHubs = relatedHubs;
@@ -1423,6 +1423,26 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     } catch (e) {
       // Silently fail - related sections won't appear if fetch fails
     }
+  }
+
+  /// Order related hubs as: the collection containing this item → "More by
+  /// [Director]" → "More with [Actor]" → everything else (Similar, Genre, …).
+  /// Stable within each rank, preserving Plex's native ordering.
+  List<MediaHub> _sortRelatedHubs(List<MediaHub> hubs) {
+    int rank(MediaHub hub) {
+      final lower = hub.title.toLowerCase();
+      if (lower.contains('collection')) return 0;
+      if (lower.contains('director') || lower.contains('more by')) return 1;
+      if (lower.contains('more with') || lower.contains('more from')) return 2;
+      return 3;
+    }
+
+    final indexed = [for (var i = 0; i < hubs.length; i++) (i, hubs[i])];
+    indexed.sort((a, b) {
+      final byRank = rank(a.$2).compareTo(rank(b.$2));
+      return byRank != 0 ? byRank : a.$1.compareTo(b.$1);
+    });
+    return [for (final entry in indexed) entry.$2];
   }
 
   /// Focus the first visible section above cast: season tabs → overview → play button.
@@ -1965,6 +1985,52 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     return Symbols.recommend_rounded;
   }
 
+  /// Localize a Plex related-hub title. Plex bakes the name into the title
+  /// ("More with Tom Hanks"); we match the hub by its identifier (falling back
+  /// to the English title prefix), recover the name, and render a localized
+  /// template. The collection hub keeps its own name. Unknown hubs fall back to
+  /// the server-provided title unchanged.
+  String _localizedRelatedHubTitle(MediaHub hub) {
+    final identifier = hub.identifier?.toLowerCase() ?? '';
+    final title = hub.title;
+    final lower = title.toLowerCase();
+
+    // Strip a known English prefix to recover the embedded name, e.g.
+    // "More with Tom Hanks" → "Tom Hanks". Returns null if absent.
+    String? nameAfter(String prefix) {
+      if (lower.startsWith(prefix.toLowerCase())) {
+        return title.substring(prefix.length).trim();
+      }
+      return null;
+    }
+
+    // Actor — Plex: `*.byactor` / "More with [Actor]".
+    if (identifier.endsWith('byactor') || lower.startsWith('more with')) {
+      final name = nameAfter('More with ');
+      if (name != null && name.isNotEmpty) return t.relatedHubs.moreWithActor(name: name);
+    }
+
+    // Director — Plex: `*.bydirector` / "More by [Director]".
+    if (identifier.endsWith('bydirector') || lower.startsWith('more by')) {
+      final name = nameAfter('More by ');
+      if (name != null && name.isNotEmpty) return t.relatedHubs.moreByDirector(name: name);
+    }
+
+    // Genre — Plex: `*.bygenre` / "More in [Genre]".
+    if (identifier.endsWith('bygenre') || identifier.endsWith('genre') || lower.startsWith('more in')) {
+      final name = nameAfter('More in ');
+      if (name != null && name.isNotEmpty) return t.relatedHubs.moreInGenre(name: name);
+    }
+
+    // Similar — no embedded name.
+    if (identifier.endsWith('similar') || lower == 'similar') {
+      return t.relatedHubs.similar;
+    }
+
+    // Collection and anything else: keep the server-provided title.
+    return title;
+  }
+
   static const Widget _sectionLoading = Center(
     child: Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator()),
   );
@@ -2414,12 +2480,14 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                             const SizedBox(height: 24),
                           ],
 
-                          // Related Hubs (Collections, Similar, More From...)
-                          if (!metadata.isMovie && !metadata.isShow)
-                            for (int i = 0; i < _relatedHubs.length; i++) ...[
+                          // Related Hubs (Collections, "More by [Director]",
+                          // "More with [Actor]", Similar). Populated by
+                          // [_loadRelatedHubs] for movies/shows; rendered below
+                          // the Cast section.
+                          for (int i = 0; i < _relatedHubs.length; i++) ...[
                             HubSection(
                               key: _relatedHubKeys[i],
-                              hub: _relatedHubs[i],
+                              hub: _relatedHubs[i].copyWith(title: _localizedRelatedHubTitle(_relatedHubs[i])),
                               icon: _getRelatedHubIcon(_relatedHubs[i]),
                               inset: true,
                               onVerticalNavigation: (isUp) => _handleRelatedHubNavigation(i, isUp),

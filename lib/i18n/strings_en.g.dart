@@ -46,6 +46,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsScreensEn screens = TranslationsScreensEn.internal(_root);
 	late final TranslationsUpdateEn update = TranslationsUpdateEn.internal(_root);
 	late final TranslationsMediaDetailEn mediaDetail = TranslationsMediaDetailEn.internal(_root);
+	late final TranslationsRelatedHubsEn relatedHubs = TranslationsRelatedHubsEn.internal(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
 	late final TranslationsSearchEn search = TranslationsSearchEn.internal(_root);
 	late final TranslationsHotkeysEn hotkeys = TranslationsHotkeysEn.internal(_root);
@@ -381,6 +382,27 @@ class TranslationsMediaDetailEn {
 
 	/// en: 'Seasons'
 	String get seasonsColumn => 'Seasons';
+}
+
+// Path: relatedHubs
+class TranslationsRelatedHubsEn {
+	TranslationsRelatedHubsEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'More with ${name}'
+	String moreWithActor({required Object name}) => 'More with ${name}';
+
+	/// en: 'More by ${name}'
+	String moreByDirector({required Object name}) => 'More by ${name}';
+
+	/// en: 'More in ${name}'
+	String moreInGenre({required Object name}) => 'More in ${name}';
+
+	/// en: 'Similar'
+	String get similar => 'Similar';
 }
 
 // Path: settings
@@ -4458,6 +4480,10 @@ extension on Translations {
 			'mediaDetail.episode' => 'Episode',
 			'mediaDetail.episodesListHeader' => 'Episodes',
 			'mediaDetail.seasonsColumn' => 'Seasons',
+			'relatedHubs.moreWithActor' => ({required Object name}) => 'More with ${name}',
+			'relatedHubs.moreByDirector' => ({required Object name}) => 'More by ${name}',
+			'relatedHubs.moreInGenre' => ({required Object name}) => 'More in ${name}',
+			'relatedHubs.similar' => 'Similar',
 			'settings.title' => 'Settings',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',
@@ -4885,12 +4911,12 @@ extension on Translations {
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
 			'profiles.removeConnectionTitle' => 'Remove connection?',
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.deleteProfileTitle' => 'Delete profile?',
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
@@ -5399,12 +5425,12 @@ extension on Translations {
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
 			'metadataEdit.latestEpisode' => 'Latest episode',
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',
 			'metadataEdit.never' => 'Never',
 			'metadataEdit.afterADay' => 'After a day',
 			'metadataEdit.afterAWeek' => 'After a week',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.afterAMonth' => 'After a month',
 			'metadataEdit.onNextRefresh' => 'On next refresh',
 			'metadataEdit.seasons' => 'Seasons',

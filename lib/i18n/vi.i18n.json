@@ -92,6 +92,12 @@
     "episodesListHeader": "Danh sách tập phim",
     "seasonsColumn": "Các phần phim"
   },
+  "relatedHubs": {
+    "moreWithActor": "Phim của ${name}",
+    "moreByDirector": "Phim của ${name}",
+    "moreInGenre": "Phim thể loại ${name}",
+    "similar": "Phim tương tự"
+  },
   "settings": {
     "title": "Cài đặt",
     "supportDeveloper": "Support Lumi",
