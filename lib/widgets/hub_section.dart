@@ -307,7 +307,15 @@ class HubSectionState extends State<HubSection> with MountedSetStateMixin {
   }
 
   Future<void> _navigateToItem(dynamic item) async {
-    await navigateToMediaItem(context, item, onRefresh: widget.onRefresh, playDirectly: widget.isInContinueWatching);
+    // Continue Watching opens the item's detail screen (movies → media detail,
+    // episodes → show detail with the season/episode in view) rather than
+    // jumping straight into playback. Other hubs keep their default behavior.
+    await navigateToMediaItem(
+      context,
+      item,
+      onRefresh: widget.onRefresh,
+      episodesToDetail: widget.isInContinueWatching,
+    );
   }
 
   void _navigateToHubDetail(BuildContext context) {

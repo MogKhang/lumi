@@ -108,7 +108,7 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
                   playButtonIcon,
                   const SizedBox(width: 8),
                   Text(
-                    (metadata.isMovie || metadata.isShow) ? t.mediaDetail.watchNow : playButtonLabel,
+                    (metadata.isMovie || metadata.isShow) ? _getWatchButtonText(metadata) : playButtonLabel,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],

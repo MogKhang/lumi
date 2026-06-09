@@ -139,7 +139,10 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
       widget.item,
       onRefresh: widget.onRefresh,
       isOffline: widget.isOffline,
-      playDirectly: widget.isInContinueWatching,
+      // Continue Watching opens the detail screen (movies → media detail,
+      // episodes → show detail with the season/episode in view) instead of
+      // jumping straight into playback.
+      episodesToDetail: widget.isInContinueWatching,
     );
 
     if (!context.mounted) return;

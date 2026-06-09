@@ -86,7 +86,18 @@ class MediaDetailScreen extends StatefulWidget {
   /// Used when navigating to a show from a season context.
   final int? initialSeasonIndex;
 
-  const MediaDetailScreen({super.key, required this.metadata, this.isOffline = false, this.initialSeasonIndex});
+  /// If provided, scrolls this episode into view once its season's episodes
+  /// load. Used when opening a show from the Continue Watching hub so the
+  /// in-progress episode is visible without manual scrolling.
+  final String? initialEpisodeId;
+
+  const MediaDetailScreen({
+    super.key,
+    required this.metadata,
+    this.isOffline = false,
+    this.initialSeasonIndex,
+    this.initialEpisodeId,
+  });
 
   @override
   State<MediaDetailScreen> createState() => _MediaDetailScreenState();
@@ -105,6 +116,14 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   bool _showEpisodesDirectly = false;
   MediaItem? _fullMetadata;
   MediaItem? _onDeckEpisode;
+
+  /// Episode id to scroll into view once its season's episodes load (from the
+  /// Continue Watching hub). One-shot: cleared after the first successful scroll.
+  String? _pendingScrollEpisodeId;
+
+  /// Key for the episode card that [_pendingScrollEpisodeId] targets, so it can
+  /// be brought into view via [Scrollable.ensureVisible].
+  final GlobalKey _scrollTargetEpisodeKey = GlobalKey();
   final Map<String, int> _localProgressById = {};
   bool _isLoadingMetadata = true;
   List<MediaItem>? _extras;
@@ -438,6 +457,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   @override
   void initState() {
     super.initState();
+    _pendingScrollEpisodeId = widget.initialEpisodeId;
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
     _extrasFocusNode = FocusNode(debugLabel: 'extras_row');
@@ -1267,6 +1287,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
         _episodes = cached.map(_applyLocalProgress).toList();
         _isLoadingSeasonEpisodes = false;
       });
+      _maybeScrollToPendingEpisode();
       return;
     }
 
@@ -1284,6 +1305,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
           _episodes = seasonEpisodes.map(_applyLocalProgress).toList();
           _isLoadingSeasonEpisodes = false;
         });
+        _maybeScrollToPendingEpisode();
       } else {
         // Resolve the right backend client so Jellyfin (where the typed
         // PlexClient helper returns null) loads episodes too.
@@ -1311,10 +1333,32 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
           _episodes = List.of(episodesWithServerId);
           _isLoadingSeasonEpisodes = false;
         });
+        _maybeScrollToPendingEpisode();
       }
     } catch (e) {
       setStateIfMounted(() => _isLoadingSeasonEpisodes = false);
     }
+  }
+
+  /// Scroll the [_pendingScrollEpisodeId] episode into view once it is present
+  /// in the currently loaded [_episodes]. One-shot — runs after the first
+  /// season load that contains the target (e.g. opened from Continue Watching).
+  void _maybeScrollToPendingEpisode() {
+    final targetId = _pendingScrollEpisodeId;
+    if (targetId == null) return;
+    if (!_episodes.any((e) => e.id == targetId)) return;
+
+    _pendingScrollEpisodeId = null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _scrollTargetEpisodeKey.currentContext;
+      if (ctx == null) return;
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        alignment: 0.2,
+      );
+    });
   }
 
   /// Load extras (trailers, behind-the-scenes, etc.). Plex-only — Jellyfin
@@ -1949,7 +1993,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
           final artworkRef = context.read<DownloadProvider>().getArtworkPaths(episode.globalKey);
           localPosterPath = artworkRef?.getLocalPath(DownloadStorageService.instance, episode.serverId!);
         }
-        return EpisodeCard(
+        final card = EpisodeCard(
           episode: episode,
           client: client,
           isOffline: widget.isOffline,
@@ -2007,6 +2051,12 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                 },
           onListRefresh: widget.isOffline ? null : _refreshCurrentEpisodes,
         );
+        // Tag the target episode so it can be scrolled into view when the
+        // screen is opened from Continue Watching.
+        if (widget.initialEpisodeId != null && episode.id == widget.initialEpisodeId) {
+          return KeyedSubtree(key: _scrollTargetEpisodeKey, child: card);
+        }
+        return card;
       },
     );
   }
@@ -2978,22 +3028,23 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   }
 
   IconData _getPlayButtonIcon(MediaItem metadata) {
-    // For TV shows
-    if (metadata.isShow) {
-      if (_onDeckEpisode != null) {
-        final episode = _onDeckEpisode!;
-        // Check if episode has been partially watched
-        if (episode.viewOffsetMs != null && episode.viewOffsetMs! > 0) {
-          return Symbols.resume_rounded; // Resume icon
-        }
-      }
-    } else {
-      // For movies or episodes
-      if (metadata.viewOffsetMs != null && metadata.viewOffsetMs! > 0) {
-        return Symbols.resume_rounded; // Resume icon
-      }
-    }
+    return _isPlaybackResumable(metadata) ? Symbols.resume_rounded : Symbols.play_arrow_rounded;
+  }
 
-    return Symbols.play_arrow_rounded; // Default play icon
+  /// Whether the primary action would resume in-progress playback rather than
+  /// start from the beginning. For shows this checks the on-deck episode; for
+  /// movies/episodes it checks the item's own resume offset.
+  bool _isPlaybackResumable(MediaItem metadata) {
+    if (metadata.isShow) {
+      final episode = _onDeckEpisode;
+      return episode?.viewOffsetMs != null && episode!.viewOffsetMs! > 0;
+    }
+    return metadata.viewOffsetMs != null && metadata.viewOffsetMs! > 0;
+  }
+
+  /// Primary action button text. Shows "Resume" for in-progress items (e.g.
+  /// those opened from Continue Watching), otherwise "Watch Now".
+  String _getWatchButtonText(MediaItem metadata) {
+    return _isPlaybackResumable(metadata) ? t.common.resume : t.mediaDetail.watchNow;
   }
 }

@@ -46,6 +46,11 @@ enum MediaNavigationResult {
 ///
 /// Set [playDirectly] to true to play movies immediately (e.g., from continue watching).
 ///
+/// Set [episodesToDetail] to true to send an episode to its show's detail screen
+/// (auto-selecting the episode's season and scrolling it into view) instead of
+/// playing it directly. Used by the Continue Watching hub so a tap opens the
+/// show rather than jumping straight into playback.
+///
 /// Returns a [MediaNavigationResult] indicating what action was taken:
 /// - [MediaNavigationResult.navigated]: Navigation completed, item refresh handled
 /// - [MediaNavigationResult.listRefreshNeeded]: Caller should refresh entire list
@@ -56,6 +61,7 @@ Future<MediaNavigationResult> navigateToMediaItem(
   void Function(String)? onRefresh,
   bool isOffline = false,
   bool playDirectly = false,
+  bool episodesToDetail = false,
 }) async {
   if (item is MediaPlaylist) {
     await Navigator.push(context, MaterialPageRoute(builder: (context) => PlaylistDetailScreen(playlist: item)));
@@ -97,8 +103,43 @@ Future<MediaNavigationResult> navigateToMediaItem(
       // Music types not supported
       return MediaNavigationResult.unsupported;
 
-    case MediaKind.clip:
     case MediaKind.episode:
+      // From Continue Watching: open the show detail with this episode's season
+      // selected and the episode scrolled into view, instead of playing it.
+      if (episodesToDetail && mi.grandparentId != null) {
+        final showStub = MediaItem(
+          id: mi.grandparentId!,
+          backend: mi.backend,
+          kind: MediaKind.show,
+          title: mi.grandparentTitle ?? mi.displayTitle,
+          thumbPath: mi.grandparentThumbPath,
+          artPath: mi.grandparentArtPath ?? mi.artPath,
+          serverId: mi.serverId,
+          serverName: mi.serverName,
+        );
+        final result = await Navigator.push<bool>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MediaDetailScreen(
+              metadata: showStub,
+              isOffline: isOffline,
+              initialSeasonIndex: mi.parentIndex,
+              initialEpisodeId: mi.id,
+            ),
+          ),
+        );
+        if (result == true) {
+          onRefresh?.call(mi.id);
+        }
+        return MediaNavigationResult.navigated;
+      }
+      final result = await navigateToVideoPlayer(context, metadata: mi, isOffline: isOffline);
+      if (result == true) {
+        onRefresh?.call(mi.id);
+      }
+      return MediaNavigationResult.navigated;
+
+    case MediaKind.clip:
       final result = await navigateToVideoPlayer(context, metadata: mi, isOffline: isOffline);
       if (result == true) {
         onRefresh?.call(mi.id);
