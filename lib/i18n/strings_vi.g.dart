@@ -453,7 +453,7 @@ class _TranslationsFileInfoVi extends TranslationsFileInfoEn {
 	@override String get resolution => 'Resolution';
 	@override String get bitrate => 'Bitrate';
 	@override String get frameRate => 'Frame Rate';
-	@override String get aspectRatio => 'Aspect Ratio';
+	@override String get aspectRatio => 'Tỉ lệ màn hình';
 	@override String get profile => 'Profile';
 	@override String get bitDepth => 'Bit Depth';
 	@override String get colorSpace => 'Color Space';
@@ -541,9 +541,9 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String playsLater({required Object label}) => '${label} plays later';
 	@override String playsEarlier({required Object label}) => '${label} plays earlier';
 	@override String get noOffset => 'No offset';
-	@override String get letterbox => 'Letterbox';
-	@override String get fillScreen => 'Fill screen';
-	@override String get stretch => 'Stretch';
+	@override String get letterbox => 'Tiêu chuẩn';
+	@override String get fillScreen => 'Phóng đại';
+	@override String get stretch => 'Kéo giãn';
 	@override String get lockRotation => 'Lock rotation';
 	@override String get unlockRotation => 'Unlock rotation';
 	@override String get timerActive => 'Timer Active';
@@ -575,11 +575,11 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String qualityBandwidthEstimate({required Object bitrate}) => '~${bitrate} Mbps';
 	@override String get transcodeUnavailableFallback => 'Transcoding unavailable — playing original quality';
 	@override String get pipButton => 'Picture-in-Picture mode';
-	@override String get aspectRatioButton => 'Aspect ratio';
+	@override String get aspectRatioButton => 'Tỉ lệ';
 	@override String get ambientLighting => 'Ambient lighting';
-	@override String get fullscreenButton => 'Enter fullscreen';
-	@override String get exitFullscreenButton => 'Exit fullscreen';
-	@override String get alwaysOnTopButton => 'Always on top';
+	@override String get fullscreenButton => 'Toàn màn hình';
+	@override String get exitFullscreenButton => 'Thu nhỏ màn hình';
+	@override String get alwaysOnTopButton => 'Ghim cửa sổ';
 	@override String get rotationLockButton => 'Rotation lock';
 	@override String get lockScreen => 'Lock screen';
 	@override String get screenLockButton => 'Screen lock';
@@ -2165,7 +2165,7 @@ extension on TranslationsVi {
 			'fileInfo.resolution' => 'Resolution',
 			'fileInfo.bitrate' => 'Bitrate',
 			'fileInfo.frameRate' => 'Frame Rate',
-			'fileInfo.aspectRatio' => 'Aspect Ratio',
+			'fileInfo.aspectRatio' => 'Tỉ lệ màn hình',
 			'fileInfo.profile' => 'Profile',
 			'fileInfo.bitDepth' => 'Bit Depth',
 			'fileInfo.colorSpace' => 'Color Space',
@@ -2217,9 +2217,9 @@ extension on TranslationsVi {
 			'videoControls.playsLater' => ({required Object label}) => '${label} plays later',
 			'videoControls.playsEarlier' => ({required Object label}) => '${label} plays earlier',
 			'videoControls.noOffset' => 'No offset',
-			'videoControls.letterbox' => 'Letterbox',
-			'videoControls.fillScreen' => 'Fill screen',
-			'videoControls.stretch' => 'Stretch',
+			'videoControls.letterbox' => 'Tiêu chuẩn',
+			'videoControls.fillScreen' => 'Phóng đại',
+			'videoControls.stretch' => 'Kéo giãn',
 			'videoControls.lockRotation' => 'Lock rotation',
 			'videoControls.unlockRotation' => 'Unlock rotation',
 			'videoControls.timerActive' => 'Timer Active',
@@ -2251,11 +2251,11 @@ extension on TranslationsVi {
 			'videoControls.qualityBandwidthEstimate' => ({required Object bitrate}) => '~${bitrate} Mbps',
 			'videoControls.transcodeUnavailableFallback' => 'Transcoding unavailable — playing original quality',
 			'videoControls.pipButton' => 'Picture-in-Picture mode',
-			'videoControls.aspectRatioButton' => 'Aspect ratio',
+			'videoControls.aspectRatioButton' => 'Tỉ lệ',
 			'videoControls.ambientLighting' => 'Ambient lighting',
-			'videoControls.fullscreenButton' => 'Enter fullscreen',
-			'videoControls.exitFullscreenButton' => 'Exit fullscreen',
-			'videoControls.alwaysOnTopButton' => 'Always on top',
+			'videoControls.fullscreenButton' => 'Toàn màn hình',
+			'videoControls.exitFullscreenButton' => 'Thu nhỏ màn hình',
+			'videoControls.alwaysOnTopButton' => 'Ghim cửa sổ',
 			'videoControls.rotationLockButton' => 'Rotation lock',
 			'videoControls.lockScreen' => 'Lock screen',
 			'videoControls.screenLockButton' => 'Screen lock',

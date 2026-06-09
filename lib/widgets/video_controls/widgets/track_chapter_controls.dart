@@ -443,9 +443,36 @@ class TrackChapterControls extends StatelessWidget {
           buttonIndex++;
         }
 
-
-
-
+        // Aspect Ratio button (Letterbox → Fill screen → Stretch).
+        // Last button on mobile/TV: right of Quality for movies, right of
+        // Episodes for shows. Hidden for live streams.
+        if (onCycleBoxFitMode != null && !isLive) {
+          final currentIndex = buttonIndex;
+          final mode = boxFitMode;
+          final (aspectIcon, aspectLabel) = switch (mode) {
+            1 => (Symbols.crop_landscape_rounded, t.videoControls.fillScreen),
+            2 => (Symbols.aspect_ratio_rounded, t.videoControls.stretch),
+            _ => (Symbols.fit_screen_rounded, t.videoControls.letterbox),
+          };
+          buttons.add(
+            _buildTrackButton(
+              buttonIndex: currentIndex,
+              icon: aspectIcon,
+              isActive: mode != 0,
+              tooltip: '${t.videoControls.aspectRatioButton}: $aspectLabel',
+              semanticLabel: t.videoControls.aspectRatioButton,
+              tracks: tracks,
+              isMobile: isMobile,
+              isDesktop: isDesktop,
+              onPressed: () {
+                onCancelAutoHide?.call();
+                onCycleBoxFitMode?.call();
+                onStartAutoHide?.call();
+              },
+            ),
+          );
+          buttonIndex++;
+        }
 
         // Always on top button (desktop only, not TV)
         if (isDesktop && onToggleAlwaysOnTop != null) {
@@ -502,6 +529,7 @@ class TrackChapterControls extends StatelessWidget {
       count++;
     }
     if (metadata.kind == MediaKind.episode) count++;
+    if (onCycleBoxFitMode != null && !isLive) count++; // Aspect ratio
 
     if (isDesktop && onToggleAlwaysOnTop != null) count++; // Always on top
     if (isDesktop) count++; // Fullscreen
