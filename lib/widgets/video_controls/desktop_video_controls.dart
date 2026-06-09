@@ -892,6 +892,15 @@ class DesktopVideoControlsState extends State<DesktopVideoControls> {
           iconSize: iconSize,
           tooltip: tooltip,
           onPressed: onPressed,
+          // Stronger hover/press wash than Material's faint default, so the
+          // mouse-hover highlight reads clearly over the video on desktop.
+          style: ButtonStyle(
+            overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.pressed)) return Colors.white.withValues(alpha: 0.3);
+              if (states.contains(WidgetState.hovered)) return Colors.white.withValues(alpha: 0.22);
+              return null;
+            }),
+          ),
         ),
       ),
     );

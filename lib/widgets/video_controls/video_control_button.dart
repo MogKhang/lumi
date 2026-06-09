@@ -59,11 +59,21 @@ class VideoControlButton extends StatelessWidget {
     // Determine the effective color: explicit color > active brand accent > default white
     final effectiveColor = color ?? (isActive ? MonoTokens.brandAccent : Colors.white);
 
+    // Material's default hover overlay (~8% over the video) is too faint to
+    // read on desktop. Use a stronger white wash so the mouse-hover highlight
+    // is as visible as the keyboard/D-pad focus background (which uses ~30%).
+    final overlayColor = WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.pressed)) return Colors.white.withValues(alpha: 0.3);
+      if (states.contains(WidgetState.hovered)) return Colors.white.withValues(alpha: 0.22);
+      return null;
+    });
+
     final button = IconButton(
       icon: AppIcon(icon, fill: 1, color: effectiveColor),
       onPressed: onPressed,
       tooltip: tooltip,
       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+      style: ButtonStyle(overlayColor: overlayColor),
     );
 
     Widget result = semanticLabel != null
