@@ -134,6 +134,13 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
                 ),
               ),
             ),
+            // Three-dots menu — same actions as the tap-and-hold menu, exposed
+            // as a one-tap button (especially handy on TV/D-pad). Hidden in
+            // offline mode, matching the full layout.
+            if (!widget.isOffline) ...[
+              const SizedBox(width: 12),
+              _buildMoreActionsButton(metadata, actionButtonStyle),
+            ],
           ],
           if (!minimal) ...[
             const SizedBox(width: 12),
