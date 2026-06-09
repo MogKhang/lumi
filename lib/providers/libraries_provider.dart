@@ -16,6 +16,7 @@ enum LibrariesLoadState { initial, loading, loaded, error }
 class LibrariesProvider extends ChangeNotifier with DisposableChangeNotifierMixin {
   DataAggregationService? _aggregationService;
   List<MediaLibrary> _libraries = [];
+  List<MediaLibrary> _allServerLibraries = [];
   LibrariesLoadState _loadState = LibrariesLoadState.initial;
   String? _errorMessage;
 
@@ -23,8 +24,15 @@ class LibrariesProvider extends ChangeNotifier with DisposableChangeNotifierMixi
   /// see the same in-flight result instead of racing two separate fetches.
   Future<void>? _inFlightLoad;
 
-  /// Unmodifiable list of all libraries (filtered for supported types, ordered)
+  /// Unmodifiable list of libraries for the active server (filtered for
+  /// supported types, ordered). Honors the Select-Server visibility filter,
+  /// so this is what drives the browseable content of the current server.
   List<MediaLibrary> get libraries => List.unmodifiable(_libraries);
+
+  /// Unmodifiable list of libraries across EVERY connected server (filtered for
+  /// supported types). Ignores the active-server filter so the Libraries screen
+  /// can offer a cross-server picker. Ordering is server-grouped by fetch order.
+  List<MediaLibrary> get allServerLibraries => List.unmodifiable(_allServerLibraries);
 
   /// Whether libraries are currently being loaded
   bool get isLoading => _loadState == LibrariesLoadState.loading;
@@ -67,10 +75,22 @@ class LibrariesProvider extends ChangeNotifier with DisposableChangeNotifierMixi
       // Fetch libraries from every connected backend (Plex + Jellyfin).
       // The aggregation service converts Plex-typed responses to MediaLibrary
       // internally; Jellyfin clients return MediaLibrary natively.
-      final allLibraries = await _aggregationService!.getMediaLibrariesFromAllServers();
+      //
+      // Two fetches: the active-server set (honors Select-Server, drives
+      // browseable content) and the all-servers set (ignores the filter, feeds
+      // the Libraries screen's cross-server picker). With a single connected
+      // server both fetches return the same data, so the extra call is cheap.
+      final results = await Future.wait([
+        _aggregationService!.getMediaLibrariesFromAllServers(),
+        _aggregationService!.getMediaLibrariesFromAllServers(includeAllServers: true),
+      ]);
+      final allLibraries = results.first;
+      final everyServerLibraries = results[1];
+
+      bool isSupported(MediaLibrary lib) => !ContentTypeHelper.isMusicLibrary(lib);
 
       // Filter out music libraries (not supported)
-      final filteredLibraries = allLibraries.where((lib) => !ContentTypeHelper.isMusicLibrary(lib)).toList();
+      final filteredLibraries = allLibraries.where(isSupported).toList();
 
       // Apply saved library order
       final storage = await StorageService.getInstance();
@@ -78,10 +98,14 @@ class LibrariesProvider extends ChangeNotifier with DisposableChangeNotifierMixi
       final orderedLibraries = _applyLibraryOrder(filteredLibraries, savedOrder);
 
       _libraries = orderedLibraries;
+      _allServerLibraries = _applyLibraryOrder(everyServerLibraries.where(isSupported).toList(), savedOrder);
       _loadState = LibrariesLoadState.loaded;
       _errorMessage = null;
 
-      appLogger.i('LibrariesProvider: Loaded ${_libraries.length} libraries');
+      appLogger.i(
+        'LibrariesProvider: Loaded ${_libraries.length} libraries '
+        '(${_allServerLibraries.length} across all servers)',
+      );
       safeNotifyListeners();
     } catch (e, stackTrace) {
       appLogger.e('LibrariesProvider: Failed to load libraries', error: e, stackTrace: stackTrace);
@@ -116,6 +140,7 @@ class LibrariesProvider extends ChangeNotifier with DisposableChangeNotifierMixi
   /// Clear all library data (for profile switch or logout).
   void clear() {
     _libraries = [];
+    _allServerLibraries = [];
     _loadState = LibrariesLoadState.initial;
     _errorMessage = null;
     safeNotifyListeners();

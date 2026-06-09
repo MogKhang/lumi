@@ -13,6 +13,7 @@ import '../../focus/input_mode_tracker.dart';
 import '../../focus/key_event_utils.dart';
 import '../../mixins/tab_navigation_mixin.dart';
 import '../../services/plex_client.dart';
+import '../../services/settings_service.dart';
 import '../../media/media_backend.dart';
 import '../../media/media_item.dart';
 import '../../media/media_kind.dart';
@@ -22,6 +23,7 @@ import '../../providers/hidden_libraries_provider.dart';
 import '../../providers/libraries_provider.dart';
 import '../../utils/app_logger.dart';
 import '../../utils/dialogs.dart';
+import '../../utils/library_grouping.dart';
 import '../../utils/platform_detector.dart';
 import '../../utils/provider_extensions.dart';
 import '../../utils/snackbar_helper.dart';
@@ -475,11 +477,14 @@ class _LibrariesScreenState extends State<LibrariesScreen>
 
   Future<void> _loadLibraryContent(String libraryGlobalKey, {bool focusContent = true}) async {
     final librariesProvider = context.read<LibrariesProvider>();
-    final allLibraries = librariesProvider.libraries;
 
-    // Resolve from allLibraries — hidden libraries are still navigable from the
-    // sidebar's "Hidden libraries" section.
-    final selectedLibrary = allLibraries.where((lib) => lib.globalKey == libraryGlobalKey).firstOrNull;
+    // Resolve across ALL servers — the header picker can target a library on a
+    // server other than the active one (browse tabs fetch via the library's own
+    // serverId, so no active-server switch is required). Falls back to the
+    // active-server list. Hidden libraries stay navigable from the sidebar.
+    final selectedLibrary =
+        librariesProvider.allServerLibraries.where((lib) => lib.globalKey == libraryGlobalKey).firstOrNull ??
+        librariesProvider.libraries.where((lib) => lib.globalKey == libraryGlobalKey).firstOrNull;
     if (selectedLibrary == null) return;
 
     final isLibraryChange = _selectedLibraryGlobalKey != libraryGlobalKey;
@@ -842,6 +847,14 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     final theme = Theme.of(context);
     final label = selectedLibrary?.title ?? libraries.first.title;
 
+    // When the user has access to 2+ servers, group the libraries by server so
+    // they can switch both server and library in one menu. With a single server
+    // (or libraries lacking server identity), keep the flat list. Honors the
+    // same "group libraries by server" setting the side navigation rail uses.
+    final distinctServerIds = libraries.map((lib) => lib.serverId).whereType<String>().toSet();
+    final groupByServer = SettingsService.instanceOrNull?.read(SettingsService.groupLibrariesByServer) ?? true;
+    final isMultiServer = distinctServerIds.length >= 2 && groupByServer;
+
     return FocusablePopupMenuButton<String>(
       tooltip: t.libraries.title,
       onSelected: (globalKey) => unawaited(_loadLibraryContent(globalKey)),
@@ -861,27 +874,74 @@ class _LibrariesScreenState extends State<LibrariesScreen>
           ],
         ),
       ),
-      itemBuilder: (_) => [
-        for (final library in libraries)
-          PopupMenuItem<String>(
-            value: library.globalKey,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 28,
-                  child: library.globalKey == selectedLibrary?.globalKey
-                      ? const AppIcon(Symbols.check_rounded, fill: 1)
-                      : null,
-                ),
-                Expanded(child: Text(library.title, overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          ),
-      ],
+      itemBuilder: (_) =>
+          isMultiServer ? _buildGroupedLibraryItems(libraries, selectedLibrary) : _buildFlatLibraryItems(libraries, selectedLibrary),
     );
   }
 
-  Widget _buildAppBarTitle(MediaLibrary? selectedLibrary, List<MediaLibrary> libraries) {
+  /// Flat library list (single-server case).
+  List<PopupMenuEntry<String>> _buildFlatLibraryItems(List<MediaLibrary> libraries, MediaLibrary? selectedLibrary) {
+    return [
+      for (final library in libraries) _buildLibraryMenuItem(library, selectedLibrary),
+    ];
+  }
+
+  /// Libraries grouped under a per-server header (multi-server case). Servers are
+  /// listed in the order their first library appears, with the libraries of each
+  /// server kept together and separated by a divider.
+  List<PopupMenuEntry<String>> _buildGroupedLibraryItems(List<MediaLibrary> libraries, MediaLibrary? selectedLibrary) {
+    final theme = Theme.of(context);
+    final groups = groupLibrariesByFirstAppearance(libraries);
+
+    final entries = <PopupMenuEntry<String>>[];
+    for (final serverKey in groups.serverOrder) {
+      final serverLibraries = groups.byServer[serverKey]!;
+      if (entries.isNotEmpty) entries.add(const PopupMenuDivider());
+
+      entries.add(
+        PopupMenuItem<String>(
+          enabled: false,
+          height: 32,
+          child: Text(
+            serverLibraries.first.serverName ?? t.libraries.title,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+
+      for (final library in serverLibraries) {
+        entries.add(_buildLibraryMenuItem(library, selectedLibrary));
+      }
+    }
+
+    return entries;
+  }
+
+  PopupMenuItem<String> _buildLibraryMenuItem(MediaLibrary library, MediaLibrary? selectedLibrary) {
+    return PopupMenuItem<String>(
+      value: library.globalKey,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 28,
+            child: library.globalKey == selectedLibrary?.globalKey
+                ? const AppIcon(Symbols.check_rounded, fill: 1)
+                : null,
+          ),
+          Expanded(child: Text(library.title, overflow: TextOverflow.ellipsis)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppBarTitle(
+    MediaLibrary? selectedLibrary,
+    List<MediaLibrary> pickerLibraries,
+  ) {
     final useLogo = widget.filterKind == MediaKind.movie || widget.filterKind == MediaKind.show;
 
     final titleWidget = useLogo
@@ -926,7 +986,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     // Tablets (wide) keep the picker in the logo row, horizontally centered.
     // Phones (narrow) move it to its own row under the logo — built in
     // _buildMobileTabBar — so it isn't cramped beside the logo.
-    final picker = useLogo ? _buildLibraryPicker(libraries, selectedLibrary) : null;
+    final picker = useLogo ? _buildLibraryPicker(pickerLibraries, selectedLibrary) : null;
     if (picker != null && PlatformDetector.isTablet(context)) {
       return SizedBox(
         width: double.infinity,
@@ -942,7 +1002,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     return titleWidget;
   }
 
-  PreferredSizeWidget? _buildMobileTabBar(MediaLibrary? selectedLibrary, List<MediaLibrary> libraries) {
+  PreferredSizeWidget? _buildMobileTabBar(MediaLibrary? selectedLibrary, List<MediaLibrary> pickerLibraries) {
     if (PlatformDetector.shouldUseSideNavigation(context) || _selectedLibraryGlobalKey == null) {
       return null;
     }
@@ -974,7 +1034,7 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     // edge lines up with the tab row beneath it.
     final useLogo = widget.filterKind == MediaKind.movie || widget.filterKind == MediaKind.show;
     final picker = (useLogo && PlatformDetector.isPhone(context))
-        ? _buildLibraryPicker(libraries, selectedLibrary)
+        ? _buildLibraryPicker(pickerLibraries, selectedLibrary)
         : null;
 
     if (picker == null) {
@@ -1085,9 +1145,25 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     }
     _sortLibrariesAlphabetically(visibleLibraries);
 
-    // Resolve selected library defensively — may be null if server temporarily dropped during refresh
+    // Cross-server picker list: all connected servers' libraries of this kind,
+    // ignoring the active-server filter so the user can jump to any server's
+    // library from the header dropdown. Grouped by server inside the picker,
+    // so it is NOT alphabetized across servers here. Falls back to the active
+    // list when no extra servers are present.
+    var pickerLibraries = librariesProvider.allServerLibraries
+        .where((lib) => !hiddenKeys.contains(lib.globalKey))
+        .toList();
+    if (widget.filterKind != null) {
+      pickerLibraries = pickerLibraries.where((lib) => lib.kind == widget.filterKind).toList();
+    }
+    if (pickerLibraries.isEmpty) pickerLibraries = visibleLibraries;
+
+    // Resolve selected library defensively — may be null if server temporarily
+    // dropped during refresh. Check the cross-server list first so a library
+    // picked from another server still resolves for the header/tabs.
     final selectedLibrary = _selectedLibraryGlobalKey != null
-        ? allLibraries.where((lib) => lib.globalKey == _selectedLibraryGlobalKey).firstOrNull
+        ? (pickerLibraries.where((lib) => lib.globalKey == _selectedLibraryGlobalKey).firstOrNull ??
+              allLibraries.where((lib) => lib.globalKey == _selectedLibraryGlobalKey).firstOrNull)
         : null;
 
     // Auto-select first library if current selection is missing or invalid
@@ -1104,11 +1180,11 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     Widget appBar({required bool pinned, bool? isFloating}) {
       final isTV = PlatformDetector.isTV();
       return DesktopSliverAppBar(
-        title: _buildAppBarTitle(selectedLibrary, visibleLibraries),
+        title: _buildAppBarTitle(selectedLibrary, pickerLibraries),
         pinned: pinned,
         floating: isFloating ?? false,
         snap: isFloating ?? false,
-        bottom: isTV ? _buildTVActionBar() : _buildMobileTabBar(selectedLibrary, visibleLibraries),
+        bottom: isTV ? _buildTVActionBar() : _buildMobileTabBar(selectedLibrary, pickerLibraries),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
         shadowColor: Colors.transparent,

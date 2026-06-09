@@ -32,8 +32,14 @@ class DataAggregationService {
 
   /// Fetch libraries from all online clients regardless of backend, returning
   /// neutral [MediaLibrary]s.
-  Future<List<MediaLibrary>> getMediaLibrariesFromAllServers() async {
-    final clients = _filteredClients;
+  ///
+  /// By default this honors [visibleServerIds] (the single active server picked
+  /// via Select Server), matching every other aggregated content flow. Pass
+  /// [includeAllServers] to bypass that filter and return libraries from every
+  /// online server — used by the Libraries screen's cross-server picker so the
+  /// user can jump to any server's library without switching the active server.
+  Future<List<MediaLibrary>> getMediaLibrariesFromAllServers({bool includeAllServers = false}) async {
+    final clients = includeAllServers ? _serverManager.onlineClients : _filteredClients;
     if (clients.isEmpty) {
       appLogger.w('No online servers available for fetching libraries (neutral)');
       return [];
