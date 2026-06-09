@@ -453,7 +453,7 @@ class _TranslationsFileInfoVi extends TranslationsFileInfoEn {
 	@override String get resolution => 'Resolution';
 	@override String get bitrate => 'Bitrate';
 	@override String get frameRate => 'Frame Rate';
-	@override String get aspectRatio => 'Tỉ lệ màn hình';
+	@override String get aspectRatio => 'Tỉ lệ';
 	@override String get profile => 'Profile';
 	@override String get bitDepth => 'Bit Depth';
 	@override String get colorSpace => 'Color Space';
@@ -576,6 +576,7 @@ class _TranslationsVideoControlsVi extends TranslationsVideoControlsEn {
 	@override String get transcodeUnavailableFallback => 'Transcoding unavailable — playing original quality';
 	@override String get pipButton => 'Picture-in-Picture mode';
 	@override String get aspectRatioButton => 'Tỉ lệ';
+	@override String zoomPercent({required Object percent}) => 'Thu phóng ${percent}%';
 	@override String get ambientLighting => 'Ambient lighting';
 	@override String get fullscreenButton => 'Toàn màn hình';
 	@override String get exitFullscreenButton => 'Thu nhỏ màn hình';
@@ -1259,6 +1260,7 @@ class _TranslationsVideoSettingsVi extends TranslationsVideoSettingsEn {
 	// Translations
 	@override String get playbackSettings => 'Cấu hình';
 	@override String get playbackSpeed => 'Tốc độ phát';
+	@override String get zoom => 'Thu phóng';
 	@override String get sleepTimer => 'Hẹn giờ tắt màn hình';
 	@override String get audioSync => 'Độ trễ âm thanh';
 	@override String get subtitleSync => 'Độ trễ phụ đề';
@@ -2165,7 +2167,7 @@ extension on TranslationsVi {
 			'fileInfo.resolution' => 'Resolution',
 			'fileInfo.bitrate' => 'Bitrate',
 			'fileInfo.frameRate' => 'Frame Rate',
-			'fileInfo.aspectRatio' => 'Tỉ lệ màn hình',
+			'fileInfo.aspectRatio' => 'Tỉ lệ',
 			'fileInfo.profile' => 'Profile',
 			'fileInfo.bitDepth' => 'Bit Depth',
 			'fileInfo.colorSpace' => 'Color Space',
@@ -2252,6 +2254,7 @@ extension on TranslationsVi {
 			'videoControls.transcodeUnavailableFallback' => 'Transcoding unavailable — playing original quality',
 			'videoControls.pipButton' => 'Picture-in-Picture mode',
 			'videoControls.aspectRatioButton' => 'Tỉ lệ',
+			'videoControls.zoomPercent' => ({required Object percent}) => 'Thu phóng ${percent}%',
 			'videoControls.ambientLighting' => 'Ambient lighting',
 			'videoControls.fullscreenButton' => 'Toàn màn hình',
 			'videoControls.exitFullscreenButton' => 'Thu nhỏ màn hình',
@@ -2376,9 +2379,9 @@ extension on TranslationsVi {
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
-			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
@@ -2819,6 +2822,7 @@ extension on TranslationsVi {
 			'companionRemote.remote.searchHint' => 'Search on desktop...',
 			'videoSettings.playbackSettings' => 'Cấu hình',
 			'videoSettings.playbackSpeed' => 'Tốc độ phát',
+			'videoSettings.zoom' => 'Thu phóng',
 			'videoSettings.sleepTimer' => 'Hẹn giờ tắt màn hình',
 			'videoSettings.audioSync' => 'Độ trễ âm thanh',
 			'videoSettings.subtitleSync' => 'Độ trễ phụ đề',
@@ -2889,10 +2893,10 @@ extension on TranslationsVi {
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',
 			'metadataEdit.never' => 'Never',
-			'metadataEdit.afterADay' => 'After a day',
-			'metadataEdit.afterAWeek' => 'After a week',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.afterADay' => 'After a day',
+			'metadataEdit.afterAWeek' => 'After a week',
 			'metadataEdit.afterAMonth' => 'After a month',
 			'metadataEdit.onNextRefresh' => 'On next refresh',
 			'metadataEdit.seasons' => 'Seasons',
