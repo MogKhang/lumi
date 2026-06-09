@@ -1311,6 +1311,9 @@ class TranslationsVideoControlsEn {
 	/// en: 'Aspect ratio'
 	String get aspectRatioButton => 'Aspect ratio';
 
+	/// en: 'Zoom ${percent}%'
+	String zoomPercent({required Object percent}) => 'Zoom ${percent}%';
+
 	/// en: 'Ambient lighting'
 	String get ambientLighting => 'Ambient lighting';
 
@@ -2843,6 +2846,9 @@ class TranslationsVideoSettingsEn {
 
 	/// en: 'Playback Speed'
 	String get playbackSpeed => 'Playback Speed';
+
+	/// en: 'Zoom'
+	String get zoom => 'Zoom';
 
 	/// en: 'Sleep Timer'
 	String get sleepTimer => 'Sleep Timer';
@@ -4758,6 +4764,7 @@ extension on Translations {
 			'videoControls.transcodeUnavailableFallback' => 'Transcoding unavailable — playing original quality',
 			'videoControls.pipButton' => 'Picture-in-Picture mode',
 			'videoControls.aspectRatioButton' => 'Aspect ratio',
+			'videoControls.zoomPercent' => ({required Object percent}) => 'Zoom ${percent}%',
 			'videoControls.ambientLighting' => 'Ambient lighting',
 			'videoControls.fullscreenButton' => 'Enter fullscreen',
 			'videoControls.exitFullscreenButton' => 'Exit fullscreen',
@@ -4882,9 +4889,9 @@ extension on Translations {
 			'profiles.deleteProfileMessage' => ({required Object displayName}) => 'This removes ${displayName} and all its connections from this device. The underlying Plex/Jellyfin servers aren\'t affected.',
 			'profiles.profileNameLabel' => 'Profile name',
 			'profiles.pinProtectionLabel' => 'PIN protection',
-			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
 			'profiles.connectionsLabel' => 'Connections',
@@ -5323,6 +5330,7 @@ extension on Translations {
 			'companionRemote.remote.searchHint' => 'Search on desktop...',
 			'videoSettings.playbackSettings' => 'Playback Settings',
 			'videoSettings.playbackSpeed' => 'Playback Speed',
+			'videoSettings.zoom' => 'Zoom',
 			'videoSettings.sleepTimer' => 'Sleep Timer',
 			'videoSettings.audioSync' => 'Audio Sync',
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
@@ -5395,10 +5403,10 @@ extension on Translations {
 			'metadataEdit.never' => 'Never',
 			'metadataEdit.afterADay' => 'After a day',
 			'metadataEdit.afterAWeek' => 'After a week',
-			'metadataEdit.afterAMonth' => 'After a month',
-			'metadataEdit.onNextRefresh' => 'On next refresh',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.afterAMonth' => 'After a month',
+			'metadataEdit.onNextRefresh' => 'On next refresh',
 			'metadataEdit.seasons' => 'Seasons',
 			'metadataEdit.show' => 'Show',
 			'metadataEdit.hide' => 'Hide',

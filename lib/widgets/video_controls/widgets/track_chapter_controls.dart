@@ -81,6 +81,7 @@ class TrackChapterControls extends StatelessWidget {
   bool get serverSupportsTranscoding => trackControlsState.serverSupportsTranscoding;
   ValueChanged<TranscodeQualityPreset>? get onSwitchQualityPreset => trackControlsState.onSwitchQualityPreset;
   int get boxFitMode => trackControlsState.boxFitMode;
+  double get videoZoomScale => trackControlsState.videoZoomScale;
   int get audioSyncOffset => trackControlsState.audioSyncOffset;
   int get subtitleSyncOffset => trackControlsState.subtitleSyncOffset;
   bool get isRotationLocked => trackControlsState.isRotationLocked;
@@ -89,6 +90,8 @@ class TrackChapterControls extends StatelessWidget {
   bool get isAlwaysOnTop => trackControlsState.isAlwaysOnTop;
   VoidCallback? get onTogglePIPMode => trackControlsState.onTogglePIPMode;
   VoidCallback? get onCycleBoxFitMode => trackControlsState.onCycleBoxFitMode;
+  ValueChanged<double>? get onVideoZoomChanged => trackControlsState.onVideoZoomChanged;
+  VoidCallback? get onResetVideoZoom => trackControlsState.onResetVideoZoom;
   VoidCallback? get onToggleRotationLock => trackControlsState.onToggleRotationLock;
   VoidCallback? get onToggleScreenLock => trackControlsState.onToggleScreenLock;
   VoidCallback? get onToggleFullscreen => trackControlsState.onToggleFullscreen;
@@ -211,7 +214,8 @@ class TrackChapterControls extends StatelessWidget {
               final sleepTimer = SleepTimerService();
               final isShaderActive =
                   shaderService != null && shaderService!.isSupported && shaderService!.currentPreset.isEnabled;
-              final isActive = sleepTimer.isActive || isShaderActive;
+              final isZoomActive = (videoZoomScale - 1.0).abs() > 0.0001;
+              final isActive = sleepTimer.isActive || isShaderActive || isZoomActive;
               return _buildTrackButton(
                 buttonIndex: 0,
                 icon: Symbols.tune_rounded,
@@ -229,6 +233,9 @@ class TrackChapterControls extends StatelessWidget {
                           player: player,
                           audioSyncOffset: audioSyncOffset,
                           subtitleSyncOffset: subtitleSyncOffset,
+                          videoZoomScale: videoZoomScale,
+                          onVideoZoomChanged: onVideoZoomChanged,
+                          onResetVideoZoom: onResetVideoZoom,
                           canControl: canControl,
                           isLive: isLive,
                           shaderService: shaderService,

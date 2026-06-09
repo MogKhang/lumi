@@ -357,6 +357,9 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
   VideoPIPManager? _videoPIPManager;
   ShaderService? _shaderService;
   AmbientLightingService? _ambientLightingService;
+  double? _pinchStartZoomScale;
+  bool _isPinchZooming = false;
+  bool _pinchZoomChanged = false;
   final EpisodeNavigationService _episodeNavigation = EpisodeNavigationService();
 
 

@@ -21,6 +21,7 @@ class TrackControlsState {
   /// to show estimated file sizes per preset (bitrate × duration).
   final int? sourceDurationMs;
   final int boxFitMode;
+  final double videoZoomScale;
   final int audioSyncOffset;
   final int subtitleSyncOffset;
   final bool isRotationLocked;
@@ -29,6 +30,8 @@ class TrackControlsState {
   final bool isAlwaysOnTop;
   final VoidCallback? onTogglePIPMode;
   final VoidCallback? onCycleBoxFitMode;
+  final ValueChanged<double>? onVideoZoomChanged;
+  final VoidCallback? onResetVideoZoom;
   final VoidCallback? onToggleRotationLock;
   final VoidCallback? onToggleScreenLock;
   final VoidCallback? onToggleFullscreen;
@@ -72,6 +75,7 @@ class TrackControlsState {
     this.selectedAudioStreamId,
     this.sourceDurationMs,
     this.boxFitMode = 0,
+    this.videoZoomScale = 1.0,
     this.audioSyncOffset = 0,
     this.subtitleSyncOffset = 0,
     this.isRotationLocked = false,
@@ -80,6 +84,8 @@ class TrackControlsState {
     this.isAlwaysOnTop = false,
     this.onTogglePIPMode,
     this.onCycleBoxFitMode,
+    this.onVideoZoomChanged,
+    this.onResetVideoZoom,
     this.onToggleRotationLock,
     this.onToggleScreenLock,
     this.onToggleFullscreen,

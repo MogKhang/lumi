@@ -18,6 +18,7 @@ import '../../../services/file_picker_service.dart';
 import '../../../services/settings_service.dart';
 import '../../../services/shader_service.dart';
 import '../../../services/sleep_timer_service.dart';
+import '../../../services/video_filter_manager.dart';
 import '../../../focus/focusable_wrapper.dart';
 import '../../../utils/dialogs.dart';
 import '../../../utils/formatters.dart';
@@ -31,7 +32,7 @@ import '../widgets/sleep_timer_content.dart';
 import '../../../i18n/strings.g.dart';
 import 'base_video_control_sheet.dart';
 
-enum _SettingsView { menu, speed, sleep, audioSync, subtitleSync, audioDevice, shader, dvConversion }
+enum _SettingsView { menu, speed, zoom, sleep, audioSync, subtitleSync, audioDevice, shader, dvConversion }
 
 class _SettingsMenuItem extends StatelessWidget {
   final IconData icon;
@@ -111,6 +112,9 @@ class VideoSettingsSheet extends StatefulWidget {
   final Player player;
   final int audioSyncOffset;
   final int subtitleSyncOffset;
+  final double videoZoomScale;
+  final ValueChanged<double>? onVideoZoomChanged;
+  final VoidCallback? onResetVideoZoom;
 
   /// Whether the user can control playback (false hides speed option in host-only mode).
   final bool canControl;
@@ -144,6 +148,9 @@ class VideoSettingsSheet extends StatefulWidget {
     required this.player,
     required this.audioSyncOffset,
     required this.subtitleSyncOffset,
+    this.videoZoomScale = 1.0,
+    this.onVideoZoomChanged,
+    this.onResetVideoZoom,
     this.canControl = true,
     this.isLive = false,
     this.shaderService,
@@ -163,6 +170,7 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
   _SettingsView _currentView = _SettingsView.menu;
   late int _audioSyncOffset;
   late int _subtitleSyncOffset;
+  late double _zoomScale;
   String _dvConversionMode = 'auto';
 
   @override
@@ -170,7 +178,17 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
     super.initState();
     _audioSyncOffset = widget.audioSyncOffset;
     _subtitleSyncOffset = widget.subtitleSyncOffset;
+    _zoomScale = VideoFilterManager.normalizeZoomScale(widget.videoZoomScale);
     _loadDebugDvConversionMode();
+  }
+
+  @override
+  void didUpdateWidget(covariant VideoSettingsSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final nextZoomScale = VideoFilterManager.normalizeZoomScale(widget.videoZoomScale);
+    if (_zoomScale != nextZoomScale) {
+      _zoomScale = nextZoomScale;
+    }
   }
 
   Future<void> _loadDebugDvConversionMode() async {
@@ -266,6 +284,8 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
         return t.videoSettings.playbackSettings;
       case _SettingsView.speed:
         return t.videoSettings.playbackSpeed;
+      case _SettingsView.zoom:
+        return t.videoSettings.zoom;
       case _SettingsView.sleep:
         return t.videoSettings.sleepTimer;
       case _SettingsView.audioSync:
@@ -287,6 +307,8 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
         return Symbols.tune_rounded;
       case _SettingsView.speed:
         return Symbols.speed_rounded;
+      case _SettingsView.zoom:
+        return Symbols.zoom_in_rounded;
       case _SettingsView.sleep:
         return Symbols.bedtime_rounded;
       case _SettingsView.audioSync:
@@ -327,12 +349,44 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
     return t.videoSettings.active(time: formatDurationWithSeconds(remaining));
   }
 
+  String _formatZoomScale(double scale) => '${(scale * 100).round()}%';
+
+  void _setZoomScale(double scale) {
+    final next = VideoFilterManager.normalizeZoomScale(scale);
+    setState(() {
+      _zoomScale = next;
+    });
+    widget.onVideoZoomChanged?.call(next);
+  }
+
+  void _resetZoomScale() {
+    setState(() {
+      _zoomScale = 1.0;
+    });
+    final reset = widget.onResetVideoZoom;
+    if (reset != null) {
+      reset();
+    } else {
+      widget.onVideoZoomChanged?.call(1.0);
+    }
+  }
+
   Widget _buildMenuView() {
     final sleepTimer = SleepTimerService();
     final isDesktop = PlatformDetector.isDesktop(context);
 
     return ListView(
       children: [
+
+        // Zoom
+        if (widget.onVideoZoomChanged != null || widget.onResetVideoZoom != null)
+          _SettingsMenuItem(
+            icon: Symbols.zoom_in_rounded,
+            title: t.videoSettings.zoom,
+            valueText: _formatZoomScale(_zoomScale),
+            isHighlighted: (_zoomScale - 1.0).abs() > 0.0001,
+            onTap: () => _navigateTo(_SettingsView.zoom),
+          ),
 
         // Sleep Timer
         ListenableBuilder(
@@ -443,6 +497,32 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
           },
         );
       },
+    );
+  }
+
+  Widget _buildZoomView() {
+    const zoomPresets = [0.5, 0.75, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0];
+    final primary = Theme.of(context).colorScheme.primary;
+
+    return ListView(
+      children: [
+        FocusableListTile(
+          leading: AppIcon(Symbols.restart_alt_rounded, fill: 1, color: tokens(context).textMuted),
+          title: Text(t.common.reset),
+          onTap: _resetZoomScale,
+        ),
+        for (final scale in zoomPresets)
+          FocusableListTile(
+            title: Text(
+              _formatZoomScale(scale),
+              style: TextStyle(color: (_zoomScale - scale).abs() < 0.005 ? primary : null),
+            ),
+            trailing: (_zoomScale - scale).abs() < 0.005
+                ? AppIcon(Symbols.check_rounded, fill: 1, color: primary)
+                : null,
+            onTap: () => _setZoomScale(scale),
+          ),
+      ],
     );
   }
 
@@ -693,9 +773,10 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
   Widget build(BuildContext context) {
     final sleepTimer = SleepTimerService();
     final isShaderActive = widget.shaderService != null && widget.shaderService!.currentPreset.isEnabled;
+    final isZoomActive = (_zoomScale - 1.0).abs() > 0.0001;
     final isIconActive =
         _currentView == _SettingsView.menu &&
-        (sleepTimer.isActive || _audioSyncOffset != 0 || _subtitleSyncOffset != 0 || isShaderActive);
+        (sleepTimer.isActive || _audioSyncOffset != 0 || _subtitleSyncOffset != 0 || isShaderActive || isZoomActive);
 
     return BaseVideoControlSheet(
       title: _getTitle(),
@@ -712,6 +793,8 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
             return _buildMenuView();
           case _SettingsView.speed:
             return _buildSpeedView();
+          case _SettingsView.zoom:
+            return _buildZoomView();
           case _SettingsView.sleep:
             return _buildSleepView();
           case _SettingsView.audioSync:

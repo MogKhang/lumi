@@ -13,7 +13,7 @@ extension _VideoPlayerPipShaderMethods on VideoPlayerScreenState {
       initialBoxFitMode: settings.read(SettingsService.defaultBoxFitMode),
       onBoxFitModeChanged: (mode) => settings.write(SettingsService.defaultBoxFitMode, mode),
     );
-    _videoFilterManager!.updateVideoFilter();
+    unawaited(_videoFilterManager!.updateVideoFilter());
 
     _videoPIPManager = VideoPIPManager(player: player!);
     _videoPIPManager!.onBeforeEnterPip = () {
@@ -131,7 +131,7 @@ extension _VideoPlayerPipShaderMethods on VideoPlayerScreenState {
 
     if (ambientLighting.isEnabled) {
       await ambientLighting.disable();
-      _videoFilterManager?.updateVideoFilter();
+      unawaited(_videoFilterManager?.updateVideoFilter());
     } else {
       // Get video display aspect ratio
       final dwidth = await player?.getProperty('dwidth');
@@ -166,10 +166,32 @@ extension _VideoPlayerPipShaderMethods on VideoPlayerScreenState {
     if (mounted) _setPlayerState(() {});
   }
 
-  /// Toggle between contain and cover modes only (for pinch gesture)
-  void _toggleContainCover() {
-    _setPlayerState(() {
-      _videoFilterManager?.toggleContainCover();
-    });
+  void _showZoomToast(double zoomScale) {
+    _toastController.show(Symbols.zoom_in_rounded, t.videoControls.zoomPercent(percent: (zoomScale * 100).round()));
+  }
+
+  double _setVideoZoom(double zoomScale, {bool showToast = true}) {
+    final filterManager = _videoFilterManager;
+    if (filterManager == null) return 1.0;
+
+    _ambientLightingService?.disable();
+    final next = filterManager.setZoomScale(zoomScale);
+    if (showToast) _showZoomToast(next);
+    if (mounted) _setPlayerState(() {});
+    return next;
+  }
+
+  void _zoomVideoIn() {
+    final current = _videoFilterManager?.zoomScale ?? 1.0;
+    _setVideoZoom(current + VideoFilterManager.zoomStep);
+  }
+
+  void _zoomVideoOut() {
+    final current = _videoFilterManager?.zoomScale ?? 1.0;
+    _setVideoZoom(current - VideoFilterManager.zoomStep);
+  }
+
+  void _resetVideoZoom() {
+    _setVideoZoom(1.0);
   }
 }

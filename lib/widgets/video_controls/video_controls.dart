@@ -1,7 +1,16 @@
 import 'dart:async' show StreamSubscription, Timer, unawaited;
 import 'dart:io' show Platform;
 
-import 'package:flutter/gestures.dart' show PointerSignalEvent, PointerScrollEvent;
+import 'package:flutter/gestures.dart'
+    show
+        PointerCancelEvent,
+        PointerDeviceKind,
+        PointerDownEvent,
+        PointerMoveEvent,
+        PointerScrollEvent,
+        PointerSignalEvent,
+        PointerUpEvent,
+        kDoubleTapTimeout;
 import 'package:flutter/material.dart';
 import 'package:lumi/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -54,6 +63,7 @@ import '../../i18n/strings.g.dart';
 import '../../focus/input_mode_tracker.dart';
 import 'models/track_controls_state.dart';
 import 'widgets/double_tap_feedback.dart';
+import 'helpers/two_finger_double_tap_tracker.dart';
 import 'widgets/linux_keep_alive.dart';
 import 'widgets/mobile_skip_zones.dart';
 import 'widgets/skip_marker_button.dart';
@@ -92,7 +102,12 @@ Widget plexVideoControlsBuilder(
   int? selectedAudioStreamId,
   VoidCallback? onTogglePIPMode,
   int boxFitMode = 0,
+  double videoZoomScale = 1.0,
   VoidCallback? onCycleBoxFitMode,
+  ValueChanged<double>? onVideoZoomChanged,
+  VoidCallback? onZoomIn,
+  VoidCallback? onZoomOut,
+  VoidCallback? onResetVideoZoom,
   VoidCallback? onCycleAudioTrack,
   VoidCallback? onCycleSubtitleTrack,
   Function(AudioTrack)? onAudioTrackChanged,
@@ -137,8 +152,13 @@ Widget plexVideoControlsBuilder(
       sourceAudioTracks: sourceAudioTracks,
       selectedAudioStreamId: selectedAudioStreamId,
       boxFitMode: boxFitMode,
+      videoZoomScale: videoZoomScale,
       onTogglePIPMode: onTogglePIPMode,
       onCycleBoxFitMode: onCycleBoxFitMode,
+      onVideoZoomChanged: onVideoZoomChanged,
+      onZoomIn: onZoomIn,
+      onZoomOut: onZoomOut,
+      onResetVideoZoom: onResetVideoZoom,
       onCycleAudioTrack: onCycleAudioTrack,
       onCycleSubtitleTrack: onCycleSubtitleTrack,
       onAudioTrackChanged: onAudioTrackChanged,
@@ -219,8 +239,13 @@ class PlexVideoControls extends StatefulWidget {
   final List<MediaAudioTrack> sourceAudioTracks;
   final int? selectedAudioStreamId;
   final int boxFitMode;
+  final double videoZoomScale;
   final VoidCallback? onTogglePIPMode;
   final VoidCallback? onCycleBoxFitMode;
+  final ValueChanged<double>? onVideoZoomChanged;
+  final VoidCallback? onZoomIn;
+  final VoidCallback? onZoomOut;
+  final VoidCallback? onResetVideoZoom;
   final VoidCallback? onCycleAudioTrack;
   final VoidCallback? onCycleSubtitleTrack;
   final Function(AudioTrack)? onAudioTrackChanged;
@@ -308,8 +333,13 @@ class PlexVideoControls extends StatefulWidget {
     this.sourceAudioTracks = const [],
     this.selectedAudioStreamId,
     this.boxFitMode = 0,
+    this.videoZoomScale = 1.0,
     this.onTogglePIPMode,
     this.onCycleBoxFitMode,
+    this.onVideoZoomChanged,
+    this.onZoomIn,
+    this.onZoomOut,
+    this.onResetVideoZoom,
     this.onCycleAudioTrack,
     this.onCycleSubtitleTrack,
     this.onAudioTrackChanged,
@@ -383,6 +413,8 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
   bool _lastSkipTapWasForward = true;
   DateTime? _lastSkipActionTime; // Debounce: prevents double-tap counting as 2 skips
   Timer? _singleTapTimer; // Timer for delayed single-tap action (toggle controls)
+  final TwoFingerDoubleTapTracker _twoFingerDoubleTapTracker = TwoFingerDoubleTapTracker();
+  DateTime? _suppressTouchTapUntil;
   // Seek throttle
   late final Throttle _seekThrottle;
   // Current marker state
@@ -601,6 +633,10 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
           child: Listener(
             behavior: HitTestBehavior.translucent,
             onPointerHover: (_) => _showControlsFromPointerActivity(),
+            onPointerDown: isMobile ? _handleTouchPointerDown : null,
+            onPointerMove: isMobile ? _handleTouchPointerMove : null,
+            onPointerUp: isMobile ? _handleTouchPointerUp : null,
+            onPointerCancel: isMobile ? _handleTouchPointerCancel : null,
             onPointerSignal: _handlePointerSignal,
             child: MouseRegion(
               cursor: (_showControls || _forceShowControls) ? SystemMouseCursors.basic : SystemMouseCursors.none,
