@@ -232,8 +232,8 @@ class _TranslationsRelatedHubsVi extends TranslationsRelatedHubsEn {
 	@override String moreByDirector({required Object name}) => 'Phim của ${name}';
 	@override String moreInGenre({required Object name}) => 'Phim thể loại ${name}';
 	@override String get similar => 'Phim tương tự';
-	@override String collection({required Object name}) => 'Bộ sưu tập ${name}';
-	@override String tvShowsInCollection({required Object name}) => 'Bộ sưu tập ${name}';
+	@override String collection({required Object name}) => '${name}';
+	@override String tvShowsInCollection({required Object name}) => '${name}';
 }
 
 // Path: settings
@@ -1968,8 +1968,8 @@ extension on TranslationsVi {
 			'relatedHubs.moreByDirector' => ({required Object name}) => 'Phim của ${name}',
 			'relatedHubs.moreInGenre' => ({required Object name}) => 'Phim thể loại ${name}',
 			'relatedHubs.similar' => 'Phim tương tự',
-			'relatedHubs.collection' => ({required Object name}) => 'Bộ sưu tập ${name}',
-			'relatedHubs.tvShowsInCollection' => ({required Object name}) => 'Bộ sưu tập ${name}',
+			'relatedHubs.collection' => ({required Object name}) => '${name}',
+			'relatedHubs.tvShowsInCollection' => ({required Object name}) => '${name}',
 			'settings.title' => 'Cài đặt',
 			'settings.supportDeveloper' => 'Support Lumi',
 			'settings.supportDeveloperDescription' => 'Donate via Liberapay to fund development',

@@ -97,8 +97,8 @@
     "moreByDirector": "Phim của ${name}",
     "moreInGenre": "Phim thể loại ${name}",
     "similar": "Phim tương tự",
-    "collection": "Bộ sưu tập ${name}",
-    "tvShowsInCollection": "Bộ sưu tập ${name}"
+    "collection": "${name}",
+    "tvShowsInCollection": "${name}"
   },
   "settings": {
     "title": "Cài đặt",
