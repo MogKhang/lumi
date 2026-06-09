@@ -56,12 +56,12 @@ class _SettingsMenuItem extends StatelessWidget {
     final t = tokens(context);
     final valueWidget = Text(
       valueText,
-      style: TextStyle(color: isHighlighted ? Colors.amber : t.textMuted, fontSize: 14),
+      style: TextStyle(color: isHighlighted ? MonoTokens.brandAccent : t.textMuted, fontSize: 14),
       overflow: allowValueOverflow ? TextOverflow.ellipsis : null,
     );
 
     return FocusableListTile(
-      leading: AppIcon(icon, fill: 1, color: isHighlighted ? Colors.amber : t.textMuted),
+      leading: AppIcon(icon, fill: 1, color: isHighlighted ? MonoTokens.brandAccent : t.textMuted),
       title: Text(title),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -97,9 +97,9 @@ class _SettingsToggleItem extends StatelessWidget {
         }
 
         return FocusableListTile(
-          leading: AppIcon(icon, fill: 1, color: value ? Colors.amber : tokens(context).textMuted),
+          leading: AppIcon(icon, fill: 1, color: value ? MonoTokens.brandAccent : tokens(context).textMuted),
           title: Text(title),
-          trailing: Switch(value: value, onChanged: write, activeThumbColor: Colors.amber),
+          trailing: Switch(value: value, onChanged: write, activeThumbColor: MonoTokens.brandAccent),
           onTap: () => write(!value),
         );
       },
@@ -661,14 +661,14 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
             final isCustom = preset.type == ShaderPresetType.custom;
 
             return FocusableListTile(
-              title: Text(preset.name, style: TextStyle(color: isSelected ? Colors.amber : null)),
+              title: Text(preset.name, style: TextStyle(color: isSelected ? MonoTokens.brandAccent : null)),
               subtitle: _getShaderSubtitle(preset) != null
                   ? Text(_getShaderSubtitle(preset)!, style: TextStyle(color: tokens(context).textMuted, fontSize: 12))
                   : null,
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (isSelected) const AppIcon(Symbols.check_rounded, fill: 1, color: Colors.amber),
+                  if (isSelected) const AppIcon(Symbols.check_rounded, fill: 1, color: MonoTokens.brandAccent),
                   if (isCustom) ...[
                     if (isSelected) const SizedBox(width: 8),
                     GestureDetector(
@@ -782,8 +782,8 @@ class _VideoSettingsSheetState extends State<VideoSettingsSheet> {
       title: _getTitle(),
       icon: _getIcon(),
       iconColor: () {
-        if (isIconActive) return Colors.amber;
-        if (_currentView == _SettingsView.shader && isShaderActive) return Colors.amber;
+        if (isIconActive) return MonoTokens.brandAccent;
+        if (_currentView == _SettingsView.shader && isShaderActive) return MonoTokens.brandAccent;
         return null;
       }(),
       onBack: _currentView != _SettingsView.menu ? _navigateBack : null,

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../../../utils/formatters.dart';
 import '../../../services/settings_service.dart';
 import '../../../widgets/focusable_list_tile.dart';
+import '../../../theme/mono_tokens.dart';
 import '../sheets/base_video_control_sheet.dart';
 
 import '../../../focus/dpad_navigator.dart';
@@ -575,7 +576,7 @@ class _PlaybackSpeedView extends StatelessWidget {
             final primary = Theme.of(context).colorScheme.primary;
             return FocusableListTile(
               title: Text(label, style: TextStyle(color: isSelected ? primary : null)),
-              trailing: isSelected ? const Icon(Symbols.check_rounded, color: Colors.amber) : null,
+              trailing: isSelected ? const Icon(Symbols.check_rounded, color: MonoTokens.brandAccent) : null,
               onTap: () async {
                 await player.setRate(speed);
                 // Save as default playback speed

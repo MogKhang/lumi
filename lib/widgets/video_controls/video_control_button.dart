@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lumi/widgets/app_icon.dart';
 
 import '../../focus/focusable_wrapper.dart';
+import '../../theme/mono_tokens.dart';
 
 /// A standardized button for video player controls with improved tap targets.
 ///
@@ -13,7 +14,8 @@ class VideoControlButton extends StatelessWidget {
 
   final VoidCallback? onPressed;
 
-  /// The color of the icon. Defaults to white, or amber if [isActive] is true.
+  /// The color of the icon. Defaults to white, or the brand accent if
+  /// [isActive] is true.
   final Color? color;
 
   /// Optional tooltip text shown on hover or long press.
@@ -24,7 +26,7 @@ class VideoControlButton extends StatelessWidget {
   final String? semanticLabel;
 
   /// Whether this button represents an active state (e.g., a feature is enabled).
-  /// When true, the icon color defaults to amber instead of white.
+  /// When true, the icon color defaults to the brand accent instead of white.
   final bool isActive;
 
   /// Optional FocusNode for D-pad/keyboard navigation.
@@ -54,8 +56,8 @@ class VideoControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine the effective color: explicit color > active amber > default white
-    final effectiveColor = color ?? (isActive ? Colors.amber : Colors.white);
+    // Determine the effective color: explicit color > active brand accent > default white
+    final effectiveColor = color ?? (isActive ? MonoTokens.brandAccent : Colors.white);
 
     final button = IconButton(
       icon: AppIcon(icon, fill: 1, color: effectiveColor),

@@ -3,6 +3,7 @@ import 'package:lumi/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../focus/focusable_button.dart';
 import '../../../services/sleep_timer_service.dart';
+import '../../../theme/mono_tokens.dart';
 import '../../../i18n/strings.g.dart';
 import '../../../utils/formatters.dart';
 
@@ -18,12 +19,12 @@ class SleepTimerActiveStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: Colors.amber.withValues(alpha: 0.1),
+      color: MonoTokens.brandAccent.withValues(alpha: 0.1),
       child: Column(
         children: [
           Text(
             t.videoControls.timerActive,
-            style: const TextStyle(color: Colors.amber, fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(color: MonoTokens.brandAccent, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(

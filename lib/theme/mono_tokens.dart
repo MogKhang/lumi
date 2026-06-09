@@ -5,6 +5,10 @@ MonoTokens tokens(BuildContext context) => Theme.of(context).extension<MonoToken
 
 @immutable
 class MonoTokens extends ThemeExtension<MonoTokens> {
+  /// Lumi brand accent (pink). Used to highlight active/selected states such as
+  /// the playback control toggles.
+  static const Color brandAccent = Color(0xFFEC609B);
+
   final double radiusSm;
   final double radiusMd;
   final double space;
