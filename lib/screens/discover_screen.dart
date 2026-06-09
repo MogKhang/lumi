@@ -532,6 +532,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       final onDeckFuture = multiServerProvider.aggregationService.getOnDeckFromAllServers(
         limit: 20,
         hiddenLibraryKeys: hiddenLibrariesProvider.hiddenLibraryKeys,
+        includeAllServers: true,
       );
       final hubsFuture = multiServerProvider.aggregationService.getHubsFromAllServers(
         hiddenLibraryKeys: hiddenLibrariesProvider.hiddenLibraryKeys,
@@ -668,6 +669,7 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       final onDeck = await multiServerProvider.aggregationService.getOnDeckFromAllServers(
         limit: 20,
         hiddenLibraryKeys: hiddenLibrariesProvider.hiddenLibraryKeys,
+        includeAllServers: true,
       );
 
       if (mounted) {

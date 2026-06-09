@@ -59,8 +59,17 @@ class DataAggregationService {
   /// Fetch "On Deck" (Continue Watching) from all servers and merge by recency.
   /// Items are tagged with server info by the underlying client. Returns
   /// neutral [MediaItem]s.
-  Future<List<MediaItem>> getOnDeckFromAllServers({int? limit, Set<String>? hiddenLibraryKeys}) async {
-    final clients = _filteredClients;
+  ///
+  /// By default this honors [visibleServerIds] (the single active server picked
+  /// via Select Server), matching the other hubs. Pass [includeAllServers] to
+  /// bypass that filter so Continue Watching surfaces in-progress playback from
+  /// every connected server while the rest of the home hubs stay clamped.
+  Future<List<MediaItem>> getOnDeckFromAllServers({
+    int? limit,
+    Set<String>? hiddenLibraryKeys,
+    bool includeAllServers = false,
+  }) async {
+    final clients = includeAllServers ? _serverManager.onlineClients : _filteredClients;
     if (clients.isEmpty) {
       appLogger.w('No online servers available for fetching on deck');
       return [];
