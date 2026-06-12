@@ -2,7 +2,7 @@ flutter_launcher_icons:
   android: true
   ios:
     generate: true
-    image_path: "assets/lumi.png"
+    image_path: "assets/lumi_ios.png"
   macos:
     generate: true
     image_path: "assets/lumi.png"
