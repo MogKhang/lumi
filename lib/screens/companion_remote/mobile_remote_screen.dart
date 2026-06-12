@@ -331,7 +331,7 @@ class _RemoteControlContentState extends State<_RemoteControlContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _RemoteButton(
-              icon: Icons.replay_10,
+              icon: Icons.replay_5,
               label: t.companionRemote.remote.seekBack,
               onPressed: () => _sendCommand(RemoteCommandType.seekBackward),
             ),
@@ -343,7 +343,7 @@ class _RemoteControlContentState extends State<_RemoteControlContent> {
             ),
             const SizedBox(width: 16),
             _RemoteButton(
-              icon: Icons.forward_10,
+              icon: Icons.forward_5,
               label: t.companionRemote.remote.seekForward,
               onPressed: () => _sendCommand(RemoteCommandType.seekForward),
             ),

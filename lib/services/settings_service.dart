@@ -252,7 +252,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const preferredVideoCodec = StringPref('preferred_video_codec', defaultValue: 'auto');
   static const preferredAudioCodec = StringPref('preferred_audio_codec', defaultValue: 'auto');
   static const viewMode = EnumPref<ViewMode>('view_mode', values: ViewMode.values, defaultValue: ViewMode.grid);
-  static const seekTimeSmall = IntPref('seek_time_small', defaultValue: 10);
+  static const seekTimeSmall = IntPref('seek_time_small', defaultValue: 5);
   static const seekTimeLarge = IntPref('seek_time_large', defaultValue: 30);
   static const rewindOnResume = IntPref('rewind_on_resume', defaultValue: 5);
   static const showHeroSection = BoolPref('show_hero_section', defaultValue: false);
