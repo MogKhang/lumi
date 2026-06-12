@@ -1,3 +1,6 @@
+# Compile the Release Build
+flutter build macos --release
+
 # Move to the build folder
 cd build/macos/Build/Products/Release/
 
