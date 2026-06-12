@@ -14,6 +14,7 @@
 		6A8A46212EDB320D0057B88C /* MPVKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6A8A46202EDB320D0057B88C /* MPVKit */; };
 		6A8A46252EDB370C0057B88C /* MpvPlayerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A46232EDB370C0057B88C /* MpvPlayerPlugin.swift */; };
 		6A8A46262EDB370C0057B88C /* MpvPlayerCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A46222EDB370C0057B88C /* MpvPlayerCore.swift */; };
+		6AC86ED92EA70C710067BC66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AC86ED82EA70C710067BC66 /* Assets.xcassets */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		748A259343D7FF8DFD2C3910 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D2EEFFFFE26C0F3CD48133 /* Pods_RunnerTests.framework */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
@@ -23,7 +24,6 @@
 		B1D51A6A2F00110000000001 /* MpvPlayerCoreBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D51A6A2F00110000000002 /* MpvPlayerCoreBase.swift */; };
 		B1D51A6A2F00110000000005 /* MpvPlayerPluginShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D51A6A2F00110000000006 /* MpvPlayerPluginShared.swift */; };
 		B1D51A6A2F00110000000008 /* ExternalDisplayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D51A6A2F00110000000007 /* ExternalDisplayManager.swift */; };
-		6AC86ED92EA70C710067BC66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AC86ED82EA70C710067BC66 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +59,7 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		6A8A46222EDB370C0057B88C /* MpvPlayerCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MpvPlayerCore.swift; sourceTree = "<group>"; };
 		6A8A46232EDB370C0057B88C /* MpvPlayerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MpvPlayerPlugin.swift; sourceTree = "<group>"; };
+		6AC86ED82EA70C710067BC66 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75D2EEFFFFE26C0F3CD48133 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +80,6 @@
 		BB346A1D0705AB171F80B11B /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE48FF2E074644167608B23D /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		F3553CDE70191F0FC81A782E /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		6AC86ED82EA70C710067BC66 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -514,18 +514,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = G88U5B5783;
+				CURRENT_PROJECT_VERSION = 90;
+				DEVELOPMENT_TEAM = JF8YN4AJTF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lumi;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -701,18 +701,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = G88U5B5783;
+				CURRENT_PROJECT_VERSION = 90;
+				DEVELOPMENT_TEAM = JF8YN4AJTF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lumi;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -728,18 +728,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = G88U5B5783;
+				CURRENT_PROJECT_VERSION = 90;
+				DEVELOPMENT_TEAM = JF8YN4AJTF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lumi;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
