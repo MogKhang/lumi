@@ -1,6 +1,12 @@
 import Flutter
 import UIKit
 import AVFoundation
+import Foundation
+
+@_silgen_name("swift_coroFrameAlloc")
+public func swift_coroFrameAlloc(size: Int, typeId: UInt64) -> UnsafeMutableRawPointer {
+    return malloc(size)
+}
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
