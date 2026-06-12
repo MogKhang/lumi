@@ -12,5 +12,5 @@ create-dmg \
   --icon-size 100 \
   --icon "Lumi.app" 175 120 \
   --app-drop-link 425 120 \
-  "Lumi.dmg" \
+  "lumi.dmg" \
   "Lumi.app"
