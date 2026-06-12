@@ -29,6 +29,51 @@
 		F85DEBB1878182EEE1DC542A /* ConnectivityPlusPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936A41610C7269D52E5E51FF /* ConnectivityPlusPlugin.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		24431E39B30697C5FE16385E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 55C13EDD7E201D71A889791B31B8A36F;
+			remoteInfo = Subproject;
+		};
+		4520F5297ABFFAFA43C33DD1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B74B458B450D74B75744B87BD747314;
+			remoteInfo = "Pods-Runner";
+		};
+		624E1FE6401ACF69161A4CFE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 68FF46C9439F7E44730AF68E2A4FEFF2;
+			remoteInfo = Subproject;
+		};
+		6A46763FCEFF1BF4A1F351CE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 669E8F25E1897672BDB80B7EB784DA24;
+			remoteInfo = Subproject;
+		};
+		C0A731F73AC4B493F21BA9E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 73ECA6FD2D79225A16B9CD83DA4F931B;
+			remoteInfo = Subproject;
+		};
+		F51F0FAC5660367884B1A3B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 531B0F2B142AAF88D65E943FB44B0CA4;
+			remoteInfo = Subproject;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -51,6 +96,7 @@
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3C9575190150A93F97270FC0 /* ConnectivityProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConnectivityProvider.swift; sourceTree = "<group>"; };
 		420881FB6A648A2AFD39FFF2 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		73645904F226A24585A092CE /* MpvPlayerPluginShared.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MpvPlayerPluginShared.swift; path = ../shared/apple/MpvPlayer/MpvPlayerPluginShared.swift; sourceTree = "<source_root>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +207,7 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				53CDD29681161166962B9FA5 /* Pods */,
 				5833EC5B503BBB4E370BA1B7 /* Frameworks */,
+				47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,6 +215,11 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
+				B6F2FA48821FEAEB36DEAB8A /* os_media_controls.framework */,
+				FA8150B49EEB0E445B89B915 /* Pods_Runner.framework */,
+				4A244F5DF6A3D14CCEA84F13 /* universal_gamepad.framework */,
+				9F0AB5CE695E720BB1830D25 /* wakelock_plus.framework */,
+				9E300703408ABE4F882AB49C /* wakelock_plus_privacy.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -236,6 +288,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5EAF50ECBB43B9CA9ADD9B1D /* PBXTargetDependency */,
 			);
 			name = Runner;
 			packageProductDependencies = (
@@ -274,12 +327,56 @@
 			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 97C146EF1CF9000F007C117D /* Products */;
+					ProjectRef = 47AC1738FA18D382DD4F73D0 /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4A244F5DF6A3D14CCEA84F13 /* universal_gamepad.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = universal_gamepad.framework;
+			remoteRef = F51F0FAC5660367884B1A3B8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9E300703408ABE4F882AB49C /* wakelock_plus_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.plug-in";
+			path = wakelock_plus_privacy.bundle;
+			remoteRef = C0A731F73AC4B493F21BA9E5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9F0AB5CE695E720BB1830D25 /* wakelock_plus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = wakelock_plus.framework;
+			remoteRef = 24431E39B30697C5FE16385E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B6F2FA48821FEAEB36DEAB8A /* os_media_controls.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = os_media_controls.framework;
+			remoteRef = 624E1FE6401ACF69161A4CFE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FA8150B49EEB0E445B89B915 /* Pods_Runner.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Runner.framework;
+			remoteRef = 6A46763FCEFF1BF4A1F351CE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		97C146EC1CF9000F007C117D /* Resources */ = {
@@ -340,13 +437,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -392,6 +485,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5EAF50ECBB43B9CA9ADD9B1D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-Runner";
+			targetProxy = 4520F5297ABFFAFA43C33DD1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -475,6 +576,7 @@
 				CURRENT_PROJECT_VERSION = 89;
 				DEVELOPMENT_TEAM = G88U5B5783;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = x86_64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -620,6 +722,7 @@
 				CURRENT_PROJECT_VERSION = 89;
 				DEVELOPMENT_TEAM = G88U5B5783;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = x86_64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -658,6 +761,7 @@
 				CURRENT_PROJECT_VERSION = 89;
 				DEVELOPMENT_TEAM = G88U5B5783;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=appletvsimulator*]" = x86_64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",

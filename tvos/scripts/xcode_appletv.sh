@@ -404,6 +404,31 @@ BuildAppRelease() {
 }
 
 
+# The cached tvOS engine ships x86_64-only host tools (dartaotruntime,
+# frontend_server). On Apple Silicon they need Rosetta 2; without it the
+# kernel/AOT step dies with a cryptic "Bad CPU type in executable". Verify the
+# runtime can actually execute and, if not, point at the one-line fix.
+PreflightHostTools() {
+  local runtime="$FLUTTER_LOCAL_ENGINE/out/host_release/dart-sdk/bin/dartaotruntime"
+  [ -x "$runtime" ] || return 0  # let the later step report a missing tool
+
+  if "$runtime" --version >/dev/null 2>&1; then
+    return 0
+  fi
+
+  # Only the arm64-host + x86_64-tool + no-Rosetta combination is actionable.
+  if [[ "$(uname -m)" == "arm64" && "$(file -b "$runtime")" == *x86_64* ]] \
+     && ! /usr/bin/pgrep -q oahd; then
+    echo " └─ERROR: engine host tools are x86_64-only and Rosetta 2 is missing."
+    echo "         Install it once, then rebuild:"
+    echo "           softwareupdate --install-rosetta --agree-to-license"
+    return 1
+  fi
+
+  echo " └─ERROR: engine dartaotruntime failed to execute: $runtime"
+  return 1
+}
+
 BuildApp() {
   ReadPubspecVersion
 
@@ -413,11 +438,13 @@ BuildApp() {
   echo " └─version $FLUTTER_BUILD_NAME ($FLUTTER_BUILD_NUMBER)"
 
   if [ -z "$FLUTTER_LOCAL_ENGINE" ]; then
-    echo " └─ERROR: FLUTTER_LOCAL_ENGINE not set!" 
+    echo " └─ERROR: FLUTTER_LOCAL_ENGINE not set!"
     return 1;
   fi
 
   echo " └─engine $FLUTTER_LOCAL_ENGINE"
+
+  PreflightHostTools || return 1
 
 
   if [[ "$PLATFORM_NAME" == "appletvsimulator" && "$build_mode" =~ "debug" ]]; then
