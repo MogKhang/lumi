@@ -2078,6 +2078,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
           client: client,
           isOffline: widget.isOffline,
           autofocus: false,
+          highlighted: widget.initialEpisodeId != null && episode.id == widget.initialEpisodeId,
           focusNode: index == 0
               ? _firstEpisodeFocusNode
               : index == _episodes.length - 1 && _episodes.length > 1

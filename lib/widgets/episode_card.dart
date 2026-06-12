@@ -38,6 +38,11 @@ class EpisodeCard extends StatefulWidget {
   final FocusNode? focusNode;
   final VoidCallback? onNavigateUp;
 
+  /// Draws a brand-accent border around the card. Used to mark the episode the
+  /// detail screen was opened on (e.g. from the Continue Watching hub) so the
+  /// user can spot it in the list.
+  final bool highlighted;
+
   const EpisodeCard({
     super.key,
     required this.episode,
@@ -50,6 +55,7 @@ class EpisodeCard extends StatefulWidget {
     this.localPosterPath,
     this.focusNode,
     this.onNavigateUp,
+    this.highlighted = false,
   });
 
   @override
@@ -140,6 +146,9 @@ class _EpisodeCardState extends State<EpisodeCard> with ContextMenuTapMixin<Epis
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(FocusTheme.defaultBorderRadius),
+                border: widget.highlighted
+                    ? const Border.fromBorderSide(BorderSide(color: MonoTokens.brandAccent, width: 2))
+                    : null,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Row(
