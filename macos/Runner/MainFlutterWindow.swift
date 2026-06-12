@@ -38,7 +38,7 @@ class MainFlutterWindow: NSWindow {
     RegisterGeneratedPlugins(registry: flutterViewController)
 
     // Enable window position/size persistence
-    self.setFrameAutosaveName("com.edde746.lumi.MainWindow")
+    self.setFrameAutosaveName("com.mogkhang.lumi.MainWindow")
 
     super.awakeFromNib()
   }

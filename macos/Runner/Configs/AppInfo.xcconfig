@@ -8,7 +8,7 @@
 PRODUCT_NAME = Lumi
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.edde746.lumi
+PRODUCT_BUNDLE_IDENTIFIER = com.mogkhang.lumi
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 edde746
+PRODUCT_COPYRIGHT = Copyright © 2025 mogkhang

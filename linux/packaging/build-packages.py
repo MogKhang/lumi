@@ -16,9 +16,9 @@ ARCH_SUFFIX = os.environ.get("ARCH_SUFFIX", "x64")
 METADATA = {
     "name": "lumi",
     "license": "GPL-3.0",
-    "vendor": "edde746",
-    "maintainer": "edde746 <noreply@github.com>",
-    "url": "https://github.com/edde746/lumi",
+    "vendor": "mogkhang",
+    "maintainer": "mogkhang <noreply@github.com>",
+    "url": "https://github.com/MogKhang/lumi",
     "description": "A modern Plex client for desktop and mobile",
 }
 
@@ -112,7 +112,7 @@ def get_file_mappings() -> list[str]:
     """Get file mappings for fpm."""
     mappings = [
         f"{BUILD_DIR}/=/opt/lumi/",
-        f"{SCRIPT_DIR}/com.edde746.lumi.desktop=/usr/share/applications/com.edde746.lumi.desktop",
+        f"{SCRIPT_DIR}/com.mogkhang.lumi.desktop=/usr/share/applications/com.mogkhang.lumi.desktop",
         f"{SCRIPT_DIR}/lumi.sh=/usr/bin/lumi",
     ]
 
