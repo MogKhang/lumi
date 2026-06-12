@@ -447,7 +447,16 @@ BuildApp() {
   PreflightHostTools || return 1
 
 
-  if [[ "$PLATFORM_NAME" == "appletvsimulator" && "$build_mode" =~ "debug" ]]; then
+  # The prebuilt engine has no release-simulator runtime — the only
+  # simulator-compatible Flutter.framework is the JIT debug-sim slice
+  # (tvos_debug_sim_unopt_arm64). gen_snapshot only emits device arm64 AOT.
+  # So ANY simulator build must go through the debug (JIT) path regardless of
+  # the Xcode configuration; a Release/Profile sim build would otherwise copy
+  # the device framework and fail to link/run.
+  if [[ "$PLATFORM_NAME" == "appletvsimulator" ]]; then
+    if [[ ! "$build_mode" =~ "debug" ]]; then
+      echo " └─NOTE: $build_mode on simulator → using JIT debug engine (no release-sim runtime exists)"
+    fi
     debug_sim="true"
     BuildAppDebug
   elif [[ "$build_mode" =~ "debug" ]]; then
@@ -456,7 +465,7 @@ BuildApp() {
     # release/archive   (archive: build mode == "release" && ${ACTION} == "install")
     BuildAppRelease
   else
-    echo " └─ERROR: unknown target: ${build_mode}" 
+    echo " └─ERROR: unknown target: ${build_mode}"
     return 1;
   fi
 

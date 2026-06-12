@@ -48,7 +48,13 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       is_debug = config.name.downcase.include?('debug')
-      sim_variant = is_debug ? 'tvos_debug_sim_unopt_arm64' : 'tvos_release'
+      # The prebuilt engine ships only ONE simulator-compatible Flutter.framework
+      # (tvos_debug_sim_unopt_arm64, platform TVOSSIMULATOR). tvos_release is a
+      # device-only build (platform TVOS) and the simulator linker rejects it
+      # ("building for tvOS-simulator, but linking in dylib built for tvOS").
+      # So the simulator must always use the debug-sim slice regardless of the
+      # Debug/Release/Profile config — there is no release-simulator engine.
+      sim_variant = 'tvos_debug_sim_unopt_arm64'
       dev_variant = is_debug ? 'tvos_debug_unopt' : 'tvos_release'
       config.build_settings['FRAMEWORK_SEARCH_PATHS[sdk=appletvsimulator*]'] = [
         '$(inherited)',
