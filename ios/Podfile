@@ -44,4 +44,23 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
   end
+
+  # Flutter regenerates FlutterGeneratedPluginSwiftPackage/Package.swift with a
+  # hardcoded `.iOS("13.0")` default and only bumps it to the real deployment
+  # target during a full `flutter build ios` — building directly in Xcode never
+  # triggers that bump, so plugins requiring iOS 14+ (background_downloader) fail
+  # with "requires minimum platform version 14.0 ... but this target supports 13.0".
+  # Patch it here so it stays correct after every pod install, however it was regenerated.
+  generated_package = File.expand_path(
+    File.join('Flutter', 'ephemeral', 'Packages', 'FlutterGeneratedPluginSwiftPackage', 'Package.swift'),
+    __dir__,
+  )
+  if File.exist?(generated_package)
+    contents = File.read(generated_package)
+    patched = contents.sub(/\.iOS\("13\.0"\)/, '.iOS("15.5")')
+    if patched != contents
+      File.write(generated_package, patched)
+      Pod::UI.puts "[lumi] Patched FlutterGeneratedPluginSwiftPackage iOS platform 13.0 -> 15.5"
+    end
+  end
 end
