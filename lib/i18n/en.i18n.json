@@ -79,6 +79,9 @@
     "currentVersion": "Current: ${version}",
     "skipVersion": "Skip This Version",
     "viewRelease": "View Release",
+    "updateNow": "Update",
+    "remindLater": "Remind later",
+    "doNotAskAgain": "Do not ask again",
     "latestVersion": "You are on the latest version",
     "checkFailed": "Failed to check for updates"
   },

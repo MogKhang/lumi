@@ -21,6 +21,9 @@ import '../../services/donation_service.dart';
 import '../../providers/theme_provider.dart';
 import '../../services/keyboard_shortcuts_service.dart';
 import '../../services/settings_service.dart' as settings;
+import '../../services/update_service.dart';
+import '../../utils/update_dialog.dart';
+import '../../widgets/loading_indicator_box.dart';
 import '../../widgets/desktop_app_bar.dart';
 import '../../widgets/setting_tile.dart';
 import '../../profiles/active_profile_provider.dart';
@@ -61,10 +64,15 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   static const _kDonate = 'donate';
   static const _kTheme = 'theme';
   static const _kDownloads = 'downloads';
+  static const _kCheckForUpdates = 'check_for_updates';
   static const _kLogout = 'logout';
 
   KeyboardShortcutsService? _keyboardService;
   late final bool _keyboardShortcutsSupported = KeyboardShortcutsService.isPlatformSupported();
+
+  // Latest manual update-check result; null until the user runs a check.
+  Map<String, dynamic>? _updateInfo;
+  bool _isCheckingForUpdate = false;
 
   @override
   void initState() {
@@ -149,6 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
                       _buildProfileSwitcherTile(),
                       _buildSwitchServerTile(),
                       if (_keyboardShortcutsSupported) ...[_buildKeyboardShortcutsSection()],
+                      if (UpdateService.isUpdateCheckEnabled) _buildUpdatesSection(),
                       _buildLogoutTile(),
                     ]),
                   ),
@@ -314,6 +323,80 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
         );
       },
     );
+  }
+
+  /// Updates section: a "Check for Updates" / "Update Available" row plus the
+  /// "auto-check on startup" toggle. Only shown when the ENABLE_UPDATE_CHECK
+  /// build flag is set.
+  Widget _buildUpdatesSection() {
+    if (!UpdateService.isUpdateCheckEnabled) return const SizedBox.shrink();
+
+    final hasUpdate = _updateInfo != null && _updateInfo!['hasUpdate'] == true;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          focusNode: _focusTracker.get(_kCheckForUpdates),
+          leading: AppIcon(
+            hasUpdate ? Symbols.system_update_rounded : Symbols.check_circle_rounded,
+            fill: 1,
+            color: hasUpdate ? Colors.orange : null,
+          ),
+          title: Text(hasUpdate ? t.settings.updateAvailable : t.settings.checkForUpdates),
+          subtitle: hasUpdate ? Text(t.update.versionAvailable(version: _updateInfo!['latestVersion'])) : null,
+          trailing: _isCheckingForUpdate
+              ? const LoadingIndicatorBox(size: 24)
+              : const AppIcon(Symbols.chevron_right_rounded, fill: 1),
+          onTap: _isCheckingForUpdate
+              ? null
+              : () {
+                  if (hasUpdate) {
+                    _showUpdateDialog();
+                  } else {
+                    _checkForUpdates();
+                  }
+                },
+        ),
+        SettingSwitchTile(
+          pref: settings.SettingsService.autoCheckUpdatesOnStartup,
+          icon: Symbols.restart_alt_rounded,
+          title: t.settings.autoCheckUpdatesOnStartup,
+          subtitle: t.settings.autoCheckUpdatesOnStartupDescription,
+        ),
+      ],
+    );
+  }
+
+  Future<void> _checkForUpdates() async {
+    setStateIfMounted(() => _isCheckingForUpdate = true);
+    try {
+      // A deliberate manual check means the user is interested in updates
+      // again — undo a previous "Do not ask again" so startup prompts resume.
+      await UpdateService.setUpdatePromptsDisabled(false);
+      final updateInfo = await UpdateService.checkForUpdates();
+      if (!mounted) return;
+      setStateIfMounted(() {
+        _updateInfo = updateInfo ?? {'hasUpdate': false};
+        _isCheckingForUpdate = false;
+      });
+      if (updateInfo != null && updateInfo['hasUpdate'] == true && mounted) {
+        _showUpdateDialog();
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t.update.latestVersion)));
+      }
+    } catch (e) {
+      appLogger.e('Manual update check failed', error: e);
+      if (mounted) {
+        setStateIfMounted(() => _isCheckingForUpdate = false);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(t.update.checkFailed)));
+      }
+    }
+  }
+
+  void _showUpdateDialog() {
+    if (_updateInfo == null) return;
+    showUpdateAvailableDialog(context, _updateInfo!, title: t.update.available);
   }
 
   Widget _buildKeyboardShortcutsSection() {

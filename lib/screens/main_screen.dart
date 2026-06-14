@@ -458,12 +458,6 @@ class _MainScreenState extends State<MainScreen>
     final settingsService = await SettingsService.getInstance();
     if (!settingsService.read(SettingsService.autoCheckUpdatesOnStartup)) return;
 
-    // Native updater (Sparkle/WinSparkle) handles everything — skip Flutter dialog
-    if (UpdateService.useNativeUpdater) {
-      await UpdateService.checkForUpdatesNative(inBackground: true);
-      return;
-    }
-
     try {
       final updateInfo = await UpdateService.checkForUpdatesOnStartup();
 
@@ -475,13 +469,8 @@ class _MainScreenState extends State<MainScreen>
     }
   }
 
-  Future<void> _showUpdateDialog(Map<String, dynamic> updateInfo) => showUpdateAvailableDialog(
-    context,
-    updateInfo,
-    title: t.update.available,
-    dismissLabel: t.common.later,
-    showSkipVersion: true,
-  );
+  Future<void> _showUpdateDialog(Map<String, dynamic> updateInfo) =>
+      showUpdateAvailableDialog(context, updateInfo, title: t.update.available);
 
   /// Set up Watch Next deep link handling for Android TV launcher taps
   void _setupWatchNextDeepLink() {

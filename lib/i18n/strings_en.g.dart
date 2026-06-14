@@ -344,6 +344,15 @@ class TranslationsUpdateEn {
 	/// en: 'View Release'
 	String get viewRelease => 'View Release';
 
+	/// en: 'Update'
+	String get updateNow => 'Update';
+
+	/// en: 'Remind later'
+	String get remindLater => 'Remind later';
+
+	/// en: 'Do not ask again'
+	String get doNotAskAgain => 'Do not ask again';
+
 	/// en: 'You are on the latest version'
 	String get latestVersion => 'You are on the latest version';
 
@@ -4476,6 +4485,9 @@ extension on Translations {
 			'update.currentVersion' => ({required Object version}) => 'Current: ${version}',
 			'update.skipVersion' => 'Skip This Version',
 			'update.viewRelease' => 'View Release',
+			'update.updateNow' => 'Update',
+			'update.remindLater' => 'Remind later',
+			'update.doNotAskAgain' => 'Do not ask again',
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
 			'mediaDetail.watchNow' => 'Watch Now',
@@ -4914,11 +4926,11 @@ extension on Translations {
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Switch User',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.removeConnectionTitle' => 'Remove connection?',
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
@@ -5428,11 +5440,11 @@ extension on Translations {
 			'metadataEdit.episodeSorting' => 'Episode Sorting',
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.keep' => 'Keep',
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.latestEpisode' => 'Latest episode',
 			'metadataEdit.episodesAddedPastDays' => ({required Object count}) => 'Episodes added in the past ${count} days',
 			'metadataEdit.deleteAfterPlaying' => 'Delete Episodes After Playing',

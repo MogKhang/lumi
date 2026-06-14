@@ -195,13 +195,16 @@ class _TranslationsUpdateVi extends TranslationsUpdateEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get available => 'Update Available';
-	@override String versionAvailable({required Object version}) => 'Version ${version} is available';
-	@override String currentVersion({required Object version}) => 'Current: ${version}';
-	@override String get skipVersion => 'Skip This Version';
-	@override String get viewRelease => 'View Release';
-	@override String get latestVersion => 'You are on the latest version';
-	@override String get checkFailed => 'Failed to check for updates';
+	@override String get available => 'Đã có bản cập nhật';
+	@override String versionAvailable({required Object version}) => 'Đã có phiên bản ${version}';
+	@override String currentVersion({required Object version}) => 'Hiện tại: ${version}';
+	@override String get skipVersion => 'Bỏ qua phiên bản này';
+	@override String get viewRelease => 'Xem bản phát hành';
+	@override String get updateNow => 'Cập nhật';
+	@override String get remindLater => 'Nhắc lại sau';
+	@override String get doNotAskAgain => 'Không hỏi lại';
+	@override String get latestVersion => 'Bạn đang dùng phiên bản mới nhất';
+	@override String get checkFailed => 'Không thể kiểm tra cập nhật';
 }
 
 // Path: mediaDetail
@@ -347,11 +350,11 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get shortcutsReset => 'Shortcuts reset to defaults';
 	@override String get about => 'About';
 	@override String get aboutDescription => 'App information and licenses';
-	@override String get updates => 'Updates';
-	@override String get updateAvailable => 'Update Available';
-	@override String get checkForUpdates => 'Check for Updates';
-	@override String get autoCheckUpdatesOnStartup => 'Automatically check for updates on startup';
-	@override String get autoCheckUpdatesOnStartupDescription => 'Show a notification when a new version is available at launch';
+	@override String get updates => 'Cập nhật';
+	@override String get updateAvailable => 'Đã có bản cập nhật';
+	@override String get checkForUpdates => 'Kiểm tra cập nhật';
+	@override String get autoCheckUpdatesOnStartup => 'Tự động kiểm tra cập nhật';
+	@override String get autoCheckUpdatesOnStartupDescription => 'Hiển thị thông báo khi có phiên bản mới';
 	@override String get validationErrorEnterNumber => 'Please enter a valid number';
 	@override String validationErrorDuration({required Object min, required Object max, required Object unit}) => 'Duration must be between ${min} and ${max} ${unit}';
 	@override String shortcutAlreadyAssigned({required Object action}) => 'Shortcut already assigned to ${action}';
@@ -1949,13 +1952,16 @@ extension on TranslationsVi {
 			'screens.subtitleStyling' => 'Subtitle Styling',
 			'screens.mpvConfig' => 'mpv.conf',
 			'screens.logs' => 'Logs',
-			'update.available' => 'Update Available',
-			'update.versionAvailable' => ({required Object version}) => 'Version ${version} is available',
-			'update.currentVersion' => ({required Object version}) => 'Current: ${version}',
-			'update.skipVersion' => 'Skip This Version',
-			'update.viewRelease' => 'View Release',
-			'update.latestVersion' => 'You are on the latest version',
-			'update.checkFailed' => 'Failed to check for updates',
+			'update.available' => 'Đã có bản cập nhật',
+			'update.versionAvailable' => ({required Object version}) => 'Đã có phiên bản ${version}',
+			'update.currentVersion' => ({required Object version}) => 'Hiện tại: ${version}',
+			'update.skipVersion' => 'Bỏ qua phiên bản này',
+			'update.viewRelease' => 'Xem bản phát hành',
+			'update.updateNow' => 'Cập nhật',
+			'update.remindLater' => 'Nhắc lại sau',
+			'update.doNotAskAgain' => 'Không hỏi lại',
+			'update.latestVersion' => 'Bạn đang dùng phiên bản mới nhất',
+			'update.checkFailed' => 'Không thể kiểm tra cập nhật',
 			'mediaDetail.watchNow' => 'Xem phim',
 			'mediaDetail.addToPlaylist' => 'Thêm danh sách',
 			'mediaDetail.plot' => 'Nội dung',
@@ -2074,11 +2080,11 @@ extension on TranslationsVi {
 			'settings.shortcutsReset' => 'Shortcuts reset to defaults',
 			'settings.about' => 'About',
 			'settings.aboutDescription' => 'App information and licenses',
-			'settings.updates' => 'Updates',
-			'settings.updateAvailable' => 'Update Available',
-			'settings.checkForUpdates' => 'Check for Updates',
-			'settings.autoCheckUpdatesOnStartup' => 'Automatically check for updates on startup',
-			'settings.autoCheckUpdatesOnStartupDescription' => 'Show a notification when a new version is available at launch',
+			'settings.updates' => 'Cập nhật',
+			'settings.updateAvailable' => 'Đã có bản cập nhật',
+			'settings.checkForUpdates' => 'Kiểm tra cập nhật',
+			'settings.autoCheckUpdatesOnStartup' => 'Tự động kiểm tra cập nhật',
+			'settings.autoCheckUpdatesOnStartupDescription' => 'Hiển thị thông báo khi có phiên bản mới',
 			'settings.validationErrorEnterNumber' => 'Please enter a valid number',
 			'settings.validationErrorDuration' => ({required Object min, required Object max, required Object unit}) => 'Duration must be between ${min} and ${max} ${unit}',
 			'settings.shortcutAlreadyAssigned' => ({required Object action}) => 'Shortcut already assigned to ${action}',
@@ -2392,11 +2398,11 @@ extension on TranslationsVi {
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Chọn hồ sơ',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.removeConnectionTitle' => 'Remove connection?',
 			'profiles.removeConnectionMessage' => ({required Object displayName, required Object connectionLabel}) => '${displayName} will lose access to ${connectionLabel}. The connection itself stays available to other profiles.',
 			'profiles.deleteProfileTitle' => 'Delete profile?',
@@ -2906,11 +2912,11 @@ extension on TranslationsVi {
 			'metadataEdit.accountDefault' => 'Account default',
 			'metadataEdit.seriesDefault' => 'Series default',
 			'metadataEdit.episodeSorting' => 'Episode Sorting',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',
 			'metadataEdit.latestEpisode' => 'Latest episode',

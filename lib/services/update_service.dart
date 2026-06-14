@@ -1,102 +1,96 @@
 import 'dart:io';
 
-import 'package:auto_updater/auto_updater.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:logger/logger.dart';
 import 'package:lumi/utils/media_server_http_client.dart';
 import 'base_shared_preferences_service.dart';
 
-/// Service to check for new versions on GitHub
-/// Only enabled when ENABLE_UPDATE_CHECK build flag is set
+/// Service to check for new versions on GitHub.
+/// Only enabled when the ENABLE_UPDATE_CHECK build flag is set.
 ///
-/// On macOS (non-Homebrew) and installed Windows: delegates to Sparkle/WinSparkle
-/// via auto_updater for native update dialogs and in-app installs.
-/// On all other platforms: falls back to GitHub API check + browser link dialog.
+/// Checks the latest GitHub release and, when a newer version exists, lets the
+/// UI present the in-app update dialog. The dialog's "Update" button routes to
+/// the right place per platform via [updateDestination] (Play Store, App Store,
+/// or the macOS/Windows download pages).
 class UpdateService {
   static final Logger _logger = Logger();
   static const String _githubRepo = 'mogkhang/lumi';
-  static const String _feedUrl = 'https://cdn.jsdelivr.net/gh/mogkhang/lumi@appcast/appcast.xml';
 
   static const String _keySkippedVersion = 'update_skipped_version';
   static const String _keyLastCheckTime = 'update_last_check_time';
+  static const String _keyUpdatesDisabled = 'update_prompts_disabled';
 
   // Check cooldown: 6 hours
   static const Duration _checkCooldown = Duration(hours: 6);
 
-  static bool _nativeUpdaterInitialized = false;
+  // ---------------------------------------------------------------------------
+  // Store / download destinations for the in-app "Update" button.
+  //
+  // Each platform's Update action sends the user to the place they actually
+  // install Lumi from, so they can update it themselves:
+  //   - Android  -> Google Play listing
+  //   - iOS/iPad -> App Store listing
+  //   - Apple TV -> App Store listing (tvOS)
+  //   - macOS    -> DMG download page
+  //   - Windows  -> EXE installer download page
+  // ---------------------------------------------------------------------------
+
+  /// Android application id (Play Store package name).
+  static const String _androidPackage = 'com.mogkhang.lumi';
+
+  /// Apple App Store numeric id (the digits in
+  /// `apps.apple.com/app/id<NUMBER>`). Shared by iOS, iPadOS and tvOS.
+  ///
+  /// TODO(store): Lumi is not on the App Store yet. Once the app is approved,
+  /// set this to the numeric id from App Store Connect (e.g. '123456789').
+  /// While empty, the iOS/tvOS Update button falls back to the GitHub release
+  /// page so it always does *something* useful.
+  static const String _appStoreId = '';
+
+  /// macOS DMG download page.
+  static const String _macDownloadUrl = 'https://go.khocuky.page/mac';
+
+  /// Windows EXE installer download page.
+  static const String _windowsDownloadUrl = 'https://go.khocuky.page/win';
+
+  /// The URL the in-app "Update" button should open for the current platform.
+  ///
+  /// [releaseUrl] is the GitHub release page from the update check; it is used
+  /// as the fallback (and on platforms without a dedicated store target).
+  static Uri updateDestination({required String releaseUrl}) {
+    if (Platform.isAndroid) {
+      // Android routes this https listing to the Play Store app via the intent
+      // system when launched externally; opens the web listing otherwise.
+      return Uri.parse('https://play.google.com/store/apps/details?id=$_androidPackage');
+    }
+    if (Platform.isIOS) {
+      // Covers iPhone, iPad and Apple TV (all report Platform.isIOS).
+      if (_appStoreId.isNotEmpty) {
+        return Uri.parse('https://apps.apple.com/app/id$_appStoreId');
+      }
+      return Uri.parse(releaseUrl);
+    }
+    if (Platform.isMacOS) return Uri.parse(_macDownloadUrl);
+    if (Platform.isWindows) return Uri.parse(_windowsDownloadUrl);
+    return Uri.parse(releaseUrl);
+  }
 
   /// Check if update checking is enabled via build flag
   static bool get isUpdateCheckEnabled {
     return const bool.fromEnvironment('ENABLE_UPDATE_CHECK', defaultValue: false);
   }
 
-  /// Whether the native auto_updater (Sparkle/WinSparkle) should be used.
-  /// True on macOS (non-Homebrew) and installed Windows (has uninstaller).
-  static bool get useNativeUpdater {
-    if (!isUpdateCheckEnabled) return false;
-    if (Platform.isMacOS) return !_isHomebrewInstall();
-    if (Platform.isWindows) return _isInstalledApp() && !_isWingetInstall();
-    return false;
+  /// Whether the user chose "Do not ask again" — suppresses the startup update
+  /// prompt entirely. The Settings → Updates "Check for Updates" action still
+  /// works and re-enables prompting (see [setUpdatePromptsDisabled]).
+  static Future<bool> areUpdatePromptsDisabled() async {
+    final prefs = await BaseSharedPreferencesService.sharedCache();
+    return prefs.getBool(_keyUpdatesDisabled) ?? false;
   }
 
-  /// Initialize the native auto_updater (Sparkle/WinSparkle).
-  /// Call once at startup if [useNativeUpdater] is true.
-  static Future<void> initNativeUpdater() async {
-    if (_nativeUpdaterInitialized) return;
-
-    try {
-      await autoUpdater.setFeedURL(_feedUrl);
-      _nativeUpdaterInitialized = true;
-    } catch (e) {
-      _logger.e('Failed to initialize native auto updater: $e');
-    }
-  }
-
-  /// Trigger a background update check via Sparkle/WinSparkle.
-  /// Only shows UI if an update is found.
-  static Future<void> checkForUpdatesNative({bool inBackground = true}) async {
-    if (!_nativeUpdaterInitialized) {
-      await initNativeUpdater();
-      if (!_nativeUpdaterInitialized) return;
-    }
-    try {
-      await autoUpdater.checkForUpdates(inBackground: inBackground);
-    } catch (e) {
-      _logger.e('Native update check failed: $e');
-    }
-  }
-
-  /// Check if the macOS app was installed via Homebrew.
-  /// Homebrew casks live under /opt/homebrew/Caskroom/ or /usr/local/Caskroom/.
-  static bool _isHomebrewInstall() {
-    try {
-      final execPath = Platform.resolvedExecutable;
-      return execPath.contains('/Caskroom/') || execPath.contains('/homebrew/');
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /// Check if the Windows app was installed via winget.
-  /// The Inno Setup installer writes a .winget marker file when invoked with /WINGET=1.
-  static bool _isWingetInstall() {
-    try {
-      final exeDir = File(Platform.resolvedExecutable).parent.path;
-      return File('$exeDir\\.winget').existsSync();
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /// Check if the Windows app is an installed copy (not portable).
-  /// The Inno Setup installer places unins000.exe next to the executable.
-  static bool _isInstalledApp() {
-    try {
-      final exeDir = File(Platform.resolvedExecutable).parent.path;
-      return File('$exeDir\\unins000.exe').existsSync();
-    } catch (_) {
-      return false;
-    }
+  static Future<void> setUpdatePromptsDisabled(bool disabled) async {
+    final prefs = await BaseSharedPreferencesService.sharedCache();
+    await prefs.setBool(_keyUpdatesDisabled, disabled);
   }
 
   static Future<void> skipVersion(String version) async {
@@ -134,9 +128,17 @@ class UpdateService {
   }
 
   /// Internal method that performs the actual update check
-  /// [respectCooldown] - if true, checks cooldown and updates last check time
+  /// [respectCooldown] - if true (startup path), honors the check cooldown,
+  /// the per-version skip, and the "Do not ask again" preference, and updates
+  /// the last-check time. Manual checks pass false so they always run.
   static Future<Map<String, dynamic>?> _performUpdateCheck({required bool respectCooldown}) async {
     if (!isUpdateCheckEnabled) {
+      return null;
+    }
+
+    // "Do not ask again" only suppresses the automatic startup prompt; a manual
+    // check from Settings still runs and re-enables prompting.
+    if (respectCooldown && await areUpdatePromptsDisabled()) {
       return null;
     }
 
