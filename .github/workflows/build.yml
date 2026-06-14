@@ -63,7 +63,7 @@ jobs:
           EOF
 
       - name: Build APKs
-        run: flutter build apk --release --split-per-abi --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --obfuscate --split-debug-info=debug-info/android-apk
+        run: flutter build apk --release --split-per-abi ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --obfuscate --split-debug-info=debug-info/android-apk
 
       - name: Stage symbols for upload
         if: github.repository == 'mogkhang/lumi'
@@ -162,7 +162,7 @@ jobs:
         run: flutter pub get --enforce-lockfile --no-example
 
       - name: Build iOS (no codesign)
-        run: flutter build ios --release --no-codesign --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/ios
+        run: flutter build ios --release --no-codesign ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/ios
 
       - name: Stage symbols for upload
         if: github.repository == 'mogkhang/lumi'
@@ -251,7 +251,7 @@ jobs:
         run: flutter pub get --enforce-lockfile --no-example
 
       - name: Build macOS
-        run: flutter build macos --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/macos
+        run: flutter build macos --release ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/macos
 
       - name: Stage symbols for upload
         if: github.repository == 'mogkhang/lumi'
@@ -439,7 +439,7 @@ jobs:
         run: flutter pub get --enforce-lockfile --no-example
 
       - name: Build Windows x64
-        run: flutter build windows --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/windows-x64
+        run: flutter build windows --release ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/windows-x64
 
       - name: Stage symbols for upload
         if: github.repository == 'mogkhang/lumi'
@@ -525,7 +525,7 @@ jobs:
         run: flutter pub get --no-example
 
       - name: Build Windows arm64
-        run: flutter build windows --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/windows-arm64
+        run: flutter build windows --release ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/windows-arm64
 
       - name: Stage symbols for upload
         if: github.repository == 'mogkhang/lumi'
@@ -708,7 +708,7 @@ jobs:
         run: flutter pub get --enforce-lockfile --no-example
 
       - name: Build Linux x64
-        run: flutter build linux --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/linux-x64
+        run: flutter build linux --release ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/linux-x64
         env:
           PKG_CONFIG_PATH: ${{ github.workspace }}/libmpv-prefix/lib/pkgconfig:${{ github.workspace }}/libmpv-prefix/lib/x86_64-linux-gnu/pkgconfig
 
@@ -847,7 +847,7 @@ jobs:
         run: flutter pub get --no-example
 
       - name: Build Linux arm64
-        run: flutter build linux --release --dart-define=ENABLE_UPDATE_CHECK=true ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/linux-arm64
+        run: flutter build linux --release ${{ env.SENTRY_DART_DEFINE }} ${{ env.GIT_COMMIT_DART_DEFINE }} ${{ env.SENTRY_ENV_DART_DEFINE }} ${{ env.DONATIONS_DART_DEFINE }} --split-debug-info=debug-info/linux-arm64
         env:
           PKG_CONFIG_PATH: ${{ github.workspace }}/libmpv-prefix/lib/pkgconfig:${{ github.workspace }}/libmpv-prefix/lib/aarch64-linux-gnu/pkgconfig
 

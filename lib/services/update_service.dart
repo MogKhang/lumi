@@ -6,7 +6,6 @@ import 'package:lumi/utils/media_server_http_client.dart';
 import 'base_shared_preferences_service.dart';
 
 /// Service to check for new versions on GitHub.
-/// Only enabled when the ENABLE_UPDATE_CHECK build flag is set.
 ///
 /// Checks the latest GitHub release and, when a newer version exists, lets the
 /// UI present the in-app update dialog. The dialog's "Update" button routes to
@@ -75,10 +74,9 @@ class UpdateService {
     return Uri.parse(releaseUrl);
   }
 
-  /// Check if update checking is enabled via build flag
-  static bool get isUpdateCheckEnabled {
-    return const bool.fromEnvironment('ENABLE_UPDATE_CHECK', defaultValue: false);
-  }
+  /// Whether the update feature (startup prompt + Settings → Updates section)
+  /// is available. Always on — the section shows in every build.
+  static bool get isUpdateCheckEnabled => true;
 
   /// Whether the user chose "Do not ask again" — suppresses the startup update
   /// prompt entirely. The Settings → Updates "Check for Updates" action still
