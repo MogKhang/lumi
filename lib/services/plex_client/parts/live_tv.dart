@@ -993,6 +993,8 @@ mixin _PlexLiveTvClientMethods on MediaServerCacheMixin {
         'X-Plex-Version': config.version,
         'X-Plex-Client-Identifier': config.clientIdentifier,
         'X-Plex-Platform': config.platform,
+        if (config.device != null) 'X-Plex-Device': config.device!,
+        if (config.deviceName != null) 'X-Plex-Device-Name': config.deviceName!,
         'X-Plex-Client-Profile-Name': 'Plex Desktop',
         if (offsetSeconds != null) 'offset': offsetSeconds.toString(),
         if (config.token != null) 'X-Plex-Token': config.token!,

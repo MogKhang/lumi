@@ -31,6 +31,7 @@ import 'services/native_window_service.dart';
 import 'services/fullscreen_state_manager.dart';
 import 'services/settings_service.dart';
 import 'utils/platform_detector.dart';
+import 'utils/plex_device_info.dart';
 import 'services/apple_tv_remote_touch_service.dart';
 import 'services/discord_rpc_service.dart';
 import 'services/gamepad_service.dart';
@@ -154,6 +155,12 @@ Future<void> _bootstrapApp() async {
   futures.add(StorageService.getInstance());
 
   await Future.wait(futures);
+
+  // Resolve the device identity (platform / device type / device name) that
+  // Lumi advertises to Plex. Must run after TvDetectionService so Android TV /
+  // Apple TV are classified correctly. Cached for the process lifetime and
+  // read synchronously by PlexConfig and PlexAuthService.
+  await PlexDeviceInfo.resolve();
 
   // The PLEX_TOKEN dart-define (screenshot automation) is consumed by
   // [ConnectionBootstrap.seedFromDevTokenDefine] later, when the registry

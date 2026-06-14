@@ -54,6 +54,7 @@ import '../utils/endpoint_failover_interceptor.dart';
 import '../utils/app_logger.dart';
 import '../utils/media_server_retry.dart';
 import '../utils/media_server_timeouts.dart';
+import '../utils/plex_device_info.dart';
 import '../utils/log_redaction_manager.dart';
 import '../utils/plex_cache_parser.dart';
 import '../utils/plex_url_helper.dart';
@@ -505,7 +506,12 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
       if (clientIdentifier != null) {
         headers['X-Plex-Client-Identifier'] = clientIdentifier;
         headers['X-Plex-Product'] = 'Lumi';
-        headers['X-Plex-Device-Name'] = 'Lumi';
+        final deviceInfo = PlexDeviceInfo.cached;
+        headers['X-Plex-Device-Name'] = deviceInfo?.deviceName ?? 'Lumi';
+        if (deviceInfo != null) {
+          headers['X-Plex-Device'] = deviceInfo.device;
+          headers['X-Plex-Platform'] = deviceInfo.platform;
+        }
       }
 
       final response = await client.get('/', headers: headers);
@@ -2631,6 +2637,7 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
         // [_transcodePlatformName] for the mapping.
         'X-Plex-Platform': _transcodePlatformName(),
         if (config.device != null) 'X-Plex-Device': config.device!,
+        if (config.deviceName != null) 'X-Plex-Device-Name': config.deviceName!,
         if (offsetMs != null) 'offset': (offsetMs ~/ 1000).toString(),
         if (config.token != null) 'X-Plex-Token': config.token!,
       };

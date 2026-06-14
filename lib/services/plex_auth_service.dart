@@ -8,6 +8,7 @@ import '../models/user_switch_response.dart';
 import '../utils/app_logger.dart';
 import '../utils/media_server_timeouts.dart';
 import '../utils/media_server_http_client.dart';
+import '../utils/plex_device_info.dart';
 import '../utils/poll_with_backoff.dart';
 
 /// Redacts the middle of an IP address or hostname for safe logging.
@@ -67,10 +68,16 @@ class PlexAuthService {
   String get clientIdentifier => _clientIdentifier;
 
   Map<String, String> _getCommonHeaders({String? authToken}) {
+    // Use the resolved device identity (if available) so Plex's account device
+    // list and the "Now Playing" dashboard show the real platform/device after
+    // the product name, matching the official clients.
+    final deviceInfo = PlexDeviceInfo.cached;
     final headers = {
       'Accept': 'application/json',
       'X-Plex-Product': 'Lumi',
-      'X-Plex-Device-Name': 'Lumi',
+      'X-Plex-Device-Name': deviceInfo?.deviceName ?? 'Lumi',
+      if (deviceInfo != null) 'X-Plex-Device': deviceInfo.device,
+      if (deviceInfo != null) 'X-Plex-Platform': deviceInfo.platform,
       'X-Plex-Client-Identifier': _clientIdentifier,
     };
 
@@ -228,8 +235,10 @@ class PlexAuthService {
       'X-Plex-Product': _appName,
       'X-Plex-Version': '1.1.0',
       'X-Plex-Client-Identifier': _clientIdentifier,
-      'X-Plex-Platform': 'Flutter',
+      'X-Plex-Platform': PlexDeviceInfo.cached?.platform ?? 'Flutter',
       'X-Plex-Platform-Version': '3.8.1',
+      if (PlexDeviceInfo.cached != null) 'X-Plex-Device': PlexDeviceInfo.cached!.device,
+      if (PlexDeviceInfo.cached != null) 'X-Plex-Device-Name': PlexDeviceInfo.cached!.deviceName,
       'X-Plex-Token': currentToken,
       'X-Plex-Language': 'en',
       'pin': ?pin,
