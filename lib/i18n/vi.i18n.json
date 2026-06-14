@@ -77,10 +77,10 @@
     "available": "Đã có bản cập nhật",
     "versionAvailable": "Đã có phiên bản ${version}",
     "currentVersion": "Hiện tại: ${version}",
-    "skipVersion": "Bỏ qua phiên bản này",
-    "viewRelease": "Xem bản phát hành",
+    "skipVersion": "Bỏ qua",
+    "viewRelease": "Xem chi tiết",
     "updateNow": "Cập nhật",
-    "remindLater": "Nhắc lại sau",
+    "remindLater": "Để sau",
     "doNotAskAgain": "Không hỏi lại",
     "latestVersion": "Bạn đang dùng phiên bản mới nhất",
     "checkFailed": "Không thể kiểm tra cập nhật"

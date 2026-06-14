@@ -198,10 +198,10 @@ class _TranslationsUpdateVi extends TranslationsUpdateEn {
 	@override String get available => 'Đã có bản cập nhật';
 	@override String versionAvailable({required Object version}) => 'Đã có phiên bản ${version}';
 	@override String currentVersion({required Object version}) => 'Hiện tại: ${version}';
-	@override String get skipVersion => 'Bỏ qua phiên bản này';
-	@override String get viewRelease => 'Xem bản phát hành';
+	@override String get skipVersion => 'Bỏ qua';
+	@override String get viewRelease => 'Xem chi tiết';
 	@override String get updateNow => 'Cập nhật';
-	@override String get remindLater => 'Nhắc lại sau';
+	@override String get remindLater => 'Để sau';
 	@override String get doNotAskAgain => 'Không hỏi lại';
 	@override String get latestVersion => 'Bạn đang dùng phiên bản mới nhất';
 	@override String get checkFailed => 'Không thể kiểm tra cập nhật';
@@ -1955,10 +1955,10 @@ extension on TranslationsVi {
 			'update.available' => 'Đã có bản cập nhật',
 			'update.versionAvailable' => ({required Object version}) => 'Đã có phiên bản ${version}',
 			'update.currentVersion' => ({required Object version}) => 'Hiện tại: ${version}',
-			'update.skipVersion' => 'Bỏ qua phiên bản này',
-			'update.viewRelease' => 'Xem bản phát hành',
+			'update.skipVersion' => 'Bỏ qua',
+			'update.viewRelease' => 'Xem chi tiết',
 			'update.updateNow' => 'Cập nhật',
-			'update.remindLater' => 'Nhắc lại sau',
+			'update.remindLater' => 'Để sau',
 			'update.doNotAskAgain' => 'Không hỏi lại',
 			'update.latestVersion' => 'Bạn đang dùng phiên bản mới nhất',
 			'update.checkFailed' => 'Không thể kiểm tra cập nhật',
