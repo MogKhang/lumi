@@ -1767,6 +1767,12 @@ class TranslationsProfilesEn {
 	/// en: 'Set PIN'
 	String get setPin => 'Set PIN';
 
+	/// en: 'Set PIN'
+	String get setPinTitle => 'Set PIN';
+
+	/// en: 'Confirm PIN'
+	String get confirmPinTitle => 'Confirm PIN';
+
 	/// en: 'Connections'
 	String get connectionsLabel => 'Connections';
 
@@ -4940,6 +4946,8 @@ extension on Translations {
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
+			'profiles.setPinTitle' => 'Set PIN',
+			'profiles.confirmPinTitle' => 'Confirm PIN',
 			'profiles.connectionsLabel' => 'Connections',
 			'profiles.add' => 'Add',
 			'profiles.deleteProfileButton' => 'Delete profile',
@@ -5438,10 +5446,10 @@ extension on Translations {
 			'metadataEdit.accountDefault' => 'Account default',
 			'metadataEdit.seriesDefault' => 'Series default',
 			'metadataEdit.episodeSorting' => 'Episode Sorting',
-			'metadataEdit.oldestFirst' => 'Oldest first',
-			'metadataEdit.newestFirst' => 'Newest first',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.oldestFirst' => 'Oldest first',
+			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',
 			'metadataEdit.allEpisodes' => 'All episodes',
 			'metadataEdit.latestEpisodes' => ({required Object count}) => '${count} latest episodes',

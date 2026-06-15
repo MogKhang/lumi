@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../widgets/clickable_cursor.dart';
 import 'dpad_navigator.dart';
 import 'focus_theme.dart';
 import 'input_mode_tracker.dart';
@@ -461,6 +462,11 @@ class _FocusableWrapperState extends State<FocusableWrapper> with SingleTickerPr
     // Add semantics if label provided
     if (widget.semanticLabel != null) {
       result = Semantics(label: widget.semanticLabel, button: widget.onSelect != null, child: result);
+    }
+
+    // Show the pointer/hand cursor on desktop & web for interactive items.
+    if (widget.onSelect != null || widget.onLongPress != null) {
+      result = ClickableCursor(child: result);
     }
 
     return result;

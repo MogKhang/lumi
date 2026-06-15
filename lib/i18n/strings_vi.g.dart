@@ -771,6 +771,8 @@ class _TranslationsProfilesVi extends TranslationsProfilesEn {
 	@override String get pinManagedByPlex => 'PIN managed by Plex. Edit on plex.tv.';
 	@override String get noPinSetEditOnPlex => 'No PIN set. To require one, edit the home user on plex.tv.';
 	@override String get setPin => 'Set PIN';
+	@override String get setPinTitle => 'Đặt mã PIN';
+	@override String get confirmPinTitle => 'Xác nhận mã PIN';
 	@override String get connectionsLabel => 'Connections';
 	@override String get add => 'Add';
 	@override String get deleteProfileButton => 'Delete profile';
@@ -2412,6 +2414,8 @@ extension on TranslationsVi {
 			'profiles.pinManagedByPlex' => 'PIN managed by Plex. Edit on plex.tv.',
 			'profiles.noPinSetEditOnPlex' => 'No PIN set. To require one, edit the home user on plex.tv.',
 			'profiles.setPin' => 'Set PIN',
+			'profiles.setPinTitle' => 'Đặt mã PIN',
+			'profiles.confirmPinTitle' => 'Xác nhận mã PIN',
 			'profiles.connectionsLabel' => 'Connections',
 			'profiles.add' => 'Add',
 			'profiles.deleteProfileButton' => 'Delete profile',
@@ -2910,10 +2914,10 @@ extension on TranslationsVi {
 			'metadataEdit.notSet' => 'Not set',
 			'metadataEdit.libraryDefault' => 'Library default',
 			'metadataEdit.accountDefault' => 'Account default',
-			'metadataEdit.seriesDefault' => 'Series default',
-			'metadataEdit.episodeSorting' => 'Episode Sorting',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.seriesDefault' => 'Series default',
+			'metadataEdit.episodeSorting' => 'Episode Sorting',
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',

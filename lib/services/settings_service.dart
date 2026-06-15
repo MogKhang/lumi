@@ -277,6 +277,7 @@ class SettingsService extends BaseSharedPreferencesService {
   );
   static const subtitleBold = BoolPref('subtitle_bold');
   static const subtitleItalic = BoolPref('subtitle_italic');
+  static const cleanedOldImageCache = BoolPref('cleaned_old_image_cache');
 
   /// Draw a fully-opaque black box behind subtitles (and thicken the border so
   /// the box reads a bit larger). Toggled live from the Audio & Subtitles

@@ -568,6 +568,8 @@
     "pinManagedByPlex": "PIN managed by Plex. Edit on plex.tv.",
     "noPinSetEditOnPlex": "No PIN set. To require one, edit the home user on plex.tv.",
     "setPin": "Set PIN",
+    "setPinTitle": "Đặt mã PIN",
+    "confirmPinTitle": "Xác nhận mã PIN",
     "connectionsLabel": "Connections",
     "add": "Add",
     "deleteProfileButton": "Delete profile",
