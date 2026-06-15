@@ -929,6 +929,12 @@ class TranslationsSettingsEn {
 	/// en: 'Open Lumi in fullscreen mode at launch'
 	String get startInFullscreenDescription => 'Open Lumi in fullscreen mode at launch';
 
+	/// en: 'Exit fullscreen when player closes'
+	String get exitFullscreenOnPlayerClose => 'Exit fullscreen when player closes';
+
+	/// en: 'Leave fullscreen automatically after closing the video player'
+	String get exitFullscreenOnPlayerCloseDescription => 'Leave fullscreen automatically after closing the video player';
+
 	/// en: 'Auto-Hide Performance Overlay'
 	String get autoHidePerformanceOverlay => 'Auto-Hide Performance Overlay';
 
@@ -2896,6 +2902,9 @@ class TranslationsVideoSettingsEn {
 	/// en: 'Sleep Timer'
 	String get sleepTimer => 'Sleep Timer';
 
+	/// en: 'End of current video'
+	String get sleepTimerEndOfVideo => 'End of current video';
+
 	/// en: 'Audio Sync'
 	String get audioSync => 'Audio Sync';
 
@@ -4677,6 +4686,8 @@ extension on Translations {
 			'settings.forceTvModeDescription' => 'Use the TV layout regardless of auto-detection. Useful on Android TV devices that don\'t report the leanback feature. Restarts the app on change.',
 			'settings.startInFullscreen' => 'Start in fullscreen',
 			'settings.startInFullscreenDescription' => 'Open Lumi in fullscreen mode at launch',
+			'settings.exitFullscreenOnPlayerClose' => 'Exit fullscreen when player closes',
+			'settings.exitFullscreenOnPlayerCloseDescription' => 'Leave fullscreen automatically after closing the video player',
 			'settings.autoHidePerformanceOverlay' => 'Auto-Hide Performance Overlay',
 			'settings.autoHidePerformanceOverlayDescription' => 'Fade the performance overlay with the playback controls',
 			'settings.showNavBarLabels' => 'Show Navigation Bar Labels',
@@ -4930,10 +4941,10 @@ extension on Translations {
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
-			'profiles.signOutFailed' => 'Sign out failed.',
-			'profiles.sectionTitle' => 'Switch User',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.signOutFailed' => 'Sign out failed.',
+			'profiles.sectionTitle' => 'Switch User',
 			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
@@ -5386,6 +5397,7 @@ extension on Translations {
 			'videoSettings.playbackSpeed' => 'Playback Speed',
 			'videoSettings.zoom' => 'Zoom',
 			'videoSettings.sleepTimer' => 'Sleep Timer',
+			'videoSettings.sleepTimerEndOfVideo' => 'End of current video',
 			'videoSettings.audioSync' => 'Audio Sync',
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
 			'videoSettings.hdr' => 'HDR',
@@ -5443,11 +5455,11 @@ extension on Translations {
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',
 			'metadataEdit.libraryDefault' => 'Library default',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.accountDefault' => 'Account default',
 			'metadataEdit.seriesDefault' => 'Series default',
 			'metadataEdit.episodeSorting' => 'Episode Sorting',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.oldestFirst' => 'Oldest first',
 			'metadataEdit.newestFirst' => 'Newest first',
 			'metadataEdit.keep' => 'Keep',

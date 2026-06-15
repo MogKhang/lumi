@@ -114,6 +114,7 @@ class MobileVideoControls extends StatefulWidget {
 class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTickerProviderStateMixin {
   late final AnimationController _stripAnim;
   bool _stripVisible = false;
+  late bool _lastControlsVisible;
 
   /// Drag distance (in pixels) required to fully reveal the strip.
   static const _dragExtent = 150.0;
@@ -125,6 +126,7 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
     super.initState();
     _stripAnim = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
     _stripAnim.addListener(_onStripAnimChanged);
+    _lastControlsVisible = widget.controlsVisible?.value ?? true;
     widget.controlsVisible?.addListener(_onControlsVisibilityChanged);
   }
 
@@ -133,6 +135,7 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controlsVisible != widget.controlsVisible) {
       oldWidget.controlsVisible?.removeListener(_onControlsVisibilityChanged);
+      _lastControlsVisible = widget.controlsVisible?.value ?? true;
       widget.controlsVisible?.addListener(_onControlsVisibilityChanged);
     }
   }
@@ -154,12 +157,18 @@ class _MobileVideoControlsState extends State<MobileVideoControls> with SingleTi
   }
 
   void _onControlsVisibilityChanged() {
-    if (widget.controlsVisible?.value == false && _stripVisible) {
+    final controlsVisible = widget.controlsVisible?.value ?? true;
+    final wasControlsVisible = _lastControlsVisible;
+    _lastControlsVisible = controlsVisible;
+
+    // Act only on edge transitions so a notifier fire with an unchanged value
+    // can't flicker the strip.
+    if (!controlsVisible && wasControlsVisible && _stripVisible) {
       // Just notify parent that strip is no longer active — don't animate,
       // let the overlay fade out with the strip still showing.
       _stripVisible = false;
       widget.onStripVisibilityChanged?.call(false);
-    } else if (widget.controlsVisible?.value == true && _stripAnim.value > 0) {
+    } else if (controlsVisible && !wasControlsVisible && _stripAnim.value > 0) {
       // Reset strip when controls reappear so page 0 is shown.
       _stripAnim.value = 0;
     }

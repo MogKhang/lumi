@@ -379,6 +379,9 @@ class MpvPlayerCoreBase: NSObject {
     checkError(mpv_set_option_string(mpv, "gpu-context", "moltenvk"))
     checkError(mpv_set_option_string(mpv, "hwdec", "videotoolbox"))
     checkError(mpv_set_option_string(mpv, "target-colorspace-hint", "yes"))
+    // Pause on the last frame at EOF instead of unloading the file, so seeking
+    // back after the video ends still works (matches Linux/Windows).
+    checkError(mpv_set_option_string(mpv, "keep-open", "yes"))
   }
 
   private func cancelPendingRequests() {

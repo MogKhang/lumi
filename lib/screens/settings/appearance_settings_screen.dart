@@ -100,13 +100,20 @@ class AppearanceSettingsScreen extends StatelessWidget {
           subtitle: t.settings.showUnwatchedCountDescription,
         ),
 
-        if (Platform.isWindows || Platform.isLinux) ...[
+        if (PlatformDetector.isDesktopOS()) ...[
           SettingsSectionHeader(t.settings.window),
+          if (Platform.isWindows || Platform.isLinux)
+            SettingSwitchTile(
+              pref: SettingsService.startInFullscreen,
+              icon: Symbols.fullscreen_rounded,
+              title: t.settings.startInFullscreen,
+              subtitle: t.settings.startInFullscreenDescription,
+            ),
           SettingSwitchTile(
-            pref: SettingsService.startInFullscreen,
-            icon: Symbols.fullscreen_rounded,
-            title: t.settings.startInFullscreen,
-            subtitle: t.settings.startInFullscreenDescription,
+            pref: SettingsService.exitFullscreenOnPlayerClose,
+            icon: Symbols.fullscreen_exit_rounded,
+            title: t.settings.exitFullscreenOnPlayerClose,
+            subtitle: t.settings.exitFullscreenOnPlayerCloseDescription,
           ),
         ],
 

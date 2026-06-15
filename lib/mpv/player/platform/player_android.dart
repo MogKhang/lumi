@@ -99,6 +99,9 @@ class PlayerAndroid extends PlayerBase {
     if (disposed) return;
     await _ensureInitialized();
     final startPosition = media.start ?? Duration.zero;
+    // Drop the previous item's track list so stale audio/subtitle selections
+    // don't briefly surface before the new media reports its own tracks.
+    clearTracks();
     resetPlaybackProgress(startPosition);
     setSeekable(false);
 
@@ -138,7 +141,7 @@ class PlayerAndroid extends PlayerBase {
 
   @override
   Future<void> seek(Duration position) async {
-    await runSeek(() => invoke('seek', {'positionMs': position.inMilliseconds}));
+    await runSeek(position, () => invoke('seek', {'positionMs': position.inMilliseconds}));
   }
 
   @override

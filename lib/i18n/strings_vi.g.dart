@@ -413,6 +413,8 @@ class _TranslationsSettingsVi extends TranslationsSettingsEn {
 	@override String get forceTvModeDescription => 'Use the TV layout regardless of auto-detection. Useful on Android TV devices that don\'t report the leanback feature. Restarts the app on change.';
 	@override String get startInFullscreen => 'Start in fullscreen';
 	@override String get startInFullscreenDescription => 'Open Lumi in fullscreen mode at launch';
+	@override String get exitFullscreenOnPlayerClose => 'Thoát toàn màn hình khi đóng trình phát';
+	@override String get exitFullscreenOnPlayerCloseDescription => 'Tự động thoát chế độ toàn màn hình sau khi đóng trình phát video';
 	@override String get autoHidePerformanceOverlay => 'Auto-Hide Performance Overlay';
 	@override String get autoHidePerformanceOverlayDescription => 'Fade the performance overlay with the playback controls';
 	@override String get showNavBarLabels => 'Show Navigation Bar Labels';
@@ -1283,6 +1285,7 @@ class _TranslationsVideoSettingsVi extends TranslationsVideoSettingsEn {
 	@override String get playbackSpeed => 'Tốc độ phát';
 	@override String get zoom => 'Thu phóng';
 	@override String get sleepTimer => 'Hẹn giờ tắt màn hình';
+	@override String get sleepTimerEndOfVideo => 'Khi hết video hiện tại';
 	@override String get audioSync => 'Độ trễ âm thanh';
 	@override String get subtitleSync => 'Độ trễ phụ đề';
 	@override String get hdr => 'HDR';
@@ -2145,6 +2148,8 @@ extension on TranslationsVi {
 			'settings.forceTvModeDescription' => 'Use the TV layout regardless of auto-detection. Useful on Android TV devices that don\'t report the leanback feature. Restarts the app on change.',
 			'settings.startInFullscreen' => 'Start in fullscreen',
 			'settings.startInFullscreenDescription' => 'Open Lumi in fullscreen mode at launch',
+			'settings.exitFullscreenOnPlayerClose' => 'Thoát toàn màn hình khi đóng trình phát',
+			'settings.exitFullscreenOnPlayerCloseDescription' => 'Tự động thoát chế độ toàn màn hình sau khi đóng trình phát video',
 			'settings.autoHidePerformanceOverlay' => 'Auto-Hide Performance Overlay',
 			'settings.autoHidePerformanceOverlayDescription' => 'Fade the performance overlay with the playback controls',
 			'settings.showNavBarLabels' => 'Show Navigation Bar Labels',
@@ -2398,10 +2403,10 @@ extension on TranslationsVi {
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
-			'profiles.signOutFailed' => 'Sign out failed.',
-			'profiles.sectionTitle' => 'Chọn hồ sơ',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.signOutFailed' => 'Sign out failed.',
+			'profiles.sectionTitle' => 'Chọn hồ sơ',
 			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
 			'profiles.summaryMultipleWithActive' => ({required Object count, required Object activeName}) => '${count} profiles · active: ${activeName}',
 			'profiles.summaryMultiple' => ({required Object count}) => '${count} profiles',
@@ -2856,6 +2861,7 @@ extension on TranslationsVi {
 			'videoSettings.playbackSpeed' => 'Tốc độ phát',
 			'videoSettings.zoom' => 'Thu phóng',
 			'videoSettings.sleepTimer' => 'Hẹn giờ tắt màn hình',
+			'videoSettings.sleepTimerEndOfVideo' => 'Khi hết video hiện tại',
 			'videoSettings.audioSync' => 'Độ trễ âm thanh',
 			'videoSettings.subtitleSync' => 'Độ trễ phụ đề',
 			'videoSettings.hdr' => 'HDR',
@@ -2911,11 +2917,11 @@ extension on TranslationsVi {
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.notSet' => 'Not set',
 			'metadataEdit.libraryDefault' => 'Library default',
 			'metadataEdit.accountDefault' => 'Account default',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.seriesDefault' => 'Series default',
 			'metadataEdit.episodeSorting' => 'Episode Sorting',
 			'metadataEdit.oldestFirst' => 'Oldest first',

@@ -19,6 +19,15 @@ extension _VideoPlayerPlaybackPromptMethods on VideoPlayerScreenState {
       unawaited(_videoPIPManager?.updateAutoPipState(isPlaying: false));
     }
 
+    // End-of-video sleep timer takes precedence over autoplay / next-episode
+    // dialogs: the user explicitly asked to stop after this item.
+    final sleepTimerService = SleepTimerService();
+    if (sleepTimerService.isEndOfVideoMode && !_completionTriggered) {
+      _completionTriggered = true;
+      sleepTimerService.notifyVideoCompleted();
+      return;
+    }
+
     if (_nextEpisode != null && !_showPlayNextDialog && !_showStillWatchingPrompt && !_completionTriggered) {
       _completionTriggered = true;
 
@@ -82,10 +91,23 @@ extension _VideoPlayerPlaybackPromptMethods on VideoPlayerScreenState {
 
   void _cancelAutoPlay() {
     _autoPlayTimer?.cancel();
-    _completionTriggered = false; // Reset so it can trigger again if user seeks near end
+    // Keep _completionTriggered set: playback is still parked inside the
+    // end-of-video window, so clearing it here would let the position listener
+    // re-fire this prompt on the next tick. It is re-armed once playback seeks
+    // back clear of the end region (see the position listener) or new media loads.
     _setPlayerState(() {
       _showPlayNextDialog = false;
     });
+  }
+
+  /// Re-arm the end-of-video latch so Play Next can fire again — but only when no
+  /// prompt is visible and no auto-play countdown is running, so we never clobber
+  /// an active dialog. Callers decide *when* it is safe to re-arm (media reloaded,
+  /// or playback moved back out of the end region).
+  void _rearmCompletionLatch() {
+    if (_completionTriggered && !_showPlayNextDialog && _autoPlayTimer?.isActive != true) {
+      _completionTriggered = false;
+    }
   }
 
   void _showStillWatchingDialog() {

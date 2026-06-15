@@ -104,6 +104,9 @@ class PlayerNative extends PlayerBase {
   }) async {
     if (disposed) return;
     await _ensureInitialized();
+    // Drop the previous item's track list so stale audio/subtitle selections
+    // don't briefly surface before the new media reports its own tracks.
+    clearTracks();
     setSeekable(false);
 
     await setVisible(true);
@@ -156,7 +159,7 @@ class PlayerNative extends PlayerBase {
 
   @override
   Future<void> seek(Duration position) async {
-    await runSeek(() => command(['seek', (position.inMilliseconds / 1000.0).toString(), 'absolute']));
+    await runSeek(position, () => command(['seek', (position.inMilliseconds / 1000.0).toString(), 'absolute']));
   }
 
   @override

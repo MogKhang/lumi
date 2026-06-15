@@ -311,6 +311,13 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
   int _autoPlayCountdown = 5;
   bool _completionTriggered = false;
 
+  // End-of-video Play Next thresholds. Fire the prompt within _kPlayNextTriggerMs
+  // of the end; re-arm (allow it to fire again) only once playback is more than
+  // _kPlayNextRearmMs from the end. The gap is hysteresis so a position parked at
+  // the boundary can't oscillate between firing and re-arming.
+  static const int _kPlayNextTriggerMs = 1000;
+  static const int _kPlayNextRearmMs = 2000;
+
   late final FocusNode _playNextCancelFocusNode;
   late final FocusNode _playNextConfirmFocusNode;
 
@@ -335,6 +342,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
   bool _wasPlayingBeforeInactive = false;
   bool _hiddenForBackground = false;
   bool _autoPipEnabled = false;
+  bool _exitFullscreenOnPlayerClose = false;
   bool _androidAutoPipTransitionInFlight = false;
   bool _resumeLiveTimelineOnResume = false;
   int _rewindOnResume = 0;
@@ -527,6 +535,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       final settingsService = await SettingsService.getInstance();
       _videoPlayerNavigationEnabled = settingsService.read(SettingsService.videoPlayerNavigationEnabled);
       _autoPipEnabled = settingsService.read(SettingsService.autoPip);
+      _exitFullscreenOnPlayerClose = settingsService.read(SettingsService.exitFullscreenOnPlayerClose);
       _rewindOnResume = settingsService.read(SettingsService.rewindOnResume);
       final bufferSizeMB = settingsService.read(SettingsService.bufferSize);
       final enableHardwareDecoding = settingsService.read(SettingsService.enableHardwareDecoding);
@@ -781,13 +790,18 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
 
       _playingSubscription = player!.streams.playing.listen(_onPlayingStateChanged);
 
-      // Listen to completion. When mpv emits completed=false (file-loaded after a
-      // reconnect-seek or fresh open), clear a stale _completionTriggered so the
-      // real end-of-file can still show Play Next. Guarded against clobbering an
-      // active dialog or running auto-play countdown.
       _completedSubscription = player!.streams.completed.listen((done) {
-        if (!done && _completionTriggered && !_showPlayNextDialog && _autoPlayTimer?.isActive != true) {
-          _completionTriggered = false;
+        // completed=false means a file (re)loaded after a reconnect-seek or fresh
+        // open — re-arm the end-of-video latch so the real EOF can still show Play
+        // Next. But only when playback is clear of the end region: a stray
+        // completed=false while parked at EOF must NOT re-arm, or the position
+        // listener would immediately re-fire the Play Next prompt.
+        if (!done) {
+          final durMs = player!.state.duration.inMilliseconds;
+          final posMs = player!.state.position.inMilliseconds;
+          if (durMs <= 0 || posMs < durMs - _kPlayNextRearmMs) {
+            _rearmCompletionLatch();
+          }
         }
         _onVideoCompleted(done);
       });
@@ -868,11 +882,16 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
         }
 
         final duration = player!.state.duration;
-        if (duration.inMilliseconds > 0 &&
-            position.inMilliseconds >= duration.inMilliseconds - 1000 &&
-            !_showPlayNextDialog &&
-            !_completionTriggered) {
-          _onVideoCompleted(true);
+        if (duration.inMilliseconds > 0) {
+          if (position.inMilliseconds >= duration.inMilliseconds - _kPlayNextTriggerMs &&
+              !_showPlayNextDialog &&
+              !_completionTriggered) {
+            _onVideoCompleted(true);
+          } else if (position.inMilliseconds < duration.inMilliseconds - _kPlayNextRearmMs) {
+            // Seeked back out of the end region after dismissing Play Next — re-arm
+            // so the prompt can fire again if the user returns to the end.
+            _rearmCompletionLatch();
+          }
         }
       });
 
@@ -922,11 +941,44 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
       if (navigator.canPop()) {
         _isExiting.value = true;
         await _sendStoppedProgressOnce();
+        await _restoreSystemUiAndOrientation();
         if (!mounted) return;
         navigator.pop(true);
       }
     } finally {
       _isHandlingBack = false;
+    }
+  }
+
+  /// Restore the app's system UI, orientation, and (on desktop) windowed mode
+  /// when leaving the player. Safe to await before popping the route or to
+  /// fire-and-forget from [dispose].
+  Future<void> _restoreSystemUiAndOrientation() async {
+    // Desktop: optionally drop out of fullscreen when the player closes.
+    if (PlatformDetector.isDesktopOS() && _exitFullscreenOnPlayerClose) {
+      unawaited(FullscreenStateManager().exitFullscreen());
+    }
+
+    try {
+      await OrientationHelper.restoreSystemUI();
+    } catch (e) {
+      appLogger.w('Failed to restore system UI', error: e);
+    }
+
+    // Restore orientation based on cached device type (no context needed).
+    try {
+      if (_isPhone) {
+        await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+      } else {
+        await SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      }
+    } catch (e) {
+      appLogger.w('Failed to restore orientation', error: e);
     }
   }
 
@@ -1023,23 +1075,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> with WidgetsBindin
 
     // Restore system UI and orientation preferences (skip if navigating to another video)
     if (!_isReplacingWithVideo) {
-      OrientationHelper.restoreSystemUI();
-
-      // Restore orientation based on cached device type (no context needed)
-      try {
-        if (_isPhone) {
-          SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-        } else {
-          SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp,
-            DeviceOrientation.portraitDown,
-            DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
-          ]);
-        }
-      } catch (e) {
-        appLogger.w('Failed to restore orientation in dispose', error: e);
-      }
+      unawaited(_restoreSystemUiAndOrientation());
     }
 
     final playerToDispose = player;
