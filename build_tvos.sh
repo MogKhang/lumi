@@ -78,13 +78,21 @@ fi
 echo "==> [4/5] Archiving (config=$BUILD_CONFIG, generic tvOS device)"
 rm -rf "$ARCHIVE_PATH"
 mkdir -p "$BUILD_OUT"
+# Archive UNSIGNED. A signed archive makes Xcode try to mint a tvOS *Development*
+# provisioning profile, which fails with "your team has no devices..." because
+# this team has no registered tvOS devices (and we don't need any for
+# TestFlight). The -exportArchive step below re-signs the app with the Apple
+# Distribution cert + App Store profile (created on demand), which is the
+# correct identity for TestFlight and needs no registered devices.
 xcodebuild archive \
   -workspace "$WORKSPACE" \
   -scheme "$SCHEME" \
   -configuration "$BUILD_CONFIG" \
   -destination 'generic/platform=tvOS' \
   -archivePath "$ARCHIVE_PATH" \
-  -allowProvisioningUpdates \
+  CODE_SIGNING_ALLOWED=NO \
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGN_IDENTITY="" \
   COMPILER_INDEX_STORE_ENABLE=NO
 
 if [[ "$ARCHIVE_ONLY" == "1" ]]; then
