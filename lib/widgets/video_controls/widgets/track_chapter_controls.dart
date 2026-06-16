@@ -426,31 +426,6 @@ class TrackChapterControls extends StatelessWidget {
           buttonIndex++;
         }
 
-        // Episodes button
-        if (metadata.kind == MediaKind.episode) {
-          final currentIndex = buttonIndex;
-          buttons.add(
-            _buildTrackButton(
-              buttonIndex: currentIndex,
-              icon: Symbols.format_list_bulleted_rounded,
-              tooltip: 'Episodes',
-              semanticLabel: 'Episodes',
-              tracks: tracks,
-              isMobile: isMobile,
-              isDesktop: isDesktop,
-              onPressed: () {
-                onCancelAutoHide?.call();
-                OverlaySheetController.of(context)
-                    .show(
-                      builder: (_) => EpisodeSheet(metadata: metadata),
-                    )
-                    .whenComplete(() => onStartAutoHide?.call());
-              },
-            ),
-          );
-          buttonIndex++;
-        }
-
         // Aspect Ratio button (Letterbox → Fill screen → Stretch).
         // Last button on mobile/TV: right of Quality for movies, right of
         // Episodes for shows. Hidden for live streams.
@@ -514,6 +489,31 @@ class TrackChapterControls extends StatelessWidget {
               isMobile: isMobile,
               isDesktop: isDesktop,
               onPressed: onToggleFullscreen,
+            ),
+          );
+          buttonIndex++;
+        }
+
+        // Episodes button — last on all platforms.
+        if (metadata.kind == MediaKind.episode) {
+          final currentIndex = buttonIndex;
+          buttons.add(
+            _buildTrackButton(
+              buttonIndex: currentIndex,
+              icon: Symbols.format_list_bulleted_rounded,
+              tooltip: 'Episodes',
+              semanticLabel: 'Episodes',
+              tracks: tracks,
+              isMobile: isMobile,
+              isDesktop: isDesktop,
+              onPressed: () {
+                onCancelAutoHide?.call();
+                OverlaySheetController.of(context)
+                    .show(
+                      builder: (_) => EpisodeSheet(metadata: metadata),
+                    )
+                    .whenComplete(() => onStartAutoHide?.call());
+              },
             ),
           );
         }
