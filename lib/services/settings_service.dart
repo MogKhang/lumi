@@ -327,6 +327,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const appLocale = _AppLocalePref();
   static const autoPip = _AutoPipPref();
   static const customDownloadPath = NullableStringPref('custom_download_path');
+  static const companionRemoteLastHostAddress = NullableStringPref('companion_remote_last_host_address');
   static const selectedServerId = NullableStringPref('selected_server_id');
 
   static final maxVolume = IntPref('max_volume', defaultValue: 100, transform: (v) => v.clamp(100, 300));
@@ -681,6 +682,7 @@ class SettingsService extends BaseSharedPreferencesService {
     customShaderPresets,
     selectedExternalPlayer,
     customExternalPlayers,
+    companionRemoteLastHostAddress,
   ];
 
   Future<void> resetAllSettings() async {

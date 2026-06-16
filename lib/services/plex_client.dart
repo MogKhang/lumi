@@ -136,6 +136,23 @@ class ConnectionTestResult {
   ConnectionTestResult({required this.success, required this.latencyMs, this.error, this.transcoderVideo});
 }
 
+/// Parse the root `MediaContainer`'s `transcoderVideo` capability flag.
+///
+/// Returns `null` for an absent or unrecognized value — distinct from an
+/// explicit `false`. Callers fail *open* (assume transcoding is available) on
+/// `null`, so a server that simply omits the flag isn't wrongly treated as
+/// transcode-incapable. [flexibleBool] would collapse "absent" to `false`.
+bool? _parsePlexTranscoderVideoCapability(Object? value) {
+  return switch (value) {
+    final bool b => b,
+    final int n when n == 1 => true,
+    final int n when n == 0 => false,
+    final String s when s.trim().toLowerCase() == 'true' || s.trim() == '1' => true,
+    final String s when s.trim().toLowerCase() == 'false' || s.trim() == '0' => false,
+    _ => null,
+  };
+}
+
 class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements MediaServerClient {
   @override
   PlexConfig config;
@@ -521,7 +538,9 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
 
       bool? transcoderVideo;
       if (success && response.data is Map && response.data['MediaContainer'] is Map) {
-        transcoderVideo = flexibleBool((response.data['MediaContainer'] as Map)['transcoderVideo']);
+        transcoderVideo = _parsePlexTranscoderVideoCapability(
+          (response.data['MediaContainer'] as Map)['transcoderVideo'],
+        );
       }
 
       return ConnectionTestResult(
@@ -2490,7 +2509,9 @@ class PlexClient with MediaServerCacheMixin, _PlexLiveTvClientMethods implements
       final response = await _http.get('/', timeout: const Duration(seconds: 5));
       final container = _getMediaContainer(response);
       final value = container?['transcoderVideo'];
-      final supported = flexibleBool(value);
+      // Fail open: an absent/unknown flag means "assume transcoding works"
+      // rather than disabling it outright.
+      final supported = _parsePlexTranscoderVideoCapability(value) ?? true;
       _serverTranscoderCached = supported;
       return supported;
     } catch (e) {
