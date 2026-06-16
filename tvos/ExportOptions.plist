@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Export options for an App Store Connect / TestFlight upload of the tvOS app.
+  Used by `xcodebuild -exportArchive`.
+  Signing is left to Xcode (automatic): it resolves the Apple Distribution
+  certificate and the tvOS App Store provisioning profile for the LUSINE team
+  (JF8YN4AJTF). The tvOS App ID must have the tvOS platform enabled in the
+  developer portal and the account signed into Xcode so these can be created.
+-->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>destination</key>
+	<string>export</string>
+	<key>teamID</key>
+	<string>JF8YN4AJTF</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>uploadSymbols</key>
+	<true/>
+	<key>stripSwiftSymbols</key>
+	<true/>
+</dict>
+</plist>
