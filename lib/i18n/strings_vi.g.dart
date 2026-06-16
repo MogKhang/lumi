@@ -215,6 +215,7 @@ class _TranslationsMediaDetailVi extends TranslationsMediaDetailEn {
 
 	// Translations
 	@override String get watchNow => 'Xem phim';
+	@override String titleCount({required Object count}) => '${count} tựa phim';
 	@override String get addToPlaylist => 'Thêm danh sách';
 	@override String get plot => 'Nội dung';
 	@override String get season => 'Phần';
@@ -1968,6 +1969,7 @@ extension on TranslationsVi {
 			'update.latestVersion' => 'Bạn đang dùng phiên bản mới nhất',
 			'update.checkFailed' => 'Không thể kiểm tra cập nhật',
 			'mediaDetail.watchNow' => 'Xem phim',
+			'mediaDetail.titleCount' => ({required Object count}) => '${count} tựa phim',
 			'mediaDetail.addToPlaylist' => 'Thêm danh sách',
 			'mediaDetail.plot' => 'Nội dung',
 			'mediaDetail.season' => 'Phần',
@@ -2402,9 +2404,9 @@ extension on TranslationsVi {
 			'profiles.signOut' => 'Đăng xuất',
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
-			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Chọn hồ sơ',
 			'profiles.summarySingle' => 'Lựa chọn hồ sơ xem phim mặc định',
@@ -2916,9 +2918,9 @@ extension on TranslationsVi {
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
-			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',
 			'metadataEdit.libraryDefault' => 'Library default',
 			'metadataEdit.accountDefault' => 'Account default',

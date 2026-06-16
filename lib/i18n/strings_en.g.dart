@@ -371,6 +371,9 @@ class TranslationsMediaDetailEn {
 	/// en: 'Watch Now'
 	String get watchNow => 'Watch Now';
 
+	/// en: '${count} titles'
+	String titleCount({required Object count}) => '${count} titles';
+
 	/// en: 'Add to Playlist'
 	String get addToPlaylist => 'Add to Playlist';
 
@@ -4506,6 +4509,7 @@ extension on Translations {
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
 			'mediaDetail.watchNow' => 'Watch Now',
+			'mediaDetail.titleCount' => ({required Object count}) => '${count} titles',
 			'mediaDetail.addToPlaylist' => 'Add to Playlist',
 			'mediaDetail.plot' => 'Plot',
 			'mediaDetail.season' => 'Season',
@@ -4940,9 +4944,9 @@ extension on Translations {
 			'profiles.signOut' => 'Sign out',
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
-			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Switch User',
 			'profiles.summarySingle' => 'Add profiles to mix managed users and local identities',
@@ -5454,9 +5458,9 @@ extension on Translations {
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',
-			'metadataEdit.libraryDefault' => 'Library default',
 			_ => null,
 		} ?? switch (path) {
+			'metadataEdit.libraryDefault' => 'Library default',
 			'metadataEdit.accountDefault' => 'Account default',
 			'metadataEdit.seriesDefault' => 'Series default',
 			'metadataEdit.episodeSorting' => 'Episode Sorting',

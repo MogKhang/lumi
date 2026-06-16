@@ -87,6 +87,7 @@
   },
   "mediaDetail": {
     "watchNow": "Watch Now",
+    "titleCount": "${count} titles",
     "addToPlaylist": "Add to Playlist",
     "plot": "Plot",
     "season": "Season",

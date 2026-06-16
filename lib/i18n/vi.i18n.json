@@ -87,6 +87,7 @@
   },
   "mediaDetail": {
     "watchNow": "Xem phim",
+    "titleCount": "${count} tựa phim",
     "addToPlaylist": "Thêm danh sách",
     "plot": "Nội dung",
     "season": "Phần",

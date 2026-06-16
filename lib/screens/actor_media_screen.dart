@@ -133,7 +133,7 @@ class _ActorMediaScreenState extends BaseMediaListDetailScreen<ActorMediaScreen>
                   if (items.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
-                      '${items.length} ${items.length == 1 ? 'title' : 'titles'}',
+                      t.mediaDetail.titleCount(count: items.length),
                       style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                     ),
                   ],
