@@ -214,6 +214,8 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
   BoxConstraints? _constraints;
   Color? _explicitBackgroundColor;
   Alignment _alignment = Alignment.bottomCenter;
+  Offset? _lastPointerPosition;
+  double? _sheetHorizontalAnchor;
 
   // Drag-to-dismiss state
   double _dragOffset = 0;
@@ -274,6 +276,7 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
 
     final completer = Completer<T?>();
     final entry = _OverlaySheetEntry(builder: builder, completer: completer, initialFocusNode: initialFocusNode);
+    final horizontalAnchor = _resolveSheetHorizontalAnchor(alignment);
 
     setState(() {
       _pageStack.add(entry);
@@ -284,6 +287,7 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
       _constraints = constraints;
       _explicitBackgroundColor = backgroundColor;
       _alignment = alignment;
+      _sheetHorizontalAnchor = horizontalAnchor;
       _dragOffset = 0;
       _isDragging = false;
     });
@@ -345,6 +349,7 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
         _isClosing = false;
         _dragOffset = 0;
         _isDragging = false;
+        _sheetHorizontalAnchor = null;
       });
       // Clear stale back-key flags. handleBackKeyAction sets
       // markClosedViaBackKey() expecting a route pop, but the overlay
@@ -353,6 +358,21 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
       // double-pop on the underlying screen.
       BackKeyUpSuppressor.clearSuppression();
     });
+  }
+
+  void _rememberPointerPosition(PointerEvent event) {
+    if (event.kind != PointerDeviceKind.mouse) return;
+    _lastPointerPosition = event.localPosition;
+  }
+
+  /// On desktop (mouse mode), anchor a bottom-centered sheet horizontally near
+  /// the last pointer position instead of always centering it. Returns null
+  /// (default centered behavior) on TV, keyboard mode, or non-bottom alignments.
+  double? _resolveSheetHorizontalAnchor(Alignment alignment) {
+    if (!PlatformDetector.isDesktopOS() || PlatformDetector.isTV()) return null;
+    if (InputModeTracker.isKeyboardMode(context)) return null;
+    if (alignment.x != 0 || alignment.y <= 0) return null;
+    return _lastPointerPosition?.dx;
   }
 
   void _autoFocus() {
@@ -458,25 +478,30 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
 
     return _OverlaySheetScope(
       controller: _controller,
-      child: Stack(
-        children: [
-          widget.child,
-          // Barrier + sheet only when open
-          if (_isOpen) ...[
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: _barrierAnimation,
-                builder: (context, child) {
-                  return GestureDetector(
-                    onTap: _barrierDismissible ? () => _close() : null,
-                    child: ColoredBox(color: Colors.black.withValues(alpha: _barrierAnimation.value)),
-                  );
-                },
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: _rememberPointerPosition,
+        onPointerHover: _rememberPointerPosition,
+        child: Stack(
+          children: [
+            widget.child,
+            // Barrier + sheet only when open
+            if (_isOpen) ...[
+              Positioned.fill(
+                child: AnimatedBuilder(
+                  animation: _barrierAnimation,
+                  builder: (context, child) {
+                    return GestureDetector(
+                      onTap: _barrierDismissible ? () => _close() : null,
+                      child: ColoredBox(color: Colors.black.withValues(alpha: _barrierAnimation.value)),
+                    );
+                  },
+                ),
               ),
-            ),
-            _buildSheet(context),
+              _buildSheet(context),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -517,6 +542,9 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
     final colorScheme = Theme.of(context).colorScheme;
 
     Widget content = _pageStack.isNotEmpty ? Builder(builder: _pageStack.last.builder) : const SizedBox.shrink();
+    // Keep sheet scrollables from attaching to the route's primary controller,
+    // so scrolling inside the sheet doesn't drive the page behind it.
+    content = PrimaryScrollController.none(child: content);
 
     // Wrap content in NotificationListener for scroll-aware drag-to-dismiss
     if (showHandle) {
@@ -586,8 +614,12 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
         canRequestFocus: false,
         skipTraversal: true,
         onKeyEvent: _handleKeyEvent,
-        child: Align(
-          alignment: _alignment,
+        child: CustomSingleChildLayout(
+          delegate: _OverlaySheetLayoutDelegate(
+            alignment: _alignment,
+            horizontalAnchor: _sheetHorizontalAnchor,
+            edgePadding: isDesktop ? _OverlaySheetLayoutDelegate.desktopEdgePadding : 0,
+          ),
           child: AnimatedBuilder(
             animation: _slideCurve,
             builder: (context, child) {
@@ -652,5 +684,52 @@ class _OverlaySheetHostState extends State<OverlaySheetHost> with SingleTickerPr
     }
 
     return sheet;
+  }
+}
+
+/// Lays out the overlay sheet. Centers it by [alignment] like a plain [Align],
+/// except when [horizontalAnchor] is set (desktop mouse mode) — then the sheet
+/// is positioned horizontally near the pointer, clamped to the screen with
+/// [edgePadding].
+class _OverlaySheetLayoutDelegate extends SingleChildLayoutDelegate {
+  static const desktopEdgePadding = 16.0;
+
+  final Alignment alignment;
+  final double? horizontalAnchor;
+  final double edgePadding;
+
+  const _OverlaySheetLayoutDelegate({
+    required this.alignment,
+    required this.horizontalAnchor,
+    required this.edgePadding,
+  });
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    final size = constraints.biggest;
+    final maxWidth = size.width > edgePadding * 2 ? size.width - edgePadding * 2 : size.width;
+    return BoxConstraints.loose(Size(maxWidth, size.height));
+  }
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final hasHorizontalPadding = edgePadding > 0 && size.width > childSize.width + edgePadding * 2;
+    final minLeft = hasHorizontalPadding ? edgePadding : 0.0;
+    final maxLeft = hasHorizontalPadding ? size.width - childSize.width - edgePadding : minLeft;
+    final left = horizontalAnchor == null
+        ? minLeft + (maxLeft - minLeft) * (alignment.x + 1) / 2
+        : (horizontalAnchor! - childSize.width / 2).clamp(minLeft, maxLeft).toDouble();
+
+    final maxTop = size.height > childSize.height ? size.height - childSize.height : 0.0;
+    final top = maxTop * (alignment.y + 1) / 2;
+
+    return Offset(left, top);
+  }
+
+  @override
+  bool shouldRelayout(_OverlaySheetLayoutDelegate oldDelegate) {
+    return alignment != oldDelegate.alignment ||
+        horizontalAnchor != oldDelegate.horizontalAnchor ||
+        edgePadding != oldDelegate.edgePadding;
   }
 }

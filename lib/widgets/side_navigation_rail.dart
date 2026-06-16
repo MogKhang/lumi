@@ -60,6 +60,11 @@ class NavigationRailItem extends StatelessWidget {
   final BorderRadius borderRadius;
   final double iconSize;
 
+  /// When true, don't paint the selected-item background tint. Used while the
+  /// sidebar itself is focus-traversed so the focus highlight doesn't double up
+  /// with the persistent selection tint.
+  final bool suppressSelectedBackground;
+
   /// Called when RIGHT arrow is pressed to navigate to content area.
   final VoidCallback? onNavigateRight;
 
@@ -77,12 +82,14 @@ class NavigationRailItem extends StatelessWidget {
     this.autofocus = false,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     this.iconSize = 22,
+    this.suppressSelectedBackground = false,
     this.onNavigateRight,
   });
 
   @override
   Widget build(BuildContext context) {
     final t = tokens(context);
+    final showSelectedBackground = isSelected && !suppressSelectedBackground;
 
     return Focus(
       focusNode: focusNode,
@@ -108,9 +115,8 @@ class NavigationRailItem extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: () {
-                if (isSelected && isFocused) return t.text.withValues(alpha: 0.15);
-                if (isSelected) return t.text.withValues(alpha: 0.1);
-                if (isFocused) return t.text.withValues(alpha: 0.12);
+                if (isFocused) return t.text.withValues(alpha: showSelectedBackground ? 0.15 : 0.12);
+                if (showSelectedBackground) return t.text.withValues(alpha: 0.1);
                 return null;
               }(),
               borderRadius: borderRadius,
@@ -775,6 +781,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       onTap: onTap,
       focusNode: focusNode,
       autofocus: autofocus,
+      suppressSelectedBackground: widget.isSidebarFocused,
       onNavigateRight: widget.onNavigateToContent,
     );
   }
@@ -1192,6 +1199,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         focusNode: focusNode,
         borderRadius: BorderRadius.circular(tokens(context).radiusSm),
         iconSize: 18,
+        suppressSelectedBackground: widget.isSidebarFocused,
         onNavigateRight: widget.onNavigateToContent,
       ),
     );
