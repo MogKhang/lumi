@@ -78,22 +78,29 @@ fi
 echo "==> [4/5] Archiving (config=$BUILD_CONFIG, generic tvOS device)"
 rm -rf "$ARCHIVE_PATH"
 mkdir -p "$BUILD_OUT"
-# Archive with automatic signing ENABLED (not CODE_SIGNING_ALLOWED=NO). The
-# archive must be signed so every embedded framework (Libass/mpv/etc.) gets a
-# real distribution signature — an unsigned archive leaves them ad-hoc-signed
-# and App Store validation rejects them ("Libass.framework is not properly
-# signed"). -allowProvisioningUpdates lets Xcode resolve/create the Apple
-# Distribution cert + tvOS App Store profile (no registered devices needed for
-# the distribution path; the earlier "no devices" failure was the *development*
-# path, which automatic signing only falls back to when no App Store profile
-# exists yet — one now does, created by the first successful export).
+# Archive UNSIGNED, then sign at export. This is the only flow that works for
+# this hand-wired tvOS project:
+#   * A signed archive with AUTOMATIC signing forces a tvOS *Development*
+#     profile, which fails "your team has no devices..." (this team has no
+#     registered tvOS devices — and the distribution path needs none).
+#   * MANUAL distribution signing on the command line leaks the app's profile
+#     onto the plugin Pod targets (universal_gamepad/os_media_controls/
+#     wakelock_plus/Pods-Runner), which reject it ("does not support
+#     provisioning profiles").
+# So we archive unsigned and let `-exportArchive` (below) do all the signing.
+# Verified: -exportArchive with the app-store-connect ExportOptions deep-signs
+# the app AND all 33 embedded frameworks (Libass/mpv/etc.) with the Apple
+# Distribution cert — no ad-hoc framework is left, so App Store validation
+# accepts it.
 xcodebuild archive \
   -workspace "$WORKSPACE" \
   -scheme "$SCHEME" \
   -configuration "$BUILD_CONFIG" \
   -destination 'generic/platform=tvOS' \
   -archivePath "$ARCHIVE_PATH" \
-  -allowProvisioningUpdates \
+  CODE_SIGNING_ALLOWED=NO \
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGN_IDENTITY="" \
   COMPILER_INDEX_STORE_ENABLE=NO
 
 if [[ "$ARCHIVE_ONLY" == "1" ]]; then
@@ -111,7 +118,40 @@ xcodebuild -exportArchive \
   -exportPath "$EXPORT_PATH" \
   -allowProvisioningUpdates
 
+IPA="$(ls "$EXPORT_PATH"/*.ipa 2>/dev/null | head -1)"
+if [[ -z "$IPA" ]]; then
+  echo "error: export produced no .ipa" >&2
+  exit 1
+fi
+
+# Pre-flight signing check. App Store validation rejects any embedded framework
+# that isn't signed with the Apple Distribution cert (the "Libass.framework is
+# not properly signed" 409). Verify here so a bad build is caught BEFORE upload.
+echo "==> Verifying code signatures in $IPA"
+VERIFY_DIR="$(mktemp -d)"
+trap 'rm -rf "$VERIFY_DIR"' EXIT
+( cd "$VERIFY_DIR" && unzip -q "$IPA" )
+APP_DIR="$VERIFY_DIR/Payload/Runner.app"
+bad=0
+for item in "$APP_DIR" "$APP_DIR"/Frameworks/*; do
+  [[ -e "$item" ]] || continue
+  # Capture into a variable first: piping `codesign` straight into `grep -q`
+  # makes grep close the pipe on the first match, killing codesign with SIGPIPE
+  # — which under `set -o pipefail` looks like a failure and false-flags the
+  # item as unsigned.
+  sig="$(codesign -dvv "$item" 2>&1)"
+  if [[ "$sig" != *"Authority=Apple Distribution"* ]]; then
+    echo "  NOT distribution-signed: ${item#"$APP_DIR"/}" >&2
+    bad=$((bad + 1))
+  fi
+done
+if [[ "$bad" -gt 0 ]]; then
+  echo "error: $bad item(s) are not Apple Distribution signed — do NOT upload." >&2
+  exit 1
+fi
+echo "    OK: app + all frameworks are Apple Distribution signed."
+
 echo ""
-echo "Done. .ipa written to $EXPORT_PATH"
+echo "Done. .ipa written to $IPA"
 echo "Upload to TestFlight with Transporter.app, or:"
-echo "  xcrun altool --upload-app -f \"$EXPORT_PATH\"/*.ipa -t tvos --apiKey <KEY_ID> --apiIssuer <ISSUER_ID>"
+echo "  xcrun altool --upload-app -f \"$IPA\" -t tvos --apiKey <KEY_ID> --apiIssuer <ISSUER_ID>"
