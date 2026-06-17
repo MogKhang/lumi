@@ -1,4 +1,4 @@
-platform :tvos, '14.0'
+platform :tvos, '15.6'
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -67,6 +67,11 @@ post_install do |installer|
       # Engine Flutter.framework ships arm64-only for simulator; exclude x86_64
       # so the link step doesn't look for a slice that doesn't exist.
       config.build_settings['EXCLUDED_ARCHS[sdk=appletvsimulator*]'] = 'x86_64'
+      # Force every pod's minimum tvOS to match the app (15.6). Plugin pods
+      # default to lower targets (wakelock_plus 12.0, os_media_controls 13.0,
+      # universal_gamepad 14.0); App Store validation rejects the upload (90208)
+      # if any bundled framework declares a lower MinimumOSVersion than the app.
+      config.build_settings['TVOS_DEPLOYMENT_TARGET'] = '15.6'
     end
   end
 end

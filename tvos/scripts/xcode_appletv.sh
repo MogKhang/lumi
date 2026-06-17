@@ -219,6 +219,12 @@ BuildAppDebug() {
 
   echo " └─copy frameworks"
   cp "$PROJECT_DIR/scripts/Info.plist" "$OUTDIR/App.framework/Info.plist"
+  # Stamp the real deployment target into App.framework's Info.plist (scripts/
+  # Info.plist ships a fixed value). App Store validation rejects the upload
+  # (90208) if App.framework's MinimumOSVersion is lower than the app's.
+  if [[ -n "${TVOS_DEPLOYMENT_TARGET:-}" ]]; then
+    plutil -replace MinimumOSVersion -string "$TVOS_DEPLOYMENT_TARGET" "$OUTDIR/App.framework/Info.plist"
+  fi
 
   # Two destinations:
   # 1. BUILT_PRODUCTS_DIR — Swift/linker search path. For plain builds this
@@ -374,6 +380,12 @@ BuildAppRelease() {
   strip "$OUTDIR/App.framework/App"
 
   cp "$PROJECT_DIR/scripts/Info.plist" "$OUTDIR/App.framework/Info.plist"
+  # Stamp the real deployment target into App.framework's Info.plist (scripts/
+  # Info.plist ships a fixed value). App Store validation rejects the upload
+  # (90208) if App.framework's MinimumOSVersion is lower than the app's.
+  if [[ -n "${TVOS_DEPLOYMENT_TARGET:-}" ]]; then
+    plutil -replace MinimumOSVersion -string "$TVOS_DEPLOYMENT_TARGET" "$OUTDIR/App.framework/Info.plist"
+  fi
 
   echo " └─copy frameworks"
   # BUILT_PRODUCTS_DIR = linker search path. DO NOT use TARGET_BUILD_DIR

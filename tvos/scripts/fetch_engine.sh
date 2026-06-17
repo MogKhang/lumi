@@ -77,8 +77,10 @@ fi
 PUB_NAME="${PUB_NAME:-1.0.0}"
 PUB_NUMBER="${PUB_NUMBER:-1}"
 
-# tvOS deployment target is hard-coded at the Podfile / project level to 14.0.
-# Write Generated.xcconfig so Xcode (and the Run Script phase) see the engine.
+# tvOS deployment target. MUST match the Runner target's TVOS_DEPLOYMENT_TARGET
+# (15.6) — this value is stamped into App.framework's Info.plist MinimumOSVersion,
+# and App Store validation rejects the upload (90208) if a bundled framework
+# declares a lower minimum than the app's Info.plist.
 GEN_XC="${TVOS_DIR}/Flutter/Generated.xcconfig"
 mkdir -p "$(dirname "$GEN_XC")"
 cat > "$GEN_XC" <<EOF
@@ -87,7 +89,7 @@ FLUTTER_APPLICATION_PATH=${REPO_ROOT}
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_NAME=${PUB_NAME}
 FLUTTER_BUILD_NUMBER=${PUB_NUMBER}
-TVOS_DEPLOYMENT_TARGET=14.0
+TVOS_DEPLOYMENT_TARGET=15.6
 FLUTTER_LOCAL_ENGINE=${ENGINE_DIR}
 PODS_ROOT=${TVOS_DIR}/Pods
 EOF

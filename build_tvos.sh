@@ -64,9 +64,11 @@ if [[ "$RUN_PODS" == "1" ]]; then
   # post_install bakes the engine's Flutter.framework search paths into the
   # Pods project at `pod install` time, so the ordering below is mandatory.
   echo "==> [3/5] Re-running pod install + target/pods wiring (--pods)"
+  # set_tvos_target_pods.sh uses a relative `cd Pods/Pods.xcodeproj`, so the
+  # wiring scripts must run with tvos/ as the working directory.
   bash "${TVOS_DIR}/scripts/pod_install.sh"
-  bash "${TVOS_DIR}/scripts/set_tvos_target_pods.sh"
-  ruby "${TVOS_DIR}/scripts/wire_pods_dependency.rb"
+  ( cd "$TVOS_DIR" && bash scripts/set_tvos_target_pods.sh )
+  ( cd "$TVOS_DIR" && ruby scripts/wire_pods_dependency.rb )
 else
   echo "==> [3/5] Skipping pod re-wire (pass --pods after engine/plugin changes)"
   if [[ ! -f "${TVOS_DIR}/Pods/Pods.xcodeproj/project.pbxproj" ]]; then
