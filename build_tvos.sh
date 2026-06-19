@@ -20,14 +20,14 @@
 #   ./build_tvos.sh --archive-only # stop after producing the .xcarchive
 #
 # Env overrides:
-#   FLUTTER_ROOT   host Flutter SDK (default: ~/Documents/Apps/flutter)
+#   FLUTTER_ROOT   host Flutter SDK (default: ~/Dev/flutter)
 #   BUILD_CONFIG   xcodebuild configuration (default: Release)
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TVOS_DIR="${REPO_ROOT}/tvos"
-export FLUTTER_ROOT="${FLUTTER_ROOT:-$HOME/Documents/Apps/flutter}"
+export FLUTTER_ROOT="${FLUTTER_ROOT:-$HOME/Dev/flutter}"
 FLUTTER="${FLUTTER_ROOT}/bin/flutter"
 BUILD_CONFIG="${BUILD_CONFIG:-Release}"
 
