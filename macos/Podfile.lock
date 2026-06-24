@@ -1,7 +1,4 @@
 PODS:
-  - auto_updater_macos (0.0.1):
-    - FlutterMacOS
-    - Sparkle
   - cupertino_http (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -10,25 +7,17 @@ PODS:
     - FlutterMacOS
   - screen_retriever_macos (0.0.1):
     - FlutterMacOS
-  - Sparkle (2.9.0)
   - universal_gamepad (0.1.0):
     - FlutterMacOS
 
 DEPENDENCIES:
-  - auto_updater_macos (from `Flutter/ephemeral/.symlinks/plugins/auto_updater_macos/macos`)
   - cupertino_http (from `Flutter/ephemeral/.symlinks/plugins/cupertino_http/darwin`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - os_media_controls (from `Flutter/ephemeral/.symlinks/plugins/os_media_controls/macos`)
   - screen_retriever_macos (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever_macos/macos`)
   - universal_gamepad (from `Flutter/ephemeral/.symlinks/plugins/universal_gamepad/macos`)
 
-SPEC REPOS:
-  trunk:
-    - Sparkle
-
 EXTERNAL SOURCES:
-  auto_updater_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/auto_updater_macos/macos
   cupertino_http:
     :path: Flutter/ephemeral/.symlinks/plugins/cupertino_http/darwin
   FlutterMacOS:
@@ -41,12 +30,10 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/universal_gamepad/macos
 
 SPEC CHECKSUMS:
-  auto_updater_macos: 3e3462c418fe4e731917eacd8d28eef7af84086d
   cupertino_http: 947a233f40cfea55167a49f2facc18434ea117ba
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   os_media_controls: d773f492339b4dbffd3ef5103ffb51325c496adb
   screen_retriever_macos: 776e0fa5d42c6163d2bf772d22478df4b302b161
-  Sparkle: f4355f9ebbe9b7d932df4980d70f13922ac97b2a
   universal_gamepad: e7928c0af322652075b42fbc24782ad9ab7fcd07
 
 PODFILE CHECKSUM: d16f5e5d196d1ca9863d7a71d5885cad7ffa7d2d

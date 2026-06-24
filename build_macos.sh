@@ -64,7 +64,8 @@ xcodebuild archive \
   -scheme "$SCHEME" \
   -configuration Release \
   -destination "generic/platform=macOS" \
-  -archivePath "$ARCHIVE_PATH"
+  -archivePath "$ARCHIVE_PATH" \
+  -allowProvisioningUpdates
 
 echo ""
 echo "Archive written to $ARCHIVE_PATH"
