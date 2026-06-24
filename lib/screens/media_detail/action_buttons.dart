@@ -139,7 +139,15 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
             // offline mode, matching the full layout.
             if (!widget.isOffline) ...[
               const SizedBox(width: 12),
-              _buildMoreActionsButton(metadata, actionButtonStyle),
+              Focus(
+                skipTraversal: true,
+                onKeyEvent: _handleMoreActionsKeyEvent,
+                child: _buildMoreActionsButton(
+                  metadata,
+                  actionButtonStyle,
+                  focusNode: _moreActionsFocusNode,
+                ),
+              ),
             ],
           ],
           if (!minimal) ...[
@@ -241,14 +249,16 @@ extension _MediaDetailActionButtons on _MediaDetailScreenState {
 
   Widget _buildMoreActionsButton(
     MediaItem metadata,
-    ButtonStyle Function({Color? foregroundColor, EdgeInsetsGeometry? padding}) actionButtonStyle,
-  ) {
+    ButtonStyle Function({Color? foregroundColor, EdgeInsetsGeometry? padding}) actionButtonStyle, {
+    FocusNode? focusNode,
+  }) {
     return MediaContextMenu(
       key: _contextMenuKey,
       item: metadata,
       onRefresh: (_) => _loadFullMetadata(),
       child: Builder(
         builder: (buttonContext) => IconButton.filledTonal(
+          focusNode: focusNode,
           onPressed: () {
             final renderBox = buttonContext.findRenderObject() as RenderBox?;
             if (renderBox != null) {

@@ -146,6 +146,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
 
   late final FocusNode _playButtonFocusNode;
   late final FocusNode _addToPlaylistFocusNode;
+  late final FocusNode _moreActionsFocusNode;
   late final FocusNode _ratingChipFocusNode;
   Timer? _selectKeyTimer;
   bool _isSelectKeyDown = false;
@@ -463,6 +464,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     _extrasFocusNode = FocusNode(debugLabel: 'extras_row');
     _playButtonFocusNode = FocusNode(debugLabel: 'play_button');
     _addToPlaylistFocusNode = FocusNode(debugLabel: 'add_to_playlist_button');
+    _moreActionsFocusNode = FocusNode(debugLabel: 'more_actions_button');
     _ratingChipFocusNode = FocusNode(debugLabel: 'rating_chip');
     _overviewFocusNode = FocusNode(debugLabel: 'overview');
     _castFocusNode = FocusNode(debugLabel: 'cast_row');
@@ -482,6 +484,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
     _extrasFocusNode.dispose();
     _playButtonFocusNode.dispose();
     _addToPlaylistFocusNode.dispose();
+    _moreActionsFocusNode.dispose();
     _ratingChipFocusNode.dispose();
     _overviewFocusNode.dispose();
     _castFocusNode.dispose();
@@ -1510,6 +1513,32 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
 
     if (key.isLeftKey) {
       _playButtonFocusNode.requestFocus();
+      return KeyEventResult.handled;
+    }
+    // RIGHT: move to the three-dots more-actions button (sits to the right of
+    // Add to Playlist; hidden in offline mode where it isn't built).
+    if (key.isRightKey) {
+      if (!widget.isOffline) {
+        _moreActionsFocusNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    }
+    if (key.isUpKey || key.isDownKey) {
+      return _handlePlayButtonKeyEvent(node, event);
+    }
+    return KeyEventResult.ignored;
+  }
+
+  /// Key handling for the TV three-dots more-actions button (right of Add to
+  /// Playlist in the minimal movie/show layout). LEFT returns to Add to
+  /// Playlist; UP/DOWN reuse the play button's vertical navigation.
+  KeyEventResult _handleMoreActionsKeyEvent(FocusNode node, KeyEvent event) {
+    final key = event.logicalKey;
+    if (!event.isActionable) return KeyEventResult.ignored;
+
+    if (key.isLeftKey) {
+      _addToPlaylistFocusNode.requestFocus();
       return KeyEventResult.handled;
     }
     if (key.isUpKey || key.isDownKey) {
