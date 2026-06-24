@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Export options for a Mac App Store upload of the macOS app.
+  Used by `xcodebuild -exportArchive`; produces a signed .pkg (the Mac App
+  Store does not accept .ipa — that format is iOS/tvOS only).
+  Signing is left to Xcode (automatic): it resolves the "Apple Distribution"
+  + "Mac Installer Distribution" certificates and the Mac App Store provisioning
+  profile for the LUSINE team (JF8YN4AJTF), creating them on demand if the
+  account is signed into Xcode.
+-->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>destination</key>
+	<string>export</string>
+	<key>teamID</key>
+	<string>JF8YN4AJTF</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>uploadSymbols</key>
+	<true/>
+	<key>stripSwiftSymbols</key>
+	<true/>
+</dict>
+</plist>
