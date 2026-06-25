@@ -1,0 +1,47 @@
+/* Lexend (variable weight) — the same family Lumi uses on Android/Apple. We map
+   "Lexend Medium" to weight 500, then apply it app-wide, overriding Enact's
+   default theme font so the webOS UI matches the other platforms. */
+@font-face {
+	font-family: 'Lexend';
+	src: url('./Lexend.ttf') format('truetype');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+html,
+body,
+#root {
+	font-family: 'Lexend', sans-serif;
+	/* Medium across the UI, matching the other platforms. */
+	font-weight: 500;
+	/* Establish a full-height chain so descendant Scrollers/TabLayout content
+	   have a bounded height and can actually scroll (otherwise they size to
+	   content and never overflow, so focus moving down doesn't scroll). */
+	height: 100%;
+	margin: 0;
+}
+
+/* Enact components read from CSS custom properties / their own classes; force
+   the family broadly so themed text picks up Lexend too. */
+* {
+	font-family: 'Lexend', sans-serif;
+}
+
+/* Custom poster tiles (PosterCard): the art div is sized to the poster's exact
+   2:3 aspect and uses cover, so it fills edge-to-edge with no letterbox gutters
+   and no meaningful crop. */
+.lumi-poster-art {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* Focus ring for the poster tile (Spottable adds :focus on D-pad focus).
+   No zoom/scale — just a ring around the focused poster. */
+.lumi-poster {
+	outline: none;
+}
+.lumi-poster:focus .lumi-poster-art {
+	box-shadow: 0 0 0 0.25rem #fff;
+}

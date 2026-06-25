@@ -4,6 +4,8 @@ import {createRoot, hydrateRoot} from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import './fonts/fonts.css';
+
 const appElement = (<App />);
 
 // In a browser environment, render instead of exporting

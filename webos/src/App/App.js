@@ -1,26 +1,38 @@
-import kind from '@enact/core/kind';
+import {useState, useCallback} from 'react';
 import ThemeDecorator from '@enact/limestone/ThemeDecorator';
-import Panels from '@enact/limestone/Panels';
 
-import MainPanel from '../views/MainPanel';
+import AppStateProvider, {useAppState} from '../state/AppState';
+import PlexLoginPanel from '../views/PlexLoginPanel';
+import MainShell from '../views/MainShell';
 
 import css from './App.module.less';
 
-const App = kind({
-	name: 'App',
+// Top-level: unauthenticated users see the Plex QR sign-in; once a server is
+// saved, the MainShell (left sidebar: Home/Movies/Shows/Settings) takes over and
+// owns all in-app navigation, including media detail drill-down.
+const Routed = () => {
+	const {isAuthenticated} = useAppState();
+	const [showLogin, setShowLogin] = useState(!isAuthenticated);
 
-	styles: {
-		css,
-		className: 'app'
-	},
+	const onAuthenticated = useCallback(() => setShowLogin(false), []);
+	const onAddServer = useCallback(() => setShowLogin(true), []);
+	// Back from login only returns to the shell if a server already exists.
+	const onLoginBack = useCallback(() => {
+		if (isAuthenticated) setShowLogin(false);
+	}, [isAuthenticated]);
 
-	render: (props) => (
-		<div {...props}>
-			<Panels>
-				<MainPanel />
-			</Panels>
-		</div>
-	)
-});
+	if (showLogin) {
+		return <PlexLoginPanel onBack={onLoginBack} onAuthenticated={onAuthenticated} />;
+	}
+	return <MainShell onAddServer={onAddServer} />;
+};
+
+const App = (props) => (
+	<div {...props} className={css.app}>
+		<AppStateProvider>
+			<Routed />
+		</AppStateProvider>
+	</div>
+);
 
 export default ThemeDecorator(App);
