@@ -1,0 +1,16 @@
+{
+	"id": "com.mogkhang.lumi",
+	"version": "2.2.4",
+	"vendor": "mogkhang",
+	"type": "web",
+	"main": "index.html",
+	"title": "Lumi",
+	"icon": "icon.png",
+	"largeIcon": "largeIcon.png",
+	"bgColor": "#000000",
+	"iconColor": "#000000",
+	"disableBackHistoryAPI": true,
+	"supportPortraitMode": false,
+	"requiredMemory": 200,
+	"buildNumber": "92"
+}
