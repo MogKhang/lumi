@@ -13,7 +13,7 @@ import {Panel, Header} from '@enact/limestone/Panels';
 import MediaRow from '../components/MediaRow';
 import {useAppState} from '../state/AppState';
 
-const DetailPanel = ({item, onOpenItem, onBack, ...rest}) => {
+const DetailPanel = ({item, onOpenItem, onPlay, onBack, ...rest}) => {
 	const {client} = useAppState();
 	const [full, setFull] = useState(item);
 	const [children, setChildren] = useState([]);
@@ -47,6 +47,24 @@ const DetailPanel = ({item, onOpenItem, onBack, ...rest}) => {
 		[client]
 	);
 
+	// Play: movies/episodes play themselves; shows/seasons play the first child
+	// episode (simple "play from start" — on-deck resume comes from viewOffset).
+	const handlePlay = useCallback(async () => {
+		if (full.type === 'movie' || full.type === 'episode') {
+			onPlay(full);
+			return;
+		}
+		// Show/season: find the first playable episode.
+		let kids = children;
+		if (full.type === 'show') {
+			// children are seasons; descend into the first season.
+			const firstSeason = kids[0];
+			if (firstSeason) kids = await client.fetchChildren(firstSeason.id).catch(() => []);
+		}
+		const firstEpisode = kids.find((k) => k.type === 'episode') || kids[0];
+		if (firstEpisode) onPlay(firstEpisode);
+	}, [full, children, client, onPlay]);
+
 	const art = client ? client.imageUrl(full.art || full.thumb, {width: 640, height: 360}) : '';
 	const childrenTitle = full.type === 'show' ? 'Seasons' : 'Episodes';
 
@@ -66,8 +84,9 @@ const DetailPanel = ({item, onOpenItem, onBack, ...rest}) => {
 							<div style={{flex: 1}}>
 								<BodyText>{full.summary || 'No description available.'}</BodyText>
 								<div style={{marginTop: '16px'}}>
-									{/* Playback arrives in M4. */}
-									<Button disabled>Play (coming in M4)</Button>
+									<Button icon="play" onClick={handlePlay}>
+										Play
+									</Button>
 								</div>
 							</div>
 						</div>

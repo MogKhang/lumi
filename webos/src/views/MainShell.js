@@ -13,6 +13,7 @@ import HomePanel from './HomePanel';
 import TypeLibraryBrowser from './TypeLibraryBrowser';
 import SettingsPanel from './SettingsPanel';
 import DetailPanel from './DetailPanel';
+import PlayerPanel from './PlayerPanel';
 
 const TAB = {HOME: 0, MOVIES: 1, SHOWS: 2, SETTINGS: 3};
 
@@ -28,16 +29,32 @@ const MainShell = ({onAddServer}) => {
 	const [tab, setTab] = useState(TAB.HOME);
 	// Detail drill-down stack layered above the tabs.
 	const [detailStack, setDetailStack] = useState([]);
+	// The video player is a separate full-screen layer ABOVE everything (not a
+	// Panels child — VideoPlayer needs to own the whole viewport).
+	const [playing, setPlaying] = useState(null);
 
-	const openItem = useCallback((item) => setDetailStack((s) => [...s, item]), []);
+	const openItem = useCallback((item) => setDetailStack((s) => [...s, {type: 'detail', item}]), []);
+	const openPlayer = useCallback((item) => setPlaying(item), []);
+	const closePlayer = useCallback(() => setPlaying(null), []);
 	const pop = useCallback(() => setDetailStack((s) => s.slice(0, -1)), []);
 	const onSelectTab = useCallback(({index}) => setTab(index), []);
 
+	// Player takes over the whole screen when active.
+	if (playing) {
+		return <PlayerPanel item={playing} onBack={closePlayer} />;
+	}
+
 	if (detailStack.length > 0) {
 		return (
-			<CancelablePanels index={detailStack.length - 1} onBack={pop}>
-				{detailStack.map((item, i) => (
-					<DetailPanel key={`${item.id}:${i}`} item={item} onBack={pop} onOpenItem={openItem} />
+			<CancelablePanels index={detailStack.length - 1} onBack={pop} noCloseButton>
+				{detailStack.map((entry, i) => (
+					<DetailPanel
+						key={`${entry.item.id}:${i}`}
+						item={entry.item}
+						onBack={pop}
+						onOpenItem={openItem}
+						onPlay={openPlayer}
+					/>
 				))}
 			</CancelablePanels>
 		);

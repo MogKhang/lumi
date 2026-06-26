@@ -12,5 +12,8 @@
 	"disableBackHistoryAPI": true,
 	"supportPortraitMode": false,
 	"requiredMemory": 200,
+	"allowCrossDomain": true,
+	"allowVideoCapture": false,
+	"allowAudioCapture": false,
 	"buildNumber": "92"
 }

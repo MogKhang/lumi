@@ -5,6 +5,7 @@
 
 import {request, qs} from '../http';
 import {APP_NAME, PLATFORM, DEVICE_NAME, getClientIdentifier} from '../identity';
+import {canDirectPlay, directPlayUrl, transcodeUrl} from './plexPlayback';
 
 export function createPlexClient(server) {
 	const baseUrl = (server.baseUrl || '').replace(/\/+$/, '');
@@ -172,6 +173,60 @@ export function createPlexClient(server) {
 		async fetchChildren(parentId) {
 			const c = await get(`/library/metadata/${parentId}/children`);
 			return (c.Metadata || []).map(mapItem);
+		},
+
+		/**
+		 * Resolve how to play an item: fetch its metadata, read Media[0]/Part[0],
+		 * pick direct-play vs HLS transcode, and return a ready-to-use stream.
+		 * @returns {Promise<{url, isTranscode, ratingKey, duration, offsetMs, title}>}
+		 */
+		async getPlaybackInfo(id) {
+			const c = await get(`/library/metadata/${id}`);
+			const meta = (c.Metadata || [])[0];
+			if (!meta) throw new Error('Item not found');
+
+			const media = (meta.Media || [])[0] || {};
+			const part = (media.Part || [])[0] || {};
+			const offsetMs = meta.viewOffset || 0;
+			const duration = meta.duration || media.duration || 0;
+
+			const mediaInfo = {
+				container: media.container,
+				videoCodec: media.videoCodec,
+				audioCodec: media.audioCodec
+			};
+
+			let url;
+			let isTranscode;
+			if (part.key && canDirectPlay(mediaInfo)) {
+				url = directPlayUrl(baseUrl, part.key, token);
+				isTranscode = false;
+			} else {
+				url = transcodeUrl(baseUrl, id, token, {offsetMs});
+				isTranscode = true;
+			}
+
+			return {url, isTranscode, ratingKey: id, duration, offsetMs, title: meta.title};
+		},
+
+		/**
+		 * Report playback state to Plex so resume/Continue Watching update.
+		 * @param {string} ratingKey
+		 * @param {{timeMs:number, state:'playing'|'paused'|'stopped', durationMs?:number}} p
+		 */
+		async reportTimeline(ratingKey, {timeMs, state, durationMs}) {
+			const params = {
+				ratingKey,
+				key: `/library/metadata/${ratingKey}`,
+				time: Math.floor(timeMs),
+				state,
+				duration: durationMs ? Math.floor(durationMs) : undefined
+			};
+			try {
+				await request(`${baseUrl}/:/timeline?${qs(params)}`, {method: 'POST', headers: headers()});
+			} catch {
+				// Progress reporting is best-effort; don't disrupt playback.
+			}
 		}
 	};
 }
