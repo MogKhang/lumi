@@ -85,6 +85,13 @@
     "latestVersion": "You are on the latest version",
     "checkFailed": "Failed to check for updates"
   },
+  "account": {
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Delete account?",
+    "deleteAccountMessage": "This permanently removes all of your data stored in Lumi on this device — your Plex and Jellyfin sign-ins, saved servers, profiles, downloads, and preferences. This cannot be undone.\n\nYour Plex or Jellyfin account itself lives on the media server you connect to, not in Lumi. To delete that account, use the provider's website below after removing your data here.",
+    "deleteAccountConfirm": "Delete my data",
+    "managePlexAccount": "Manage / delete your Plex account"
+  },
   "mediaDetail": {
     "watchNow": "Watch Now",
     "titleCount": "${count} titles",

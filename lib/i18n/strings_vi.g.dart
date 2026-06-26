@@ -44,6 +44,7 @@ class TranslationsVi extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsCommonVi common = _TranslationsCommonVi._(_root);
 	@override late final _TranslationsScreensVi screens = _TranslationsScreensVi._(_root);
 	@override late final _TranslationsUpdateVi update = _TranslationsUpdateVi._(_root);
+	@override late final _TranslationsAccountVi account = _TranslationsAccountVi._(_root);
 	@override late final _TranslationsMediaDetailVi mediaDetail = _TranslationsMediaDetailVi._(_root);
 	@override late final _TranslationsRelatedHubsVi relatedHubs = _TranslationsRelatedHubsVi._(_root);
 	@override late final _TranslationsSettingsVi settings = _TranslationsSettingsVi._(_root);
@@ -205,6 +206,20 @@ class _TranslationsUpdateVi extends TranslationsUpdateEn {
 	@override String get doNotAskAgain => 'Không hỏi lại';
 	@override String get latestVersion => 'Bạn đang dùng phiên bản mới nhất';
 	@override String get checkFailed => 'Không thể kiểm tra cập nhật';
+}
+
+// Path: account
+class _TranslationsAccountVi extends TranslationsAccountEn {
+	_TranslationsAccountVi._(TranslationsVi root) : this._root = root, super.internal(root);
+
+	final TranslationsVi _root; // ignore: unused_field
+
+	// Translations
+	@override String get deleteAccount => 'Xóa tài khoản';
+	@override String get deleteAccountTitle => 'Xóa tài khoản?';
+	@override String get deleteAccountMessage => 'Thao tác này sẽ xóa vĩnh viễn toàn bộ dữ liệu của bạn được lưu trong Lumi trên thiết bị này — đăng nhập Plex và Jellyfin, máy chủ đã lưu, hồ sơ, mục đã tải xuống và tùy chọn. Không thể hoàn tác.\n\nTài khoản Plex hoặc Jellyfin của bạn nằm trên máy chủ media mà bạn kết nối, không phải trong Lumi. Để xóa tài khoản đó, hãy dùng trang web của nhà cung cấp bên dưới sau khi xóa dữ liệu tại đây.';
+	@override String get deleteAccountConfirm => 'Xóa dữ liệu của tôi';
+	@override String get managePlexAccount => 'Quản lý / xóa tài khoản Plex';
 }
 
 // Path: mediaDetail
@@ -754,8 +769,8 @@ class _TranslationsProfilesVi extends TranslationsProfilesEn {
 	@override String get deleteThisProfileTitle => 'Delete this profile?';
 	@override String deleteThisProfileMessage({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.';
 	@override String get active => 'Đang sử dụng';
-	@override String get manage => 'Manage';
-	@override String get delete => 'Delete';
+	@override String get manage => 'Quản lý';
+	@override String get delete => 'Xóa';
 	@override String get signOut => 'Đăng xuất';
 	@override String get signOutPlexTitle => 'Sign out of Plex?';
 	@override String signOutPlexMessage({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.';
@@ -1968,6 +1983,11 @@ extension on TranslationsVi {
 			'update.doNotAskAgain' => 'Không hỏi lại',
 			'update.latestVersion' => 'Bạn đang dùng phiên bản mới nhất',
 			'update.checkFailed' => 'Không thể kiểm tra cập nhật',
+			'account.deleteAccount' => 'Xóa tài khoản',
+			'account.deleteAccountTitle' => 'Xóa tài khoản?',
+			'account.deleteAccountMessage' => 'Thao tác này sẽ xóa vĩnh viễn toàn bộ dữ liệu của bạn được lưu trong Lumi trên thiết bị này — đăng nhập Plex và Jellyfin, máy chủ đã lưu, hồ sơ, mục đã tải xuống và tùy chọn. Không thể hoàn tác.\n\nTài khoản Plex hoặc Jellyfin của bạn nằm trên máy chủ media mà bạn kết nối, không phải trong Lumi. Để xóa tài khoản đó, hãy dùng trang web của nhà cung cấp bên dưới sau khi xóa dữ liệu tại đây.',
+			'account.deleteAccountConfirm' => 'Xóa dữ liệu của tôi',
+			'account.managePlexAccount' => 'Quản lý / xóa tài khoản Plex',
 			'mediaDetail.watchNow' => 'Xem phim',
 			'mediaDetail.titleCount' => ({required Object count}) => '${count} tựa phim',
 			'mediaDetail.addToPlaylist' => 'Thêm danh sách',
@@ -2399,13 +2419,13 @@ extension on TranslationsVi {
 			'profiles.deleteThisProfileTitle' => 'Delete this profile?',
 			'profiles.deleteThisProfileMessage' => ({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.',
 			'profiles.active' => 'Đang sử dụng',
-			'profiles.manage' => 'Manage',
-			'profiles.delete' => 'Delete',
+			_ => null,
+		} ?? switch (path) {
+			'profiles.manage' => 'Quản lý',
+			'profiles.delete' => 'Xóa',
 			'profiles.signOut' => 'Đăng xuất',
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Chọn hồ sơ',
@@ -2913,13 +2933,13 @@ extension on TranslationsVi {
 			'metadataEdit.fromUrl' => 'From URL',
 			'metadataEdit.uploadFile' => 'Upload File',
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',
 			'metadataEdit.libraryDefault' => 'Library default',

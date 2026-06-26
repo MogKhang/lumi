@@ -3,8 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../connection/connection_registry.dart';
+import '../../providers/companion_remote_provider.dart';
+import '../../providers/hidden_libraries_provider.dart';
+import '../../providers/multi_server_provider.dart';
+import '../../providers/playback_state_provider.dart';
+import '../../providers/user_profile_provider.dart';
 import '../../focus/focusable_wrapper.dart';
 import '../../i18n/strings.g.dart';
 import '../../media/media_backend.dart';
@@ -230,7 +236,11 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
         final onSignOut = profile.isPlexHome && profile.parentConnectionId != null && !widget.requireSelection
             ? () => _signOutPlexAccount(profile)
             : null;
-        final hasMenu = onDelete != null || onSignOut != null;
+        // Delete Account (App Store 5.1.1(v)) wipes ALL local account data, so
+        // it's offered alongside Sign out — the same profiles that can sign out
+        // of a Plex account can fully delete their data.
+        final onDeleteAccount = onSignOut != null ? () => _deleteAccount(context) : null;
+        final hasMenu = onDelete != null || onSignOut != null || onDeleteAccount != null;
 
         if (isFirstSelectable && !_focusRequested) {
           _focusRequested = true;
@@ -261,6 +271,7 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
                 onManage: onManage,
                 onDelete: onDelete,
                 onSignOut: onSignOut,
+                onDeleteAccount: onDeleteAccount,
                 menuFocusNode: menuFocusNode,
                 menuKey: menuKey,
                 onMenuNavigateLeft: () => profileFocusNode.requestFocus(),
@@ -336,6 +347,90 @@ class _ProfileSwitchScreenState extends State<ProfileSwitchScreen> with MountedS
       if (mounted) {
         showErrorSnackBar(context, t.profiles.signOutFailed);
       }
+    }
+  }
+
+  /// Account deletion required by App Store Guideline 5.1.1(v). Lumi doesn't
+  /// host accounts — sign-ins are to the user's own Plex/Jellyfin server — so
+  /// "Delete Account" erases every credential and trace of account data stored
+  /// locally, and links the user to Plex's own account page for the upstream
+  /// account. Mirrors the Logout teardown in SettingsScreen but is irreversible
+  /// and confirmed.
+  Future<void> _deleteAccount(BuildContext context) async {
+    // Capture every provider + the navigator up front so nothing reads
+    // `context` across the dialog's async gap.
+    final companionRemote = context.read<CompanionRemoteProvider>();
+    final userProfileProvider = context.read<UserProfileProvider>();
+    final multiServerProvider = context.read<MultiServerProvider>();
+    final profileConnReg = context.read<ProfileConnectionRegistry>();
+    final profileRegistry = context.read<ProfileRegistry>();
+    final connectionRegistry = context.read<ConnectionRegistry>();
+    final plexHome = context.read<PlexHomeService>();
+    final hiddenLibrariesProvider = context.read<HiddenLibrariesProvider>();
+    final playbackStateProvider = context.read<PlaybackStateProvider>();
+    final navigator = Navigator.of(context, rootNavigator: true);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        final colorScheme = Theme.of(dialogContext).colorScheme;
+        return AlertDialog(
+          title: Text(t.account.deleteAccountTitle),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(t.account.deleteAccountMessage),
+                const SizedBox(height: 16),
+                TextButton.icon(
+                  onPressed: () => launchUrl(
+                    Uri.parse('https://app.plex.tv/desktop/#!/settings/account'),
+                    mode: LaunchMode.externalApplication,
+                  ),
+                  icon: const AppIcon(Symbols.open_in_new_rounded, size: 18),
+                  label: Text(t.account.managePlexAccount),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(t.common.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              style: FilledButton.styleFrom(
+                backgroundColor: colorScheme.error,
+                foregroundColor: colorScheme.onError,
+              ),
+              child: Text(t.account.deleteAccountConfirm),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    await companionRemote.resetForLogout();
+    await userProfileProvider.logout();
+    multiServerProvider.clearAllConnections();
+    await profileConnReg.clear();
+    await profileRegistry.clear();
+    await connectionRegistry.clear();
+    await plexHome.clearAll();
+    final storage = await StorageService.getInstance();
+    await storage.clearActiveProfileId();
+    await storage.clearAllProfileLastUsed();
+    await hiddenLibrariesProvider.refresh();
+    playbackStateProvider.clearShuffle();
+
+    if (navigator.mounted) {
+      unawaited(
+        navigator.pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const AuthScreen()), (_) => false),
+      );
     }
   }
 
@@ -419,6 +514,7 @@ class _ProfileTile extends StatelessWidget {
   final VoidCallback? onManage;
   final VoidCallback? onDelete;
   final VoidCallback? onSignOut;
+  final VoidCallback? onDeleteAccount;
   final FocusNode menuFocusNode;
   final GlobalKey<PopupMenuButtonState<_TileAction>> menuKey;
   final VoidCallback onMenuNavigateLeft;
@@ -431,6 +527,7 @@ class _ProfileTile extends StatelessWidget {
     this.onManage,
     this.onDelete,
     this.onSignOut,
+    this.onDeleteAccount,
     required this.menuFocusNode,
     required this.menuKey,
     required this.onMenuNavigateLeft,
@@ -439,7 +536,7 @@ class _ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hasMenu = onManage != null || onDelete != null || onSignOut != null;
+    final hasMenu = onManage != null || onDelete != null || onSignOut != null || onDeleteAccount != null;
     return InkWell(
       onTap: isActive ? null : onTap,
       borderRadius: BorderRadius.circular(12),
@@ -494,6 +591,7 @@ class _ProfileTile extends StatelessWidget {
                   if (onManage != null) _TileAction.manage,
                   if (onDelete != null) _TileAction.delete,
                   if (onSignOut != null) _TileAction.signOut,
+                  if (onDeleteAccount != null) _TileAction.deleteAccount,
                 ],
               )
             else if (!isActive)
@@ -515,6 +613,9 @@ class _ProfileTile extends StatelessWidget {
           break;
         case _TileAction.signOut:
           onSignOut?.call();
+          break;
+        case _TileAction.deleteAccount:
+          onDeleteAccount?.call();
           break;
       }
     });
@@ -557,11 +658,12 @@ extension _TileActionLabel on _TileAction {
       _TileAction.manage => t.profiles.manage,
       _TileAction.delete => t.profiles.delete,
       _TileAction.signOut => t.profiles.signOut,
+      _TileAction.deleteAccount => t.account.deleteAccount,
     };
   }
 }
 
-enum _TileAction { manage, delete, signOut }
+enum _TileAction { manage, delete, signOut, deleteAccount }
 
 class _ConnectionChips extends StatelessWidget {
   final List<_ChipData> chips;

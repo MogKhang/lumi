@@ -45,6 +45,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsCommonEn common = TranslationsCommonEn.internal(_root);
 	late final TranslationsScreensEn screens = TranslationsScreensEn.internal(_root);
 	late final TranslationsUpdateEn update = TranslationsUpdateEn.internal(_root);
+	late final TranslationsAccountEn account = TranslationsAccountEn.internal(_root);
 	late final TranslationsMediaDetailEn mediaDetail = TranslationsMediaDetailEn.internal(_root);
 	late final TranslationsRelatedHubsEn relatedHubs = TranslationsRelatedHubsEn.internal(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn.internal(_root);
@@ -358,6 +359,30 @@ class TranslationsUpdateEn {
 
 	/// en: 'Failed to check for updates'
 	String get checkFailed => 'Failed to check for updates';
+}
+
+// Path: account
+class TranslationsAccountEn {
+	TranslationsAccountEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Delete Account'
+	String get deleteAccount => 'Delete Account';
+
+	/// en: 'Delete account?'
+	String get deleteAccountTitle => 'Delete account?';
+
+	/// en: 'This permanently removes all of your data stored in Lumi on this device — your Plex and Jellyfin sign-ins, saved servers, profiles, downloads, and preferences. This cannot be undone. Your Plex or Jellyfin account itself lives on the media server you connect to, not in Lumi. To delete that account, use the provider's website below after removing your data here.'
+	String get deleteAccountMessage => 'This permanently removes all of your data stored in Lumi on this device — your Plex and Jellyfin sign-ins, saved servers, profiles, downloads, and preferences. This cannot be undone.\n\nYour Plex or Jellyfin account itself lives on the media server you connect to, not in Lumi. To delete that account, use the provider\'s website below after removing your data here.';
+
+	/// en: 'Delete my data'
+	String get deleteAccountConfirm => 'Delete my data';
+
+	/// en: 'Manage / delete your Plex account'
+	String get managePlexAccount => 'Manage / delete your Plex account';
 }
 
 // Path: mediaDetail
@@ -4508,6 +4533,11 @@ extension on Translations {
 			'update.doNotAskAgain' => 'Do not ask again',
 			'update.latestVersion' => 'You are on the latest version',
 			'update.checkFailed' => 'Failed to check for updates',
+			'account.deleteAccount' => 'Delete Account',
+			'account.deleteAccountTitle' => 'Delete account?',
+			'account.deleteAccountMessage' => 'This permanently removes all of your data stored in Lumi on this device — your Plex and Jellyfin sign-ins, saved servers, profiles, downloads, and preferences. This cannot be undone.\n\nYour Plex or Jellyfin account itself lives on the media server you connect to, not in Lumi. To delete that account, use the provider\'s website below after removing your data here.',
+			'account.deleteAccountConfirm' => 'Delete my data',
+			'account.managePlexAccount' => 'Manage / delete your Plex account',
 			'mediaDetail.watchNow' => 'Watch Now',
 			'mediaDetail.titleCount' => ({required Object count}) => '${count} titles',
 			'mediaDetail.addToPlaylist' => 'Add to Playlist',
@@ -4939,13 +4969,13 @@ extension on Translations {
 			'profiles.deleteThisProfileTitle' => 'Delete this profile?',
 			'profiles.deleteThisProfileMessage' => ({required Object displayName}) => '${displayName} will be removed. Connections themselves are not affected.',
 			'profiles.active' => 'Active',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.manage' => 'Manage',
 			'profiles.delete' => 'Delete',
 			'profiles.signOut' => 'Sign out',
 			'profiles.signOutPlexTitle' => 'Sign out of Plex?',
 			'profiles.signOutPlexMessage' => ({required Object displayName}) => '${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.signedOutPlex' => 'Signed out of Plex.',
 			'profiles.signOutFailed' => 'Sign out failed.',
 			'profiles.sectionTitle' => 'Switch User',
@@ -5453,13 +5483,13 @@ extension on Translations {
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',
 			'metadataEdit.noArtworkAvailable' => 'No artwork available',
 			'metadataEdit.notSet' => 'Not set',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.libraryDefault' => 'Library default',
 			'metadataEdit.accountDefault' => 'Account default',
 			'metadataEdit.seriesDefault' => 'Series default',

@@ -85,6 +85,13 @@
     "latestVersion": "Bạn đang dùng phiên bản mới nhất",
     "checkFailed": "Không thể kiểm tra cập nhật"
   },
+  "account": {
+    "deleteAccount": "Xóa tài khoản",
+    "deleteAccountTitle": "Xóa tài khoản?",
+    "deleteAccountMessage": "Thao tác này sẽ xóa vĩnh viễn toàn bộ dữ liệu của bạn được lưu trong Lumi trên thiết bị này — đăng nhập Plex và Jellyfin, máy chủ đã lưu, hồ sơ, mục đã tải xuống và tùy chọn. Không thể hoàn tác.\n\nTài khoản Plex hoặc Jellyfin của bạn nằm trên máy chủ media mà bạn kết nối, không phải trong Lumi. Để xóa tài khoản đó, hãy dùng trang web của nhà cung cấp bên dưới sau khi xóa dữ liệu tại đây.",
+    "deleteAccountConfirm": "Xóa dữ liệu của tôi",
+    "managePlexAccount": "Quản lý / xóa tài khoản Plex"
+  },
   "mediaDetail": {
     "watchNow": "Xem phim",
     "titleCount": "${count} tựa phim",
@@ -551,8 +558,8 @@
     "deleteThisProfileTitle": "Delete this profile?",
     "deleteThisProfileMessage": "${displayName} will be removed. Connections themselves are not affected.",
     "active": "Đang sử dụng",
-    "manage": "Manage",
-    "delete": "Delete",
+    "manage": "Quản lý",
+    "delete": "Xóa",
     "signOut": "Đăng xuất",
     "signOutPlexTitle": "Sign out of Plex?",
     "signOutPlexMessage": "${displayName} and every Plex Home user on this account will be removed from this device. You can sign back in any time.",
