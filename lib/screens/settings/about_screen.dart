@@ -52,7 +52,34 @@ class AboutScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 32),
+
+                  // Disclaimer — independence from Plex/Jellyfin + no hosted
+                  // content. Expanded by default so reviewers see it up front.
+                  _LegalSection(
+                    icon: Symbols.gpp_maybe_rounded,
+                    title: t.about.disclaimerTitle,
+                    body: t.about.disclaimerBody(appName: appName),
+                    initiallyExpanded: true,
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  _LegalSection(
+                    icon: Symbols.gavel_rounded,
+                    title: t.about.termsTitle,
+                    body: t.about.termsBody(appName: appName),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  _LegalSection(
+                    icon: Symbols.privacy_tip_rounded,
+                    title: t.about.privacyTitle,
+                    body: t.about.privacyBody(appName: appName),
+                  ),
+
+                  const SizedBox(height: 12),
 
                   // Open Source Licenses
                   Card(
@@ -74,6 +101,43 @@ class AboutScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// Collapsible card holding a block of legal text (disclaimer, terms, privacy).
+class _LegalSection extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String body;
+  final bool initiallyExpanded;
+
+  const _LegalSection({
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.initiallyExpanded = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: ExpansionTile(
+        leading: AppIcon(icon, fill: 1),
+        title: Text(title, style: theme.textTheme.titleMedium),
+        initiallyExpanded: initiallyExpanded,
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        expandedAlignment: Alignment.centerLeft,
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            body,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.5, color: theme.colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
     );
   }
 }

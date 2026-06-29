@@ -2156,6 +2156,24 @@ class TranslationsAboutEn {
 
 	/// en: 'View licenses of third-party libraries'
 	String get viewLicensesDescription => 'View licenses of third-party libraries';
+
+	/// en: 'Disclaimer'
+	String get disclaimerTitle => 'Disclaimer';
+
+	/// en: '${appName} is an independent, third-party client application. It is not affiliated with, authorized, endorsed by, or in any way officially connected with Plex, Inc., Jellyfin, or any of their subsidiaries or affiliates. "Plex" and "Jellyfin" are trademarks of their respective owners. ${appName} does not host, store, provide, or distribute any media content. It functions solely as a client that connects to media servers that you, the user, own and operate. All media accessed through ${appName} is hosted on and supplied by your own server, and you are solely responsible for ensuring you have the rights to any content you access.'
+	String disclaimerBody({required Object appName}) => '${appName} is an independent, third-party client application. It is not affiliated with, authorized, endorsed by, or in any way officially connected with Plex, Inc., Jellyfin, or any of their subsidiaries or affiliates. "Plex" and "Jellyfin" are trademarks of their respective owners.\n\n${appName} does not host, store, provide, or distribute any media content. It functions solely as a client that connects to media servers that you, the user, own and operate. All media accessed through ${appName} is hosted on and supplied by your own server, and you are solely responsible for ensuring you have the rights to any content you access.';
+
+	/// en: 'Terms & Conditions'
+	String get termsTitle => 'Terms & Conditions';
+
+	/// en: 'By using ${appName}, you agree to the following terms. 1. License. ${appName} grants you a personal, non-exclusive, non-transferable licence to use the app on your own devices. 2. Your responsibility. You are responsible for the media servers you connect to and for all content you access, store, or stream through them. You must own or have the necessary rights and permissions to that content. ${appName} provides no media of its own. 3. No warranty. The app is provided "as is", without warranties of any kind, express or implied. We do not guarantee that it will be uninterrupted, error-free, or compatible with every server configuration. 4. Limitation of liability. To the maximum extent permitted by law, the developer is not liable for any loss or damage arising from your use of the app, including any liability relating to content you access through third-party servers. 5. Changes. These terms may be updated from time to time. Continued use of the app after changes take effect constitutes acceptance of the revised terms.'
+	String termsBody({required Object appName}) => 'By using ${appName}, you agree to the following terms.\n\n1. License. ${appName} grants you a personal, non-exclusive, non-transferable licence to use the app on your own devices.\n\n2. Your responsibility. You are responsible for the media servers you connect to and for all content you access, store, or stream through them. You must own or have the necessary rights and permissions to that content. ${appName} provides no media of its own.\n\n3. No warranty. The app is provided "as is", without warranties of any kind, express or implied. We do not guarantee that it will be uninterrupted, error-free, or compatible with every server configuration.\n\n4. Limitation of liability. To the maximum extent permitted by law, the developer is not liable for any loss or damage arising from your use of the app, including any liability relating to content you access through third-party servers.\n\n5. Changes. These terms may be updated from time to time. Continued use of the app after changes take effect constitutes acceptance of the revised terms.';
+
+	/// en: 'Privacy'
+	String get privacyTitle => 'Privacy';
+
+	/// en: '${appName} respects your privacy. • ${appName} does not operate any account system of its own. When you sign in, you authenticate directly with your own Plex or Jellyfin server. Your credentials and access tokens are stored only on your device. • ${appName} does not sell, share, or transmit your personal data to the developer or any third party for advertising or analytics. • Playback, library, and connection data stays between your device and the servers you choose to connect to. • You can remove all locally stored account data at any time using "Delete Account" (Switch Profile → profile menu → Delete Account).'
+	String privacyBody({required Object appName}) => '${appName} respects your privacy.\n\n• ${appName} does not operate any account system of its own. When you sign in, you authenticate directly with your own Plex or Jellyfin server. Your credentials and access tokens are stored only on your device.\n\n• ${appName} does not sell, share, or transmit your personal data to the developer or any third party for advertising or analytics.\n\n• Playback, library, and connection data stays between your device and the servers you choose to connect to.\n\n• You can remove all locally stored account data at any time using "Delete Account" (Switch Profile → profile menu → Delete Account).';
 }
 
 // Path: serverSelection
@@ -5140,6 +5158,12 @@ extension on Translations {
 			'about.versionLabel' => ({required Object version}) => 'Version ${version}',
 			'about.appDescription' => 'A beautiful Plex and Jellyfin client for Flutter',
 			'about.viewLicensesDescription' => 'View licenses of third-party libraries',
+			'about.disclaimerTitle' => 'Disclaimer',
+			'about.disclaimerBody' => ({required Object appName}) => '${appName} is an independent, third-party client application. It is not affiliated with, authorized, endorsed by, or in any way officially connected with Plex, Inc., Jellyfin, or any of their subsidiaries or affiliates. "Plex" and "Jellyfin" are trademarks of their respective owners.\n\n${appName} does not host, store, provide, or distribute any media content. It functions solely as a client that connects to media servers that you, the user, own and operate. All media accessed through ${appName} is hosted on and supplied by your own server, and you are solely responsible for ensuring you have the rights to any content you access.',
+			'about.termsTitle' => 'Terms & Conditions',
+			'about.termsBody' => ({required Object appName}) => 'By using ${appName}, you agree to the following terms.\n\n1. License. ${appName} grants you a personal, non-exclusive, non-transferable licence to use the app on your own devices.\n\n2. Your responsibility. You are responsible for the media servers you connect to and for all content you access, store, or stream through them. You must own or have the necessary rights and permissions to that content. ${appName} provides no media of its own.\n\n3. No warranty. The app is provided "as is", without warranties of any kind, express or implied. We do not guarantee that it will be uninterrupted, error-free, or compatible with every server configuration.\n\n4. Limitation of liability. To the maximum extent permitted by law, the developer is not liable for any loss or damage arising from your use of the app, including any liability relating to content you access through third-party servers.\n\n5. Changes. These terms may be updated from time to time. Continued use of the app after changes take effect constitutes acceptance of the revised terms.',
+			'about.privacyTitle' => 'Privacy',
+			'about.privacyBody' => ({required Object appName}) => '${appName} respects your privacy.\n\n• ${appName} does not operate any account system of its own. When you sign in, you authenticate directly with your own Plex or Jellyfin server. Your credentials and access tokens are stored only on your device.\n\n• ${appName} does not sell, share, or transmit your personal data to the developer or any third party for advertising or analytics.\n\n• Playback, library, and connection data stays between your device and the servers you choose to connect to.\n\n• You can remove all locally stored account data at any time using "Delete Account" (Switch Profile → profile menu → Delete Account).',
 			'serverSelection.allServerConnectionsFailed' => 'Failed to connect to any servers. Please check your network and try again.',
 			'serverSelection.noServersFoundForAccount' => ({required Object username, required Object email}) => 'No servers found for ${username} (${email})',
 			'serverSelection.failedToLoadServers' => ({required Object error}) => 'Failed to load servers: ${error}',
@@ -5477,14 +5501,14 @@ extension on Translations {
 			'metadataEdit.selectPoster' => 'Select Poster',
 			'metadataEdit.selectBackground' => 'Select Background',
 			'metadataEdit.selectLogo' => 'Select Logo',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',
 			'metadataEdit.uploadFile' => 'Upload File',
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',
 			'metadataEdit.artworkUpdated' => 'Artwork updated',
 			'metadataEdit.artworkUpdateFailed' => 'Failed to update artwork',

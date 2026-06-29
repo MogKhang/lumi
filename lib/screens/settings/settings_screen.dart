@@ -12,6 +12,7 @@ import 'settings_utils.dart';
 import '../../utils/app_logger.dart';
 
 import '../../focus/focus_memory_tracker.dart';
+import '../../focus/focusable_wrapper.dart';
 import '../../focus/input_mode_tracker.dart';
 import '../../i18n/strings.g.dart';
 import '../main_screen.dart';
@@ -30,6 +31,7 @@ import '../../profiles/active_profile_provider.dart';
 import '../../profiles/profile.dart';
 import '../../utils/platform_detector.dart';
 import '../../profiles/profile_registry.dart';
+import 'about_screen.dart';
 import 'keyboard_shortcuts_screen.dart';
 import '../downloads/downloads_screen.dart';
 import '../profile/profile_switch_screen.dart';
@@ -66,6 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   static const _kDownloads = 'downloads';
   static const _kCheckForUpdates = 'check_for_updates';
   static const _kLogout = 'logout';
+  static const _kAbout = 'about';
 
   KeyboardShortcutsService? _keyboardService;
   late final bool _keyboardShortcutsSupported = KeyboardShortcutsService.isPlatformSupported();
@@ -537,32 +540,51 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     }
   }
 
+  void _openAbout(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AboutScreen()));
+  }
+
   Widget _buildAppInfoSection() {
     return FutureBuilder<PackageInfo>(
       future: SettingsScreen._packageInfoFuture,
       builder: (context, snapshot) {
         final appVersion = snapshot.data?.version ?? '';
         return Center(
-          child: Column(
-            children: [
-              Image.asset('assets/lumi-text.png', width: 100),
-              const SizedBox(height: 6),
-              const Text(
-                'App coi phim dỏm nhất Việt Nam',
-                style: TextStyle(
-                  fontFamily: 'Lexend',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  color: Color(0xFFEC609B),
+          child: FocusableWrapper(
+            focusNode: _focusTracker.get(_kAbout),
+            disableScale: true,
+            useBackgroundFocus: true,
+            borderRadius: 16,
+            semanticLabel: t.about.title,
+            onSelect: () => _openAbout(context),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => _openAbout(context),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                child: Column(
+                  children: [
+                    Image.asset('assets/lumi-text.png', width: 100),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'App coi phim dỏm nhất Việt Nam',
+                      style: TextStyle(
+                        fontFamily: 'Lexend',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Color(0xFFEC609B),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      t.about.versionLabel(version: appVersion),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 6),
-              Text(
-                t.about.versionLabel(version: appVersion),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
-              ),
-            ],
+            ),
           ),
         );
       },

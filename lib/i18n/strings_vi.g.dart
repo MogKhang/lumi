@@ -935,11 +935,17 @@ class _TranslationsAboutVi extends TranslationsAboutEn {
 	final TranslationsVi _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'About';
-	@override String get openSourceLicenses => 'Open Source Licenses';
-	@override String versionLabel({required Object version}) => 'Version ${version}';
-	@override String get appDescription => 'A beautiful Plex and Jellyfin client for Flutter';
-	@override String get viewLicensesDescription => 'View licenses of third-party libraries';
+	@override String get title => 'Giới thiệu';
+	@override String get openSourceLicenses => 'Giấy phép mã nguồn mở';
+	@override String versionLabel({required Object version}) => 'Phiên bản ${version}';
+	@override String get appDescription => 'Trình phát Plex và Jellyfin đẹp mắt viết bằng Flutter';
+	@override String get viewLicensesDescription => 'Xem giấy phép của các thư viện bên thứ ba';
+	@override String get disclaimerTitle => 'Tuyên bố miễn trừ';
+	@override String disclaimerBody({required Object appName}) => '${appName} là ứng dụng khách độc lập của bên thứ ba. Ứng dụng không liên kết, không được ủy quyền, không được xác nhận, và không có bất kỳ kết nối chính thức nào với Plex, Inc., Jellyfin hoặc bất kỳ công ty con hay chi nhánh nào của họ. "Plex" và "Jellyfin" là thương hiệu của các chủ sở hữu tương ứng.\n\n${appName} không lưu trữ, cung cấp hay phân phối bất kỳ nội dung media nào. Ứng dụng chỉ hoạt động như một ứng dụng khách kết nối đến các máy chủ media do chính bạn — người dùng — sở hữu và vận hành. Mọi nội dung truy cập qua ${appName} đều nằm trên và do máy chủ của bạn cung cấp; bạn hoàn toàn chịu trách nhiệm bảo đảm mình có quyền đối với nội dung mình truy cập.';
+	@override String get termsTitle => 'Điều khoản & Điều kiện';
+	@override String termsBody({required Object appName}) => 'Bằng việc sử dụng ${appName}, bạn đồng ý với các điều khoản sau.\n\n1. Giấy phép. ${appName} cấp cho bạn giấy phép cá nhân, không độc quyền, không thể chuyển nhượng để sử dụng ứng dụng trên thiết bị của riêng bạn.\n\n2. Trách nhiệm của bạn. Bạn chịu trách nhiệm về các máy chủ media bạn kết nối và về mọi nội dung bạn truy cập, lưu trữ hoặc phát qua đó. Bạn phải sở hữu hoặc có quyền và sự cho phép cần thiết đối với nội dung đó. ${appName} không cung cấp media của riêng mình.\n\n3. Không bảo hành. Ứng dụng được cung cấp "nguyên trạng", không kèm bảo hành dưới bất kỳ hình thức nào. Chúng tôi không bảo đảm ứng dụng sẽ hoạt động liên tục, không lỗi hay tương thích với mọi cấu hình máy chủ.\n\n4. Giới hạn trách nhiệm. Trong phạm vi tối đa pháp luật cho phép, nhà phát triển không chịu trách nhiệm cho bất kỳ tổn thất hay thiệt hại nào phát sinh từ việc bạn sử dụng ứng dụng, bao gồm trách nhiệm liên quan đến nội dung bạn truy cập qua máy chủ của bên thứ ba.\n\n5. Thay đổi. Các điều khoản này có thể được cập nhật theo thời gian. Việc tiếp tục sử dụng ứng dụng sau khi thay đổi có hiệu lực đồng nghĩa với việc chấp nhận các điều khoản đã sửa đổi.';
+	@override String get privacyTitle => 'Quyền riêng tư';
+	@override String privacyBody({required Object appName}) => '${appName} tôn trọng quyền riêng tư của bạn.\n\n• ${appName} không vận hành hệ thống tài khoản riêng. Khi đăng nhập, bạn xác thực trực tiếp với máy chủ Plex hoặc Jellyfin của chính mình. Thông tin đăng nhập và mã truy cập chỉ được lưu trên thiết bị của bạn.\n\n• ${appName} không bán, chia sẻ hoặc truyền dữ liệu cá nhân của bạn cho nhà phát triển hay bất kỳ bên thứ ba nào nhằm mục đích quảng cáo hoặc phân tích.\n\n• Dữ liệu phát, thư viện và kết nối chỉ nằm giữa thiết bị của bạn và các máy chủ bạn chọn kết nối.\n\n• Bạn có thể xóa toàn bộ dữ liệu tài khoản lưu cục bộ bất kỳ lúc nào qua "Xóa tài khoản" (Chuyển hồ sơ → menu hồ sơ → Xóa tài khoản).';
 }
 
 // Path: serverSelection
@@ -2585,11 +2591,17 @@ extension on TranslationsVi {
 			'libraries.sortLabels.dateShared' => 'Ngày chia sẻ',
 			'libraries.sortLabels.latestEpisodeAirDate' => 'Ngày phát sóng tập mới nhất',
 			'libraries.sortLabels.latestEpisodeAddedDate' => 'Ngày thêm tập mới nhất',
-			'about.title' => 'About',
-			'about.openSourceLicenses' => 'Open Source Licenses',
-			'about.versionLabel' => ({required Object version}) => 'Version ${version}',
-			'about.appDescription' => 'A beautiful Plex and Jellyfin client for Flutter',
-			'about.viewLicensesDescription' => 'View licenses of third-party libraries',
+			'about.title' => 'Giới thiệu',
+			'about.openSourceLicenses' => 'Giấy phép mã nguồn mở',
+			'about.versionLabel' => ({required Object version}) => 'Phiên bản ${version}',
+			'about.appDescription' => 'Trình phát Plex và Jellyfin đẹp mắt viết bằng Flutter',
+			'about.viewLicensesDescription' => 'Xem giấy phép của các thư viện bên thứ ba',
+			'about.disclaimerTitle' => 'Tuyên bố miễn trừ',
+			'about.disclaimerBody' => ({required Object appName}) => '${appName} là ứng dụng khách độc lập của bên thứ ba. Ứng dụng không liên kết, không được ủy quyền, không được xác nhận, và không có bất kỳ kết nối chính thức nào với Plex, Inc., Jellyfin hoặc bất kỳ công ty con hay chi nhánh nào của họ. "Plex" và "Jellyfin" là thương hiệu của các chủ sở hữu tương ứng.\n\n${appName} không lưu trữ, cung cấp hay phân phối bất kỳ nội dung media nào. Ứng dụng chỉ hoạt động như một ứng dụng khách kết nối đến các máy chủ media do chính bạn — người dùng — sở hữu và vận hành. Mọi nội dung truy cập qua ${appName} đều nằm trên và do máy chủ của bạn cung cấp; bạn hoàn toàn chịu trách nhiệm bảo đảm mình có quyền đối với nội dung mình truy cập.',
+			'about.termsTitle' => 'Điều khoản & Điều kiện',
+			'about.termsBody' => ({required Object appName}) => 'Bằng việc sử dụng ${appName}, bạn đồng ý với các điều khoản sau.\n\n1. Giấy phép. ${appName} cấp cho bạn giấy phép cá nhân, không độc quyền, không thể chuyển nhượng để sử dụng ứng dụng trên thiết bị của riêng bạn.\n\n2. Trách nhiệm của bạn. Bạn chịu trách nhiệm về các máy chủ media bạn kết nối và về mọi nội dung bạn truy cập, lưu trữ hoặc phát qua đó. Bạn phải sở hữu hoặc có quyền và sự cho phép cần thiết đối với nội dung đó. ${appName} không cung cấp media của riêng mình.\n\n3. Không bảo hành. Ứng dụng được cung cấp "nguyên trạng", không kèm bảo hành dưới bất kỳ hình thức nào. Chúng tôi không bảo đảm ứng dụng sẽ hoạt động liên tục, không lỗi hay tương thích với mọi cấu hình máy chủ.\n\n4. Giới hạn trách nhiệm. Trong phạm vi tối đa pháp luật cho phép, nhà phát triển không chịu trách nhiệm cho bất kỳ tổn thất hay thiệt hại nào phát sinh từ việc bạn sử dụng ứng dụng, bao gồm trách nhiệm liên quan đến nội dung bạn truy cập qua máy chủ của bên thứ ba.\n\n5. Thay đổi. Các điều khoản này có thể được cập nhật theo thời gian. Việc tiếp tục sử dụng ứng dụng sau khi thay đổi có hiệu lực đồng nghĩa với việc chấp nhận các điều khoản đã sửa đổi.',
+			'about.privacyTitle' => 'Quyền riêng tư',
+			'about.privacyBody' => ({required Object appName}) => '${appName} tôn trọng quyền riêng tư của bạn.\n\n• ${appName} không vận hành hệ thống tài khoản riêng. Khi đăng nhập, bạn xác thực trực tiếp với máy chủ Plex hoặc Jellyfin của chính mình. Thông tin đăng nhập và mã truy cập chỉ được lưu trên thiết bị của bạn.\n\n• ${appName} không bán, chia sẻ hoặc truyền dữ liệu cá nhân của bạn cho nhà phát triển hay bất kỳ bên thứ ba nào nhằm mục đích quảng cáo hoặc phân tích.\n\n• Dữ liệu phát, thư viện và kết nối chỉ nằm giữa thiết bị của bạn và các máy chủ bạn chọn kết nối.\n\n• Bạn có thể xóa toàn bộ dữ liệu tài khoản lưu cục bộ bất kỳ lúc nào qua "Xóa tài khoản" (Chuyển hồ sơ → menu hồ sơ → Xóa tài khoản).',
 			'serverSelection.allServerConnectionsFailed' => 'Failed to connect to any servers. Please check your network and try again.',
 			'serverSelection.noServersFoundForAccount' => ({required Object username, required Object email}) => 'No servers found for ${username} (${email})',
 			'serverSelection.failedToLoadServers' => ({required Object error}) => 'Failed to load servers: ${error}',
@@ -2927,14 +2939,14 @@ extension on TranslationsVi {
 			'metadataEdit.logo' => 'Logo',
 			'metadataEdit.squareArt' => 'Square Art',
 			'metadataEdit.selectPoster' => 'Select Poster',
+			_ => null,
+		} ?? switch (path) {
 			'metadataEdit.selectBackground' => 'Select Background',
 			'metadataEdit.selectLogo' => 'Select Logo',
 			'metadataEdit.selectSquareArt' => 'Select Square Art',
 			'metadataEdit.fromUrl' => 'From URL',
 			'metadataEdit.uploadFile' => 'Upload File',
 			'metadataEdit.enterImageUrl' => 'Enter image URL',
-			_ => null,
-		} ?? switch (path) {
 			'metadataEdit.imageUrl' => 'Image URL',
 			'metadataEdit.metadataUpdated' => 'Metadata updated',
 			'metadataEdit.metadataUpdateFailed' => 'Failed to update metadata',

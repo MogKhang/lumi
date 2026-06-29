@@ -744,7 +744,13 @@
     "openSourceLicenses": "Open Source Licenses",
     "versionLabel": "Version ${version}",
     "appDescription": "A beautiful Plex and Jellyfin client for Flutter",
-    "viewLicensesDescription": "View licenses of third-party libraries"
+    "viewLicensesDescription": "View licenses of third-party libraries",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimerBody": "${appName} is an independent, third-party client application. It is not affiliated with, authorized, endorsed by, or in any way officially connected with Plex, Inc., Jellyfin, or any of their subsidiaries or affiliates. \"Plex\" and \"Jellyfin\" are trademarks of their respective owners.\n\n${appName} does not host, store, provide, or distribute any media content. It functions solely as a client that connects to media servers that you, the user, own and operate. All media accessed through ${appName} is hosted on and supplied by your own server, and you are solely responsible for ensuring you have the rights to any content you access.",
+    "termsTitle": "Terms & Conditions",
+    "termsBody": "By using ${appName}, you agree to the following terms.\n\n1. License. ${appName} grants you a personal, non-exclusive, non-transferable licence to use the app on your own devices.\n\n2. Your responsibility. You are responsible for the media servers you connect to and for all content you access, store, or stream through them. You must own or have the necessary rights and permissions to that content. ${appName} provides no media of its own.\n\n3. No warranty. The app is provided \"as is\", without warranties of any kind, express or implied. We do not guarantee that it will be uninterrupted, error-free, or compatible with every server configuration.\n\n4. Limitation of liability. To the maximum extent permitted by law, the developer is not liable for any loss or damage arising from your use of the app, including any liability relating to content you access through third-party servers.\n\n5. Changes. These terms may be updated from time to time. Continued use of the app after changes take effect constitutes acceptance of the revised terms.",
+    "privacyTitle": "Privacy",
+    "privacyBody": "${appName} respects your privacy.\n\n• ${appName} does not operate any account system of its own. When you sign in, you authenticate directly with your own Plex or Jellyfin server. Your credentials and access tokens are stored only on your device.\n\n• ${appName} does not sell, share, or transmit your personal data to the developer or any third party for advertising or analytics.\n\n• Playback, library, and connection data stays between your device and the servers you choose to connect to.\n\n• You can remove all locally stored account data at any time using \"Delete Account\" (Switch Profile → profile menu → Delete Account)."
   },
   "serverSelection": {
     "allServerConnectionsFailed": "Failed to connect to any servers. Please check your network and try again.",
